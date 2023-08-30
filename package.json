@@ -8,7 +8,10 @@
     "start": "next start",
     "lint": "next lint",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "build-storybook": "storybook build",
+    "tsc": "tsc",
+    "prettier": "prettier",
+    "eslint": "eslint"
   },
   "dependencies": {
     "@radix-ui/react-checkbox": "^1.0.4",
@@ -50,7 +53,12 @@
     "@storybook/react": "^7.3.2",
     "@storybook/testing-library": "^0.2.0",
     "@types/flat": "^5.0.2",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "eslint-config-prettier": "^9.0.0",
     "eslint-plugin-storybook": "^0.6.13",
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.1",
+    "prettier": "^3.0.3",
     "storybook": "^7.3.2"
   },
   "resolutions": {
