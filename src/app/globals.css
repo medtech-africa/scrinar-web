@@ -154,6 +154,6 @@
     font-family: "Aeonik", sans-serif;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background;
   }
 }
