@@ -4,15 +4,26 @@ import { Text } from "@/components/ui/text";
 import { cn } from "@/lib/utils";
 import flatten from "flat";
 import colors from "@/constants/colors";
+
+const getContrastYIQ = (hexcolor = "") => {
+  const r = parseInt(hexcolor.substring(1, 3), 16);
+  const g = parseInt(hexcolor.substring(3, 5), 16);
+  const b = parseInt(hexcolor.substring(5, 7), 16);
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
+  return yiq >= 128 ? "black" : "white";
+};
+
 const Color = ({ color = "", name = "" }) => {
   return (
     <div
       className={cn(
         "flex justify-center items-center rounded-lg mb-10 w-[118.4px] h-[104px]"
       )}
-      style={{ background: color }}
-    >
-      <Text className="text-[10px]" weight="medium">
+      style={{ background: color }}>
+      <Text
+        className={cn("text-[10px]")}
+        style={{ color: getContrastYIQ(color) }}
+        weight="medium">
         {color}-<b>{name}</b>
       </Text>
     </div>
@@ -23,6 +34,8 @@ const ColorShades = ({ colorKey = "", colors = {} }) => {
   const flattenedColors = flatten<typeof colors, Record<string, string>>(
     colors
   );
+  console.log(flattenedColors);
+  console.log(colors);
   return (
     <div>
       <Text variant="text/xs" weight="medium">
