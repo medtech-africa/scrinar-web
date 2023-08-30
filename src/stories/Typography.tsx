@@ -1,4 +1,4 @@
-import { Text } from "@/components/ui/text";
+import { Text } from '@/components/ui/text'
 
 export const Typography: React.FC = () => {
   return (
@@ -115,5 +115,5 @@ export const Typography: React.FC = () => {
         </div>
       </section>
     </section>
-  );
-};
+  )
+}

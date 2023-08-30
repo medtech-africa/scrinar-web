@@ -1,41 +1,41 @@
-import React from "react";
-import { Meta } from "@storybook/react";
-import { Text } from "@/components/ui/text";
-import { cn } from "@/lib/utils";
-import flatten from "flat";
-import colors from "@/constants/colors";
+import React from 'react'
+import { Meta } from '@storybook/react'
+import { Text } from '@/components/ui/text'
+import { cn } from '@/lib/utils'
+import flatten from 'flat'
+import colors from '@/constants/colors'
 
-const getContrastYIQ = (hexcolor = "") => {
-  const r = parseInt(hexcolor.substring(1, 3), 16);
-  const g = parseInt(hexcolor.substring(3, 5), 16);
-  const b = parseInt(hexcolor.substring(5, 7), 16);
-  const yiq = (r * 299 + g * 587 + b * 114) / 1000;
-  return yiq >= 128 ? "black" : "white";
-};
+const getContrastYIQ = (hexcolor = '') => {
+  const r = parseInt(hexcolor.substring(1, 3), 16)
+  const g = parseInt(hexcolor.substring(3, 5), 16)
+  const b = parseInt(hexcolor.substring(5, 7), 16)
+  const yiq = (r * 299 + g * 587 + b * 114) / 1000
+  return yiq >= 128 ? 'black' : 'white'
+}
 
-const Color = ({ color = "", name = "" }) => {
+const Color = ({ color = '', name = '' }) => {
   return (
     <div
       className={cn(
-        "flex justify-center items-center rounded-lg mb-10 w-[118.4px] h-[104px]"
+        'flex justify-center items-center rounded-lg mb-10 w-[118.4px] h-[104px]'
       )}
-      style={{ background: color }}>
+      style={{ background: color }}
+    >
       <Text
-        className={cn("text-[10px]")}
+        className={cn('text-[10px]')}
         style={{ color: getContrastYIQ(color) }}
-        weight="medium">
+        weight="medium"
+      >
         {color}-<b>{name}</b>
       </Text>
     </div>
-  );
-};
+  )
+}
 
-const ColorShades = ({ colorKey = "", colors = {} }) => {
-  const flattenedColors = flatten<typeof colors, Record<string, string>>(
-    colors
-  );
-  console.log(flattenedColors);
-  console.log(colors);
+const ColorShades = ({ colorKey = '', colors = {} }) => {
+  const flattenedColors = flatten<typeof colors, Record<string, string>>(colors)
+  console.log(flattenedColors)
+  console.log(colors)
   return (
     <div>
       <Text variant="text/xs" weight="medium">
@@ -49,12 +49,12 @@ const ColorShades = ({ colorKey = "", colors = {} }) => {
               color={flattenedColors[item]}
               name={item}
             />
-          );
+          )
         })}
       </div>
     </div>
-  );
-};
+  )
+}
 
 export const Colors = (): JSX.Element => {
   return (
@@ -63,8 +63,8 @@ export const Colors = (): JSX.Element => {
         PROJECT COLORS
       </Text>
 
-      <Color color={colors?.lust?.[900] ?? ""} name={"primary"} />
-      <Color color={colors?.sunglow?.[900] ?? ""} name={"secondary"} />
+      <Color color={colors?.lust?.[900] ?? ''} name={'primary'} />
+      <Color color={colors?.sunglow?.[900] ?? ''} name={'secondary'} />
       <ColorShades colorKey="Lust (Red)" colors={colors?.lust} />
       <ColorShades colorKey="Sunglow" colors={colors?.sunglow} />
 
@@ -74,31 +74,31 @@ export const Colors = (): JSX.Element => {
       <ColorShades colorKey="Grey" colors={colors?.grey} />
       <ColorShades
         colorKey="Spanish Violet"
-        colors={colors?.["spanish-violet"]}
+        colors={colors?.['spanish-violet']}
       />
       <ColorShades colorKey="Iris" colors={colors?.iris} />
       <ColorShades
         colorKey="Carmine Pink Red"
-        colors={colors?.["carmine-pink-red"]}
+        colors={colors?.['carmine-pink-red']}
       />
       <ColorShades colorKey="Orange" colors={colors?.orange} />
       <ColorShades
         colorKey="Yellow Orange"
-        colors={colors?.["yellow-orange"]}
+        colors={colors?.['yellow-orange']}
       />
       <ColorShades colorKey="Blue" colors={colors.blue} />
       <ColorShades colorKey="Green" colors={colors.green} />
     </section>
-  );
-};
+  )
+}
 
 const meta = {
-  title: "Design System/Colors",
+  title: 'Design System/Colors',
   component: Colors,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/react/configure/story-layout
-    layout: "centered",
+    layout: 'centered',
   },
-} as Meta;
+} as Meta
 
-export default meta;
+export default meta

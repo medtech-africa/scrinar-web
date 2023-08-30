@@ -1,17 +1,17 @@
-import React from "react";
+import React from 'react'
 
-import "./header.css";
-import { Button } from "@/components/ui/button";
+import './header.css'
+import { Button } from '@/components/ui/button'
 
 type User = {
-  name: string;
-};
+  name: string
+}
 
 interface HeaderProps {
-  user?: User;
-  onLogin: () => void;
-  onLogout: () => void;
-  onCreateAccount: () => void;
+  user?: User
+  onLogin: () => void
+  onLogout: () => void
+  onCreateAccount: () => void
 }
 
 export const Header = ({
@@ -27,7 +27,8 @@ export const Header = ({
           width="32"
           height="32"
           viewBox="0 0 32 32"
-          xmlns="http://www.w3.org/2000/svg">
+          xmlns="http://www.w3.org/2000/svg"
+        >
           <g fill="none" fillRule="evenodd">
             <path
               d="M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z"
@@ -56,7 +57,7 @@ export const Header = ({
         ) : (
           <>
             <Button onClick={onLogin}>Log in</Button>
-            <Button variant={"primary"} onClick={onCreateAccount}>
+            <Button variant={'primary'} onClick={onCreateAccount}>
               Sign up
             </Button>
           </>
@@ -64,4 +65,4 @@ export const Header = ({
       </div>
     </div>
   </header>
-);
+)
