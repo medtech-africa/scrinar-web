@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 
-const textVariants = cva('', {
+const textVariants = cva('text-grey-900', {
   variants: {
     variant: {
       'display/2xl': 'text-7xl',
