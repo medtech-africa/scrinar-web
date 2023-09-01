@@ -54,7 +54,7 @@ export const WithIconRight: Story = {
     ),
   },
 }
-export const WithIconCenter: Story = {
+export const OnlyIcon: Story = {
   args: {
     children: (
       <>

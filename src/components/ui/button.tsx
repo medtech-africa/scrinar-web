@@ -9,11 +9,16 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: 'bg-grey-800 text-grey-50',
-        primary: 'bg-primary text-grey-50',
-        secondary: 'bg-secondary text-grey-900',
-        ghost: 'bg-lust-50 text-lust-200 ',
-        border: 'border-2 border-lust-200 bg-primary text-primary-foreground',
+        default:
+          'bg-grey-800 text-grey-50 hover:bg-grey-900 focus:border-2 border-grey-200',
+        primary:
+          'bg-lust-800 text-grey-50 hover:bg-lust-900 focus:border-2 border-lust-200 disabled:bg-lust-50 disabled:text-lust-200 ',
+        secondary:
+          'bg-secondary text-grey-900 hover:bg-sunglow-800 focus:border-2 border-sunglow-200',
+        disabledPrimary: 'bg-lust-50 text-lust-200 ',
+        disabledSecondary: 'bg-sunglow-100 text-gray-400 ',
+        disabledDefault: 'bg-gray-100 text-gray-400 ',
+        focused: 'border-2 border-lust-200 bg-primary text-primary-foreground',
       },
       size: {
         default: 'h-10 px-4 py-2',
