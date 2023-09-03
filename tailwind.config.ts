@@ -30,9 +30,9 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
+        border: 'var(--border)',
+        input: 'var(--input)',
+        ring: 'var(--ring)',
         background: '#F9FAFB',
         primary: {
           DEFAULT: '#E31B23',
