@@ -13,39 +13,39 @@ parameters: {
 export default meta
 type Story = StoryObj<typeof meta>
 
-export const Inprogress: Story = {
+export const OrangeStatus: Story = {
 args: {
-    variant: 'inprogress',
+    variant: 'orange',
     children: 'Inprogress'
 }
 }
-export const Completed: Story = {
+export const GreenStatus: Story = {
 args: {
-    variant: 'completed',
+    variant: 'green',
     children: 'Completed'
 }
 }
-export const Schedule: Story = {
+export const YellowStatus: Story = {
 args: {
-    variant: 'schedule',
+    variant: 'yellow',
     children: 'Schedule'
 }
 }
-export const Overdue: Story = {
+export const RedStatus: Story = {
 args: {
-    variant: 'overdue',
+    variant: 'red',
     children: 'Overdue'
 }
 }
-export const HighlyObese: Story = {
+export const DarkOrangeStatus: Story = {
 args: {
-    variant: 'highlyObese',
+    variant: 'darkorange',
     children: 'Highly Obese'
 }
 }
-export const OverWeight: Story = {
+export const DarkRedStatus: Story = {
 args: {
-    variant: 'overweight',
+    variant: 'darkRed',
     children: 'Over Weight'
 }
 }
