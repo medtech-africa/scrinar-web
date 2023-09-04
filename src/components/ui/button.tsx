@@ -5,14 +5,16 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors',
+  'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus:border-2',
   {
     variants: {
       variant: {
-        default: 'bg-grey-800 text-grey-50 hover:bg-grey-900 border-grey-200',
-        primary: 'bg-lust-800 text-grey-50 hover:bg-lust-900 border-lust-200',
+        default:
+          'bg-grey-800 text-grey-50 hover:bg-grey-900 focus:border-grey-200',
+        primary:
+          'bg-lust-800 text-grey-50 hover:bg-lust-900 focus:border-lust-200',
         secondary:
-          'bg-secondary text-grey-900 hover:bg-sunglow-800 border-sunglow-200',
+          'bg-secondary text-grey-900 hover:bg-sunglow-800 focus:border-sunglow-200',
       },
 
       size: {
@@ -24,7 +26,7 @@ const buttonVariants = cva(
       },
       disabled: {
         true: 'pointer-events-none',
-        false: 'focus:border-2 cursor-pointer ',
+        false: ' cursor-pointer ',
       },
     },
     compoundVariants: [
