@@ -5,20 +5,19 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors focus:border-2',
+  'inline-flex items-center justify-center rounded-lg text-sm font-medium transition-colors ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-4  focus-visible:ring-offset-0 disabled:pointer-events-none',
   {
     variants: {
       variant: {
         default:
-          'bg-grey-800 text-grey-50 hover:bg-grey-900 focus:border-grey-200',
+          'bg-grey-800 text-grey-50 hover:bg-grey-900 focus:border-grey-200 focus-visible:ring-grey-200',
         primary:
-          'bg-lust-800 text-grey-50 hover:bg-lust-900 focus:border-lust-200',
+          'bg-lust-800 text-grey-50 hover:bg-lust-900 focus:border-lust-200 focus-visible:ring-lust-200',
         secondary:
-          'bg-secondary text-grey-900 hover:bg-sunglow-800 focus:border-sunglow-200',
+          'bg-secondary text-grey-900 hover:bg-sunglow-800 focus-visible:ring-sunglow-200',
       },
 
       size: {
-        default: 'h-10 px-4 py-2',
         sm: 'px-4 py-[7px]',
         md: 'px-4 py-2',
         lg: 'px-4 py-3',
@@ -26,7 +25,7 @@ const buttonVariants = cva(
       },
       disabled: {
         true: 'pointer-events-none',
-        false: ' cursor-pointer ',
+        false: 'cursor-pointer',
       },
     },
     compoundVariants: [
@@ -47,8 +46,8 @@ const buttonVariants = cva(
       },
     ],
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: 'primary',
+      size: 'md',
       disabled: false,
     },
   }
@@ -78,6 +77,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
     return (
       <Comp
         className={cn(buttonVariants({ variant, size, className, disabled }))}
+        disabled={disabled}
         ref={ref}
         {...props}
       />
