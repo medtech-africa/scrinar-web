@@ -9,7 +9,7 @@ const statusVariants = cva( 'inline-flex items-center justify-center rounded-lg 
        green: 'border-[#D0F1E180] text-green-900 bg-green-50',
        yellow: 'border-[#FDF5D880] text-sunglow-900 bg-sunglow-50',
        red: 'border-[#F9D1D380] text-lust-900 bg-lust-50',
-       darkorange: 'border-[#FEE0D080] text-orange-900 bg-orange-50',
+       darkOrange: 'border-[#FEE0D080] text-orange-900 bg-orange-50',
        darkRed: 'border-[#FCDAD780] text-carmine-pink-red-900 bg-carmine-pink-red-50',
 
       }
