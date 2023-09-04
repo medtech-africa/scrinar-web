@@ -34,8 +34,7 @@ const Color = ({ color = '', name = '' }) => {
 
 const ColorShades = ({ colorKey = '', colors = {} }) => {
   const flattenedColors = flatten<typeof colors, Record<string, string>>(colors)
-  console.log(flattenedColors)
-  console.log(colors)
+
   return (
     <div>
       <Text variant="text/xs" weight="medium">
