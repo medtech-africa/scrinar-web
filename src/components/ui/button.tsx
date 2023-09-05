@@ -5,28 +5,50 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center rounded-lg text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center rounded-lg text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-4  focus-visible:ring-offset-0 disabled:pointer-events-none',
   {
     variants: {
       variant: {
-        default: 'bg-grey-800 text-grey-50',
-        primary: 'bg-primary text-grey-50',
-        secondary: 'bg-secondary text-grey-900',
-        ghost: 'bg-lust-50 text-lust-200 ',
-        border: 'border-2 border-lust-200 bg-primary text-primary-foreground',
+        default:
+          'bg-grey-800 text-grey-50 hover:bg-grey-900 focus:border-grey-200 focus-visible:ring-grey-200',
+        primary:
+          'bg-lust-800 text-grey-50 hover:bg-lust-900 focus:border-lust-200 focus-visible:ring-lust-200',
+        secondary:
+          'bg-secondary text-grey-900 hover:bg-sunglow-800 focus-visible:ring-sunglow-200',
       },
+
       size: {
-        default: 'h-10 px-4 py-2',
-        sm: 'rounded-lg px-4 py-[7px]',
-        md: 'rounded-lg px-4 py-2',
-        lg: 'rounded-lg px-4 py-3',
-        xl: 'rounded-lg px-4 py-4',
-        // icon: "h-10 w-10",
+        sm: 'px-4 py-[7px]',
+        md: 'px-4 py-2',
+        lg: 'px-4 py-3',
+        xl: 'px-4 py-4',
+      },
+      disabled: {
+        true: 'cursor-not-allowed',
+        false: '',
       },
     },
+    compoundVariants: [
+      {
+        variant: 'primary',
+        disabled: true,
+        class: 'bg-lust-50 text-lust-200',
+      },
+      {
+        variant: 'secondary',
+        disabled: true,
+        class: 'bg-sunglow-100 text-gray-400 ',
+      },
+      {
+        variant: 'default',
+        disabled: true,
+        class: 'bg-gray-100 text-gray-400',
+      },
+    ],
     defaultVariants: {
-      variant: 'default',
-      size: 'default',
+      variant: 'primary',
+      size: 'md',
+      disabled: false,
     },
   }
 )
@@ -35,17 +57,27 @@ export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
   asChild?: boolean
+  disabled?: boolean
 }
 
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   (
-    { className, variant, size, asChild = false, formAction: _, ...props },
+    {
+      className,
+      variant,
+      size,
+      asChild = false,
+      disabled,
+      formAction: _,
+      ...props
+    },
     ref
   ) => {
     const Comp = asChild ? Slot : 'button'
     return (
       <Comp
-        className={cn(buttonVariants({ variant, size, className }))}
+        className={cn(buttonVariants({ variant, size, className, disabled }))}
+        disabled={disabled}
         ref={ref}
         {...props}
       />
