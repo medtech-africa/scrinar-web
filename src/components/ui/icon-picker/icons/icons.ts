@@ -1,0 +1,16 @@
+/* -- insert below here -- */
+// 1: after creating svg, add here
+export { Grid7Icon } from './grid-7'
+export { Grid8Icon } from './grid-8'
+export { HealthIcon } from './health'
+export { CalendarIcon } from './calendar'
+export { BookIcon } from './book'
+export { ArrowOutwardIcon } from './arrow-outward'
+export { TeacherIcon } from './teacher'
+export { MessageQuestionIcon } from './message-question'
+export { Profile2UserIcon } from './profile-2-user'
+export { Setting2Icon } from './setting-2'
+export { SearchIcon } from './search'
+export { EclipseIcon } from './eclipse'
+export { LocationIcon } from './location'
+export { ArrowDownIcon } from './arrow-down'
