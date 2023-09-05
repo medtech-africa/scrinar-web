@@ -124,9 +124,10 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -200, opacity: 0 }}
           transition={{ duration: 0.3 }}
-          className={`flex flex-col md:w-60 w-52 p-4 rounded-lg sidebar-shadow ${
+          className={cn(
+            `flex flex-col md:w-60 w-52 p-4 rounded-lg sidebar-shadow bg-white h-[100vh] overflow-y-auto`,
             sideOpen && 'hidden'
-          }  bg-white h-[100vh] overflow-y-auto`}
+          )}
         >
           <div ref={isLargeScreen ? null : sidebarRef}>
             <div className="py-3">
