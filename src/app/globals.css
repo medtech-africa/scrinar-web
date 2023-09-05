@@ -87,8 +87,8 @@
     --background: 0 0% 100%;
     --foreground: 0 0% 3.9%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 0 0% 3.9%;
+    --card: #f9fafb;
+    --card-foreground: #f9fafb;
 
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 3.9%;
@@ -108,9 +108,9 @@
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 98%;
 
-    --border: #D0D5DD;
-    --input: #D0D5DD;
-    --ring: #FCE8E9;
+    --border: #d0d5dd;
+    --input: #d0d5dd;
+    --ring: #fce8e9;
 
     --radius: 0.5rem;
   }
@@ -119,8 +119,8 @@
     --background: 0 0% 3.9%;
     --foreground: 0 0% 98%;
 
-    --card: 0 0% 3.9%;
-    --card-foreground: 0 0% 98%;
+    --card: #f9fafb;
+    --card-foreground: #f9fafb;
 
     --popover: 0 0% 3.9%;
     --popover-foreground: 0 0% 98%;
