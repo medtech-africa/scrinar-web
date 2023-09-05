@@ -1,7 +1,8 @@
 import React from 'react'
-
 import './header.css'
-import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
+import { Search, Bell, Settings, ChevronDown, User2 } from 'lucide-react'
+import { Text } from '@/components/ui/text'
 
 type User = {
   name: string
@@ -21,47 +22,25 @@ export const Header = ({
   onCreateAccount,
 }: HeaderProps) => (
   <header>
-    <div className="storybook-header">
+    <div className='flex bg-grey-50 justify-between border-b-[1px] border-grey-100 items-center px-4 md:px-8 py-4 '>
       <div>
-        <svg
-          width="32"
-          height="32"
-          viewBox="0 0 32 32"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <g fill="none" fillRule="evenodd">
-            <path
-              d="M10 0h12a10 10 0 0110 10v12a10 10 0 01-10 10H10A10 10 0 010 22V10A10 10 0 0110 0z"
-              fill="#FFF"
-            />
-            <path
-              d="M5.3 10.6l10.4 6v11.1l-10.4-6v-11zm11.4-6.2l9.7 5.5-9.7 5.6V4.4z"
-              fill="#555AB9"
-            />
-            <path
-              d="M27.2 10.6v11.2l-10.5 6V16.5l10.5-6zM15.7 4.4v11L6 10l9.7-5.5z"
-              fill="#91BAF8"
-            />
-          </g>
-        </svg>
-        <h1>Acme</h1>
+       <Input leadingIcon={<Search size={20} />} className='rounded-[49px] bg-grey-100' placeholder='Search for something...'/>
       </div>
       <div>
-        {user ? (
-          <>
-            <span className="welcome">
-              Welcome, <b>{user.name}</b>!
-            </span>
-            <Button onClick={onLogout}>Log out</Button>
-          </>
-        ) : (
-          <>
-            <Button onClick={onLogin}>Log in</Button>
-            <Button variant={'primary'} onClick={onCreateAccount}>
-              Sign up
-            </Button>
-          </>
-        )}
+       
+        <div className='flex flex-row space-x-2 md:space-x-4 items-center'>
+         <div className='bg-grey-100 p-3 rounded-full'>
+          <Bell/>
+          </div>  
+         <div className='bg-grey-100 p-3 rounded-full'>
+          <Settings/>
+          </div>  
+         <div className='bg-grey-100 p-3 rounded-full'>
+          <User2/>
+          </div>  
+          <Text className='font-medium text-grey-600 text-xs sm:text-base '>School Name here</Text>
+          <ChevronDown/>
+        </div>
       </div>
     </div>
   </header>
