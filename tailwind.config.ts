@@ -203,8 +203,11 @@ const config: Config = {
           'transition-timing-function': 'cubic-bezier(0.4, 0, 0.2, 1)',
           'transition-duration': '200ms',
           outline: '0',
-          'box-shadow': ' 0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+          'box-shadow': '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
           '&:focus': focusOutset,
+        },
+        '.sidebar-shadow': {
+          'box-shadow': '0px 0px 37px 0px rgba(16, 24, 40, 0.02)',
         },
       })
     }),
