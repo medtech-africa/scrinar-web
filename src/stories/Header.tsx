@@ -4,23 +4,9 @@ import { Input } from '@/components/ui/input'
 import { Search, Bell, Settings, ChevronDown, User2 } from 'lucide-react'
 import { Text } from '@/components/ui/text'
 
-type User = {
-  name: string
-}
 
-interface HeaderProps {
-  user?: User
-  onLogin: () => void
-  onLogout: () => void
-  onCreateAccount: () => void
-}
 
-export const Header = ({
-  user,
-  onLogin,
-  onLogout,
-  onCreateAccount,
-}: HeaderProps) => (
+export const Header = () => (
   <header>
     <div className='flex bg-grey-50 justify-between border-b-[1px] border-grey-100 items-center px-4 md:px-8 py-4 '>
       <div>
