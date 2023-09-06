@@ -23,10 +23,11 @@ export interface CardProps
   //   title: React.ReactNode
   description: React.ReactNode
   icon: React.ReactNode
+  iconClassName?: string
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, title, description, icon, ...props }, ref) => (
+  ({ className, title, description, icon, iconClassName, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
@@ -35,7 +36,14 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       )}
       {...props}
     >
-      {<div className="">{icon}</div>}
+      <div
+        className={cn(
+          'p-2 rounded-lg flex-col justify-center items-start gap-[5px] inline-flex',
+          iconClassName
+        )}
+      >
+        {icon}
+      </div>
       <div className="flex-col justify-center items-start gap-[5px] inline-flex">
         <div className="text-gray-900 text-base font-medium leading-normal">
           {title}
