@@ -15,6 +15,7 @@ export enum Icons {
   location = 'location',
   eclise = 'eclise',
   arrowDown = 'arrowDown',
+  notificationBell = 'notificationBell',
 }
 
 export { Icons as IconNames }
