@@ -10,24 +10,22 @@ import Link from 'next/link'
 import { cn } from '@/lib/utils'
 // import Image from 'next/image'
 import { Divider } from './divider'
-import {
-  ArrowDown,
-  Book,
-  Calendar,
-  Grid2x2,
-  HeartPulse,
-  MessageSquare,
-  Settings2,
-  User2,
-} from 'lucide-react'
 import { Text } from './text'
 import { useRouter } from 'next/router'
+import { IconPicker } from './icon-picker'
+import { IconNames } from './icon-picker/icon-names'
 
 interface NavLinkProps {
   children: React.ReactNode
   href: string
   active?: boolean
   className?: string
+}
+
+interface Datatype {
+  title: string
+  href: string
+  icon: IconNames
 }
 
 const NavLink = ({ children, href, active, className }: NavLinkProps) => {
@@ -55,38 +53,38 @@ const DotIcon = ({ className = '' }) => (
 const generalData = [
   {
     title: 'Dashboard',
-    icon: <Grid2x2 />,
+    icon: 'grid7',
     href: '/',
   },
   {
     title: 'Health Data',
-    icon: <HeartPulse />,
+    icon: 'health',
     href: '/health',
   },
   {
     title: 'Screening',
-    icon: <Calendar />,
+    icon: 'calendar',
     href: '/screening',
   },
   {
     title: 'Training Module',
-    icon: <Book />,
+    icon: 'book',
     href: '/training',
   },
-]
+] as Datatype[]
 
 const othersData = [
   {
     title: 'App Settings',
-    icon: <Settings2 />,
+    icon: 'setting2',
     href: '/settings',
   },
   {
     title: 'Support',
-    icon: <MessageSquare />,
+    icon: 'messageQuestion',
     href: '/support',
   },
-]
+] as Datatype[]
 
 interface ISideBar {
   sideOpen: boolean
@@ -159,7 +157,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                       href={item2?.href}
                       active={location.pathname.includes(item2.href)}
                     >
-                      {item2.icon}
+                      <IconPicker icon={item2.icon} size="1.5rem" />
                       <Text variant="text/md">{item2.title}</Text>
                     </NavLink>
                   </div>
@@ -184,8 +182,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                     onClick={() => toggleOpen(!open)}
                     layout="position"
                   >
-                    <div className="flex">
-                      <User2 />
+                    <div className="flex gap-2">
+                      <IconPicker icon="profile2User" size="1.5rem" />
                       <Text variant="text/md">User Profile</Text>
                     </div>
                     <motion.div
@@ -197,7 +195,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                         damping: 50,
                       }}
                     >
-                      <ArrowDown />
+                      <IconPicker icon="arrowDown" />
                     </motion.div>
                   </motion.button>
                   <AnimatePresence initial={false}>
@@ -256,7 +254,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                       href={item2?.href}
                       active={location.pathname.includes(item2.href)}
                     >
-                      {item2.icon}
+                      <IconPicker icon={item2.icon} size="1.5rem" />
                       <Text variant="text/md">{item2.title}</Text>
                     </NavLink>
                   </div>

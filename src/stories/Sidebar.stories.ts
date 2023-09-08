@@ -15,7 +15,7 @@ type Story = StoryObj<typeof meta>
 
 export const OpenedSidebar: Story = {
   args: {
-    sideToggleOpen: () => null,
-    sideOpen: true,
+    sideToggleOpen: () => true,
+    sideOpen: false,
   },
 }

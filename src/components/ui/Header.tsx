@@ -10,7 +10,7 @@ export const Header = () => {
   const [visible, setVisible] = useState<boolean>(false)
 
   useClickAway(menuRef, () => setVisible(false))
-  console.log(visible)
+
   return (
     <header>
       <div className="flex bg-grey-50 justify-between border-b-[1px] border-grey-100 items-center px-4 md:px-8 py-4">
