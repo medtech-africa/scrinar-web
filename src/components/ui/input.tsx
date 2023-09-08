@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 import { Text } from './text'
-import { AlertCircle } from 'lucide-react'
+import { IconPicker } from './icon-picker'
 
 const inputVariants = cva(
   'py-[10px] px-[14px] rounded-lg border border-grey-300 bg-white placeholder:text-grey-500 text-grey-900 utils-focus-outset disabled:bg-grey-50 disabled:text-grey-500',
@@ -69,7 +69,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           />
           <div className="flex absolute right-[14px] top-0 bottom-0 items-center">
             {variant === 'destructive' && (
-              <AlertCircle size={16} className="text-error-500" />
+              <IconPicker icon="alertCircle" className="text-error-500" />
             )}
             {!!endingIcon && (
               <span className="text-grey-900 text-xl">{endingIcon}</span>
