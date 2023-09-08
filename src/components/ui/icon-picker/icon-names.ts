@@ -32,6 +32,7 @@ export enum Icons {
   information = 'information',
   danger = 'danger',
   loader2 = 'loader2',
+  hamburger = 'hamburger',
 }
 
 export { Icons as IconNames }
