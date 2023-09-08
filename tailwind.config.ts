@@ -30,9 +30,9 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        border: 'hsl(var(--border))',
-        input: 'hsl(var(--input))',
-        ring: 'hsl(var(--ring))',
+        border: 'var(--border)',
+        input: 'var(--input)',
+        ring: 'var(--ring)',
         background: '#F9FAFB',
         primary: {
           DEFAULT: '#E31B23',
@@ -203,8 +203,11 @@ const config: Config = {
           'transition-timing-function': 'cubic-bezier(0.4, 0, 0.2, 1)',
           'transition-duration': '200ms',
           outline: '0',
-          'box-shadow': ' 0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
+          'box-shadow': '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
           '&:focus': focusOutset,
+        },
+        '.sidebar-shadow': {
+          'box-shadow': '0px 0px 37px 0px rgba(16, 24, 40, 0.02)',
         },
       })
     }),

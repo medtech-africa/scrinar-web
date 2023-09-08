@@ -1,0 +1,36 @@
+// 2: add here
+
+export enum Icons {
+  grid7 = 'grid7',
+  grid8 = 'grid8',
+  health = 'health',
+  calendar = 'calendar',
+  book = 'book',
+  setting2 = 'setting2',
+  messageQuestion = 'messageQuestion',
+  search = 'search',
+  profile2User = 'profile2User',
+  teacher = 'teacher',
+  arrowOutward = 'arrowOutward',
+  location = 'location',
+  eclise = 'eclise',
+  arrowDown = 'arrowDown',
+  notificationBell = 'notificationBell',
+  add = 'add',
+  arrowLeft = 'arrowLeft',
+  arrowRight = 'arrowRight',
+  calendar2 = 'calendar2',
+  export = 'export',
+  gridEraser = 'gridEraser',
+  more = 'more',
+  saveAdd = 'saveAdd',
+  smallCheck = 'smallCheck',
+  mail = 'mail',
+  alertCircle = 'alertCircle',
+  check = 'check',
+  warning2 = 'warning2',
+  information = 'information',
+  danger = 'danger',
+}
+
+export { Icons as IconNames }
