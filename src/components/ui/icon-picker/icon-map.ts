@@ -33,4 +33,5 @@ export const IconMap: Map<string, string> = new Map([
   [Icons.danger, 'DangerIcon'],
   [Icons.information, 'InformationIcon'],
   [Icons.loader2, 'Loader2Icon'],
+  [Icons.hamburger, 'HamburgerIcon'],
 ])

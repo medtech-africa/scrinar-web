@@ -11,7 +11,7 @@ import { cn } from '@/lib/utils'
 // import Image from 'next/image'
 import { Divider } from './divider'
 import { Text } from './text'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
 import { IconPicker } from './icon-picker'
 import { IconNames } from './icon-picker/icon-names'
 
@@ -54,22 +54,22 @@ const generalData = [
   {
     title: 'Dashboard',
     icon: 'grid7',
-    href: '/',
+    href: '',
   },
   {
     title: 'Health Data',
     icon: 'health',
-    href: '/health',
+    href: 'health-data',
   },
   {
     title: 'Screening',
     icon: 'calendar',
-    href: '/screening',
+    href: 'screening',
   },
   {
     title: 'Training Module',
     icon: 'book',
-    href: '/training',
+    href: 'training-module',
   },
 ] as Datatype[]
 
@@ -77,12 +77,12 @@ const othersData = [
   {
     title: 'App Settings',
     icon: 'setting2',
-    href: '/settings',
+    href: 'settings',
   },
   {
     title: 'Support',
     icon: 'messageQuestion',
-    href: '/support',
+    href: 'support',
   },
 ] as Datatype[]
 
@@ -92,7 +92,7 @@ interface ISideBar {
 }
 
 const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
-  const location = useRouter()
+  const pathname = usePathname()
   const [open, toggleOpen] = useState(false)
   const sidebarRef = useRef(null)
   const windowSize = useWindowSize()
@@ -107,12 +107,12 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
 
   useEffect(() => {
     const isRoute = new RegExp(/^\/patients|^\/staff/)
-    if (isRoute.test(location.pathname)) toggleOpen(true)
+    if (isRoute.test(pathname)) toggleOpen(true)
     if (!isLargeScreen) {
       sideToggleOpen(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location])
+  }, [pathname])
 
   return (
     <AnimatePresence initial={false}>
@@ -123,7 +123,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
           exit={{ x: -200, opacity: 0 }}
           transition={{ duration: 0.3 }}
           className={cn(
-            `flex flex-col md:w-60 w-52 p-4 rounded-lg sidebar-shadow bg-white h-[100vh] overflow-y-auto`,
+            `flex flex-col md:w-60 w-52 p-4 rounded-lg sidebar-shadow bg-white h-full overflow-y-auto`,
             sideOpen && 'hidden'
           )}
         >
@@ -151,14 +151,18 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                   GENERAL
                 </Text>
 
-                {generalData.map((item2, __) => (
+                {generalData.map((item, __) => (
                   <div key={__} className="mb-2">
                     <NavLink
-                      href={item2?.href}
-                      active={location.pathname.includes(item2.href)}
+                      href={`/dashboard/${item?.href}`}
+                      active={
+                        item.href
+                          ? pathname.includes(item.href)
+                          : pathname === '/dashboard'
+                      }
                     >
-                      <IconPicker icon={item2.icon} size="1.5rem" />
-                      <Text variant="text/md">{item2.title}</Text>
+                      <IconPicker icon={item.icon} size="1.5rem" />
+                      <Text variant="text/md">{item.title}</Text>
                     </NavLink>
                   </div>
                 ))}
@@ -174,9 +178,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                       'flex items-center justify-between text-grey-600 py-3 px-4 rounded-lg hover:opacity-80 w-full',
                       {
                         'bg-primary text-white':
-                          location.pathname.includes('/user-profile'),
-                        'opacity-95':
-                          !location.pathname.includes('/user-profile'),
+                          pathname.includes('/user-profile'),
+                        'opacity-95': !pathname.includes('/user-profile'),
                       }
                     )}
                     onClick={() => toggleOpen(!open)}
@@ -217,8 +220,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                         }}
                       >
                         <NavLink
-                          href="instructors"
-                          active={location.pathname.includes('/instructors')}
+                          href={'dashboard/instructors'}
+                          active={pathname.includes('/instructors')}
                           className="pl-11"
                         >
                           <DotIcon />
@@ -226,9 +229,9 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                         </NavLink>
 
                         <NavLink
-                          href="students"
+                          href="dashboard/students"
                           className="pl-11"
-                          active={location.pathname.includes('/students')}
+                          active={pathname.includes('/students')}
                         >
                           <DotIcon />
                           <Text variant="text/md">Students</Text>
@@ -251,8 +254,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                 {othersData.map((item2, __) => (
                   <div key={__} className="mb-2">
                     <NavLink
-                      href={item2?.href}
-                      active={location.pathname.includes(item2.href)}
+                      href={`dashboard/${item2?.href}`}
+                      active={pathname.includes(item2.href)}
                     >
                       <IconPicker icon={item2.icon} size="1.5rem" />
                       <Text variant="text/md">{item2.title}</Text>
