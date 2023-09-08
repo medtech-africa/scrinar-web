@@ -16,6 +16,21 @@ export enum Icons {
   eclise = 'eclise',
   arrowDown = 'arrowDown',
   notificationBell = 'notificationBell',
+  add = 'add',
+  arrowLeft = 'arrowLeft',
+  arrowRight = 'arrowRight',
+  calendar2 = 'calendar2',
+  export = 'export',
+  gridEraser = 'gridEraser',
+  more = 'more',
+  saveAdd = 'saveAdd',
+  smallCheck = 'smallCheck',
+  mail = 'mail',
+  alertCircle = 'alertCircle',
+  check = 'check',
+  warning2 = 'warning2',
+  information = 'information',
+  danger = 'danger',
 }
 
 export { Icons as IconNames }
