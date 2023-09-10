@@ -47,7 +47,7 @@ const dataItems = [
 
 export const Example = () => {
   return (
-    <div className="grid gap-4 w-[300px] bg-white p-10">
+    <div className="grid gap-4 w-[400px] bg-white p-10">
       {dataItems.map((item) => (
         <Card key={item.title} {...item} className="w-full" />
       ))}
