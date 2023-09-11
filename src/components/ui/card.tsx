@@ -1,26 +1,9 @@
 import * as React from 'react'
 
 import { cn } from '@/lib/utils'
-import { VariantProps, cva } from 'class-variance-authority'
-
-const cardVariants = cva('', {
-  variants: {
-    // size: {
-    //   sm: 'px-4 py-[7px]',
-    //   md: 'px-4 py-2',
-    //   lg: 'px-4 py-3',
-    //   xl: 'px-4 py-4',
-    // },
-  },
-  defaultVariants: {
-    // size: 'md',
-  },
-})
 
 export interface CardProps
-  extends React.HTMLAttributes<Omit<HTMLDivElement, 'title'>>,
-    VariantProps<typeof cardVariants> {
-  //   title: React.ReactNode
+  extends React.HTMLAttributes<Omit<HTMLDivElement, 'title'>> {
   description: React.ReactNode
   icon: React.ReactNode
   iconClassName?: string
