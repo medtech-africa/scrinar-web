@@ -5,7 +5,11 @@ import { cn } from '@/lib/utils'
 import useClickAway from '@/lib/useClickAway'
 import { IconPicker } from './icon-picker'
 
-export const Header = () => {
+interface IHeader {
+  sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
+}
+
+export const Header = ({ sideToggleOpen }: IHeader) => {
   const menuRef = useRef(null)
   const [visible, setVisible] = useState<boolean>(false)
 
@@ -14,6 +18,9 @@ export const Header = () => {
   return (
     <header>
       <div className="flex bg-grey-50 justify-between border-b-[1px] border-grey-100 items-center px-4 md:px-8 py-4">
+        <div className="md:hidden" onClick={() => sideToggleOpen((pr) => !pr)}>
+          <IconPicker size={24} icon="hamburger" />
+        </div>
         <div>
           <Input
             leadingIcon={<IconPicker icon="search" />}
@@ -51,7 +58,7 @@ export const Header = () => {
       <div
         ref={menuRef}
         className={cn(
-          'flex flex-col p-3 md:hidden bg-grey-50 justify-center space-y-3 items-start shadow-xl absolute right-4',
+          'flex flex-col p-3 md:hidden bg-grey-50 justify-center space-y-3 items-start shadow-xl absolute right-4 z-40',
           visible ? 'flex' : 'hidden'
         )}
       >
