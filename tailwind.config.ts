@@ -186,6 +186,11 @@ const config: Config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      spacing: {
+        1.1: '0.3125rem',
+        1.2: '0.375rem',
+        2.2: '0.625rem',
+      },
     },
   },
   plugins: [
