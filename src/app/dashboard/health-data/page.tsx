@@ -12,28 +12,20 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Text } from '@/components/ui/text'
-// import Link from 'next/link'
+import { cn } from '@/lib/utils'
 import { useState } from 'react'
 
 const PageHeader = () => {
   return (
     <div className=" flex flex-col gap-y-4 px-6 py-4 ">
       <div className="flex items-baseline gap-4">
-        <Text
-          variant="display/xs"
-          weight="medium"
-          className="text-2xl text-grey-900"
-        >
+        <Text variant="display/xs" weight="medium" className="text-grey-900">
           Health Data
         </Text>
         <Text> Avatar</Text>
       </div>
       <div>
-        <Text
-          variant="display/sm"
-          weight="default"
-          className="text-sm text-grey-600"
-        >
+        <Text variant="text/sm" weight="default" className="text-grey-600">
           Tracking Vital Metrics: BMI and Nutritional Information
         </Text>
       </div>
@@ -44,7 +36,7 @@ const PageHeader = () => {
 const FilterData = () => {
   return (
     <div className="flex flex-row px-6 py-4 mt-2 border-y border-grey-50 gap-4">
-      <div className="flex gap-x-4">
+      <div className="gap-x-4 md:flex md:flex-row grid grid-cols-2 gap-y-2">
         <Button
           value="Timestamp"
           className="bg-grey-50 text-grey-900 hover:bg-grey-100"
@@ -69,91 +61,145 @@ const FilterData = () => {
     </div>
   )
 }
+type FilterHeaderProps = {
+  setOpenFilter: (value: boolean) => void
+  openFilter: boolean
+}
+const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
+  return (
+    <div className="md:flex md:flex-row grid grid-cols-1 py-4 px-6 justify-between mt-2 border-y border-grey-50">
+      <Input
+        leadingIcon={<IconPicker icon="search" />}
+        className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
+        placeholder="Search by Name, Gender or Age.."
+        full={false}
+      />
+      <div className="flex gap-x-4 mt-2 md:mt-0">
+        <Button
+          onClick={() => setOpenFilter(!openFilter)}
+          value="Filter Data"
+          className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
+          endingIcon={<IconPicker icon="arrowDown" />}
+        />
+        <Button
+          value="Export Data"
+          className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
+          endingIcon={<IconPicker icon="export" />}
+        />
+        <Button
+          value="Add New Record"
+          variant="primary"
+          className="p-2 md:px-4 md:py-2"
+          leadingIcon={<IconPicker icon="add" />}
+        />
+      </div>
+    </div>
+  )
+}
+const DropDownMenu = () => {
+  return (
+    <div
+      className={cn(
+        'flex flex-col p-2 bg-grey-50 mt-8 justify-center space-y-3 items-start shadow-xl absolute right-4 z-40 whitespace-nowrap'
+      )}
+    >
+      <div className="flex flex-row items-center space-x-2 cursor-pointer px-4 py-2 hover:bg-[#F9FAFB] rounded">
+        <div className="bg-grey-100 rounded-full">
+          <IconPicker icon="book" size={16} />
+        </div>
+        <Text className="hover:text-grey-900 text-grey-600 hover:text-sm text-xs ">
+          View Data
+        </Text>
+      </div>
+      <div className="flex flex-row items-center space-x-2 cursor-pointer px-4 py-2 hover:bg-[#F9FAFB] rounded">
+        <div className="bg-grey-100 rounded-full">
+          <IconPicker icon="profile2User" size={16} />
+        </div>
+        <Text className="hover:text-grey-900 text-grey-600 hover:text-sm text-xs">
+          Edit Data
+        </Text>
+      </div>
+      <div className="flex flex-row items-center space-x-2 cursor-pointer px-4 py-2 hover:bg-[#F9FAFB] rounded">
+        <div className="bg-grey-100 rounded-full">
+          <IconPicker icon="warning2" size={16} />
+        </div>
+        <Text className="hover:text-carmine-pink-red-900 text-carmine-pink-red-600 hover:text-sm text-xs">
+          Delete Data
+        </Text>
+      </div>
+    </div>
+  )
+}
 
 export default function HealthData() {
   const [openFilter, setOpenFilter] = useState(false)
-  const FilterHeader = () => {
-    return (
-      <div className="md:flex md:flex-row grid grid-cols-1 w-full px-6 py-4 justify-between mt-2 border-y border-grey-50">
-        <Input
-          leadingIcon={<IconPicker icon="search" />}
-          className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
-          placeholder="Search by Name, Gender or Age.."
-          full={false}
-        />
-        <div className="flex gap-x-4 mt-2 md:mt-0">
-          <Button
-            onClick={() => setOpenFilter(!openFilter)}
-            value="Filter Data"
-            className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
-            endingIcon={<IconPicker icon="arrowDown" />}
-          />
-          <Button
-            value="Export Data"
-            className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
-            endingIcon={<IconPicker icon="export" />}
-          />
-          <Button
-            value="Add New Record"
-            variant="primary"
-            className="p-2 md:px-4 md:py-2"
-            leadingIcon={<IconPicker icon="add" />}
-          />
-        </div>
-      </div>
-    )
+  const [selectedRow, setSelectedRow] = useState(null)
+  const handleMoreClick = (rowIndex: any) => {
+    setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
+
   return (
     <div>
       <PageHeader />
-      <FilterHeader />
+      <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
-      <Table>
-        <TableHeader className="bg-grey-100">
-          <TableRow>
-            <TableHead>Students Name</TableHead>
-            <TableHead>BMI</TableHead>
-            <TableHead></TableHead>
-            <TableHead>Nutritional Health</TableHead>
-            <TableHead>Exercise Habits</TableHead>
-            <TableHead>Timestamp</TableHead>
-            <TableHead>Action</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {data.length === 0 ? (
+      <div className="max-h-[500px] overflow-y-auto">
+        <Table>
+          <TableHeader className="bg-grey-100">
             <TableRow>
-              <TableCell>No data available</TableCell>
+              <TableHead>Students Name</TableHead>
+              <TableHead>BMI</TableHead>
+              <TableHead></TableHead>
+              <TableHead>Nutritional Health</TableHead>
+              <TableHead>Exercise Habits</TableHead>
+              <TableHead>Timestamp</TableHead>
+              <TableHead>Action</TableHead>
             </TableRow>
-          ) : (
-            data.map((val) => (
-              <TableRow
-                key={val.id}
-                className="font-normal text-sm text-grey-600"
-              >
-                <TableCell className="flex gap-x-2 items-center">
-                  <div>{val.image}</div>
-                  <div className="flex flex-row gap-x-[3px]">
-                    <div>{val.firstName}</div>
-                    <div>{val.lastName}</div>
-                  </div>
-                </TableCell>
+          </TableHeader>
+          <TableBody className="h-[500px]">
+            {data.length === 0 ? (
+              <div className="flex flex-1 justify-center flex-col items-center absolute left-[40%] h-[400px]">
+                <IconPicker icon="grid7" />
+                <Text className="text-grey-400" variant="text/sm">
+                  No Data Entry
+                </Text>
+              </div>
+            ) : (
+              data.map((val) => (
+                <TableRow
+                  key={val.id}
+                  className="font-normal text-sm text-grey-600"
+                >
+                  <TableCell className="flex gap-x-2 items-center">
+                    <div>{val.image}</div>
+                    <div className="flex flex-row gap-x-[3px]">
+                      <div>{val.firstName}</div>
+                      <div>{val.lastName}</div>
+                    </div>
+                  </TableCell>
 
-                <TableCell>{val.bmi}</TableCell>
-                <TableCell>
-                  <BadgeField variant="error" value={val.variantval} />
-                </TableCell>
-                <TableCell>{val.nutritional}</TableCell>
-                <TableCell>{val.exercise}</TableCell>
-                <TableCell>{val.timestamp}</TableCell>
-                <TableCell className="flex justify-center">
-                  <IconPicker icon="more" />
-                </TableCell>
-              </TableRow>
-            ))
-          )}
-        </TableBody>
-      </Table>
+                  <TableCell>{val.bmi}</TableCell>
+                  <TableCell>
+                    <BadgeField variant="error" value={val.variantval} />
+                  </TableCell>
+                  <TableCell>{val.nutritional}</TableCell>
+                  <TableCell>{val.exercise}</TableCell>
+                  <TableCell>{val.timestamp}</TableCell>
+                  <TableCell className="flex justify-center relative text-left">
+                    <div
+                      onClick={() => handleMoreClick(val.id)}
+                      className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50"
+                    >
+                      <IconPicker icon="more" />
+                    </div>
+                    {selectedRow === val.id && <DropDownMenu />}
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
     </div>
   )
 }
@@ -187,6 +233,76 @@ const data: DataType = [
   },
   {
     id: 2,
+    image: (
+      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
+    ),
+    firstName: 'Asah',
+    lastName: 'Benjamin',
+    bmi: 23.3,
+    nutritional: 'Execellent',
+    exercise: 'Very Active',
+    timestamp: 'Aug 10, 2023',
+    variant: 'error',
+    variantval: 'Extremely obese',
+  },
+  {
+    id: 3,
+    image: (
+      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
+    ),
+    firstName: 'Asah',
+    lastName: 'Benjamin',
+    bmi: 23.3,
+    nutritional: 'Execellent',
+    exercise: 'Very Active',
+    timestamp: 'Aug 10, 2023',
+    variant: 'error',
+    variantval: 'Extremely obese',
+  },
+  {
+    id: 4,
+    image: (
+      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
+    ),
+    firstName: 'Asah',
+    lastName: 'Benjamin',
+    bmi: 23.3,
+    nutritional: 'Execellent',
+    exercise: 'Very Active',
+    timestamp: 'Aug 10, 2023',
+    variant: 'error',
+    variantval: 'Extremely obese',
+  },
+  {
+    id: 5,
+    image: (
+      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
+    ),
+    firstName: 'Asah',
+    lastName: 'Benjamin',
+    bmi: 23.3,
+    nutritional: 'Execellent',
+    exercise: 'Very Active',
+    timestamp: 'Aug 10, 2023',
+    variant: 'error',
+    variantval: 'Extremely obese',
+  },
+  {
+    id: 6,
+    image: (
+      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
+    ),
+    firstName: 'Asah',
+    lastName: 'Benjamin',
+    bmi: 23.3,
+    nutritional: 'Execellent',
+    exercise: 'Very Active',
+    timestamp: 'Aug 10, 2023',
+    variant: 'error',
+    variantval: 'Extremely obese',
+  },
+  {
+    id: 7,
     image: (
       <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
     ),
