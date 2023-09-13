@@ -16,7 +16,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       <div className="h-full relative md:grid md:grid-rows-[80px_1fr] md:ml-60 md:pl-9">
         <Header sideToggleOpen={sideToggleOpen} />
         <AnimatePresence mode="wait">
-          <main className="md:px-8 py-4 px-2 relative md:pb-16 bg-grey-50">
+          <main className="md:px-8 py-4 px-2 relative md:pb-16 bg-white">
             {children}
           </main>
         </AnimatePresence>
