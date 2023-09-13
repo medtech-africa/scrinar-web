@@ -17,7 +17,7 @@ import { useState } from 'react'
 
 const PageHeader = () => {
   return (
-    <div className=" flex flex-col gap-y-4 px-6 py-4 ">
+    <div className=" flex flex-col gap-y-4 py-4 ">
       <div className="flex items-baseline gap-4">
         <Text variant="display/xs" weight="medium" className="text-grey-900">
           Health Data
@@ -35,7 +35,7 @@ const PageHeader = () => {
 
 const FilterData = () => {
   return (
-    <div className="flex flex-row px-6 py-4 mt-2 border-y border-grey-50 gap-4">
+    <div className="flex flex-row py-4 mt-2 border-y border-grey-50 gap-4">
       <div className="gap-x-4 md:flex md:flex-row grid grid-cols-2 gap-y-2">
         <Button
           value="Timestamp"
@@ -67,7 +67,7 @@ type FilterHeaderProps = {
 }
 const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
   return (
-    <div className="md:flex md:flex-row grid grid-cols-1 py-4 px-6 justify-between mt-2 border-y border-grey-50">
+    <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50">
       <Input
         leadingIcon={<IconPicker icon="search" />}
         className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
