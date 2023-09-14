@@ -17,7 +17,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
 
   return (
     <header>
-      <div className="flex bg-grey-50 justify-between border-b-[1px] border-grey-100 items-center px-4 md:px-8 py-4">
+      <div className="flex bg-white justify-between border-b-[1px] border-grey-100 items-center px-4 md:px-8 py-4">
         <div className="md:hidden" onClick={() => sideToggleOpen((pr) => !pr)}>
           <IconPicker size={24} icon="hamburger" />
         </div>
