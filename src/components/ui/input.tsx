@@ -28,6 +28,7 @@ export interface InputProps
   message?: string
   leadingIcon?: React.ReactNode
   endingIcon?: React.ReactNode
+  labelStyle?: string
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -40,6 +41,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       leadingIcon,
       endingIcon,
       label,
+      labelStyle,
       ...props
     },
     ref
@@ -49,7 +51,10 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         {!!label && (
           <label
             htmlFor={props.name}
-            className="text-grey-700 font-medium text-sm mb-[6px]"
+            className={cn(
+              'text-grey-700 font-medium text-sm mb-[6px]',
+              labelStyle
+            )}
           >
             {label}
           </label>

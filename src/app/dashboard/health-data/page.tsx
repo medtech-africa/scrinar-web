@@ -1,4 +1,5 @@
 'use client'
+import { PageHeader } from '@/components/PageHeader'
 import { BadgeField } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/button'
 import { IconPicker } from '@/components/ui/icon-picker'
@@ -13,25 +14,8 @@ import {
 } from '@/components/ui/table'
 import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
+import Link from 'next/link'
 import { useState } from 'react'
-
-const PageHeader = () => {
-  return (
-    <div className=" flex flex-col gap-y-4 py-4 ">
-      <div className="flex items-baseline gap-4">
-        <Text variant="display/xs" weight="medium" className="text-grey-900">
-          Health Data
-        </Text>
-        <Text> Avatar</Text>
-      </div>
-      <div>
-        <Text variant="text/sm" weight="default" className="text-grey-600">
-          Tracking Vital Metrics: BMI and Nutritional Information
-        </Text>
-      </div>
-    </div>
-  )
-}
 
 const FilterData = () => {
   return (
@@ -86,12 +70,14 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
           endingIcon={<IconPicker icon="export" />}
         />
-        <Button
-          value="Add New Record"
-          variant="primary"
-          className="p-2 md:px-4 md:py-2"
-          leadingIcon={<IconPicker icon="add" />}
-        />
+        <Link href={`/dashboard/add-record`}>
+          <Button
+            value="Add New Record"
+            variant="primary"
+            className="p-2 md:px-4 md:py-2 h-full"
+            leadingIcon={<IconPicker icon="add" />}
+          />
+        </Link>
       </div>
     </div>
   )
@@ -140,7 +126,11 @@ export default function HealthData() {
 
   return (
     <div>
-      <PageHeader />
+      <PageHeader
+        title="Header"
+        subtitle="Tracking Vital Metrics: BMI and Nutritional Information"
+        avatar="avatar"
+      />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
       <div className="max-h-[500px] overflow-y-auto">
