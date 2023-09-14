@@ -70,7 +70,7 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
           endingIcon={<IconPicker icon="export" />}
         />
-        <Link href={`/dashboard/add-record`}>
+        <Link href={`/dashboard/health-data/add-record`}>
           <Button
             value="Add New Record"
             variant="primary"
