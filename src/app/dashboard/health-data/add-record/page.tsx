@@ -2,6 +2,7 @@ import { PageHeader } from '@/components/PageHeader'
 import { BadgeField } from '@/components/ui/Badge'
 import { PageCard } from '@/components/ui/PageCard'
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
@@ -22,6 +23,26 @@ export default function AddRecord() {
       <div className="flex lg:flex-row flex-col w-full">
         <div className="w-full h-full">
           <PageCard title="Add Basic Information" bodyStyle="p-4">
+            <div className="flex gap-x-4">
+              <div className="flex items-center">
+                <div className="p-4 rounded-full border border-lust-100 border-dashed ">
+                  <IconPicker icon="add" className="text-lust-900" />
+                </div>
+                <Text
+                  className="ml-2 text-gray-900"
+                  variant="text/md"
+                  weight="medium"
+                >
+                  Add Avatar
+                </Text>
+              </div>
+              <div className="flex items-center">
+                <Checkbox />
+                <Text className="ml-2 text-grey-500">
+                  Use System Generated Avatar
+                </Text>
+              </div>
+            </div>
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
               <Input
                 placeholder="Enter Name"
