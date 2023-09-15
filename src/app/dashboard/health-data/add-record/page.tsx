@@ -3,10 +3,11 @@ import { BadgeField } from '@/components/ui/Badge'
 import { PageCard } from '@/components/ui/PageCard'
 import { Button } from '@/components/ui/button'
 import { IconPicker } from '@/components/ui/icon-picker'
+import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
 const navigationItems = [
-  { label: 'Health Data', icon: 'arrowRight' },
+  { label: 'Health Data', icon: 'arrowRight' as IconNames },
   { label: 'Add New Record' },
 ]
 export default function AddRecord() {

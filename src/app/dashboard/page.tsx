@@ -103,9 +103,9 @@ export default async function Home() {
           Dashboard Overview
         </Text>
       </section>
-      <section className="grid md:grid-cols-[2.5fr_1fr] gap-6 mt-2.2 py-8">
+      <section className="grid lg:grid-cols-[2.5fr_1fr] gap-6 mt-2.2 py-8">
         <section>
-          <div className="md:grid md:grid-cols-2 lg:grid-cols-3 flex flex-wrap gap-4 mb-6">
+          <div className="md:grid  dashboard-home-cards-container lg:grid-cols-3 flex flex-wrap gap-4 mb-6">
             {dashboardStats.map((stat, _) => {
               const statColor =
                 stat.icon === 'health'

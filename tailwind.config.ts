@@ -214,6 +214,11 @@ const config: Config = {
         '.sidebar-shadow': {
           'box-shadow': '0px 0px 37px 0px rgba(16, 24, 40, 0.02)',
         },
+        '@media (max-width: 1130px)': {
+          '.dashboard-home-cards-container': {
+            'grid-template-columns': 'repeat(2, minmax(0, 1fr)) !important',
+          },
+        },
       })
     }),
   ],
