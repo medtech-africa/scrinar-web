@@ -211,6 +211,7 @@ const config: Config = {
           'box-shadow': '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
           '&:focus': focusOutset,
         },
+        '.focus-outset': focusOutset,
         '.sidebar-shadow': {
           'box-shadow': '0px 0px 37px 0px rgba(16, 24, 40, 0.02)',
         },
