@@ -4,10 +4,12 @@ import { PageCard } from '@/components/ui/PageCard'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { IconPicker } from '@/components/ui/icon-picker'
+import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
+
 const navigationItems = [
-  { label: 'Health Data', icon: 'arrowRight' },
+  { label: 'Health Data', icon: IconNames.arrowRight },
   { label: 'Add New Record' },
 ]
 export default function AddRecord() {

@@ -1,9 +1,12 @@
+'use client'
+import { useRouter } from 'next/navigation'
 import { IconPicker } from './ui/icon-picker'
+import { IconNames } from './ui/icon-picker/icon-names'
 import { Text } from './ui/text'
 
-type NavigationItem = {
+export type NavigationItem = {
   label: string
-  icon?: string // Make the icon optional
+  icon?: IconNames
 }
 
 type PageHeaderTypes = {
@@ -19,16 +22,20 @@ export const PageHeader = ({
   navigation,
   avatar,
 }: PageHeaderTypes) => {
+  const router = useRouter()
   return (
     <div className="flex flex-col gap-y-4 py-4">
       {navigation && (
         <div className="flex flex-row">
-          <div className="bg-grey-100 rounded-full mr-4">
+          <div
+            onClick={router.back}
+            className="bg-grey-100 rounded-full mr-4 cursor-pointer"
+          >
             <IconPicker icon="arrowLeft" />
           </div>
           <div className="flex flex-row gap-x-2">
             {navigation.map((item, index) => (
-              <div key={index} className="flex flex-row gap-x-2">
+              <div key={index} className={'flex flex-row gap-x-2'}>
                 <Text
                   variant="text/sm"
                   className={
@@ -39,8 +46,7 @@ export const PageHeader = ({
                 >
                   {item.label}
                 </Text>
-                {/* eslint-disable-next-line @typescript-eslint/ban-ts-comment */}
-                {/* @ts-ignore */}
+
                 {item.icon && <IconPicker icon={item.icon} />}
                 {/* Render the icon if provided */}
               </div>
