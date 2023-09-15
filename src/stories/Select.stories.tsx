@@ -1,10 +1,10 @@
 import { IconPicker } from '@/components/ui/icon-picker'
-import { Input } from '../components/ui/input'
+import { Select } from '../components/ui/select'
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta = {
-  title: 'Example/Input',
-  component: Input,
+  title: 'Example/Select',
+  component: Select,
   parameters: {
     layout: 'centered',
   },
@@ -13,7 +13,15 @@ const meta = {
     className: 'min-w-[300px]',
   },
   tags: ['autodocs'],
-} satisfies Meta<typeof Input>
+} satisfies Meta<typeof Select>
+
+const allOptions = [
+  { value: 'pulse', label: 'Heart Beat' },
+  { value: 'respiratoryRate', label: 'Respiration' },
+  { value: 'temperature', label: 'Temperature' },
+  { value: 'bloodPressure', label: 'SBP/BBP' },
+  { value: 'bloodGlucose', label: 'Glucose' },
+]
 
 export default meta
 type Story = StoryObj<typeof meta>
@@ -21,6 +29,7 @@ type Story = StoryObj<typeof meta>
 export const Default: Story = {
   args: {
     variant: 'default',
+    options: allOptions,
   },
 }
 
@@ -43,7 +52,7 @@ export const DefaultWithLeadingIconDisabled: Story = {
   args: {
     variant: 'default',
     leadingIcon: <IconPicker icon="mail" size="1.25rem" />,
-    disabled: true,
+    isDisabled: true,
   },
 }
 
