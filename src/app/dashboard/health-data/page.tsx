@@ -97,14 +97,16 @@ const DropDownMenu = () => {
           View Data
         </Text>
       </div>
-      <div className="flex flex-row items-center space-x-2 cursor-pointer px-4 py-2 hover:bg-[#F9FAFB] rounded">
-        <div className="bg-grey-100 rounded-full">
-          <IconPicker icon="profile2User" size={16} />
+      <Link href="health-data/update-record">
+        <div className="flex flex-row items-center space-x-2 cursor-pointer px-4 py-2 hover:bg-[#F9FAFB] rounded">
+          <div className="bg-grey-100 rounded-full">
+            <IconPicker icon="profile2User" size={16} />
+          </div>
+          <Text className="hover:text-grey-900 text-grey-600 hover:text-sm text-xs">
+            Edit Data
+          </Text>
         </div>
-        <Text className="hover:text-grey-900 text-grey-600 hover:text-sm text-xs">
-          Edit Data
-        </Text>
-      </div>
+      </Link>
       <div className="flex flex-row items-center space-x-2 cursor-pointer px-4 py-2 hover:bg-[#F9FAFB] rounded">
         <div className="bg-grey-100 rounded-full">
           <IconPicker icon="warning2" size={16} />
