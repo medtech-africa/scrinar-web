@@ -18,7 +18,7 @@ export const ArrowDownIcon: FunctionComponent<IconPickerProp> = ({
     >
       <path
         d="M13.2802 5.9668L8.93355 10.3135C8.42021 10.8268 7.58021 10.8268 7.06688 10.3135L2.72021 5.9668"
-        stroke="#101828"
+        stroke="currentColor"
         strokeWidth="1.5"
         strokeMiterlimit="10"
         strokeLinecap="round"
