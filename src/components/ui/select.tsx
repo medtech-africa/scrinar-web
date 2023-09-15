@@ -174,6 +174,5 @@ const Select = ({
     </div>
   )
 }
-Select.displayName = 'Select'
 
 export { Select, inputVariants }
