@@ -1,4 +1,4 @@
-import { PageCard } from '@/components/ui/PageCard'
+import { PageCard } from '@/components/ui/page-card'
 import type { Meta, StoryObj } from '@storybook/react'
 
 const meta = {
