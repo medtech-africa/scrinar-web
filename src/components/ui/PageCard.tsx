@@ -8,8 +8,8 @@ export interface PageCardProps extends React.HTMLAttributes<HTMLDivElement> {
 }
 
 const PageCard = React.forwardRef<HTMLDivElement, PageCardProps>(
-  ({ className, title, bodyStyle, ...props }) => (
-    <div className={cn('w-full bg-white', className)}>
+  ({ className, title, bodyStyle, ...props }, ref) => (
+    <div ref={ref} className={cn('w-full bg-white', className)}>
       <div className="bg-grey-50 rounded-lg border border-gray-100">
         <Text
           variant="text/sm"

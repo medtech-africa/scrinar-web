@@ -51,7 +51,7 @@ type FilterHeaderProps = {
 }
 const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
   return (
-    <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50">
+    <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
       <Input
         leadingIcon={<IconPicker icon="search" />}
         className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
@@ -70,7 +70,7 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
           endingIcon={<IconPicker icon="export" />}
         />
-        <Link href={`/dashboard/health-data/add-record`}>
+        <Link href={`health-data/add-record`}>
           <Button
             value="Add New Record"
             variant="primary"
@@ -133,7 +133,7 @@ export default function HealthData() {
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
-      <div className="max-h-[500px] overflow-y-auto">
+      <div className="max-h-[500px] overflow-y-auto py-3 md:py-8">
         <Table>
           <TableHeader className="bg-grey-100">
             <TableRow>
