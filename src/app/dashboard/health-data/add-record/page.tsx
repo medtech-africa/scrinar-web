@@ -1,6 +1,6 @@
-import { PageHeader } from '@/components/PageHeader'
+import { PageHeader } from '@/components/page-header'
 import { BadgeField } from '@/components/ui/Badge'
-import { PageCard } from '@/components/ui/PageCard'
+import { PageCard } from '@/components/ui/page-card'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { IconPicker } from '@/components/ui/icon-picker'

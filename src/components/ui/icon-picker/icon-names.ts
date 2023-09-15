@@ -33,6 +33,10 @@ export enum Icons {
   danger = 'danger',
   loader2 = 'loader2',
   hamburger = 'hamburger',
+  documentText = 'documentText',
+  trash = 'trash',
+  security = 'security',
+  userEdit = 'userEdit',
 }
 
 export { Icons as IconNames }

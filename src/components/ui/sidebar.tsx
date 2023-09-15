@@ -208,6 +208,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                         initial="collapsed"
                         animate="open"
                         exit="collapsed"
+                        className="mt-2"
                         variants={{
                           open: {
                             opacity: 1,
@@ -220,18 +221,22 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                         }}
                       >
                         <NavLink
-                          href={'dashboard/instructors'}
-                          active={pathname.includes('/instructors')}
-                          className="pl-11"
+                          href={'/dashboard/user-profile/instructors'}
+                          className={cn(
+                            'pl-11',
+                            pathname.includes('/instructors') && 'bg-grey-100'
+                          )}
                         >
                           <DotIcon />
                           <Text variant="text/md">Instructors</Text>
                         </NavLink>
 
                         <NavLink
-                          href="dashboard/students"
-                          className="pl-11"
-                          active={pathname.includes('/students')}
+                          href="/dashboard/user-profile/students"
+                          className={cn(
+                            'pl-11',
+                            pathname.includes('/students') && 'bg-grey-100'
+                          )}
                         >
                           <DotIcon />
                           <Text variant="text/md">Students</Text>
