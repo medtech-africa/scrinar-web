@@ -7,8 +7,9 @@ import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
+
 const navigationItems = [
-  { label: 'Health Data', icon: 'arrowRight' as IconNames },
+  { label: 'Health Data', icon: IconNames.arrowRight },
   { label: 'Add New Record' },
 ]
 export default function AddRecord() {

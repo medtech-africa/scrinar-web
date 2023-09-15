@@ -216,7 +216,7 @@ const config: Config = {
         },
         '@media (max-width: 1130px)': {
           '.dashboard-home-cards-container': {
-            'grid-template-columns': 'repeat(2, minmax(0, 1fr)) !important',
+            'grid-template-columns': 'repeat(2, minmax(0, 1fr))',
           },
         },
       })

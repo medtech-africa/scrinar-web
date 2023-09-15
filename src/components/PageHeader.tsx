@@ -4,7 +4,7 @@ import { IconPicker } from './ui/icon-picker'
 import { IconNames } from './ui/icon-picker/icon-names'
 import { Text } from './ui/text'
 
-type NavigationItem = {
+export type NavigationItem = {
   label: string
   icon?: IconNames
 }
