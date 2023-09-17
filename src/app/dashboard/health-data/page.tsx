@@ -148,12 +148,12 @@ export default function HealthData() {
                   <TableCell>{val.nutritional}</TableCell>
                   <TableCell>{val.exercise}</TableCell>
                   <TableCell>{val.timestamp}</TableCell>
-                  <TableCell className="flex justify-center relative text-left">
+                  <TableCell className="relative">
                     <div
                       onClick={() => handleMoreClick(val.id)}
-                      className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50"
+                      className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                     >
-                      <IconPicker icon="more" />
+                      <IconPicker icon="more" size="1.25rem" />
                     </div>
                     {selectedRow === val.id && (
                       <DropDownMenu

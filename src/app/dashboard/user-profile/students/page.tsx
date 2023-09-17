@@ -55,7 +55,7 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
       <Input
         leadingIcon={<IconPicker icon="search" />}
         className="rounded-[49px] bg-grey-100 text-sm  md:w-[17.25rem] w-[15rem]"
-        placeholder="Search by Name, Email or Mobile Number...."
+        placeholder="Search by Name, Level, Gender or Age...."
         full={false}
       />
       <div className="flex gap-x-4 mt-2 md:mt-0">
@@ -70,9 +70,9 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
           endingIcon={<IconPicker icon="export" />}
         />
-        <Link href={`instructors/add-instructor`}>
+        <Link href={`students/add-student`}>
           <Button
-            value="Add New Instructor"
+            value="Add New Student"
             variant="primary"
             className="p-2 md:px-4 md:py-2 h-full"
             leadingIcon={<IconPicker icon="add" />}
@@ -83,7 +83,7 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
   )
 }
 
-export default function Instructors() {
+export default function Students() {
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const handleMoreClick = (rowIndex: any) => {
@@ -112,8 +112,8 @@ export default function Instructors() {
   return (
     <div>
       <PageHeader
-        title="Instructors"
-        subtitle="Manage Instructors profiles, Add, View and Delete Profile."
+        title="Students"
+        subtitle="Manage Students profiles, Add, View and Delete Profile."
         avatar="avatar"
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
@@ -123,9 +123,9 @@ export default function Instructors() {
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Role</TableHead>
-              <TableHead>Email</TableHead>
-              <TableHead>Mobile Number</TableHead>
+              <TableHead>Level</TableHead>
+              <TableHead>Gender</TableHead>
+              <TableHead>Age</TableHead>
               <TableHead>Date Added</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
@@ -147,14 +147,14 @@ export default function Instructors() {
                     </div>
                   </TableCell>
 
-                  <TableCell>{val.role}</TableCell>
-                  <TableCell>{val.email}</TableCell>
-                  <TableCell>{val.phoneNumber}</TableCell>
+                  <TableCell>{val.level}</TableCell>
+                  <TableCell>{val.gender}</TableCell>
+                  <TableCell>{val.age}</TableCell>
                   <TableCell>{val.timestamp}</TableCell>
                   <TableCell className="relative">
                     <div
                       onClick={() => handleMoreClick(val.id)}
-                      className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
+                      className="p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
@@ -179,9 +179,9 @@ type DataType = {
   image?: React.ReactNode
   firstName?: string
   lastName?: string
-  role?: string
-  email?: string
-  phoneNumber?: string
+  level?: string
+  gender?: string
+  age?: string
   timestamp?: string
 }[]
 
@@ -193,9 +193,9 @@ const data: DataType = [
     ),
     firstName: 'Emmanuel',
     lastName: 'adebayo',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
   },
   {
@@ -205,9 +205,9 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
   },
   {
@@ -217,9 +217,9 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
   },
   {
@@ -229,9 +229,9 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
   },
   {
@@ -241,9 +241,9 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
   },
   {
@@ -253,9 +253,9 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
   },
   {
@@ -265,9 +265,9 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
   },
 ]
