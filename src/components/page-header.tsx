@@ -12,7 +12,7 @@ export type NavigationItem = {
 type PageHeaderTypes = {
   title?: string
   subtitle?: string
-  navigation?: NavigationItem[] // Use an array of NavigationItem objects
+  navigation?: NavigationItem[]
   avatar?: React.ReactNode
 }
 
@@ -40,15 +40,13 @@ export const PageHeader = ({
                   variant="text/sm"
                   className={
                     index === navigation.length - 1
-                      ? 'text-grey-900' // Use a different text color for the last item
+                      ? 'text-grey-900'
                       : 'text-grey-400'
                   }
                 >
                   {item.label}
                 </Text>
-
                 {item.icon && <IconPicker icon={item.icon} />}
-                {/* Render the icon if provided */}
               </div>
             ))}
           </div>

@@ -10,20 +10,21 @@ import { Text } from '@/components/ui/text'
 
 const navigationItems = [
   { label: 'Health Data', icon: IconNames.arrowRight },
-  { label: 'Add New Record' },
+  { label: 'Data Details', icon: IconNames.arrowRight },
+  { label: 'Update' },
 ]
-export default function AddRecord() {
+export default function UpdateRecord() {
   return (
     <div>
       <PageHeader
-        title="Add New Record"
-        subtitle="Add new Health Data: track student health progress"
+        title="Update Data"
+        subtitle="Edit Health Data: track student health progress"
         navigation={navigationItems}
         avatar="avatar"
       />
       <div className="flex lg:flex-row flex-col w-full mt-9">
         <div className="w-full h-full">
-          <PageCard title="Add Basic Information" bodyStyle="p-4">
+          <PageCard title="Update Basic Information" bodyStyle="p-4">
             <div className="flex gap-x-4">
               <div className="flex items-center">
                 <div className="p-4 rounded-full border border-lust-100 border-dashed ">
@@ -114,14 +115,14 @@ export default function AddRecord() {
             </div>
             <Button
               variant={'primary'}
-              value="Save Data"
+              value="Update Data"
               leadingIcon={<IconPicker icon="saveAdd" />}
               className="mt-6"
             />
           </PageCard>
         </div>
         <div className="bg-grey-800 ml-[24px] h-full">
-          <PageCard title="Add BMI Details">
+          <PageCard title="Update BMI Details">
             <div className="flex flex-col gap-y-6 w-full p-4">
               <Input
                 placeholder="180 IN"
