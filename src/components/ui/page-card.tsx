@@ -16,7 +16,7 @@ const PageCard = React.forwardRef<HTMLDivElement, PageCardProps>(
         className
       )}
     >
-      <div className="bg-grey-50 pb-6">
+      <div className="bg-grey-50 mb-6">
         <Text
           variant="text/sm"
           weight="medium"
