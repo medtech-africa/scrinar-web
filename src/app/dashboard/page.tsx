@@ -114,7 +114,7 @@ export default async function Home() {
                   ? 'green'
                   : 'iris'
               return (
-                <DashboardCard className="md:w-full" key={_}>
+                <DashboardCard className="w-full" key={_}>
                   <DashboardCardHeader
                     title={stat.count}
                     subtitle={stat.title}

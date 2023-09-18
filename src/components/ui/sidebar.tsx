@@ -123,7 +123,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
           exit={{ x: -200, opacity: 0 }}
           transition={{ duration: 0.3 }}
           className={cn(
-            `flex flex-col md:w-60 w-52 p-4 rounded-lg sidebar-shadow bg-white h-full overflow-y-auto`,
+            `flex flex-col  w-52 md:w-20.8 lg:w-60  p-4 rounded-lg sidebar-shadow bg-white h-full overflow-y-auto`,
             sideOpen && 'hidden'
           )}
         >
@@ -137,7 +137,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                 // className="w-[123.16px] h-6"
               /> */}
               <Text variant="display/xs" weight="bold">
-                Project Logo
+                <span className="block md:hidden lg:block">Project Logo</span>
+                <span className="hidden md:block lg:hidden">PL</span>
               </Text>
             </div>
             <Divider className="my-4" />
@@ -148,7 +149,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                   as="p"
                   className="text-grey-400 uppercase pl-4 py-[11px] mb-2"
                 >
-                  GENERAL
+                  <span className="block md:hidden lg:block">GENERAL</span>
+                  <span className="hidden md:block lg:hidden">...</span>
                 </Text>
 
                 {generalData.map((item, __) => (
@@ -162,7 +164,12 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                       }
                     >
                       <IconPicker icon={item.icon} size="1.5rem" />
-                      <Text variant="text/md">{item.title}</Text>
+                      <Text
+                        className="block md:hidden lg:block"
+                        variant="text/md"
+                      >
+                        {item.title}
+                      </Text>
                     </NavLink>
                   </div>
                 ))}
@@ -187,7 +194,12 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                   >
                     <div className="flex gap-2">
                       <IconPicker icon="profile2User" size="1.5rem" />
-                      <Text variant="text/md">User Profile</Text>
+                      <Text
+                        className="block md:hidden lg:block"
+                        variant="text/md"
+                      >
+                        User Profile
+                      </Text>
                     </div>
                     <motion.div
                       key="arrow"
@@ -228,7 +240,12 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           )}
                         >
                           <DotIcon />
-                          <Text variant="text/md">Instructors</Text>
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              Instructors
+                            </span>
+                            <span className="hidden md:block lg:hidden">-</span>
+                          </Text>
                         </NavLink>
 
                         <NavLink
@@ -239,7 +256,12 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           )}
                         >
                           <DotIcon />
-                          <Text variant="text/md">Students</Text>
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              Students
+                            </span>
+                            <span className="hidden md:block lg:hidden">-</span>
+                          </Text>
                         </NavLink>
                       </motion.div>
                     )}
@@ -253,7 +275,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                   as="p"
                   className="text-grey-400 uppercase pl-4 py-[11px] mb-2"
                 >
-                  OTHERS
+                  <span className="block md:hidden lg:block">OTHERS</span>
+                  <span className="hidden md:block lg:hidden">...</span>
                 </Text>
 
                 {othersData.map((item2, __) => (
@@ -263,7 +286,12 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                       active={pathname.includes(item2.href)}
                     >
                       <IconPicker icon={item2.icon} size="1.5rem" />
-                      <Text variant="text/md">{item2.title}</Text>
+                      <Text
+                        className="block md:hidden lg:block"
+                        variant="text/md"
+                      >
+                        {item2.title}
+                      </Text>
                     </NavLink>
                   </div>
                 ))}
