@@ -1,7 +1,7 @@
 'use client'
-import DropDownMenu from '@/components/drop-down-menu'
+import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
+import EmptyData from '@/components/empty-data'
 import { PageHeader } from '@/components/page-header'
-import { BadgeField } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/button'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
@@ -14,8 +14,8 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Text } from '@/components/ui/text'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const FilterData = () => {
@@ -55,8 +55,8 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
     <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
       <Input
         leadingIcon={<IconPicker icon="search" />}
-        className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
-        placeholder="Search by Name, Gender or Age.."
+        className="rounded-[49px] bg-grey-100 text-sm  md:w-[17.25rem] w-[15rem]"
+        placeholder="Search by Name, Level, Gender or Age...."
         full={false}
       />
       <div className="flex gap-x-4 mt-2 md:mt-0">
@@ -71,9 +71,9 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
           endingIcon={<IconPicker icon="export" />}
         />
-        <Link href={`health-data/add-record`}>
+        <Link href={`students/add-student`}>
           <Button
-            value="Add New Record"
+            value="Add New Student"
             variant="primary"
             className="p-2 md:px-4 md:py-2 h-full"
             leadingIcon={<IconPicker icon="add" />}
@@ -84,24 +84,36 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
   )
 }
 
-const menuItems = [
-  { title: 'View Data', icon: IconNames.documentText },
-  { title: 'Edit Data', icon: IconNames.userEdit },
-  { title: 'Delete Data', icon: IconNames.trash },
-]
-
-export default function HealthData() {
+export default function Students() {
+  const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
 
+  const menuItems: MenuItemProp[] = [
+    {
+      title: 'View',
+      icon: IconNames.documentText,
+      action: () => router.push(`students/view/${selectedRow}`),
+    },
+    {
+      title: 'Edit',
+      icon: IconNames.userEdit,
+      action: () => router.push(`students/edit-student/${selectedRow}`),
+    },
+    {
+      title: 'Delete',
+      icon: IconNames.trash,
+    },
+  ]
+
   return (
     <div>
       <PageHeader
-        title="Header"
-        subtitle="Tracking Vital Metrics: BMI and Nutritional Information"
+        title="Students"
+        subtitle="Manage Students profiles, Add, View and Delete Profile."
         avatar="avatar"
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
@@ -110,23 +122,17 @@ export default function HealthData() {
         <Table>
           <TableHeader className="bg-grey-100">
             <TableRow>
-              <TableHead>Students Name</TableHead>
-              <TableHead>BMI</TableHead>
-              <TableHead></TableHead>
-              <TableHead>Nutritional Health</TableHead>
-              <TableHead>Exercise Habits</TableHead>
-              <TableHead>Timestamp</TableHead>
+              <TableHead>Name</TableHead>
+              <TableHead>Level</TableHead>
+              <TableHead>Gender</TableHead>
+              <TableHead>Age</TableHead>
+              <TableHead>Date Added</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody className="h-[500px]">
             {data.length === 0 ? (
-              <div className="flex flex-1 justify-center flex-col items-center absolute left-[40%] h-[400px]">
-                <IconPicker icon="grid7" />
-                <Text className="text-grey-400" variant="text/sm">
-                  No Data Entry
-                </Text>
-              </div>
+              <EmptyData />
             ) : (
               data.map((val) => (
                 <TableRow
@@ -141,24 +147,21 @@ export default function HealthData() {
                     </div>
                   </TableCell>
 
-                  <TableCell>{val.bmi}</TableCell>
-                  <TableCell>
-                    <BadgeField variant="error" value={val.variantval} />
-                  </TableCell>
-                  <TableCell>{val.nutritional}</TableCell>
-                  <TableCell>{val.exercise}</TableCell>
+                  <TableCell>{val.level}</TableCell>
+                  <TableCell>{val.gender}</TableCell>
+                  <TableCell>{val.age}</TableCell>
                   <TableCell>{val.timestamp}</TableCell>
                   <TableCell className="relative">
                     <div
                       onClick={() => handleMoreClick(val.id)}
-                      className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
+                      className="p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
                     {selectedRow === val.id && (
                       <DropDownMenu
-                        onClose={() => setSelectedRow(null)}
                         menuItems={menuItems}
+                        onClose={() => setSelectedRow(null)}
                       />
                     )}
                   </TableCell>
@@ -176,12 +179,10 @@ type DataType = {
   image?: React.ReactNode
   firstName?: string
   lastName?: string
-  bmi?: number
-  nutritional?: string
-  exercise?: string
+  level?: string
+  gender?: string
+  age?: string
   timestamp?: string
-  variant?: string
-  variantval?: string
 }[]
 
 const data: DataType = [
@@ -192,12 +193,10 @@ const data: DataType = [
     ),
     firstName: 'Emmanuel',
     lastName: 'adebayo',
-    bmi: 23.3,
-    nutritional: 'good',
-    exercise: 'Moderately Good',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
-    variant: 'success',
-    variantval: 'Healthy',
   },
   {
     id: 2,
@@ -206,12 +205,10 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
   },
   {
     id: 3,
@@ -220,12 +217,10 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
   },
   {
     id: 4,
@@ -234,12 +229,10 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
   },
   {
     id: 5,
@@ -248,12 +241,10 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
   },
   {
     id: 6,
@@ -262,12 +253,10 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
   },
   {
     id: 7,
@@ -276,11 +265,9 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    level: 'Primary 1',
+    gender: 'Male',
+    age: '10 Years',
     timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
   },
 ]

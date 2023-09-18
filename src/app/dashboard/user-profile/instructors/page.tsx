@@ -15,6 +15,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const FilterData = () => {
@@ -84,6 +85,7 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
 }
 
 export default function Instructors() {
+  const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const handleMoreClick = (rowIndex: any) => {
@@ -94,10 +96,12 @@ export default function Instructors() {
     {
       title: 'View',
       icon: IconNames.documentText,
+      action: () => router.push(`instructors/view/${selectedRow}`),
     },
     {
       title: 'Edit',
       icon: IconNames.userEdit,
+      action: () => router.push(`instructors/edit-instructor/${selectedRow}`),
     },
     {
       title: 'Send Password link',
@@ -151,12 +155,12 @@ export default function Instructors() {
                   <TableCell>{val.email}</TableCell>
                   <TableCell>{val.phoneNumber}</TableCell>
                   <TableCell>{val.timestamp}</TableCell>
-                  <TableCell className="flex justify-center relative text-left">
+                  <TableCell className="relative">
                     <div
                       onClick={() => handleMoreClick(val.id)}
-                      className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50"
+                      className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                     >
-                      <IconPicker icon="more" />
+                      <IconPicker icon="more" size="1.25rem" />
                     </div>
                     {selectedRow === val.id && (
                       <DropDownMenu

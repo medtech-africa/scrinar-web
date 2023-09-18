@@ -25,7 +25,7 @@ const DropDownMenu = ({ menuItems, onClose }: IProps) => {
     <div
       ref={menuRef}
       className={cn(
-        'flex flex-col p-2 bg-white mt-8 justify-center space-y-2 items-start shadow-xl absolute right-4 z-40 whitespace-nowrap'
+        'flex flex-col p-2 bg-white justify-center space-y-2 items-start shadow-xl absolute right-4 z-40 whitespace-nowrap'
       )}
     >
       {menuItems.map((item, _) => (
