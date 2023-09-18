@@ -15,6 +15,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const FilterData = () => {
@@ -84,6 +85,7 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
 }
 
 export default function Students() {
+  const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const handleMoreClick = (rowIndex: any) => {
@@ -94,14 +96,12 @@ export default function Students() {
     {
       title: 'View',
       icon: IconNames.documentText,
+      action: () => router.push(`students/view/${selectedRow}`),
     },
     {
       title: 'Edit',
       icon: IconNames.userEdit,
-    },
-    {
-      title: 'Send Password link',
-      icon: IconNames.security,
+      action: () => router.push(`students/edit-student/${selectedRow}`),
     },
     {
       title: 'Delete',
