@@ -37,6 +37,16 @@ export enum Icons {
   trash = 'trash',
   security = 'security',
   userEdit = 'userEdit',
+  ageIcon = 'ageIcon',
+  blood = 'blood',
+  gender = 'gender',
+  habit = 'habit',
+  healthIcon2 = 'healthIcon2',
+  measurement = 'measurement',
+  primary = 'primary',
+  waist = 'waist',
+  weight = 'weight',
+  clock = 'clock',
 }
 
 export { Icons as IconNames }

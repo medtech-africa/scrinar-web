@@ -3,11 +3,11 @@ import DashboardProgress from '@/components/svg/dashboard-progess'
 import DashboardProgressPattern from '@/components/svg/dashboard-progress-pattern'
 import { Card } from '@/components/ui/card'
 import { Divider } from '@/components/ui/divider'
+import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { PageCard } from '@/components/ui/page-card'
 import { Text } from '@/components/ui/text'
 import Image from 'next/image'
-import { AstrologyManOutline, AstrologyWomanOutline } from 'react-icons-sax'
 
 const navigationItems = [
   { label: 'Health Data', icon: IconNames.arrowRight },
@@ -17,38 +17,47 @@ const dataItems = [
   {
     title: 'Primary 1',
     description: 'level',
-    iconClassName: 'bg-[#1570EF]',
-    icon: <AstrologyManOutline size={24} color="white" />,
+    icon: <IconPicker icon="primary" size={40} />,
   },
   {
     title: '180IN',
     description: 'Height',
-    iconClassName: 'bg-yellow-orange-900',
-    icon: <AstrologyWomanOutline size={24} color="white" />,
+    icon: <IconPicker icon="measurement" size={40} />,
   },
   {
     title: 'Male',
     description: 'Gender',
-    iconClassName: 'bg-gray-900',
-    icon: <AstrologyManOutline size={24} color="white" />,
+    icon: <IconPicker icon="gender" size={40} />,
   },
   {
     title: '50KG',
     description: 'Weight',
-    iconClassName: 'bg-gray-900',
-    icon: <AstrologyManOutline size={24} color="white" />,
+    icon: <IconPicker icon="weight" size={40} />,
   },
   {
     title: '12 years',
     description: 'Age',
-    iconClassName: 'bg-gray-900',
-    icon: <AstrologyManOutline size={24} color="white" />,
+    icon: <IconPicker icon="ageIcon" size={40} />,
   },
   {
     title: '30CM',
     description: 'Waist',
-    iconClassName: 'bg-gray-900',
-    icon: <AstrologyManOutline size={24} color="white" />,
+    icon: <IconPicker icon="waist" size={40} />,
+  },
+  {
+    title: 'Good',
+    description: 'Nutritional Health',
+    icon: <IconPicker icon="healthIcon2" size={40} />,
+  },
+  {
+    title: 'Moderatively Active',
+    description: 'Exercise Habit',
+    icon: <IconPicker icon="habit" size={40} />,
+  },
+  {
+    title: '5.6 mmoI/L',
+    description: 'Blood Sugar levek',
+    icon: <IconPicker icon="blood" size={40} />,
   },
 ]
 export default function ViewRecord() {
@@ -82,7 +91,7 @@ export default function ViewRecord() {
       <div className="grid md:grid-rows-1 md:grid-cols-2  gap-6 mt-9">
         <PageCard title="Data Summary" bodyStyle="p-4">
           <div className="grid md:grid-rows-3 md:grid-cols-2 gap-x-6 gap-y-2 mb-4">
-            {dataItems.map((item) => (
+            {dataItems.slice(0, 6).map((item) => (
               <Card key={item.title} {...item} className="w-full" />
             ))}
           </div>
@@ -92,7 +101,7 @@ export default function ViewRecord() {
               <DashboardProgress progress={40} />
             </div>
             <div className="grid md:grid-rows-3 md:grid-cols-1 gap-x-6 gap-y-2 ">
-              {dataItems.splice(0, 4).map((item) => (
+              {dataItems.slice(6, 9).map((item) => (
                 <Card key={item.title} {...item} className="w-full" />
               ))}
             </div>
