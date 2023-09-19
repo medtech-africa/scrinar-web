@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/table'
 import { Text } from '@/components/ui/text'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 const FilterData = () => {
@@ -84,13 +85,22 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
   )
 }
 
-const menuItems = [
-  { title: 'View Data', icon: IconNames.documentText },
-  { title: 'Edit Data', icon: IconNames.userEdit },
-  { title: 'Delete Data', icon: IconNames.trash },
-]
-
 export default function HealthData() {
+  const router = useRouter()
+  const menuItems = [
+    {
+      title: 'View Data',
+      icon: IconNames.documentText,
+      action: () => router.push('/dashboard/health-data/view-record'),
+    },
+    {
+      title: 'Edit Data',
+      icon: IconNames.userEdit,
+      action: () => router.push('/dashboard/health-data/update-record'),
+    },
+    { title: 'Delete Data', icon: IconNames.trash },
+  ]
+
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const handleMoreClick = (rowIndex: any) => {
@@ -103,6 +113,7 @@ export default function HealthData() {
         title="Header"
         subtitle="Tracking Vital Metrics: BMI and Nutritional Information"
         avatar="avatar"
+        isAvatar
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
