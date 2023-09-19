@@ -21,7 +21,7 @@ export default function AddRecord() {
         navigation={navigationItems}
         avatar="avatar"
       />
-      <div className="flex lg:flex-row flex-col w-full mt-9">
+      <div className="flex lg:flex-row flex-col w-full mt-9 gap-y-4">
         <div className="w-full h-full">
           <PageCard title="Add Basic Information" bodyStyle="p-4">
             <div className="flex gap-x-4">
@@ -120,7 +120,7 @@ export default function AddRecord() {
             />
           </PageCard>
         </div>
-        <div className="bg-grey-800 ml-[24px] h-full">
+        <div className="lg:ml-[24px] h-full">
           <PageCard title="Add BMI Details">
             <div className="flex flex-col gap-y-6 w-full p-4">
               <Input
