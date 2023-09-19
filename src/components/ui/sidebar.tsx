@@ -282,7 +282,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                 {othersData.map((item2, __) => (
                   <div key={__} className="mb-2">
                     <NavLink
-                      href={`dashboard/${item2?.href}`}
+                      href={`/dashboard/${item2?.href}`}
                       active={pathname.includes(item2.href)}
                     >
                       <IconPicker icon={item2.icon} size="1.5rem" />
