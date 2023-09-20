@@ -8,17 +8,13 @@ export type ITabList = {
   labels: string[]
 }
 
-export const TabList: FC<ITabList> = ({
-  labels,
-  onClickTabItem,
-  activeTab,
-}) => {
+const TabList: FC<ITabList> = ({ labels, onClickTabItem, activeTab }) => {
   const isActive = (label: string) =>
     label === (activeTab ? activeTab : labels?.[0])
   const onClick = (label: string) => () => onClickTabItem(label)
 
   return (
-    <section className="flex flex-wrap my-2">
+    <section className="flex flex-wrap">
       {labels.map((label) => (
         <Text
           as="span"
@@ -36,3 +32,27 @@ export const TabList: FC<ITabList> = ({
     </section>
   )
 }
+const TabList2: FC<ITabList> = ({ labels, onClickTabItem, activeTab }) => {
+  const isActive = (label: string) =>
+    label === (activeTab ? activeTab : labels?.[0])
+  const onClick = (label: string) => () => onClickTabItem(label)
+
+  return (
+    <section className="flex flex-wrap">
+      {labels.map((label) => (
+        <Text
+          as="span"
+          className={cn(
+            'text-sm text-grey-700 transition-all cursor-pointer px-[10px] py-4',
+            isActive(label) && 'text-primary font-bold bg-lust-50 rounded-3xl'
+          )}
+          key={label}
+          onClick={onClick(label)}
+        >
+          {label}
+        </Text>
+      ))}
+    </section>
+  )
+}
+export { TabList, TabList2 }
