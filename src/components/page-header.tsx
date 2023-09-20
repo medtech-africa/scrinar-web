@@ -89,8 +89,8 @@ export const PageHeader = ({
               </Text>
               {isAvatar && <Text> {avatar}</Text>}
             </div>
-            <div className="flex gap-x-1">
-              <IconPicker icon="calendar2" />
+            <div className="">
+              {/* <IconPicker icon="calendar2" /> */}
               <Text
                 variant="text/sm"
                 weight="default"
