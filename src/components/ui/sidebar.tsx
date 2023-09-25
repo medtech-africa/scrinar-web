@@ -79,11 +79,11 @@ const othersData = [
     icon: 'setting2',
     href: 'settings',
   },
-  {
-    title: 'Support',
-    icon: 'messageQuestion',
-    href: 'support',
-  },
+  // {
+  //   title: 'Support',
+  //   icon: 'messageQuestion',
+  //   href: 'support',
+  // },
 ] as Datatype[]
 
 interface ISideBar {
