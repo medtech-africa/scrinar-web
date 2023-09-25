@@ -6,6 +6,7 @@ import { Text } from './ui/text'
 import { Button } from './ui/button'
 import { useState } from 'react'
 import DropDownMenu, { MenuItemProp } from './drop-down-menu'
+import Delete from './ui/delete'
 export type NavigationItem = {
   label: string
   icon?: IconNames
@@ -29,15 +30,20 @@ export const PageHeader = ({
   isAvatar,
 }: PageHeaderTypes) => {
   const router = useRouter()
+  const [deleteModal, setDeleteModal] = useState(false)
+
   const menuItems: MenuItemProp[] = [
     {
       title: 'Edit',
       icon: IconNames.userEdit,
-      action: () => router.push('/dashboard/health-data/update-record'),
+      action: () => router.push('/dashboard/health-data/update-record/1'), //user.id
     },
     {
       title: 'Delete',
       icon: IconNames.trash,
+      action: () => {
+        setDeleteModal(true)
+      },
     },
   ]
 
@@ -118,6 +124,7 @@ export const PageHeader = ({
           </div>
         )}
       </div>
+      <Delete open={deleteModal} onClose={setDeleteModal} />
     </div>
   )
 }
