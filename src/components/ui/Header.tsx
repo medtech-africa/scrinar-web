@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
-import useClickAway from '@/lib/useClickAway'
+import useClickAway from '@/hooks/useClickAway'
 import { IconPicker } from './icon-picker'
 
 interface IHeader {
