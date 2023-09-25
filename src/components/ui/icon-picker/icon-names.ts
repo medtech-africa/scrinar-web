@@ -47,6 +47,11 @@ export enum Icons {
   waist = 'waist',
   weight = 'weight',
   clock = 'clock',
+  calendarEdit = 'calendarEdit',
+  calendarTick = 'calendarTick',
+  closeSquare = 'closeSquare',
+  timer = 'timer',
+  document = 'document',
 }
 
 export { Icons as IconNames }

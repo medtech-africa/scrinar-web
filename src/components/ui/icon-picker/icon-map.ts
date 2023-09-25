@@ -48,4 +48,9 @@ export const IconMap: Map<string, string> = new Map([
   [Icons.waist, 'WaistIcon'],
   [Icons.weight, 'WeightIcon'],
   [Icons.clock, 'ClockIcon'],
+  [Icons.calendarEdit, 'CalendarEditIcon'],
+  [Icons.document, 'DocumentIcon'],
+  [Icons.timer, 'TimerIcon'],
+  [Icons.closeSquare, 'CloseSquareIcon'],
+  [Icons.calendarTick, 'CalendarTickIcon'],
 ])
