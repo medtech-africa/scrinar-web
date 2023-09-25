@@ -3,6 +3,7 @@ import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
 import { PageHeader } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
+import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
@@ -88,6 +89,8 @@ export default function Students() {
   const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
+  const [deleteModal, setDeleteModal] = useState(false)
+
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
@@ -106,6 +109,9 @@ export default function Students() {
     {
       title: 'Delete',
       icon: IconNames.trash,
+      action: () => {
+        setDeleteModal(true), setSelectedRow(null)
+      },
     },
   ]
 
@@ -118,6 +124,8 @@ export default function Students() {
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
+      {deleteModal && <Delete onClose={setDeleteModal} />}
+
       <div className="max-h-[500px] overflow-y-auto py-3 md:py-8">
         <Table>
           <TableHeader className="bg-grey-100">

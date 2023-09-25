@@ -12,6 +12,7 @@ const buttonVariants = cva(
           'bg-lust-800 text-grey-50 hover:bg-lust-900 focus:border-lust-200 focus-visible:ring-lust-200',
         secondary:
           'bg-secondary text-grey-900 hover:bg-sunglow-800 focus-visible:ring-sunglow-200',
+        tertiary: 'bg-grey-50 text-grey-900 hover:bg-grey-100',
       },
 
       size: {

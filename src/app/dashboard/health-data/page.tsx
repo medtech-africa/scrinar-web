@@ -3,6 +3,7 @@ import DropDownMenu from '@/components/drop-down-menu'
 import { PageHeader } from '@/components/page-header'
 import { BadgeField } from '@/components/ui/Badge'
 import { Button } from '@/components/ui/button'
+import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
@@ -89,6 +90,7 @@ export default function HealthData() {
   const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
+  const [deleteModal, setDeleteModal] = useState(false)
 
   const menuItems = [
     {
@@ -103,7 +105,13 @@ export default function HealthData() {
       action: () =>
         router.push(`/dashboard/health-data/update-record/${selectedRow}`),
     },
-    { title: 'Delete Data', icon: IconNames.trash },
+    {
+      title: 'Delete Data',
+      icon: IconNames.trash,
+      action: () => {
+        setDeleteModal(true), setSelectedRow(null)
+      },
+    },
   ]
 
   const handleMoreClick = (rowIndex: any) => {
@@ -120,6 +128,7 @@ export default function HealthData() {
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
+      {deleteModal && <Delete onClose={setDeleteModal} />}
       <div className="max-h-[500px] overflow-y-auto py-3 md:py-8">
         <Table>
           <TableHeader className="bg-grey-100">
