@@ -4,6 +4,7 @@ import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
 import { PageHeader } from '@/components/page-header'
 import { Button } from '@/components/ui/button'
+import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
@@ -192,6 +193,7 @@ type DataType = {
   timestamp?: string
 }[]
 const PermissionsRoles = () => {
+  const [deleteModal, setDeleteModal] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
@@ -229,6 +231,10 @@ const PermissionsRoles = () => {
     {
       title: 'Delete',
       icon: IconNames.trash,
+      action: () => {
+        setDeleteModal(true)
+        setSelectedRow(null)
+      },
     },
   ]
   return (
@@ -292,11 +298,14 @@ const PermissionsRoles = () => {
           )}
         </TableBody>
       </Table>
+      <Delete open={deleteModal} onClose={setDeleteModal} />
     </PageCard>
   )
 }
 
 const DataPrivacy = () => {
+  const [deleteModal, setDeleteModal] = useState(false)
+
   return (
     <PageCard title="Data & Privacy" bodyStyle="p-4">
       <Button
@@ -308,7 +317,9 @@ const DataPrivacy = () => {
         value="Delete All Data"
         leadingIcon={<IconPicker icon="trash" />}
         className="mt-6 py-3 px-4 bg-lust-50 text-primary hover:bg-lust-100"
+        onClick={() => setDeleteModal(true)}
       />
+      <Delete open={deleteModal} onClose={setDeleteModal} />
     </PageCard>
   )
 }

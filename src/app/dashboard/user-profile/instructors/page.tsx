@@ -114,7 +114,8 @@ export default function Instructors() {
       title: 'Delete',
       icon: IconNames.trash,
       action: () => {
-        setDeleteModal(true), setSelectedRow(null)
+        setDeleteModal(true)
+        setSelectedRow(null)
       },
     },
   ]
@@ -128,7 +129,7 @@ export default function Instructors() {
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
-      {deleteModal && <Delete onClose={setDeleteModal} />}
+      <Delete open={deleteModal} onClose={setDeleteModal} />
       <div className="max-h-[500px] overflow-y-auto py-3 md:py-8">
         <Table>
           <TableHeader className="bg-grey-100">
