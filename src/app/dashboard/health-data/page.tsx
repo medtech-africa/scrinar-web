@@ -87,22 +87,25 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
 
 export default function HealthData() {
   const router = useRouter()
+  const [openFilter, setOpenFilter] = useState(false)
+  const [selectedRow, setSelectedRow] = useState(null)
+
   const menuItems = [
     {
       title: 'View Data',
       icon: IconNames.documentText,
-      action: () => router.push('/dashboard/health-data/view-record'),
+      action: () =>
+        router.push(`/dashboard/health-data/view-record/${selectedRow}`),
     },
     {
       title: 'Edit Data',
       icon: IconNames.userEdit,
-      action: () => router.push('/dashboard/health-data/update-record'),
+      action: () =>
+        router.push(`/dashboard/health-data/update-record/${selectedRow}`),
     },
     { title: 'Delete Data', icon: IconNames.trash },
   ]
 
-  const [openFilter, setOpenFilter] = useState(false)
-  const [selectedRow, setSelectedRow] = useState(null)
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
