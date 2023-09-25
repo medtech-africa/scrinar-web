@@ -57,7 +57,7 @@ const dashboardStats = [
 const actionData1 = [
   {
     title: 'Create New Student Profile',
-    subtitle: 'Add Student: Create New Student',
+    subtitle: 'Add Student Profile',
     icon: 'profile2User' as IconNames,
     href: 'user-profile/students/add-student',
   },
@@ -69,7 +69,7 @@ const actionData1 = [
   },
   {
     title: 'Create New Instructor Profile',
-    subtitle: 'Add Instructor: Create New Instructor',
+    subtitle: 'Add New Instructor for School',
     icon: 'teacher' as IconNames,
     href: 'user-profile/instructors/add-instructor',
   },
@@ -185,12 +185,14 @@ export default async function Home() {
                 Discover suitable exercises tailored to {"students'"} age and
                 development.
               </Text>
-              <Button
-                className="border-2 border-sunglow-200 font-medium"
-                variant="secondary"
-              >
-                Continue Training Module
-              </Button>
+              <Link href={'/dashboard/training-module'}>
+                <Button
+                  className="border-2 border-sunglow-200 font-medium"
+                  variant="secondary"
+                >
+                  Continue Training Module
+                </Button>
+              </Link>
             </div>
             <div className="relative justify-center items-center flex">
               <DashboardProgressPattern className="absolute right-0 left-0 hidden md:block" />

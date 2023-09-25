@@ -13,8 +13,20 @@ const AllTrainingModule = () => {
           Discover handpicked modules to elevate your training journey.
         </Text>
         <div className="grid lg:grid-rows-1 md:grid-cols-2 gap-6 mt-6">
-          <Image src="/module.png" alt="module" width={500} height={300} />
-          <Image src="/module.png" alt="module" width={500} height={300} />
+          <Image
+            src="/module.png"
+            alt="module"
+            className="rounded-2xl"
+            width={500}
+            height={300}
+          />
+          <Image
+            className="rounded-2xl"
+            src="/module.png"
+            alt="module"
+            width={500}
+            height={300}
+          />
         </div>
       </div>
     </div>

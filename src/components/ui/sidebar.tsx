@@ -8,7 +8,7 @@ import useClickAway from '@/hooks/useClickAway'
 import useWindowSize from '@/hooks/useWindowSize'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-// import Image from 'next/image'
+import Image from 'next/image'
 import { Divider } from './divider'
 import { Text } from './text'
 import { usePathname } from 'next/navigation'
@@ -129,16 +129,25 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
         >
           <div ref={isLargeScreen ? null : sidebarRef}>
             <div className="py-3">
-              {/* <Image
-                src={'https://medtech.africa/logo2.png'}
-                alt="logo"
-                height={24}
-                width={123}
-                // className="w-[123.16px] h-6"
-              /> */}
               <Text variant="display/xs" weight="bold">
-                <span className="block md:hidden lg:block">Project Logo</span>
-                <span className="hidden md:block lg:hidden">PL</span>
+                <span className="block md:hidden lg:block">
+                  <Image
+                    src={'/logo_large.png'}
+                    alt="logo"
+                    height={24}
+                    width={140}
+                    // className="w-[123.16px] h-6"
+                  />
+                </span>
+                <span className="hidden md:block lg:hidden">
+                  <Image
+                    src={'/logo.png'}
+                    alt="logo"
+                    height={56}
+                    width={56}
+                    // className="w-[123.16px] h-6"
+                  />
+                </span>
               </Text>
             </div>
             <Divider className="my-4" />
