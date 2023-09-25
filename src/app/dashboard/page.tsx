@@ -57,21 +57,21 @@ const dashboardStats = [
 const actionData1 = [
   {
     title: 'Create New Student Profile',
-    subtitle: 'Lorem ipsum dolor sit amet',
+    subtitle: 'Add Student: Create New Student',
     icon: 'profile2User' as IconNames,
-    href: 'students',
+    href: 'user-profile/students/add-student',
   },
   {
     title: 'Update Student Health Data',
-    subtitle: 'Lorem ipsum dolor sit amet',
+    subtitle: 'Track student health progress',
     icon: 'health' as IconNames,
     href: 'health-data',
   },
   {
     title: 'Create New Instructor Profile',
-    subtitle: 'Lorem ipsum dolor sit amet',
+    subtitle: 'Add Instructor: Create New Instructor',
     icon: 'teacher' as IconNames,
-    href: 'instructors',
+    href: 'user-profile/instructors/add-instructor',
   },
 ]
 
@@ -182,8 +182,8 @@ export default async function Home() {
                 Age-Appropriate Exercises for Students
               </Text>
               <Text variant="text/sm" className="text-grey-500 mt-2 mb-6">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Discover suitable exercises tailored to {"students'"} age and
+                development.
               </Text>
               <Button
                 className="border-2 border-sunglow-200 font-medium"

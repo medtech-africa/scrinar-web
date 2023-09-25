@@ -7,7 +7,8 @@ export const CardData = [
     topic: '3 Topics',
     time: '1H:30',
     title: ' Age-Appropriate Exercises for Students',
-    subtile: ' Lorem ipsum dolor sit amet, consectetur adipiscing eli.',
+    subtile:
+      " Discover suitable exercises tailored to students' age and development.",
     category: ['Health Assessment', 'Exercise'],
   },
   {
@@ -16,7 +17,8 @@ export const CardData = [
     topic: '3 Topics',
     time: '1H:30',
     title: ' Age-Appropriate Exercises for Students',
-    subtile: ' Lorem ipsum dolor sit amet, consectetur adipiscing eli.',
+    subtile:
+      " Discover suitable exercises tailored to students' age and development.",
     category: ['Health Assessment', 'Exercise'],
   },
   {
@@ -25,7 +27,8 @@ export const CardData = [
     topic: '3 Topics',
     time: '1H:30',
     title: ' Age-Appropriate Exercises for Students',
-    subtile: ' Lorem ipsum dolor sit amet, consectetur adipiscing eli.',
+    subtile:
+      " Discover suitable exercises tailored to students' age and development.",
     category: ['Health Assessment', 'Exercise'],
   },
   {
@@ -34,7 +37,8 @@ export const CardData = [
     topic: '3 Topics',
     time: '1H:30',
     title: ' Age-Appropriate Exercises for Students',
-    subtile: ' Lorem ipsum dolor sit amet, consectetur adipiscing eli.',
+    subtile:
+      " Discover suitable exercises tailored to students' age and development.",
     category: ['Health Assessment', 'Exercise', 'dancing'],
   },
 ]
