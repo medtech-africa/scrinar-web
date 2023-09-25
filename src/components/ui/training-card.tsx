@@ -10,7 +10,7 @@ type IProps = {
 }
 export const TrainingCard = ({ data, type }: IProps) => {
   return data.map((val) => (
-    <div className="flex flex-row gap-x-4 p-4 shadow-md " key={val.id}>
+    <div className="flex flex-row gap-4 p-4 shadow-md " key={val.id}>
       <Image src={val.image} alt="1" width={153} height={130} />
       <div className="flex flex-col gap-y-4 ">
         <div className="flex">

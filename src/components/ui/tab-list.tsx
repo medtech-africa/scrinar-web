@@ -14,7 +14,7 @@ const TabList: FC<ITabList> = ({ labels, onClickTabItem, activeTab }) => {
   const onClick = (label: string) => () => onClickTabItem(label)
 
   return (
-    <section className="flex flex-wrap">
+    <section className="flex flex-wrap my-2">
       {labels.map((label) => (
         <Text
           as="span"
