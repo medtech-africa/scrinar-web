@@ -2,6 +2,7 @@
 import DropDownMenu from '@/components/drop-down-menu'
 import { PageHeader } from '@/components/page-header'
 import { BadgeField } from '@/components/ui/Badge'
+import { AvatarFallback, AvatarImage, AvatarRoot } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
@@ -124,7 +125,41 @@ export default function HealthData() {
       <PageHeader
         title="Header"
         subtitle="Tracking Vital Metrics: BMI and Nutritional Information"
-        avatar="avatar"
+        avatar={
+          <div className="flex">
+            <AvatarRoot className="w-8 h-8 rounded-full border border-lust-100">
+              <AvatarImage
+                src="/avatar3.svg"
+                className="border border-white bg-lust-50"
+              />
+              <AvatarFallback className="text-xs">CN</AvatarFallback>
+            </AvatarRoot>
+            <AvatarRoot className="w-8 h-8 rounded-full border border-sunglow-100 -ml-2">
+              <AvatarImage
+                src="/avatar2.svg"
+                className="border border-white bg-sunglow-50"
+              />
+              <AvatarFallback className="text-xs">PR</AvatarFallback>
+            </AvatarRoot>
+            <AvatarRoot className="w-8 h-8 rounded-full border border-iris-100 -ml-2">
+              <AvatarImage
+                src="/avatar.svg"
+                className="border border-white bg-iris-50"
+              />
+              <AvatarFallback className="text-xs">ME</AvatarFallback>
+            </AvatarRoot>
+            <AvatarRoot className="w-8 h-8 rounded-full border border-green-100 -ml-2">
+              <div className="w-full h-full rounded-full flex items-center justify-center border border-white bg-green-50">
+                <Text variant="text/sm" weight="x-bold">
+                  50
+                </Text>
+                <Text variant="text/sm" weight="x-bold">
+                  +
+                </Text>
+              </div>
+            </AvatarRoot>
+          </div>
+        }
         isAvatar
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />

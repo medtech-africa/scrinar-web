@@ -43,7 +43,7 @@ export const TrashIcon: FunctionComponent<IconPickerProp> = ({
       <path
         d="M6.33325 8.33398H9.66659"
         stroke="currentColor"
-        stroke-width="1.5"
+        strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
       />

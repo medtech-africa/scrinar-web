@@ -85,7 +85,7 @@ export const PageHeader = ({
             </div>
           )}
           <div>
-            <div className="flex items-baseline gap-4 mb-2">
+            <div className="flex items-center gap-4 mb-2">
               <Text
                 variant="display/xs"
                 weight="medium"
@@ -93,7 +93,7 @@ export const PageHeader = ({
               >
                 {title}
               </Text>
-              {isAvatar && <Text> {avatar}</Text>}
+              {isAvatar && <> {avatar}</>}
             </div>
             <div className="">
               {/* <IconPicker icon="calendar2" /> */}
