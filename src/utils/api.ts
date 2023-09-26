@@ -1,4 +1,6 @@
-const BASE_URL = process.env.NEXT_API_URL
+const BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ??
+  'http://dev-play4health-api.us-east-1.elasticbeanstalk.com'
 
 export const API = {
   // auth
