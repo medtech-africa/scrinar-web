@@ -1,0 +1,22 @@
+import React from 'react'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import AuthProvider from './auth-context'
+import UserProvider from './user-context'
+
+// Create a client
+const queryClient = new QueryClient()
+
+const Providers = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <AuthProvider>
+        <UserProvider>
+          <div>{children}</div>
+          {/* The rest of your application */}
+        </UserProvider>
+      </AuthProvider>
+    </QueryClientProvider>
+  )
+}
+
+export default Providers
