@@ -1,7 +1,6 @@
+import { IconPicker } from '@/components/ui/icon-picker'
 import { Button } from '../components/ui/button'
 import type { Meta, StoryObj } from '@storybook/react'
-import { Loader2, Mail } from 'lucide-react'
-import Link from 'next/link'
 
 // More on how to set up stories at: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 const meta = {
@@ -49,18 +48,14 @@ export const Secondary: Story = {
 
 export const WithIconLeft: Story = {
   args: {
-    children: (
-      <>
-        <Mail className="mr-2 h-4 w-4" /> Login with Email
-      </>
-    ),
+    leadingIcon: <IconPicker icon="mail" />,
   },
 }
 export const WithIconRight: Story = {
   args: {
     children: (
       <>
-        Login with Email <Mail className="ml-2 h-4 w-4" />
+        Login with Email <IconPicker icon="mail" className="ml-2" />
       </>
     ),
   },
@@ -69,7 +64,7 @@ export const OnlyIcon: Story = {
   args: {
     children: (
       <>
-        <Mail className="h-4 w-4" />
+        <IconPicker icon="mail" />
       </>
     ),
   },
@@ -79,19 +74,8 @@ export const Loading: Story = {
   args: {
     children: (
       <>
-        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+        <IconPicker icon="loader2" size="1.5rem" className="mr-2" />
         Please wait
-      </>
-    ),
-  },
-}
-
-export const AsChild: Story = {
-  args: {
-    asChild: true,
-    children: (
-      <>
-        <Link href="/login">Login</Link>
       </>
     ),
   },

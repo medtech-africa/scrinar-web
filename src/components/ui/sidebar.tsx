@@ -8,26 +8,24 @@ import useClickAway from '@/hooks/useClickAway'
 import useWindowSize from '@/hooks/useWindowSize'
 import Link from 'next/link'
 import { cn } from '@/lib/utils'
-// import Image from 'next/image'
+import Image from 'next/image'
 import { Divider } from './divider'
-import {
-  ArrowDown,
-  Book,
-  Calendar,
-  Grid2x2,
-  HeartPulse,
-  MessageSquare,
-  Settings2,
-  User2,
-} from 'lucide-react'
 import { Text } from './text'
-import { useRouter } from 'next/router'
+import { usePathname } from 'next/navigation'
+import { IconPicker } from './icon-picker'
+import { IconNames } from './icon-picker/icon-names'
 
 interface NavLinkProps {
   children: React.ReactNode
   href: string
   active?: boolean
   className?: string
+}
+
+interface Datatype {
+  title: string
+  href: string
+  icon: IconNames
 }
 
 const NavLink = ({ children, href, active, className }: NavLinkProps) => {
@@ -55,38 +53,38 @@ const DotIcon = ({ className = '' }) => (
 const generalData = [
   {
     title: 'Dashboard',
-    icon: <Grid2x2 />,
-    href: '/',
+    icon: 'grid7',
+    href: '',
   },
   {
     title: 'Health Data',
-    icon: <HeartPulse />,
-    href: '/health',
+    icon: 'health',
+    href: 'health-data',
   },
   {
     title: 'Screening',
-    icon: <Calendar />,
-    href: '/screening',
+    icon: 'calendar',
+    href: 'screening',
   },
   {
     title: 'Training Module',
-    icon: <Book />,
-    href: '/training',
+    icon: 'book',
+    href: 'training-module',
   },
-]
+] as Datatype[]
 
 const othersData = [
   {
     title: 'App Settings',
-    icon: <Settings2 />,
-    href: '/settings',
+    icon: 'setting2',
+    href: 'settings',
   },
-  {
-    title: 'Support',
-    icon: <MessageSquare />,
-    href: '/support',
-  },
-]
+  // {
+  //   title: 'Support',
+  //   icon: 'messageQuestion',
+  //   href: 'support',
+  // },
+] as Datatype[]
 
 interface ISideBar {
   sideOpen: boolean
@@ -94,7 +92,7 @@ interface ISideBar {
 }
 
 const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
-  const location = useRouter()
+  const pathname = usePathname()
   const [open, toggleOpen] = useState(false)
   const sidebarRef = useRef(null)
   const windowSize = useWindowSize()
@@ -109,12 +107,12 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
 
   useEffect(() => {
     const isRoute = new RegExp(/^\/patients|^\/staff/)
-    if (isRoute.test(location.pathname)) toggleOpen(true)
+    if (isRoute.test(pathname)) toggleOpen(true)
     if (!isLargeScreen) {
       sideToggleOpen(true)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location])
+  }, [pathname])
 
   return (
     <AnimatePresence initial={false}>
@@ -125,21 +123,31 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
           exit={{ x: -200, opacity: 0 }}
           transition={{ duration: 0.3 }}
           className={cn(
-            `flex flex-col md:w-60 w-52 p-4 rounded-lg sidebar-shadow bg-white h-[100vh] overflow-y-auto`,
+            `flex flex-col  w-52 md:w-20.8 lg:w-60  p-4 rounded-lg sidebar-shadow bg-white h-full overflow-y-auto`,
             sideOpen && 'hidden'
           )}
         >
           <div ref={isLargeScreen ? null : sidebarRef}>
             <div className="py-3">
-              {/* <Image
-                src={'https://medtech.africa/logo2.png'}
-                alt="logo"
-                height={24}
-                width={123}
-                // className="w-[123.16px] h-6"
-              /> */}
               <Text variant="display/xs" weight="bold">
-                Project Logo
+                <span className="block md:hidden lg:block">
+                  <Image
+                    src={'/logo_large.png'}
+                    alt="logo"
+                    height={24}
+                    width={140}
+                    // className="w-[123.16px] h-6"
+                  />
+                </span>
+                <span className="hidden md:block lg:hidden">
+                  <Image
+                    src={'/logo.png'}
+                    alt="logo"
+                    height={56}
+                    width={56}
+                    // className="w-[123.16px] h-6"
+                  />
+                </span>
               </Text>
             </div>
             <Divider className="my-4" />
@@ -150,17 +158,27 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                   as="p"
                   className="text-grey-400 uppercase pl-4 py-[11px] mb-2"
                 >
-                  GENERAL
+                  <span className="block md:hidden lg:block">GENERAL</span>
+                  <span className="hidden md:block lg:hidden">...</span>
                 </Text>
 
-                {generalData.map((item2, __) => (
+                {generalData.map((item, __) => (
                   <div key={__} className="mb-2">
                     <NavLink
-                      href={item2?.href}
-                      active={location.pathname.includes(item2.href)}
+                      href={`/dashboard/${item?.href}`}
+                      active={
+                        item.href
+                          ? pathname.includes(item.href)
+                          : pathname === '/dashboard'
+                      }
                     >
-                      {item2.icon}
-                      <Text variant="text/md">{item2.title}</Text>
+                      <IconPicker icon={item.icon} size="1.5rem" />
+                      <Text
+                        className="block md:hidden lg:block"
+                        variant="text/md"
+                      >
+                        {item.title}
+                      </Text>
                     </NavLink>
                   </div>
                 ))}
@@ -176,17 +194,21 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                       'flex items-center justify-between text-grey-600 py-3 px-4 rounded-lg hover:opacity-80 w-full',
                       {
                         'bg-primary text-white':
-                          location.pathname.includes('/user-profile'),
-                        'opacity-95':
-                          !location.pathname.includes('/user-profile'),
+                          pathname.includes('/user-profile'),
+                        'opacity-95': !pathname.includes('/user-profile'),
                       }
                     )}
                     onClick={() => toggleOpen(!open)}
                     layout="position"
                   >
-                    <div className="flex">
-                      <User2 />
-                      <Text variant="text/md">User Profile</Text>
+                    <div className="flex gap-2">
+                      <IconPicker icon="profile2User" size="1.5rem" />
+                      <Text
+                        className="block md:hidden lg:block"
+                        variant="text/md"
+                      >
+                        User Profile
+                      </Text>
                     </div>
                     <motion.div
                       key="arrow"
@@ -197,7 +219,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                         damping: 50,
                       }}
                     >
-                      <ArrowDown />
+                      <IconPicker icon="arrowDown" />
                     </motion.div>
                   </motion.button>
                   <AnimatePresence initial={false}>
@@ -207,6 +229,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                         initial="collapsed"
                         animate="open"
                         exit="collapsed"
+                        className="mt-2"
                         variants={{
                           open: {
                             opacity: 1,
@@ -219,21 +242,35 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                         }}
                       >
                         <NavLink
-                          href="instructors"
-                          active={location.pathname.includes('/instructors')}
-                          className="pl-11"
+                          href={'/dashboard/user-profile/instructors'}
+                          className={cn(
+                            'pl-11',
+                            pathname.includes('/instructors') && 'bg-grey-100'
+                          )}
                         >
                           <DotIcon />
-                          <Text variant="text/md">Instructors</Text>
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              Instructors
+                            </span>
+                            <span className="hidden md:block lg:hidden">-</span>
+                          </Text>
                         </NavLink>
 
                         <NavLink
-                          href="students"
-                          className="pl-11"
-                          active={location.pathname.includes('/students')}
+                          href="/dashboard/user-profile/students"
+                          className={cn(
+                            'pl-11',
+                            pathname.includes('/students') && 'bg-grey-100'
+                          )}
                         >
                           <DotIcon />
-                          <Text variant="text/md">Students</Text>
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              Students
+                            </span>
+                            <span className="hidden md:block lg:hidden">-</span>
+                          </Text>
                         </NavLink>
                       </motion.div>
                     )}
@@ -247,17 +284,23 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                   as="p"
                   className="text-grey-400 uppercase pl-4 py-[11px] mb-2"
                 >
-                  OTHERS
+                  <span className="block md:hidden lg:block">OTHERS</span>
+                  <span className="hidden md:block lg:hidden">...</span>
                 </Text>
 
                 {othersData.map((item2, __) => (
                   <div key={__} className="mb-2">
                     <NavLink
-                      href={item2?.href}
-                      active={location.pathname.includes(item2.href)}
+                      href={`/dashboard/${item2?.href}`}
+                      active={pathname.includes(item2.href)}
                     >
-                      {item2.icon}
-                      <Text variant="text/md">{item2.title}</Text>
+                      <IconPicker icon={item2.icon} size="1.5rem" />
+                      <Text
+                        className="block md:hidden lg:block"
+                        variant="text/md"
+                      >
+                        {item2.title}
+                      </Text>
                     </NavLink>
                   </div>
                 ))}
