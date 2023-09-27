@@ -135,7 +135,7 @@ export default function ViewRecord() {
                     From: 5.2 mmol/L - To 5.6mmol/L
                   </Text>
                   <div className="flex gap-x-2">
-                    {/* <IconPicker icon="clock" /> */}
+                    <IconPicker icon="clock" />
                     <Text variant="text/xs">Aug 10</Text>
                   </div>
                 </div>
@@ -160,7 +160,7 @@ export default function ViewRecord() {
                     From: 5.2 mmol/L - To 5.6mmol/L
                   </Text>
                   <div className="flex gap-x-2">
-                    {/* <IconPicker icon="clock" /> */}
+                    <IconPicker icon="clock" />
                     <Text variant="text/xs">Aug 10</Text>
                   </div>
                 </div>

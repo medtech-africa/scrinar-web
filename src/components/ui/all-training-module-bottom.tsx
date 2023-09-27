@@ -3,7 +3,7 @@ import { TrainingCard } from './training-card'
 export const CardData = [
   {
     id: 1,
-    image: '/Feature Image-1.png',
+    image: '/feat_image1.png',
     topic: '3 Topics',
     time: '1H:30',
     title: ' Age-Appropriate Exercises for Students',
@@ -13,7 +13,7 @@ export const CardData = [
   },
   {
     id: 2,
-    image: '/Feature Image-2.png',
+    image: '/feat_image2.png',
     topic: '3 Topics',
     time: '1H:30',
     title: ' Age-Appropriate Exercises for Students',
@@ -23,7 +23,7 @@ export const CardData = [
   },
   {
     id: 3,
-    image: '/Feature Image-3.png',
+    image: '/feat_image3.png',
     topic: '3 Topics',
     time: '1H:30',
     title: ' Age-Appropriate Exercises for Students',
@@ -33,7 +33,7 @@ export const CardData = [
   },
   {
     id: 4,
-    image: '/Feature Image-4.png',
+    image: '/feat_image4.png',
     topic: '3 Topics',
     time: '1H:30',
     title: ' Age-Appropriate Exercises for Students',
