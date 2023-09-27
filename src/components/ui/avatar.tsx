@@ -43,7 +43,7 @@ const AvatarImage = React.forwardRef<
   <AvatarPrimitive.Image
     ref={ref}
     className={cn(
-      'aspect-square h-full w-full rounded-full border-2 border-white',
+      'aspect-square h-full w-full rounded-full border border-white',
       className
     )}
     {...props}
@@ -69,22 +69,32 @@ AvatarFallback.displayName = AvatarPrimitive.Fallback.displayName
 export interface AvatarProps extends VariantProps<typeof avatarVariants> {
   src?: string
   fallback?: React.ReactNode
+  rootClassName?: string
+  imgClassName?: string
+  fallbackClassName?: string
 }
 
 const Avatar = React.forwardRef<
   React.ElementRef<typeof AvatarPrimitive.Root>,
   AvatarProps
->(({ src, fallback, size }, ref) => {
-  return (
-    <AvatarRoot
-      ref={ref}
-      className={cn(avatarVariants({ size }), 'rounded-full p-[2px]')}
-    >
-      <AvatarImage src={src} />
-      <AvatarFallback>{fallback}</AvatarFallback>
-    </AvatarRoot>
-  )
-})
+>(
+  (
+    { src, fallback, size, rootClassName, imgClassName, fallbackClassName },
+    ref
+  ) => {
+    return (
+      <AvatarRoot
+        ref={ref}
+        className={cn(avatarVariants({ size }), rootClassName, 'rounded-full')}
+      >
+        <AvatarImage className={imgClassName} src={src} />
+        <AvatarFallback className={cn('text-xs', fallbackClassName)}>
+          {fallback}
+        </AvatarFallback>
+      </AvatarRoot>
+    )
+  }
+)
 Avatar.displayName = 'Avatar'
 
 export { Avatar, AvatarRoot, AvatarImage, AvatarFallback }

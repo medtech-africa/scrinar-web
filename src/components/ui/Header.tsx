@@ -4,7 +4,8 @@ import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
 import useClickAway from '@/hooks/useClickAway'
 import { IconPicker } from './icon-picker'
-import { AvatarFallback, AvatarImage, AvatarRoot } from './avatar'
+import { Avatar } from './avatar'
+import Link from 'next/link'
 
 interface IHeader {
   sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -35,16 +36,19 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
             <div className="bg-grey-100 p-3 rounded-full cursor-pointer">
               <IconPicker icon="notificationBell" size="1.5rem" />
             </div>
-            <div className="bg-grey-100 p-3 rounded-full cursor-pointer">
+            <Link
+              href="/dashboard/settings"
+              className="bg-grey-100 p-3 rounded-full"
+            >
               <IconPicker icon="setting2" size="1.5rem" />
-            </div>
-            <AvatarRoot className="w-12 h-12 rounded-full border border-lust-100">
-              <AvatarImage
-                src="/avatar3.svg"
-                className="border border-white bg-lust-50"
-              />
-              <AvatarFallback className="text-xs">PR</AvatarFallback>
-            </AvatarRoot>
+            </Link>
+            <Avatar
+              src="/avatar3.svg"
+              fallback="PR"
+              size="lg"
+              rootClassName="border border-lust-100"
+              imgClassName="bg-lust-50"
+            />
             <Text className="font-medium text-grey-600 text-xs sm:text-base ">
               School Name here
             </Text>
@@ -75,12 +79,15 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
           </div>
           <Text>Notification</Text>
         </div>
-        <div className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full">
+        <Link
+          href="/dashboard/settings"
+          className="flex flex-row items-center space-x-2 px-2 hover:bg-grey-200 w-full"
+        >
           <div className="bg-grey-100 p-2 rounded-full">
             <IconPicker icon="setting2" size={18} />
           </div>
           <Text>Settings</Text>
-        </div>
+        </Link>
         <div className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full">
           <div className="bg-grey-100 p-2 rounded-full">
             {/* Avatar goes here */}
