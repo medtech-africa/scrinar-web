@@ -7,11 +7,21 @@ import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
+import { Select } from '@/components/ui/select'
 
 const navigationItems = [
   { label: 'Health Data', icon: IconNames.arrowRight },
   { label: 'Add New Record' },
 ]
+const allOptions = Array.from({ length: 11 }, (_, index) => {
+  const age = index + 7
+  return { value: age.toString(), label: age.toString() }
+})
+const genderOptions = [
+  { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+]
+
 export default function AddRecord() {
   return (
     <div>
@@ -56,48 +66,60 @@ export default function AddRecord() {
                 label="Class"
                 full
                 labelStyle="lg:text-sm text-xs"
+                endingIcon={
+                  <IconPicker icon="helpCircle" className="text-grey-400" />
+                }
+              />
+              <Select
+                label="Age"
+                full
+                labelStyle="lg:text-sm text-xs"
+                placeholder="Select Age"
+                options={allOptions}
               />
               <Input
                 placeholder="DD/MM/YYYY"
                 label="Date Of Birth"
                 full
                 labelStyle="lg:text-sm text-xs"
+                leadingIcon={<IconPicker icon="calendar2" />}
               />
-              <Input
+              <Select
                 placeholder="Select Nutritional Health"
                 label="Nutritional Health"
                 full
                 labelStyle="lg:text-sm text-xs"
               />
-              <Input
+              <Select
                 placeholder="Yes"
                 label="Does the Student Partake In Sport?"
                 full
                 labelStyle="lg:text-sm text-xs"
               />
-              <Input
+              <Select
                 labelStyle="lg:text-sm text-xs"
                 placeholder="Select Sport"
                 label="Sport"
                 full
               />
-              <Input
+              <Select
                 labelStyle="lg:text-sm text-xs"
                 placeholder="Select Exercise Habit"
                 label="How Frequent?"
                 full
               />
-              <Input
+              <Select
                 labelStyle="lg:text-sm text-xs"
                 placeholder="5.6"
                 label="Blood Sugar Level"
                 full
               />
-              <Input
+              <Select
                 labelStyle="lg:text-sm text-xs"
                 placeholder="Select Gender"
                 label="Gender"
                 full
+                options={genderOptions}
               />
               <Input
                 labelStyle="lg:text-sm text-xs"

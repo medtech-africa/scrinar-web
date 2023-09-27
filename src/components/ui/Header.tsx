@@ -4,6 +4,7 @@ import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
 import useClickAway from '@/hooks/useClickAway'
 import { IconPicker } from './icon-picker'
+import { AvatarFallback, AvatarImage, AvatarRoot } from './avatar'
 
 interface IHeader {
   sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -37,10 +38,13 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
             <div className="bg-grey-100 p-3 rounded-full cursor-pointer">
               <IconPicker icon="setting2" size="1.5rem" />
             </div>
-            <div className="bg-grey-100 p-3 rounded-full cursor-pointer">
-              {/* Avatar goes here */}
-              Av
-            </div>
+            <AvatarRoot className="w-12 h-12 rounded-full border border-lust-100">
+              <AvatarImage
+                src="/avatar3.svg"
+                className="border border-white bg-lust-50"
+              />
+              <AvatarFallback className="text-xs">PR</AvatarFallback>
+            </AvatarRoot>
             <Text className="font-medium text-grey-600 text-xs sm:text-base ">
               School Name here
             </Text>

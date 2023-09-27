@@ -52,6 +52,7 @@ export enum Icons {
   closeSquare = 'closeSquare',
   timer = 'timer',
   document = 'document',
+  helpCircle = 'helpCircle',
 }
 
 export { Icons as IconNames }
