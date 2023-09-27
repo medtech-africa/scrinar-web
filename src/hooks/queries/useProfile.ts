@@ -8,7 +8,7 @@ const fetchProfile = async () => {
 }
 
 const useProfile = () => {
-  return useQuery(['profile'], () => fetchProfile(), {
+  return useQuery(['profile'], fetchProfile, {
     enabled: false,
   })
 }

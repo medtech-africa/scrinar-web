@@ -1,4 +1,4 @@
-import useProfile from '@/hooks/queries/useProfile'
+// import useProfile from '@/hooks/queries/useProfile'
 import React, { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { useUser } from './user'
@@ -22,8 +22,8 @@ export const ProtectRoute = ({ children }: WithChildren) => {
   const [cookies] = useCookies(['token'])
 
   useEffect(() => {
-    if (!loading && !user) {
-      //
+    //@todo: remove false
+    if (false && !loading && !user) {
       console.log('protect auth')
       if (!pathname.includes('/login')) {
         router.replace('/login')
@@ -35,22 +35,23 @@ export const ProtectRoute = ({ children }: WithChildren) => {
 }
 
 const UserProvider = ({ children }: WithChildren) => {
+  //@todo: handle user fetching
   // const [user, setUser] = useState(null);
-  const loadUser = useUser((state) => state.loadUser)
-  const { isLoading, refetch } = useProfile()
+  // const loadUser = useUser((state) => state.loadUser)
+  // const { refetch } = useProfile()
 
-  const [cookies] = useCookies(['token'])
+  // const [cookies] = useCookies(['token'])
 
-  useEffect(() => {
-    // console.log('cookies change', cookies.token);
-    if (cookies.token) {
-      refetch().then((res) => {
-        loadUser(res.data)
-      })
-    }
-  }, [cookies.token, loadUser, refetch])
-
-  if (isLoading) return null
+  // useEffect(() => {
+  //   // console.log('cookies change', cookies.token);
+  //   if (cookies.token) {
+  //     refetch().then((res) => {
+  //       loadUser(res.data)
+  //     })
+  //   }
+  // }, [cookies.token, loadUser, refetch])
+  //@todo: handle loading
+  // if (isLoading) return null
 
   return <>{children}</>
 }

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-unused-modules */
 import React, { createContext, useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { useAuth } from './auth'
