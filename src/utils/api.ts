@@ -8,7 +8,7 @@ export const API = {
   getProfile: `${BASE_URL}/api/v1/hospitals/profile`,
 
   //students
-  students: `${BASE_URL}/api/v1/students`,
+  student: `${BASE_URL}/api/v1/student`,
 
   // // staff
   // staff: (currentPage = 1, limit = 10) =>
