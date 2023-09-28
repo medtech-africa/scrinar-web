@@ -53,6 +53,9 @@ export enum Icons {
   timer = 'timer',
   document = 'document',
   helpCircle = 'helpCircle',
+  bookmark = 'bookmark',
+  play = 'play',
+  password = 'password',
 }
 
 export { Icons as IconNames }
