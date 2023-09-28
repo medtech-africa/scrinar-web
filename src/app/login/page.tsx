@@ -15,7 +15,7 @@ const Login = () => {
         <div className="bg-gradient-to-t from-black  opacity-[150.49%] absolute w-full h-full top-0 left-0"></div>
       </div>
       <div className="grid place-items-center">
-        <div className="min-w-[345px] px-4 flex justify-center items-center flex-col ">
+        <div className="md:w-[484px] px-4 flex justify-center items-center flex-col ">
           <div className="flex flex-col gap-y-6 items-center">
             <Image src="/logo_large.png" width={120} height={120} alt="logo" />
             <div>
@@ -27,13 +27,13 @@ const Login = () => {
                 Welcome Back
               </Text>
               <Text variant="text/sm" className="text-grey-600 text-center">
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit
+                Lorem ipsum dolor sit amet, consectetur adipiscing
               </Text>
             </div>
           </div>
           <form
             onSubmit={(e) => e.preventDefault}
-            className="border border-grey-100 bg-white p-6 w-full mt-6 flex flex-col rounded-md"
+            className="border border-grey-100 bg-white p-8 w-full mt-6 flex flex-col rounded-md"
           >
             <div className="flex flex-col gap-y-4">
               <Input
