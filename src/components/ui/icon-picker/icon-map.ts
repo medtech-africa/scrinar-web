@@ -54,4 +54,7 @@ export const IconMap: Map<string, string> = new Map([
   [Icons.closeSquare, 'CloseSquareIcon'],
   [Icons.calendarTick, 'CalendarTickIcon'],
   [Icons.helpCircle, 'HelpCircleIcon'],
+  [Icons.bookmark, 'BookmarkIcon'],
+  [Icons.play, 'PlayIcon'],
+  [Icons.password, 'PasswordIcon'],
 ])

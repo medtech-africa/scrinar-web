@@ -1,6 +1,7 @@
 import Providers from '@/context'
 import './globals.css'
 import type { Metadata } from 'next'
+import { Toaster } from 'react-hot-toast'
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -15,7 +16,36 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Providers>{children}</Providers>
+        <Providers>
+          {children}
+          <Toaster
+            position="top-right"
+            toastOptions={{
+              //@Todo: style
+              success: {
+                style: {
+                  background: '#219653',
+                  color: 'white',
+                },
+                iconTheme: {
+                  primary: 'white',
+                  secondary: '#21965E',
+                },
+              },
+              error: {
+                style: {
+                  background: '#de1738',
+                  // background: '#ff0000',
+                  color: 'white',
+                },
+                iconTheme: {
+                  primary: 'white',
+                  secondary: 'red',
+                },
+              },
+            }}
+          />
+        </Providers>
       </body>
     </html>
   )
