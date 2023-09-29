@@ -17,9 +17,10 @@ import { API } from '@/utils/api'
 import toast from 'react-hot-toast'
 import DatePicker from '@/components/ui/date-picker'
 import schoolLevels from '@/constants/school-levels'
-import calculateAge from '@/utils/calculateAge'
+// import calculateAge from '@/utils/calculateAge'
 import generateAvatarUrl from '@/utils/generateAvatarUrl'
 import { errorMessage } from '@/utils/errorMessage'
+import filterObject from '@/utils/filterObject'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -28,7 +29,7 @@ const navigationItems = [
 ]
 
 interface IFormValue {
-  email: string
+  email?: string
   firstName: string
   lastName: string
   dob: string
@@ -44,16 +45,16 @@ interface IFormValue {
 interface IDataToSend extends Omit<IFormValue, 'level' | 'gender' | 'avatar'> {
   level: string
   gender: string
-  age: number
+  // age: number
 }
 
-export default function AddNewStudend() {
+export default function AddNewStudent() {
   const {
     isLoading,
     mutate,
     reset: postReset,
   } = useMutation((dataToSend: IDataToSend) =>
-    baseAxios.post(API.student, dataToSend)
+    baseAxios.post(API.students, dataToSend)
   )
 
   const {
@@ -67,14 +68,15 @@ export default function AddNewStudend() {
   })
 
   const onSubmit = async (data: IFormValue) => {
+    const filteredData = filterObject(data)
     const dataToSend = {
-      ...data,
+      ...filteredData,
       gender: data.gender?.value,
       level: data.level?.value,
       avatarUrl: data.avatar ? generateAvatarUrl() : '',
-      age: calculateAge(data.dob),
+      dob: new Date(data.dob).toISOString(),
+      // age: calculateAge(data.dob),
     }
-
     try {
       await mutate(dataToSend, {
         onSuccess: () => {
@@ -84,7 +86,7 @@ export default function AddNewStudend() {
           // toast.success('')
         },
         onError: (err) => {
-          console.log(err, 'rr')
+          // console.log(err, 'rr')
           errorMessage(err)
         },
       })
@@ -223,7 +225,6 @@ export default function AddNewStudend() {
                       onBlur={onBlur}
                       value={value}
                       onChange={(val) => {
-                        console.log(val, 'oninput')
                         onChange(val)
                       }}
                       // onChange={(val) => {
@@ -252,7 +253,6 @@ export default function AddNewStudend() {
                       isSearchable
                       value={value}
                       onChange={(val) => {
-                        console.log(val, 'oninput')
                         onChange(val)
                       }}
                       options={schoolLevels}

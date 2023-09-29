@@ -4,7 +4,7 @@ import * as yup from 'yup'
 
 const createPatient = yupResolver(
   yup.object().shape({
-    email: yup.string().email().required('Please enter Email'),
+    email: yup.string().optional().email(),
     firstName: yup
       .string()
       .required('Please enter first name')
@@ -38,12 +38,7 @@ const createPatient = yupResolver(
         /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
         'Enter a valid phone number'
       ),
-    parentMobileAlt: yup
-      .string()
-      .matches(
-        /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
-        'Enter a valid phone number'
-      ),
+    parentMobileAlt: yup.string().optional(),
     avatar: yup.boolean(),
   })
 )
