@@ -1,31 +1,32 @@
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 
-import { Student, columns } from "./columns"
-import { DataTable } from "@/components/ui/data-table"
+import { Student, columns } from './columns'
+import { DataTable } from '@/components/ui/data-table'
+
 
 async function getData(): Promise<Student[]> {
   return [
     {
-      id: "728ed52f",
+      id: '728ed52f',
       bmi: 10.0,
-      status: "pending",
-      studentName: "Robert Johnson",
-      nutritionalHealth: 'Good'
+      status: 'pending',
+      studentName: 'Robert Johnson',
+      nutritionalHealth: 'Good',
     },
     {
-      id: "728ed5",
+      id: '728ed5',
       bmi: 18.9,
-      status: "pending",
-      studentName: "Sophia Clark",
-      nutritionalHealth: 'Fair'
+      status: 'pending',
+      studentName: 'Sophia Clark',
+      nutritionalHealth: 'Fair',
     },
     {
-      id: "7ed52f",
+      id: '7ed52f',
       bmi: 18.9,
-      status: "pending",
-      studentName: "Robert Johnson",
-      nutritionalHealth: 'Excellent'
+      status: 'pending',
+      studentName: 'Robert Johnson',
+      nutritionalHealth: 'Excellent',
     },
   ]
 }
@@ -71,10 +72,10 @@ export default async function Home() {
         />
       </div>
       <Button>Holla</Button>
-       <div className="container mx-auto py-10">
-      <DataTable columns={columns} data={data} />
-    </div>
+      <div className="container mx-auto py-10">
+        <DataTable columns={columns} data={data} />
+        
+      </div>
     </main>
   )
 }
-
