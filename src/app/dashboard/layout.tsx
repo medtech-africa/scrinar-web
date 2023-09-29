@@ -1,6 +1,6 @@
 'use client'
 
-import { Header } from '@/components/ui/Header'
+import { Header } from '@/components/ui/header'
 import { SideBar } from '@/components/ui/sidebar'
 import { ProtectRoute } from '@/context/user-context'
 import { AnimatePresence } from 'framer-motion'
