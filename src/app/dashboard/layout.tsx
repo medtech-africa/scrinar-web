@@ -5,12 +5,14 @@ import { SideBar } from '@/components/ui/sidebar'
 import { ProtectRoute } from '@/context/user-context'
 import { AnimatePresence } from 'framer-motion'
 import { ReactNode, useState } from 'react'
+import NextTopLoader from 'nextjs-toploader'
+import colors from '@/constants/colors'
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const [sideOpen, sideToggleOpen] = useState(false)
-
   return (
     <ProtectRoute>
+      <NextTopLoader color={colors.lust[500]} showSpinner={false} />
       <div className="w-full bg-grey-100 h-screen md:overflow-hidden">
         <div className="absolute z-10 md:py-4 md:pr-2 md:pl-4 h-full">
           <SideBar sideOpen={sideOpen} sideToggleOpen={sideToggleOpen} />
