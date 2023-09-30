@@ -95,7 +95,7 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
 export default function Students() {
   const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
-  const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRow, setSelectedRow] = useState<string | null>(null)
   const [deleteModal, setDeleteModal] = useState(false)
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
@@ -103,9 +103,9 @@ export default function Students() {
 
   const { data, isLoading } = useStudents(currentPage)
 
-  const studentData = data?.data
+  const studentsData = data?.data
 
-  const handleMoreClick = (rowIndex: any) => {
+  const handleMoreClick = (rowIndex: string) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
 
@@ -158,14 +158,14 @@ export default function Students() {
             {isLoading ? (
               <TableLoader />
             ) : (
-              studentData?.map((val: any) => (
+              studentsData?.map((val: DataType) => (
                 <TableRow
                   key={val.userId}
                   className="font-normal text-sm text-grey-600"
                 >
                   <TableCell className="flex gap-x-2 items-center">
                     <Avatar
-                      src={val.avatarUrl}
+                      src={val?.avatarUrl}
                       fallback={returnJoinedFirstCharacter(
                         val.firstName,
                         val.lastName
@@ -202,9 +202,9 @@ export default function Students() {
             )}
           </TableBody>
         </Table>
-        {studentData?.length === 0 && <EmptyData />}
+        {studentsData?.length === 0 && <EmptyData />}
       </div>
-      {studentData?.length > 0 && (
+      {studentsData?.length > 0 && (
         <Pagination
           current={currentPage}
           setCurrent={setCurrentPage}
@@ -216,100 +216,14 @@ export default function Students() {
     </div>
   )
 }
-// type DataType = {
-//   id?: number
-//   image?: React.ReactNode
-//   firstName?: string
-//   lastName?: string
-//   level?: string
-//   gender?: string
-//   age?: string
-//   timestamp?: string
-// }[]
-
-// const data: DataType = [
-//   {
-//     id: 1,
-//     image: (
-//       <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-//     ),
-//     firstName: 'Emmanuel',
-//     lastName: 'adebayo',
-//     level: 'Primary 1',
-//     gender: 'Male',
-//     age: '10 Years',
-//     timestamp: 'Aug 10, 2023',
-//   },
-//   {
-//     id: 2,
-//     image: (
-//       <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-//     ),
-//     firstName: 'Asah',
-//     lastName: 'Benjamin',
-//     level: 'Primary 1',
-//     gender: 'Male',
-//     age: '10 Years',
-//     timestamp: 'Aug 10, 2023',
-//   },
-//   {
-//     id: 3,
-//     image: (
-//       <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-//     ),
-//     firstName: 'Asah',
-//     lastName: 'Benjamin',
-//     level: 'Primary 1',
-//     gender: 'Male',
-//     age: '10 Years',
-//     timestamp: 'Aug 10, 2023',
-//   },
-//   {
-//     id: 4,
-//     image: (
-//       <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-//     ),
-//     firstName: 'Asah',
-//     lastName: 'Benjamin',
-//     level: 'Primary 1',
-//     gender: 'Male',
-//     age: '10 Years',
-//     timestamp: 'Aug 10, 2023',
-//   },
-//   {
-//     id: 5,
-//     image: (
-//       <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-//     ),
-//     firstName: 'Asah',
-//     lastName: 'Benjamin',
-//     level: 'Primary 1',
-//     gender: 'Male',
-//     age: '10 Years',
-//     timestamp: 'Aug 10, 2023',
-//   },
-//   {
-//     id: 6,
-//     image: (
-//       <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-//     ),
-//     firstName: 'Asah',
-//     lastName: 'Benjamin',
-//     level: 'Primary 1',
-//     gender: 'Male',
-//     age: '10 Years',
-//     timestamp: 'Aug 10, 2023',
-//   },
-//   {
-//     id: 7,
-//     image: (
-//       <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-//     ),
-//     firstName: 'Asah',
-//     lastName: 'Benjamin',
-//     level: 'Primary 1',
-//     gender: 'Male',
-//     age: '10 Years',
-//     timestamp: 'Aug 10, 2023',
-//   },
-// ]
+type DataType = {
+  id?: string
+  userId: string
+  avatarUrl?: string
+  firstName: string
+  lastName: string
+  level: string
+  gender: string
+  age?: string
+  createdAt: string
+}
