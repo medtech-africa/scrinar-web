@@ -113,12 +113,16 @@ export default function Students() {
     {
       title: 'View',
       icon: IconNames.documentText,
-      action: () => router.push(`students/view/${selectedRow}`),
+      action: () =>
+        router.push(`students/view/${encodeURIComponent(selectedRow ?? '')}`),
     },
     {
       title: 'Edit',
       icon: IconNames.userEdit,
-      action: () => router.push(`students/edit-student/${selectedRow}`),
+      action: () =>
+        router.push(
+          `students/edit-student/${encodeURIComponent(selectedRow ?? '')}`
+        ),
     },
     {
       title: 'Delete',
@@ -187,6 +191,9 @@ export default function Students() {
                     <div
                       onClick={() => handleMoreClick(val.userId)}
                       className="p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
+                      id="menu-button"
+                      aria-expanded="true"
+                      aria-haspopup="true"
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>

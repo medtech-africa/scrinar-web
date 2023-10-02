@@ -11,6 +11,12 @@ const useStudents = (page = 1) => {
   })
 }
 
-export { getStudents }
+const useStudent = (id: string) => {
+  return useQuery(['singleStaff', id], () =>
+    baseAxios.get(API.student(id)).then((res) => res.data)
+  )
+}
+
+export { useStudent }
 
 export default useStudents
