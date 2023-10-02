@@ -2,6 +2,9 @@
 import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
 import { PageHeader } from '@/components/page-header'
+import Pagination from '@/components/pagination'
+import TableLoader from '@/components/table-loader'
+import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
@@ -15,6 +18,10 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import useStudents from '@/hooks/queries/useStudents'
+import { usePaginate } from '@/hooks/usePagination'
+import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
+import { format } from 'date-fns'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -88,10 +95,17 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
 export default function Students() {
   const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
-  const [selectedRow, setSelectedRow] = useState(null)
+  const [selectedRow, setSelectedRow] = useState<string | null>(null)
   const [deleteModal, setDeleteModal] = useState(false)
+  const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
+    {}
+  )
 
-  const handleMoreClick = (rowIndex: any) => {
+  const { data, isLoading } = useStudents(currentPage)
+
+  const studentsData = data?.data
+
+  const handleMoreClick = (rowIndex: string) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
 
@@ -127,8 +141,8 @@ export default function Students() {
       {openFilter && <FilterData />}
       <Delete open={deleteModal} onClose={setDeleteModal} />
 
-      <div className="max-h-[500px] overflow-y-auto py-3 md:py-8">
-        <Table>
+      <div className="py-3 md:py-8">
+        <Table className="table-auto">
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Name</TableHead>
@@ -139,35 +153,44 @@ export default function Students() {
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className="h-[500px]">
-            {data.length === 0 ? (
-              <EmptyData />
+
+          <TableBody>
+            {isLoading ? (
+              <TableLoader />
             ) : (
-              data.map((val) => (
+              studentsData?.map((val: DataType) => (
                 <TableRow
-                  key={val.id}
+                  key={val.userId}
                   className="font-normal text-sm text-grey-600"
                 >
                   <TableCell className="flex gap-x-2 items-center">
-                    <div>{val.image}</div>
-                    <div className="flex flex-row gap-x-[3px]">
+                    <Avatar
+                      src={val?.avatarUrl}
+                      fallback={returnJoinedFirstCharacter(
+                        val.firstName,
+                        val.lastName
+                      )}
+                    />
+                    <div className="flex gap-x-[3px]">
                       <div>{val.firstName}</div>
                       <div>{val.lastName}</div>
                     </div>
                   </TableCell>
 
-                  <TableCell>{val.level}</TableCell>
+                  <TableCell>{val.level ?? '-'}</TableCell>
                   <TableCell>{val.gender}</TableCell>
                   <TableCell>{val.age}</TableCell>
-                  <TableCell>{val.timestamp}</TableCell>
+                  <TableCell>
+                    {format(new Date(val.createdAt), 'PPP')}
+                  </TableCell>
                   <TableCell className="relative">
                     <div
-                      onClick={() => handleMoreClick(val.id)}
+                      onClick={() => handleMoreClick(val.userId)}
                       className="p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
-                    {selectedRow === val.id && (
+                    {selectedRow === val.userId && (
                       <DropDownMenu
                         menuItems={menuItems}
                         onClose={() => setSelectedRow(null)}
@@ -179,104 +202,28 @@ export default function Students() {
             )}
           </TableBody>
         </Table>
+        {studentsData?.length === 0 && <EmptyData />}
       </div>
+      {studentsData?.length > 0 && (
+        <Pagination
+          current={currentPage}
+          setCurrent={setCurrentPage}
+          total={data?.meta?.total}
+          onNext={handleNext}
+          onPrev={handlePrev}
+        />
+      )}
     </div>
   )
 }
 type DataType = {
-  id?: number
-  image?: React.ReactNode
-  firstName?: string
-  lastName?: string
-  level?: string
-  gender?: string
+  id?: string
+  userId: string
+  avatarUrl?: string
+  firstName: string
+  lastName: string
+  level: string
+  gender: string
   age?: string
-  timestamp?: string
-}[]
-
-const data: DataType = [
-  {
-    id: 1,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Emmanuel',
-    lastName: 'adebayo',
-    level: 'Primary 1',
-    gender: 'Male',
-    age: '10 Years',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 2,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    level: 'Primary 1',
-    gender: 'Male',
-    age: '10 Years',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 3,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    level: 'Primary 1',
-    gender: 'Male',
-    age: '10 Years',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 4,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    level: 'Primary 1',
-    gender: 'Male',
-    age: '10 Years',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 5,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    level: 'Primary 1',
-    gender: 'Male',
-    age: '10 Years',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 6,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    level: 'Primary 1',
-    gender: 'Male',
-    age: '10 Years',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 7,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    level: 'Primary 1',
-    gender: 'Male',
-    age: '10 Years',
-    timestamp: 'Aug 10, 2023',
-  },
-]
+  createdAt: string
+}

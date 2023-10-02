@@ -9,7 +9,8 @@ export const API = {
 
   //students
   students: `${BASE_URL}/api/v1/students`,
-
+  getStudents: (currentPage = 0) =>
+    `${BASE_URL}/api/v1/students${currentPage ? `?page=${currentPage}` : ''}`,
   // // staff
   // staff: (currentPage = 1, limit = 10) =>
   //   `${BASE_URL}/api/v1/hospitals/staff?limit=${limit}${
