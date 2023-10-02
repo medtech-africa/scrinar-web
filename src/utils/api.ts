@@ -9,6 +9,7 @@ export const API = {
 
   //students
   students: `${BASE_URL}/api/v1/students`,
+  student: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
   getStudents: (currentPage = 0) =>
     `${BASE_URL}/api/v1/students${currentPage ? `?page=${currentPage}` : ''}`,
   // // staff
