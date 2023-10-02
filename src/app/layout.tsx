@@ -1,5 +1,6 @@
 import Providers from '@/context'
 import './globals.css'
+import 'react-loading-skeleton/dist/skeleton.css'
 import type { Metadata } from 'next'
 import { Toaster } from 'react-hot-toast'
 
