@@ -1,5 +1,5 @@
+import { ToastField } from '@/components/ui/toast'
 import { Meta, StoryObj } from '@storybook/react'
-import { ToastField } from '../components/ui/Toast'
 
 const meta = {
   title: 'Design System/ToastField',
@@ -7,6 +7,14 @@ const meta = {
   parameters: {
     layout: 'centered',
   },
+  argTypes: {
+    variant: {
+      options: ['success', 'warning2', 'info', 'destructive'],
+      control: { type: 'radio' },
+    },
+  },
+
+  tags: ['autodocs'],
 } satisfies Meta<typeof ToastField>
 
 export default meta
@@ -17,6 +25,7 @@ export const SuccessBadge: Story = {
     variant: 'success',
     label: 'label',
     subtext: 'Subtext here',
+    buttonText2: 'myw yoke',
   },
 }
 export const WarningBadge: Story = {
@@ -28,15 +37,15 @@ export const WarningBadge: Story = {
 }
 export const InformationBadge: Story = {
   args: {
-    variant: 'information',
+    variant: 'info',
     label: 'label',
     subtext: 'Subtext here',
   },
 }
 
-export const DangerBadge: Story = {
+export const DestructiveBadge: Story = {
   args: {
-    variant: 'danger',
+    variant: 'destructive',
     label: 'label',
     subtext: 'Subtext here',
   },
