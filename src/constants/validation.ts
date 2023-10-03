@@ -42,9 +42,61 @@ const createPatient = yupResolver(
     avatar: yup.boolean(),
   })
 )
+const createInstructor = yupResolver(
+  yup.object().shape({
+    email: yup
+      .string()
+      .required('Please enter email address')
+      .typeError('Please enter email address')
+      .email(),
+    firstName: yup
+      .string()
+      .required('Please enter first name')
+      .typeError('Please enter first name')
+      .lowercase(),
+    lastName: yup
+      .string()
+      .required('Please enter last name')
+      .typeError('Please enter last name')
+      .lowercase(),
+    middleName: yup
+      .string()
+      .required('Please enter last name')
+      .typeError('Please enter last name')
+      .lowercase(),
+    role: yup
+      .object()
+      .shape({
+        label: yup.string().required(),
+        value: yup.string().required(),
+      })
+      .required('Please select a role')
+      .typeError('Please select a role'),
+    password: yup.string().optional(),
+    gender: yup
+      .object()
+      .shape({ label: yup.string().required(), value: yup.string().required() })
+      .required('Please select a gender')
+      .typeError('Please select a gender'),
+    dob: yup
+      .string()
+      .required('Please enter date of birth')
+      .typeError('Please enter date of birth'),
+    phoneNumber: yup
+      .string()
+      .required('Phone number is required')
+      .typeError('Please enter a number')
+      .matches(
+        /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
+        'Enter a valid phone number'
+      ),
+    avatar: yup.boolean(),
+  })
+)
 
 const validation = {
   createPatient,
+  createInstructor,
 }
 
 export default validation
