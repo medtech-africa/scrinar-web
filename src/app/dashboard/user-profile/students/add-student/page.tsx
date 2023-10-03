@@ -18,7 +18,6 @@ import toast from 'react-hot-toast'
 import DatePicker from '@/components/ui/date-picker'
 import schoolLevels from '@/constants/school-levels'
 // import calculateAge from '@/utils/calculateAge'
-import generateAvatarUrl from '@/utils/generateAvatarUrl'
 import { errorMessage } from '@/utils/errorMessage'
 import filterObject from '@/utils/filterObject'
 
@@ -28,7 +27,7 @@ const navigationItems = [
   { label: 'Add New Student' },
 ]
 
-interface IFormValue {
+export interface IFormValue {
   email?: string
   firstName: string
   lastName: string
@@ -38,11 +37,11 @@ interface IFormValue {
   parentMobile: string
   parentMobileAlt?: string
   password?: string
-  avatarUrl?: string
   avatar?: boolean
 }
 
-interface IDataToSend extends Omit<IFormValue, 'level' | 'gender' | 'avatar'> {
+export interface IDataToSend
+  extends Omit<IFormValue, 'level' | 'gender' | 'avatar'> {
   level: string
   gender: string
   // age: number
@@ -73,7 +72,6 @@ export default function AddNewStudent() {
       ...filteredData,
       gender: data.gender?.value,
       level: data.level?.value,
-      avatarUrl: data.avatar ? generateAvatarUrl() : '',
       dob: new Date(data.dob).toISOString(),
       // age: calculateAge(data.dob),
     }
