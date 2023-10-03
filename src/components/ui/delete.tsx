@@ -6,9 +6,10 @@ import { Button } from './button'
 type IProps = {
   onClose: (close: boolean) => void
   action?: () => void
+  actionLoading?: boolean
   open: boolean
 }
-const Delete = ({ onClose, action, open }: IProps) => {
+const Delete = ({ onClose, action, actionLoading, open }: IProps) => {
   return (
     open && (
       <div className="fixed top-0 left-0 flex justify-center items-center w-screen h-screen z-50">
@@ -42,6 +43,7 @@ const Delete = ({ onClose, action, open }: IProps) => {
               <Button
                 value="Delete"
                 variant="primary"
+                loading={actionLoading}
                 onClick={action}
                 className="py-3 px-4"
                 leadingIcon={<IconPicker icon="trash" />}
