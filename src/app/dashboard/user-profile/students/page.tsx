@@ -20,11 +20,16 @@ import {
 } from '@/components/ui/table'
 import useStudents from '@/hooks/queries/useStudents'
 import { usePaginate } from '@/hooks/usePagination'
+import { API } from '@/utils/api'
+import baseAxios from '@/utils/baseAxios'
+import { errorMessage } from '@/utils/errorMessage'
 import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
+import { useMutation } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 
 const FilterData = () => {
   return (
@@ -101,9 +106,13 @@ export default function Students() {
     {}
   )
 
-  const { data, isLoading } = useStudents(currentPage)
+  const { data, isLoading, refetch } = useStudents(currentPage)
 
   const studentsData = data?.data
+
+  const { isLoading: deleteLoading, mutate } = useMutation(() =>
+    baseAxios.delete(API.student(encodeURIComponent(selectedRow ?? '')))
+  )
 
   const handleMoreClick = (rowIndex: string) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
@@ -129,10 +138,28 @@ export default function Students() {
       icon: IconNames.trash,
       action: () => {
         setDeleteModal(true)
-        setSelectedRow(null)
       },
     },
   ]
+
+  const handleDelete = async () => {
+    try {
+      await mutate(undefined, {
+        onSuccess: () => {
+          setSelectedRow(null)
+          setDeleteModal(false)
+          refetch()
+          toast.success('Successfully deleted student')
+          // toast.success('')
+        },
+        onError: (err) => {
+          errorMessage(err)
+        },
+      })
+    } finally {
+      //
+    }
+  }
 
   return (
     <div>
@@ -143,7 +170,12 @@ export default function Students() {
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
-      <Delete open={deleteModal} onClose={setDeleteModal} />
+      <Delete
+        open={deleteModal}
+        onClose={setDeleteModal}
+        action={handleDelete}
+        actionLoading={deleteLoading}
+      />
 
       <div className="py-3 md:py-8">
         <Table className="table-auto">
@@ -181,8 +213,10 @@ export default function Students() {
                     </div>
                   </TableCell>
 
-                  <TableCell>{val.level ?? '-'}</TableCell>
-                  <TableCell>{val.gender}</TableCell>
+                  <TableCell className="capitalize">
+                    {val.level ?? '-'}
+                  </TableCell>
+                  <TableCell className="capitalize">{val.gender}</TableCell>
                   <TableCell>{val.age}</TableCell>
                   <TableCell>
                     {format(new Date(val.createdAt), 'PPP')}
@@ -197,7 +231,7 @@ export default function Students() {
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
-                    {selectedRow === val.userId && (
+                    {selectedRow === val.userId && !deleteModal && (
                       <DropDownMenu
                         menuItems={menuItems}
                         onClose={() => setSelectedRow(null)}
