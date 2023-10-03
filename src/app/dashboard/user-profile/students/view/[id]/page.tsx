@@ -7,7 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
 import { useStudent } from '@/hooks/queries/useStudents'
 import ContentLoader from '@/components/content-loader'
-import Image from 'next/image'
+import { Avatar } from '@/components/ui/avatar'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -103,13 +103,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
           <PageCard title="Add User Picture">
             <div className="flex flex-col justify-center items-center py-4">
               {data?.avatarUrl ? (
-                <Image
-                  height={16}
-                  width={16}
-                  src={data.avatarUrl}
-                  alt={data?.firstName}
-                  className="rounded-full"
-                />
+                <Avatar size="sm" src={data?.avatarUrl} />
               ) : (
                 <div className="p-4 rounded-full border border-lust-100 border-dashed ">
                   <IconPicker icon="add" className="text-lust-900" />
