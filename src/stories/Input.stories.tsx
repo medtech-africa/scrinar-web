@@ -1,6 +1,6 @@
+import { IconPicker } from '@/components/ui/icon-picker'
 import { Input } from '../components/ui/input'
 import type { Meta, StoryObj } from '@storybook/react'
-import { Mail } from 'lucide-react'
 
 const meta = {
   title: 'Example/Input',
@@ -27,14 +27,14 @@ export const Default: Story = {
 export const DefaultWithLeadingIcon: Story = {
   args: {
     variant: 'default',
-    leadingIcon: <Mail size={20} />,
+    leadingIcon: <IconPicker icon="mail" size="1.25rem" />,
   },
 }
 
 export const DefaultWithLeadingIconAndMessage: Story = {
   args: {
     variant: 'default',
-    leadingIcon: <Mail size={20} />,
+    leadingIcon: <IconPicker icon="mail" size="1.25rem" />,
     message: 'This is a hint text to help user.',
   },
 }
@@ -42,7 +42,7 @@ export const DefaultWithLeadingIconAndMessage: Story = {
 export const DefaultWithLeadingIconDisabled: Story = {
   args: {
     variant: 'default',
-    leadingIcon: <Mail size={20} />,
+    leadingIcon: <IconPicker icon="mail" size="1.25rem" />,
     disabled: true,
   },
 }

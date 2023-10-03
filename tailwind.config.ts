@@ -186,6 +186,12 @@ const config: Config = {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
       },
+      spacing: {
+        1.1: '0.3125rem',
+        1.2: '0.375rem',
+        2.2: '0.625rem',
+        20.8: '5.5rem',
+      },
     },
   },
   plugins: [
@@ -206,8 +212,14 @@ const config: Config = {
           'box-shadow': '0px 1px 2px 0px rgba(16, 24, 40, 0.05)',
           '&:focus': focusOutset,
         },
+        '.focus-outset': focusOutset,
         '.sidebar-shadow': {
           'box-shadow': '0px 0px 37px 0px rgba(16, 24, 40, 0.02)',
+        },
+        '@media (max-width: 1130px)': {
+          '.dashboard-home-cards-container': {
+            'grid-template-columns': 'repeat(2, minmax(0, 1fr))',
+          },
         },
       })
     }),

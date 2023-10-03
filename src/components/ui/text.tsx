@@ -6,17 +6,17 @@ import { cn } from '@/lib/utils'
 const textVariants = cva('', {
   variants: {
     variant: {
-      'display/2xl': 'text-7xl',
-      'display/xl': 'text-6xl',
-      'display/lg': 'text-5xl',
-      'display/md': 'text-4xl',
-      'display/sm': 'text-3xl',
+      'display/2xl': 'text-7xl leading-[5.625rem]',
+      'display/xl': 'text-6xl leading-[4.5rem]',
+      'display/lg': 'text-5xl leading-[3.75rem]',
+      'display/md': 'text-4xl leading-11',
+      'display/sm': 'text-3xl leading-[2.375rem]',
       'display/xs': 'text-2xl',
-      'text/xl': 'text-xl',
-      'text/lg': 'text-lg',
-      'text/md': 'text-base',
-      'text/sm': 'text-sm',
-      'text/xs': 'text-xs',
+      'text/xl': 'text-xl leading-[1.875rem]',
+      'text/lg': 'text-lg leading-7',
+      'text/md': 'text-base leading-6',
+      'text/sm': 'text-sm leading-[1.125rem]',
+      'text/xs': 'text-xs leading-[1.125rem]',
     },
     weight: {
       default: 'font-normal',
@@ -38,7 +38,7 @@ export interface TextProps
 }
 
 const Text = React.forwardRef<any, TextProps>(
-  ({ className, variant, weight, as: Comp = 'span', ...props }, ref) => {
+  ({ className, variant, weight, as: Comp = 'p', ...props }, ref) => {
     return (
       <Comp
         className={cn(textVariants({ variant, weight, className }))}
