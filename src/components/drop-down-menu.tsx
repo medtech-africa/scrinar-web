@@ -24,8 +24,12 @@ const DropDownMenu = ({ menuItems, onClose }: IProps) => {
   return (
     <div
       ref={menuRef}
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="menu-option"
+      tabIndex={1}
       className={cn(
-        'flex flex-col p-2 bg-white justify-center space-y-2 items-start shadow-xl absolute right-4 z-40 whitespace-nowrap'
+        'flex flex-col p-2 bg-white justify-center space-y-2 items-start shadow-xl absolute right-4 whitespace-nowrap z-[1000] origin-top-right '
       )}
     >
       {menuItems.map((item, _) => (
