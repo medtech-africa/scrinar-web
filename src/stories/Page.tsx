@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Header } from '../components/ui/header'
+import { Header } from '../components/ui/Header'
 import './page.css'
 
 export const Page: React.FC = () => {
