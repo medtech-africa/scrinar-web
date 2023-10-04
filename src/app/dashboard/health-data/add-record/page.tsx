@@ -2,24 +2,17 @@ import { PageHeader } from '@/components/page-header'
 import { BadgeField } from '@/components/ui/Badge'
 import { PageCard } from '@/components/ui/page-card'
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
 import { Select } from '@/components/ui/select'
+import schoolLevels from '@/constants/school-levels'
+import { Label } from '@/components/ui/label'
 
 const navigationItems = [
   { label: 'Health Data', icon: IconNames.arrowRight },
   { label: 'Add New Record' },
-]
-const allOptions = Array.from({ length: 11 }, (_, index) => {
-  const age = index + 7
-  return { value: age.toString(), label: age.toString() }
-})
-const genderOptions = [
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
 ]
 
 export default function AddRecord() {
@@ -31,133 +24,71 @@ export default function AddRecord() {
         navigation={navigationItems}
         avatar="avatar"
       />
-      <div className="flex lg:flex-row flex-col w-full mt-9 gap-y-4">
-        <div className="w-full h-full">
-          <PageCard title="Add Basic Information" bodyStyle="p-4">
-            <div className="flex gap-x-4">
-              <div className="flex items-center">
-                <div className="p-4 rounded-full border border-lust-100 border-dashed ">
-                  <IconPicker icon="add" className="text-lust-900" />
-                </div>
-                <Text
-                  className="ml-2 text-gray-900"
-                  variant="text/md"
-                  weight="medium"
-                >
-                  Add Avatar
-                </Text>
+      <div className="w-full h-full">
+        <PageCard title="Student Bio Data" bodyStyle="p-4">
+          <div className="flex items-end">
+            <div className="flex items-center">
+              <div className="p-4 rounded-full border border-lust-100 border-dashed ">
+                <IconPicker icon="add" className="text-lust-900" />
               </div>
-              <div className="flex items-center">
-                <Checkbox />
-                <Text className="ml-2 text-grey-500">
-                  Use System Generated Avatar
-                </Text>
-              </div>
+              <Text
+                className="ml-2 text-gray-900"
+                variant="text/md"
+                weight="medium"
+              >
+                Student Avatar
+              </Text>
             </div>
-            <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
-              <Input
-                placeholder="Enter Name"
-                label="Student Name"
-                full
-                labelStyle="lg:text-sm text-xs"
-              />
-              <Input
-                placeholder="Primary 1"
-                label="Class"
-                full
-                labelStyle="lg:text-sm text-xs"
-                endingIcon={
-                  <IconPicker icon="helpCircle" className="text-grey-400" />
-                }
-              />
-              <Select
-                label="Age"
-                full
-                labelStyle="lg:text-sm text-xs"
-                placeholder="Select Age"
-                options={allOptions}
-              />
-              <Input
-                placeholder="DD/MM/YYYY"
-                label="Date Of Birth"
-                full
-                labelStyle="lg:text-sm text-xs"
-                leadingIcon={<IconPicker icon="calendar2" />}
-              />
-              <Select
-                placeholder="Select Nutritional Health"
-                label="Nutritional Health"
-                full
-                labelStyle="lg:text-sm text-xs"
-              />
-              <Select
-                placeholder="Yes"
-                label="Does the Student Partake In Sport?"
-                full
-                labelStyle="lg:text-sm text-xs"
-              />
-              <Select
-                labelStyle="lg:text-sm text-xs"
-                placeholder="Select Sport"
-                label="Sport"
-                full
-              />
-              <Select
-                labelStyle="lg:text-sm text-xs"
-                placeholder="Select Exercise Habit"
-                label="How Frequent?"
-                full
-              />
-              <Select
-                labelStyle="lg:text-sm text-xs"
-                placeholder="5.6"
-                label="Blood Sugar Level"
-                full
-              />
-              <Select
-                labelStyle="lg:text-sm text-xs"
-                placeholder="Select Gender"
-                label="Gender"
-                full
-                options={genderOptions}
-              />
-              <Input
-                labelStyle="lg:text-sm text-xs"
-                placeholder="0909889877"
-                label="Guardians or Parent’s Mobile Number"
-                full
-              />
-              <Input
-                labelStyle="lg:text-sm text-xs"
-                placeholder="Add Family History"
-                label="Family History"
-                full
-              />
-            </div>
-            <Button
-              variant={'primary'}
-              value="Save Data"
-              leadingIcon={<IconPicker icon="saveAdd" />}
-              className="mt-6"
+          </div>
+          <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
+            <Select
+              label="Class"
+              full
+              labelStyle="lg:text-sm text-xs"
+              placeholder="Select Class"
+              options={schoolLevels}
             />
-          </PageCard>
-        </div>
-        <div className="lg:ml-[24px] h-full">
-          <PageCard title="Add BMI Details">
-            <div className="flex flex-col gap-y-6 w-full p-4">
+
+            <Select
+              label="Student"
+              full
+              labelStyle="lg:text-sm text-xs"
+              placeholder="Select Student"
+              // disabled={!level}
+              // options={students}
+            />
+
+            <Input
+              label="Student Age"
+              disabled
+              defaultValue="14"
+              labelStyle="lg:text-sm text-xs"
+            />
+            <Input
+              label="Student Gender"
+              disabled
+              defaultValue="Male"
+              labelStyle="lg:text-sm text-xs"
+            />
+          </div>
+        </PageCard>
+
+        <div className="grid md:grid-cols-2 gap-6 py-7 mt-2">
+          <PageCard title="Antropometry">
+            <div className="flex gap-3 w-full p-4">
               <Input
-                placeholder="180 IN"
-                label="Height"
+                placeholder="180"
+                label="Height(m)"
                 labelStyle="flex justify-center items-center"
               />
               <Input
-                placeholder="50 KG"
-                label="Weight"
+                placeholder="50"
+                label="Weight(kg)"
                 labelStyle="flex justify-center items-center"
               />
               <Input
-                placeholder="30 CM"
-                label="Waist"
+                placeholder="30"
+                label="Waist(cm)"
                 labelStyle="flex justify-center items-center"
               />
             </div>
@@ -175,9 +106,86 @@ export default function AddRecord() {
                 </Text>
                 <BadgeField variant="danger" value="overweight" />
               </div>
+              <Label className="px-4 flex justify-center">
+                * BMI automatically generated
+              </Label>
+            </div>
+          </PageCard>
+
+          <div className="h-full">
+            <PageCard title="Blood Pressure" bodyStyle="p-4">
+              <div className="flex items-center">
+                <Input
+                  placeholder="170"
+                  label="Dys"
+                  labelStyle="lg:text-sm text-xs"
+                />
+                <Text className="mt-6 mx-2" variant="display/sm">
+                  /
+                </Text>
+                <Input
+                  placeholder="10"
+                  label="Sys"
+                  labelStyle="lg:text-sm text-xs"
+                />
+                <BadgeField
+                  variant="danger"
+                  className="ml-2 mt-6"
+                  value="overweight"
+                />
+              </div>
+            </PageCard>
+
+            <PageCard title="Blood Sugar" bodyStyle="p-4 mt-4">
+              <div className="flex items-center">
+                <Input
+                  placeholder="170"
+                  label="RBS (mg/dL)"
+                  labelStyle="lg:text-sm text-xs"
+                />
+                <BadgeField
+                  variant="danger"
+                  className="ml-2 mt-6"
+                  value="overweight"
+                />
+              </div>
+            </PageCard>
+          </div>
+        </div>
+        <div className="grid md:grid-cols-2 gap-6 py-7 mt-2">
+          <PageCard title="Nutritional Assess" bodyStyle="p-4">
+            <div className="flex gap-3 items-center">
+              <Label>Dietary Diversity Score - 0/15</Label>
+              <BadgeField variant="error" value="Poor" />
+              <Text
+                variant="text/sm"
+                className="text-primary cursor-pointer underline"
+                as="span"
+              >
+                Open Questionaire
+              </Text>
+            </div>
+          </PageCard>
+          <PageCard title="Exercise/Activity" bodyStyle="p-4">
+            <div className="flex gap-3 items-center">
+              <Label>Phyical Activity Score - 0/15</Label>
+              <BadgeField variant="error" value="Poor" />
+              <Text
+                variant="text/sm"
+                className="text-primary cursor-pointer underline"
+                as="span"
+              >
+                Open Questionaire
+              </Text>
             </div>
           </PageCard>
         </div>
+        <Button
+          variant={'primary'}
+          value="Save Data"
+          leadingIcon={<IconPicker icon="saveAdd" />}
+          className="mt-6"
+        />
       </div>
     </div>
   )
