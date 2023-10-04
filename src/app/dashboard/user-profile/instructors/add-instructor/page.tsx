@@ -17,7 +17,6 @@ import filterObject from '@/utils/filterObject'
 import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import DatePicker from '@/components/ui/date-picker'
-import generateAvatarUrl from '@/utils/generateAvatarUrl'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -34,7 +33,6 @@ interface IFormValue {
   role: { value: string; label: string }
   dob: string
   gender: { value: string; label: string }
-  avatarUrl?: string
   avatar?: boolean
 }
 interface IDataToSend extends Omit<IFormValue, 'role' | 'gender'> {
@@ -66,7 +64,6 @@ export default function AddRecord() {
       ...filteredData,
       role: data.role?.value,
       gender: data.gender?.value,
-      avatarUrl: data.avatar ? generateAvatarUrl() : '',
       dob: new Date(data.dob).toISOString(),
     }
     try {
@@ -147,7 +144,7 @@ export default function AddRecord() {
                 <Controller
                   control={control}
                   name="role"
-                  render={({ field: { onChange, onBlur, value } }: any) => (
+                  render={({ field: { onChange, onBlur, value } }) => (
                     <Select
                       placeholder="Select Role"
                       label="Role"
@@ -229,8 +226,8 @@ export default function AddRecord() {
                         onChange(val)
                       }}
                       options={[
-                        { value: 'male', label: 'Male' },
-                        { value: 'female', label: 'Female' },
+                        { value: 'm', label: 'Male' },
+                        { value: 'f', label: 'Female' },
                       ]}
                       variant={errors?.gender ? 'destructive' : 'default'}
                       message={errors.gender && 'Please select a gender'}
