@@ -14,9 +14,10 @@ export type MenuItemProp = {
 interface IProps {
   menuItems: MenuItemProp[]
   onClose?: () => void
+  className?: string
 }
 
-const DropDownMenu = ({ menuItems, onClose }: IProps) => {
+const DropDownMenu = ({ menuItems, onClose, className }: IProps) => {
   const menuRef = useRef(null)
 
   useClickAway(menuRef, () => (onClose ? onClose() : null))
@@ -29,7 +30,8 @@ const DropDownMenu = ({ menuItems, onClose }: IProps) => {
       aria-labelledby="menu-option"
       tabIndex={1}
       className={cn(
-        'flex flex-col p-2 bg-white justify-center space-y-2 items-start shadow-xl absolute right-4 whitespace-nowrap z-[1000] origin-top-right '
+        'flex flex-col p-2 bg-white justify-center space-y-2 items-start shadow-xl absolute right-4 whitespace-nowrap z-[1000] origin-top-right',
+        className
       )}
     >
       {menuItems.map((item, _) => (
@@ -41,7 +43,8 @@ const DropDownMenu = ({ menuItems, onClose }: IProps) => {
           <div
             className={cn(
               ' text-grey-600',
-              item.title?.toLowerCase().includes('delete') &&
+              (item.title?.toLowerCase().includes('delete') ||
+                item.title?.toLowerCase().includes('logout')) &&
                 'text-carmine-pink-red-900'
             )}
           >
@@ -50,7 +53,8 @@ const DropDownMenu = ({ menuItems, onClose }: IProps) => {
           <Text
             className={cn(
               ' text-grey-600 text-xs',
-              item.title?.toLowerCase().includes('delete') &&
+              (item.title?.toLowerCase().includes('delete') ||
+                item.title?.toLowerCase().includes('logout')) &&
                 'text-carmine-pink-red-900'
             )}
           >

@@ -6,16 +6,33 @@ import useClickAway from '@/hooks/useClickAway'
 import { IconPicker } from './icon-picker'
 import { Avatar } from './avatar'
 import Link from 'next/link'
+import { IconNames } from './icon-picker/icon-names'
+import { useRouter } from 'next/navigation'
+import DropDownMenu from '../drop-down-menu'
 
 interface IHeader {
   sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
 }
 
 export const Header = ({ sideToggleOpen }: IHeader) => {
+  const router = useRouter()
   const menuRef = useRef(null)
   const [visible, setVisible] = useState<boolean>(false)
+  const [openDropDown, setOpenDropDown] = useState<boolean>(false)
 
   useClickAway(menuRef, () => setVisible(false))
+  const menuItems = [
+    {
+      title: 'Profile',
+      icon: IconNames.profile2User,
+      action: () => router.push('/dashboard/settings'),
+    },
+    {
+      title: 'Logout',
+      icon: IconNames.login,
+      action: () => null,
+    },
+  ]
 
   return (
     <header>
@@ -49,10 +66,22 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
               rootClassName="border border-lust-100"
               imgClassName="bg-lust-50"
             />
-            <Text className="font-medium text-grey-600 text-xs sm:text-base ">
-              School Name here
-            </Text>
-            <IconPicker icon="arrowDown" />
+            <div
+              onClick={() => setOpenDropDown(true)}
+              className="cursor-pointer flex space-x-2 md:space-x-4 items-center relative"
+            >
+              <Text className="font-medium text-grey-600 text-xs sm:text-base ">
+                School Name here
+              </Text>
+              <IconPicker icon="arrowDown" />
+              {openDropDown && (
+                <DropDownMenu
+                  className="top-9 right-0 min-w-[200px] w-full m-0"
+                  menuItems={menuItems}
+                  onClose={() => setOpenDropDown(false)}
+                />
+              )}
+            </div>
           </div>
           <div
             className="md:hidden flex items-center cursor-pointer focus:bg-black  active:bg-gray-200 transition-all duration-300 ease-in-out"
@@ -89,10 +118,14 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
           <Text>Settings</Text>
         </Link>
         <div className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full">
-          <div className="bg-grey-100 p-2 rounded-full">
-            {/* Avatar goes here */}
-          </div>
+          <Avatar size="sm" fallback="SH" />
           <Text>Profile</Text>
+        </div>
+        <div className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full">
+          <div className="bg-grey-100 p-2 rounded-full text-primary">
+            <IconPicker icon="login" size={18} />
+          </div>
+          <Text className="text-primary">Logout</Text>
         </div>
       </div>
     </header>
