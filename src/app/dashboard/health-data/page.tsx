@@ -1,7 +1,7 @@
 'use client'
 import DropDownMenu from '@/components/drop-down-menu'
 import { PageHeader } from '@/components/page-header'
-import { BadgeField } from '@/components/ui/Badge'
+// import { BadgeField } from '@/components/ui/Badge'
 import { Avatar, AvatarRoot } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import Delete from '@/components/ui/delete'
@@ -49,6 +49,7 @@ const FilterData = () => {
     </div>
   )
 }
+
 type FilterHeaderProps = {
   setOpenFilter: (value: boolean) => void
   openFilter: boolean
@@ -171,11 +172,17 @@ export default function HealthData() {
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Students Name</TableHead>
-              <TableHead>BMI</TableHead>
-              <TableHead></TableHead>
-              <TableHead>Nutritional Health</TableHead>
-              <TableHead>Exercise Habits</TableHead>
-              <TableHead>Timestamp</TableHead>
+              <TableHead>
+                Anthropometry
+                <TableHead className="pl-0">Ht(m)</TableHead>
+                <TableHead>Wt</TableHead>
+                <TableHead>BMI</TableHead>
+                <TableHead>WC(cm)</TableHead>
+              </TableHead>
+              <TableHead>BP(mmHg)</TableHead>
+              <TableHead>Blood Sugar(mg/dL)</TableHead>
+              <TableHead>Nutritional Access</TableHead>
+              <TableHead>Exercise Activity</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -201,13 +208,19 @@ export default function HealthData() {
                     </div>
                   </TableCell>
 
-                  <TableCell>{val.bmi}</TableCell>
                   <TableCell>
-                    <BadgeField variant="error" value={val.variantval} />
+                    <TableCell>
+                      {val.anthropometry.height}{' '}
+                      {/* <BadgeField variant="success" value={'n'} /> */}
+                    </TableCell>
+                    <TableCell>{val.anthropometry.weight}</TableCell>
+                    <TableCell>{val.anthropometry.bmi}</TableCell>
+                    <TableCell>{val.anthropometry.wc}</TableCell>
                   </TableCell>
+                  <TableCell>{val.bp}</TableCell>
+                  <TableCell>{val.bloodSugar}</TableCell>
                   <TableCell>{val.nutritional}</TableCell>
                   <TableCell>{val.exercise}</TableCell>
-                  <TableCell>{val.timestamp}</TableCell>
                   <TableCell className="relative">
                     <div
                       onClick={() => handleMoreClick(val.id)}
@@ -236,7 +249,14 @@ type DataType = {
   image?: React.ReactNode
   firstName?: string
   lastName?: string
-  bmi?: number
+  anthropometry: {
+    bmi?: number
+    height?: number
+    weight?: number
+    wc?: number
+  }
+  bp?: string
+  bloodSugar?: number
   nutritional?: string
   exercise?: string
   timestamp?: string
@@ -252,9 +272,16 @@ const data: DataType = [
     ),
     firstName: 'Emmanuel',
     lastName: 'adebayo',
-    bmi: 23.3,
-    nutritional: 'good',
-    exercise: 'Moderately Good',
+    anthropometry: {
+      bmi: 23.3,
+      height: 23.3,
+      weight: 32.1,
+      wc: 21.1,
+    },
+    bp: 'N/A',
+    bloodSugar: 120,
+    nutritional: '5/10',
+    exercise: '6/15',
     timestamp: 'Aug 10, 2023',
     variant: 'success',
     variantval: 'Healthy',
@@ -266,9 +293,16 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    anthropometry: {
+      bmi: 23.3,
+      height: 23.3,
+      weight: 32.1,
+      wc: 21.1,
+    },
+    bp: '100/71',
+    bloodSugar: 100,
+    nutritional: '7/10',
+    exercise: '6/15',
     timestamp: 'Aug 10, 2023',
     variant: 'error',
     variantval: 'Extremely obese',
@@ -280,9 +314,16 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    anthropometry: {
+      bmi: 23.3,
+      height: 23.3,
+      weight: 32.1,
+      wc: 21.1,
+    },
+    bp: '100/71',
+    bloodSugar: 100,
+    nutritional: '7/10',
+    exercise: '6/15',
     timestamp: 'Aug 10, 2023',
     variant: 'error',
     variantval: 'Extremely obese',
@@ -294,9 +335,16 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    anthropometry: {
+      bmi: 23.3,
+      height: 23.3,
+      weight: 32.1,
+      wc: 21.1,
+    },
+    bp: '100/71',
+    bloodSugar: 100,
+    nutritional: '7/10',
+    exercise: '6/15',
     timestamp: 'Aug 10, 2023',
     variant: 'error',
     variantval: 'Extremely obese',
@@ -308,9 +356,16 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    anthropometry: {
+      bmi: 23.3,
+      height: 23.3,
+      weight: 32.1,
+      wc: 21.1,
+    },
+    bp: '100/71',
+    bloodSugar: 100,
+    nutritional: '7/10',
+    exercise: '6/15',
     timestamp: 'Aug 10, 2023',
     variant: 'error',
     variantval: 'Extremely obese',
@@ -322,9 +377,16 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    anthropometry: {
+      bmi: 23.3,
+      height: 23.3,
+      weight: 32.1,
+      wc: 21.1,
+    },
+    bp: '100/71',
+    bloodSugar: 100,
+    nutritional: '7/10',
+    exercise: '6/15',
     timestamp: 'Aug 10, 2023',
     variant: 'error',
     variantval: 'Extremely obese',
@@ -336,9 +398,16 @@ const data: DataType = [
     ),
     firstName: 'Asah',
     lastName: 'Benjamin',
-    bmi: 23.3,
-    nutritional: 'Execellent',
-    exercise: 'Very Active',
+    anthropometry: {
+      bmi: 23.3,
+      height: 23.3,
+      weight: 32.1,
+      wc: 21.1,
+    },
+    bp: '100/71',
+    bloodSugar: 100,
+    nutritional: '7/10',
+    exercise: '6/15',
     timestamp: 'Aug 10, 2023',
     variant: 'error',
     variantval: 'Extremely obese',
