@@ -56,6 +56,7 @@ export enum Icons {
   bookmark = 'bookmark',
   play = 'play',
   password = 'password',
+  login = 'login',
 }
 
 export { Icons as IconNames }
