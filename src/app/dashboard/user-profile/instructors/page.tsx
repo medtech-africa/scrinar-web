@@ -2,6 +2,9 @@
 import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
 import { PageHeader } from '@/components/page-header'
+import Pagination from '@/components/pagination'
+import TableLoader from '@/components/table-loader'
+import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
@@ -15,9 +18,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import useInstructors from '@/hooks/queries/useInstructors'
+import { usePaginate } from '@/hooks/usePagination'
+import { API } from '@/utils/api'
+import baseAxios from '@/utils/baseAxios'
+import { errorMessage } from '@/utils/errorMessage'
+import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
+import { useMutation } from '@tanstack/react-query'
+import { format } from 'date-fns'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 
 const FilterData = () => {
   return (
@@ -90,6 +102,17 @@ export default function Instructors() {
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const [deleteModal, setDeleteModal] = useState(false)
+  const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
+    {}
+  )
+
+  const { data, isLoading, refetch } = useInstructors(currentPage)
+
+  const instructorsData = data?.data
+
+  const { isLoading: deleteLoading, mutate } = useMutation(() =>
+    baseAxios.delete(API.instructor(encodeURIComponent(selectedRow ?? '')))
+  )
 
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
@@ -99,12 +122,18 @@ export default function Instructors() {
     {
       title: 'View',
       icon: IconNames.documentText,
-      action: () => router.push(`instructors/view/${selectedRow}`),
+      action: () =>
+        router.push(
+          `instructors/view/${encodeURIComponent(selectedRow ?? '')}`
+        ),
     },
     {
       title: 'Edit',
       icon: IconNames.userEdit,
-      action: () => router.push(`instructors/edit-instructor/${selectedRow}`),
+      action: () =>
+        router.push(
+          `instructors/edit-instructor/${encodeURIComponent(selectedRow ?? '')}`
+        ),
     },
     {
       title: 'Send Password link',
@@ -115,10 +144,26 @@ export default function Instructors() {
       icon: IconNames.trash,
       action: () => {
         setDeleteModal(true)
-        setSelectedRow(null)
       },
     },
   ]
+  const handleDelete = async () => {
+    try {
+      await mutate(undefined, {
+        onSuccess: () => {
+          setSelectedRow(null)
+          setDeleteModal(false)
+          refetch()
+          toast.success('Successfully deleted instructor')
+        },
+        onError: (err) => {
+          errorMessage(err)
+        },
+      })
+    } finally {
+      //
+    }
+  }
 
   return (
     <div>
@@ -129,7 +174,12 @@ export default function Instructors() {
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
-      <Delete open={deleteModal} onClose={setDeleteModal} />
+      <Delete
+        open={deleteModal}
+        onClose={setDeleteModal}
+        action={handleDelete}
+        actionLoading={deleteLoading}
+      />
       <div className="max-h-[500px] overflow-y-auto py-3 md:py-8">
         <Table>
           <TableHeader className="bg-grey-100">
@@ -143,34 +193,46 @@ export default function Instructors() {
             </TableRow>
           </TableHeader>
           <TableBody className="h-[500px]">
-            {data.length === 0 ? (
-              <EmptyData />
+            {isLoading ? (
+              <TableLoader />
             ) : (
-              data.map((val) => (
+              instructorsData?.map((val: DataType) => (
                 <TableRow
-                  key={val.id}
+                  key={val?.userId}
                   className="font-normal text-sm text-grey-600"
                 >
                   <TableCell className="flex gap-x-2 items-center">
-                    <div>{val.image}</div>
+                    <div>
+                      <Avatar
+                        src={val?.avatarUrl}
+                        fallback={returnJoinedFirstCharacter(
+                          val.firstName,
+                          val.lastName
+                        )}
+                      />
+                    </div>
                     <div className="flex flex-row gap-x-[3px]">
-                      <div>{val.firstName}</div>
-                      <div>{val.lastName}</div>
+                      <div>{val?.firstName}</div>
+                      <div>{val?.lastName}</div>
                     </div>
                   </TableCell>
 
-                  <TableCell>{val.role}</TableCell>
-                  <TableCell>{val.email}</TableCell>
-                  <TableCell>{val.phoneNumber}</TableCell>
-                  <TableCell>{val.timestamp}</TableCell>
+                  <TableCell className="capitalize">{val?.role}</TableCell>
+                  <TableCell>{val?.email}</TableCell>
+                  <TableCell>{val?.phoneNumber ?? '-'}</TableCell>
+                  <TableCell>
+                    {val?.createdAt
+                      ? format(new Date(val?.createdAt), 'PPP')
+                      : '-'}
+                  </TableCell>
                   <TableCell className="relative">
                     <div
-                      onClick={() => handleMoreClick(val.id)}
+                      onClick={() => handleMoreClick(val?.userId)}
                       className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
-                    {selectedRow === val.id && (
+                    {selectedRow === val?.userId && !deleteModal && (
                       <DropDownMenu
                         menuItems={menuItems}
                         onClose={() => setSelectedRow(null)}
@@ -182,104 +244,27 @@ export default function Instructors() {
             )}
           </TableBody>
         </Table>
+        {instructorsData?.length === 0 && <EmptyData />}
       </div>
+      {instructorsData?.length > 0 && (
+        <Pagination
+          current={currentPage}
+          setCurrent={setCurrentPage}
+          total={data?.meta?.total}
+          onNext={handleNext}
+          onPrev={handlePrev}
+        />
+      )}
     </div>
   )
 }
 type DataType = {
-  id?: number
-  image?: React.ReactNode
+  userId?: number
+  avatarUrl?: string
   firstName?: string
   lastName?: string
   role?: string
   email?: string
   phoneNumber?: string
-  timestamp?: string
-}[]
-
-const data: DataType = [
-  {
-    id: 1,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Emmanuel',
-    lastName: 'adebayo',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 2,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 3,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 4,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 5,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 6,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
-    timestamp: 'Aug 10, 2023',
-  },
-  {
-    id: 7,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    role: 'teacher',
-    email: 'name@example.com',
-    phoneNumber: '(+234) 81 123 1234 345',
-    timestamp: 'Aug 10, 2023',
-  },
-]
+  createdAt: string
+}
