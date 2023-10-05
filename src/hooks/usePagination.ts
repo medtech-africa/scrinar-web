@@ -92,12 +92,25 @@ const usePagination = ({
   return paginationRange
 }
 
-const usePaginate = ({ defaultValue = 1 }) => {
+const usePaginate = ({
+  defaultValue = 1,
+  onNextPage,
+}: {
+  defaultValue?: number
+  onNextPage?: () => void
+}) => {
   const [currentPage, setCurrentPage] = useState(defaultValue)
 
-  const handleNext = useCallback((max?: number) => {
-    setCurrentPage((prev) => Math.min(prev + 1, max ?? 0))
-  }, [])
+  const handleNext = useCallback(
+    async (max?: number) => {
+      setCurrentPage((prev) => Math.min(prev + 1, max ?? 0))
+
+      if (onNextPage) {
+        await onNextPage()
+      }
+    },
+    [onNextPage]
+  )
 
   const handlePrev = useCallback(() => {
     setCurrentPage((prev) => Math.max(prev - 1, 1))
