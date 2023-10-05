@@ -44,6 +44,20 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
                 labelStyle="lg:text-sm text-xs"
               />
               <Input
+                defaultValue={data?.middleName ?? ''}
+                label="Middle Name"
+                className="capitalize"
+                disabled
+                labelStyle="lg:text-sm text-xs"
+              />
+              <Input
+                defaultValue={data?.gender ?? ''}
+                label="Gender"
+                className="capitalize"
+                disabled
+                labelStyle="lg:text-sm text-xs"
+              />
+              <Input
                 defaultValue={data?.role ?? ''}
                 disabled
                 className="capitalize"
