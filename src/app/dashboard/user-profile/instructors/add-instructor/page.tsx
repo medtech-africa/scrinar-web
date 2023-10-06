@@ -23,7 +23,7 @@ const navigationItems = [
   { label: 'Instructors', icon: IconNames.arrowRight },
   { label: 'Add New Instructor' },
 ]
-interface IFormValue {
+export interface InstructorFormValue {
   email: string
   firstName: string
   lastName: string
@@ -35,7 +35,8 @@ interface IFormValue {
   gender: { value: string; label: string }
   avatar?: boolean
 }
-interface IDataToSend extends Omit<IFormValue, 'role' | 'gender'> {
+export interface InstructorDataToSend
+  extends Omit<InstructorFormValue, 'role' | 'gender'> {
   role: string
   gender: string
 }
@@ -44,7 +45,7 @@ export default function AddRecord() {
     isLoading,
     mutate,
     reset: postReset,
-  } = useMutation((dataToSend: IDataToSend) =>
+  } = useMutation((dataToSend: InstructorDataToSend) =>
     baseAxios.post(API.instructors, dataToSend)
   )
 
@@ -53,12 +54,12 @@ export default function AddRecord() {
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormValue>({
+  } = useForm<InstructorFormValue>({
     resolver: validation.createInstructor,
     defaultValues: { avatar: true },
   })
 
-  const onSubmit = async (data: IFormValue) => {
+  const onSubmit = async (data: InstructorFormValue) => {
     const filteredData = filterObject(data)
     const dataToSend = {
       ...filteredData,
