@@ -58,4 +58,6 @@ export const IconMap: Map<string, string> = new Map([
   [Icons.play, 'PlayIcon'],
   [Icons.password, 'PasswordIcon'],
   [Icons.login, 'LoginIcon'],
+  [Icons.eyeOpen, 'EyeOpenIcon'],
+  [Icons.eyeClose, 'EyeCloseIcon'],
 ])

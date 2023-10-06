@@ -6,7 +6,7 @@ interface IAuthState {
   isAuth: boolean
   hydrate: () => void
   signOut: () => void
-  authenticate: (token: string, user: any) => void
+  authenticate: (token: string) => void
 }
 
 const useAuth = create<IAuthState>((set) => ({

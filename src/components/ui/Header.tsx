@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { IconNames } from './icon-picker/icon-names'
 import { useRouter } from 'next/navigation'
 import DropDownMenu from '../drop-down-menu'
+import { useAuth } from '@/context/auth'
 
 interface IHeader {
   sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,6 +20,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
   const menuRef = useRef(null)
   const [visible, setVisible] = useState<boolean>(false)
   const [openDropDown, setOpenDropDown] = useState<boolean>(false)
+  const signOut = useAuth((state) => state.signOut)
 
   useClickAway(menuRef, () => setVisible(false))
   const menuItems = [
@@ -30,7 +32,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
     {
       title: 'Logout',
       icon: IconNames.login,
-      action: () => null,
+      action: () => signOut(),
     },
   ]
 
