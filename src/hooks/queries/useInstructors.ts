@@ -6,7 +6,6 @@ const getInstructors = (lastKey?: string) =>
   baseAxios.get(API.getInstructors(lastKey)).then((res) => res.data)
 
 const useInstructors = (lastKey?: string) => {
-  console.log(API.getInstructors(lastKey))
   return useQuery(['instructors', lastKey], () => getInstructors(lastKey), {
     keepPreviousData: true,
   })
