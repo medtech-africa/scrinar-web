@@ -5,7 +5,7 @@ const BASE_URL =
 export const API = {
   // auth
   login: `${BASE_URL}/api/v1/auth/school/login`,
-  getProfile: `${BASE_URL}/api/v1/hospitals/profile`,
+  getProfile: `${BASE_URL}/api/v1/user`,
 
   //students
   students: `${BASE_URL}/api/v1/students`,

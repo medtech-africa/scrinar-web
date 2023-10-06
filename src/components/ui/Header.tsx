@@ -23,6 +23,11 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
   const signOut = useAuth((state) => state.signOut)
 
   useClickAway(menuRef, () => setVisible(false))
+
+  const handleLogout = () => {
+    signOut()
+    router.push('/login')
+  }
   const menuItems = [
     {
       title: 'Profile',
@@ -32,7 +37,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
     {
       title: 'Logout',
       icon: IconNames.login,
-      action: () => signOut(),
+      action: handleLogout,
     },
   ]
 
@@ -123,7 +128,10 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
           <Avatar size="sm" fallback="SH" />
           <Text>Profile</Text>
         </div>
-        <div className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full">
+        <div
+          onClick={handleLogout}
+          className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full"
+        >
           <div className="bg-grey-100 p-2 rounded-full text-primary">
             <IconPicker icon="login" size={18} />
           </div>

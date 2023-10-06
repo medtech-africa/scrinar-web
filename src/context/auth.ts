@@ -22,11 +22,8 @@ const useAuth = create<IAuthState>((set) => ({
     try {
       const cookies = new Cookies()
       await cookies.remove('token')
-      // await cookies.remove('admin');
       set({ isAuth: false })
-    } catch (e) {
-      console.log({ object: e })
-    }
+    } catch (_e) {}
   },
   authenticate: async (token: string) => {
     const cookies = new Cookies()
@@ -36,7 +33,6 @@ const useAuth = create<IAuthState>((set) => ({
       return Promise.resolve('')
     } catch (error) {
       cookies.remove('token')
-      // cookies.remove('admin');
       return Promise.reject(error)
     }
   },

@@ -11,7 +11,7 @@ import { errorMessage } from '@/utils/errorMessage'
 import { useMutation } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 interface IFormValue {
   email?: string
@@ -25,8 +25,12 @@ interface IDataToSend {
 const Login = () => {
   const [isVisible, setIsvisible] = useState(false)
   const [useEmail, setUseEmail] = useState(true)
-  const { authenticate } = useAuth()
+  const { authenticate, isAuth } = useAuth()
   const router = useRouter()
+
+  useEffect(() => {
+    if (isAuth) router.replace('/dashboard')
+  }, [isAuth, router])
 
   const {
     isLoading,
@@ -38,6 +42,7 @@ const Login = () => {
   const {
     control,
     reset,
+    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormValue>({
@@ -86,9 +91,10 @@ const Login = () => {
               >
                 Welcome Back
               </Text>
-              <Text variant="text/sm" className="text-grey-600 text-center">
-                Lorem ipsum dolor sit amet, consectetur adipiscing
-              </Text>
+              <Text
+                variant="text/sm"
+                className="text-grey-600 text-center"
+              ></Text>
             </div>
           </div>
           <form
@@ -113,7 +119,12 @@ const Login = () => {
                   key="email"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
-                      onChange={onChange}
+                      onChange={(e) => {
+                        if (errors.phoneNumber) {
+                          setValue('phoneNumber', '')
+                        }
+                        onChange(e.target.value)
+                      }}
                       onBlur={onBlur}
                       value={value ?? ''}
                       label="Email Address"
@@ -132,7 +143,12 @@ const Login = () => {
                   key="phoneNumber"
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
-                      onChange={onChange}
+                      onChange={(e) => {
+                        if (errors.email) {
+                          setValue('email', '')
+                        }
+                        onChange(e.target.value)
+                      }}
                       onBlur={onBlur}
                       value={value ?? ''}
                       labelStyle="lg:text-sm text-xs"

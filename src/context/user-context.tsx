@@ -2,56 +2,26 @@
 import React, { useEffect } from 'react'
 import { useCookies } from 'react-cookie'
 import { useUser } from './user'
-import { usePathname, useRouter } from 'next/navigation'
-
-// import isJwtExpired from 'constants/isJwtExpired';
-// import API from 'constants/api';
-// import screens from 'constants/screens';
-
-// export const UserContext = createContext(null);
-// export const useUser = () => useContext(UserContext);
+import useProfile from '@/hooks/queries/useProfile'
 
 export interface WithChildren {
   children: React.ReactNode
 }
 
-export const ProtectRoute = ({ children }: WithChildren) => {
-  const { user, loading } = useUser()
-  const router = useRouter()
-  const pathname = usePathname()
+const UserProvider = ({ children }: WithChildren) => {
+  const { loadUser, setLoading } = useUser()
+  const { refetch } = useProfile()
+
   const [cookies] = useCookies(['token'])
 
   useEffect(() => {
-    //@todo: remove false
-    if (false && !loading && !user) {
-      console.log('protect auth')
-      if (!pathname.includes('/login')) {
-        router.replace('/login')
-      }
+    if (cookies.token) {
+      setLoading(true)
+      refetch().then((res) => {
+        loadUser(res.data)
+      })
     }
-  }, [cookies, loading, pathname, router, user])
-
-  return children
-}
-
-const UserProvider = ({ children }: WithChildren) => {
-  //@todo: handle user fetching
-  // const [user, setUser] = useState(null);
-  // const loadUser = useUser((state) => state.loadUser)
-  // const { refetch } = useProfile()
-
-  // const [cookies] = useCookies(['token'])
-
-  // useEffect(() => {
-  //   // console.log('cookies change', cookies.token);
-  //   if (cookies.token) {
-  //     refetch().then((res) => {
-  //       loadUser(res.data)
-  //     })
-  //   }
-  // }, [cookies.token, loadUser, refetch])
-  //@todo: handle loading
-  // if (isLoading) return null
+  }, [cookies.token, loadUser, refetch, setLoading])
 
   return <>{children}</>
 }
