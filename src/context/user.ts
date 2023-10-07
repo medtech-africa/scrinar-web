@@ -12,7 +12,7 @@ interface IUserState {
 }
 
 const useUser = create<IUserState>((set, get) => ({
-  loading: true,
+  loading: false,
   user: null,
   setLoading: (val: boolean) => set({ loading: val }),
   setUser: (user: any) => {
@@ -22,13 +22,15 @@ const useUser = create<IUserState>((set, get) => ({
     const user = { ...get().user, ...val }
     set({ user })
   },
-  loadUser: (admin) => {
+  loadUser: (userData) => {
     const cookies = new Cookies()
     const { token } = cookies.getAll()
-    if (!isJwtExpired(token) && admin) {
+    if (!isJwtExpired(token) && userData) {
       try {
-        set({ loading: true, user: admin })
+        set({ loading: true, user: userData })
       } catch (error) {
+        console.log('loadUser', '>>>>>>>>>>>')
+
         cookies.remove('token')
         set({ user: null })
       } finally {

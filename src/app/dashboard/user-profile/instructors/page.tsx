@@ -102,14 +102,19 @@ export default function Instructors() {
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const [deleteModal, setDeleteModal] = useState(false)
-  const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
-    {}
+  const [lastKey, setLastKey] = useState(null)
+
+  const { data, isLoading, refetch } = useInstructors(
+    encodeURIComponent(JSON.stringify(lastKey))
   )
-
-  const { data, isLoading, refetch } = useInstructors(currentPage)
-
   const instructorsData = data?.data
 
+  const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate({
+    onNextPage: async () => {
+      setLastKey(data?.meta?.lastKey)
+      refetch()
+    },
+  })
   const { isLoading: deleteLoading, mutate } = useMutation(() =>
     baseAxios.delete(API.instructor(encodeURIComponent(selectedRow ?? '')))
   )
@@ -180,7 +185,7 @@ export default function Instructors() {
         action={handleDelete}
         actionLoading={deleteLoading}
       />
-      <div className="max-h-[500px] overflow-y-auto py-3 md:py-8">
+      <div className="py-3 md:py-8 ">
         <Table>
           <TableHeader className="bg-grey-100">
             <TableRow>
@@ -192,7 +197,7 @@ export default function Instructors() {
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className="h-[500px]">
+          <TableBody>
             {isLoading ? (
               <TableLoader />
             ) : (

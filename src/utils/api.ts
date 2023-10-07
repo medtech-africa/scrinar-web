@@ -4,8 +4,8 @@ const BASE_URL =
 
 export const API = {
   // auth
-  login: `${BASE_URL}/api/v1/hospitals/auth/login`,
-  getProfile: `${BASE_URL}/api/v1/hospitals/profile`,
+  login: `${BASE_URL}/api/v1/auth/school/login`,
+  getProfile: `${BASE_URL}/api/v1/user`,
 
   //students
   students: `${BASE_URL}/api/v1/students`,
@@ -16,10 +16,8 @@ export const API = {
   //instructors
   instructors: `${BASE_URL}/api/v1/instructors`,
   instructor: (id: string) => `${BASE_URL}/api/v1/instructors/${id}`,
-  getInstructors: (currentPage = 0, limit = 4) =>
-    `${BASE_URL}/api/v1/instructors${
-      currentPage ? `?page=${currentPage}` : ''
-    }?limit=${limit}`,
+  getInstructors: (lastKey?: any) =>
+    `${BASE_URL}/api/v1/instructors${lastKey ? `?lastKey=${lastKey}` : ''}`,
   // // staff
   // staff: (currentPage = 1, limit = 10) =>
   //   `${BASE_URL}/api/v1/hospitals/staff?limit=${limit}${
