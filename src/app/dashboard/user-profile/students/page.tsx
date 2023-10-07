@@ -143,22 +143,18 @@ export default function Students() {
   ]
 
   const handleDelete = async () => {
-    try {
-      await mutate(undefined, {
-        onSuccess: () => {
-          setSelectedRow(null)
-          setDeleteModal(false)
-          refetch()
-          toast.success('Successfully deleted student')
-          // toast.success('')
-        },
-        onError: (err) => {
-          errorMessage(err)
-        },
-      })
-    } finally {
-      //
-    }
+    await mutate(undefined, {
+      onSuccess: () => {
+        setSelectedRow(null)
+        setDeleteModal(false)
+        refetch()
+        toast.success('Successfully deleted student')
+        // toast.success('')
+      },
+      onError: (err) => {
+        errorMessage(err)
+      },
+    })
   }
 
   return (
