@@ -4,8 +4,8 @@ const BASE_URL =
 
 export const API = {
   // auth
-  login: `${BASE_URL}/api/v1/hospitals/auth/login`,
-  getProfile: `${BASE_URL}/api/v1/hospitals/profile`,
+  login: `${BASE_URL}/api/v1/auth/school/login`,
+  getProfile: `${BASE_URL}/api/v1/user`,
 
   //students
   students: `${BASE_URL}/api/v1/students`,

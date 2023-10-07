@@ -226,8 +226,8 @@ export default function AddRecord() {
                         onChange(val)
                       }}
                       options={[
-                        { value: 'm', label: 'Male' },
-                        { value: 'f', label: 'Female' },
+                        { value: 'male', label: 'Male' },
+                        { value: 'female', label: 'Female' },
                       ]}
                       variant={errors?.gender ? 'destructive' : 'default'}
                       message={errors.gender && 'Please select a gender'}

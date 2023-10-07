@@ -9,6 +9,7 @@ import Link from 'next/link'
 import { IconNames } from './icon-picker/icon-names'
 import { useRouter } from 'next/navigation'
 import DropDownMenu from '../drop-down-menu'
+import { useAuth } from '@/context/auth'
 
 interface IHeader {
   sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -19,8 +20,14 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
   const menuRef = useRef(null)
   const [visible, setVisible] = useState<boolean>(false)
   const [openDropDown, setOpenDropDown] = useState<boolean>(false)
+  const signOut = useAuth((state) => state.signOut)
 
   useClickAway(menuRef, () => setVisible(false))
+
+  const handleLogout = () => {
+    signOut()
+    router.push('/login')
+  }
   const menuItems = [
     {
       title: 'Profile',
@@ -30,7 +37,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
     {
       title: 'Logout',
       icon: IconNames.login,
-      action: () => null,
+      action: handleLogout,
     },
   ]
 
@@ -121,7 +128,10 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
           <Avatar size="sm" fallback="SH" />
           <Text>Profile</Text>
         </div>
-        <div className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full">
+        <div
+          onClick={handleLogout}
+          className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full"
+        >
           <div className="bg-grey-100 p-2 rounded-full text-primary">
             <IconPicker icon="login" size={18} />
           </div>
