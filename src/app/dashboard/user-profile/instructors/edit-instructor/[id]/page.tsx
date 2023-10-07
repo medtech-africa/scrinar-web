@@ -18,7 +18,7 @@ import { Controller, useForm } from 'react-hook-form'
 import {
   InstructorDataToSend,
   InstructorFormValue,
-} from '../../add-instructor/page'
+} from '@/app/dashboard/user-profile/instructors/add-instructor/page'
 import filterObject from '@/utils/filterObject'
 import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
@@ -31,6 +31,26 @@ const navigationItems = [
   { label: 'Instructors', icon: IconNames.arrowRight },
   { label: 'Edit Instructor' },
 ]
+const roleOptions = [
+  { value: 'admin', label: 'Admin' },
+  { value: 'instructor', label: 'Instructor' },
+]
+const genderOptions = [
+  { value: 'male', label: 'Male' },
+  { value: 'female', label: 'Female' },
+]
+const ConditionAvatar = ({ data }: { data: { avatarUrl: string } }) => (
+  <>
+    {data?.avatarUrl ? (
+      <Avatar size="sm" src={data?.avatarUrl} />
+    ) : (
+      <div className="p-4 rounded-full border border-lust-100 border-dashed">
+        <IconPicker icon="add" className="text-lust-900" />
+      </div>
+    )}
+  </>
+)
+
 export default function EditRecord({ params }: { params: { id: string } }) {
   const { data, isLoading, refetch } = useInstructor(params.id)
   const { isLoading: updateLoading, mutate } = useMutation(
@@ -79,7 +99,6 @@ export default function EditRecord({ params }: { params: { id: string } }) {
         },
       })
     } finally {
-      //
     }
   }
   return (
@@ -97,10 +116,9 @@ export default function EditRecord({ params }: { params: { id: string } }) {
               <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
                 <Controller
                   control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
+                  render={({ field: { value, ...field } }) => (
                     <Input
-                      onChange={onChange}
-                      onBlur={onBlur}
+                      {...field}
                       value={value ?? ''}
                       className="capitalize"
                       placeholder="e.g John"
@@ -115,10 +133,9 @@ export default function EditRecord({ params }: { params: { id: string } }) {
 
                 <Controller
                   control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
+                  render={({ field: { value, ...field } }) => (
                     <Input
-                      onChange={onChange}
-                      onBlur={onBlur}
+                      {...field}
                       className="capitalize"
                       value={value ?? ''}
                       placeholder="e.g Doe"
@@ -132,10 +149,9 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                 />
                 <Controller
                   control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
+                  render={({ field: { value, ...field } }) => (
                     <Input
-                      onChange={onChange}
-                      onBlur={onBlur}
+                      {...field}
                       value={value ?? ''}
                       className="capitalize"
                       placeholder="e.g Doe"
@@ -150,21 +166,14 @@ export default function EditRecord({ params }: { params: { id: string } }) {
 
                 <Controller
                   control={control}
-                  render={({ field: { onChange, onBlur, value } }: any) => (
+                  render={({ field: { ...field } }: any) => (
                     <Select
                       placeholder="Select Role"
                       label="Role"
                       labelStyle="lg:text-sm text-xs"
-                      onBlur={onBlur}
-                      value={value}
                       className="capitalize"
-                      onChange={(val) => {
-                        onChange(val)
-                      }}
-                      options={[
-                        { value: 'admin', label: 'Admin' },
-                        { value: 'instructor', label: 'Instructor' },
-                      ]}
+                      {...field}
+                      options={roleOptions}
                       variant={errors?.role ? 'destructive' : 'default'}
                       message={errors.role && 'Please select a role'}
                     />
@@ -173,21 +182,14 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                 />
                 <Controller
                   control={control}
-                  render={({ field: { onChange, onBlur, value } }: any) => (
+                  render={({ field: { ...field } }: any) => (
                     <Select
                       placeholder="Select Gender"
                       label="Gender"
                       labelStyle="lg:text-sm text-xs"
-                      onBlur={onBlur}
+                      {...field}
                       className="capitalize"
-                      value={value}
-                      onChange={(val) => {
-                        onChange(val)
-                      }}
-                      options={[
-                        { value: 'male', label: 'Male' },
-                        { value: 'female', label: 'Female' },
-                      ]}
+                      options={genderOptions}
                       variant={errors?.gender ? 'destructive' : 'default'}
                       message={errors.gender && 'Please select a gender'}
                     />
@@ -197,10 +199,9 @@ export default function EditRecord({ params }: { params: { id: string } }) {
 
                 <Controller
                   control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
+                  render={({ field: { value, ...field } }) => (
                     <Input
-                      onChange={onChange}
-                      onBlur={onBlur}
+                      {...field}
                       value={value ?? ''}
                       placeholder="e.g teacher@yourschool.com"
                       label="Email"
@@ -215,11 +216,9 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                 />
                 <Controller
                   control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
+                  render={({ field: { ...field } }) => (
                     <DatePicker
-                      onBlur={onBlur}
-                      value={value}
-                      onChange={onChange}
+                      {...field}
                       label="Date of Birth"
                       disabled
                       placeholder="DD/MM/YYYY"
@@ -231,10 +230,9 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                 />
                 <Controller
                   control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
+                  render={({ field: { value, ...field } }) => (
                     <Input
-                      onChange={onChange}
-                      onBlur={onBlur}
+                      {...field}
                       value={value ?? ''}
                       placeholder="081123456780"
                       label="Mobile Number (Optional)"
@@ -260,13 +258,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
           <div className="">
             <PageCard title="Edit User Picture">
               <div className="flex flex-col justify-center items-center py-4">
-                {data?.avatarUrl ? (
-                  <Avatar size="sm" src={data?.avatarUrl} />
-                ) : (
-                  <div className="p-4 rounded-full border border-lust-100 border-dashed">
-                    <IconPicker icon="add" className="text-lust-900" />
-                  </div>
-                )}
+                <ConditionAvatar data={data} />
                 <Text
                   className="mt-4 text-gray-900"
                   variant="text/md"
