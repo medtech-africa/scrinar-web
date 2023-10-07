@@ -93,10 +93,27 @@ const createInstructor = yupResolver(
     avatar: yup.boolean(),
   })
 )
+const login = yupResolver(
+  yup.object().shape({
+    phoneNumber: yup
+      .string()
+      .typeError('Please enter a number')
+      .matches(
+        /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
+        'Enter a valid phone number'
+      ),
+    email: yup.string().typeError('Please enter email address').email(),
+    password: yup
+      .string()
+      .required('Password is required')
+      .typeError('Please enter your password'),
+  })
+)
 
 const validation = {
   createPatient,
   createInstructor,
+  login,
 }
 
 export default validation

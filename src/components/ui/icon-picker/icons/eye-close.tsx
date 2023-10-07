@@ -2,7 +2,7 @@ import { FunctionComponent } from 'react'
 import { IconPickerProp } from '../icons.models'
 import { cn } from '@/lib/utils'
 
-export const LoginIcon: FunctionComponent<IconPickerProp> = ({
+export const EyeCloseIcon: FunctionComponent<IconPickerProp> = ({
   size = '1rem',
   className,
   ...rest
@@ -10,33 +10,33 @@ export const LoginIcon: FunctionComponent<IconPickerProp> = ({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 16 16"
+      viewBox="0 0 24 24"
       className={cn(`text-currentColor`, className)}
       style={{ width: size, height: size, ...rest.style }}
       {...rest}
       fill="none"
     >
       <path
-        d="M5.93335 5.04016C6.14002 2.64016 7.37335 1.66016 10.0733 1.66016H10.16C13.14 1.66016 14.3333 2.85349 14.3333 5.83349V10.1802C14.3333 13.1602 13.14 14.3535 10.16 14.3535H10.0733C7.39335 14.3535 6.16002 13.3868 5.94002 11.0268"
+        d="m14.53 9.47-5.06 5.06a3.576 3.576 0 1 1 5.06-5.06Z"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
+      ></path>
       <path
-        d="M1.33325 8H9.91992"
+        d="M17.82 5.77C16.07 4.45 14.07 3.73 12 3.73c-3.53 0-6.82 2.08-9.11 5.68-.9 1.41-.9 3.78 0 5.19.79 1.24 1.71 2.31 2.71 3.17M8.42 19.53c1.14.48 2.35.74 3.58.74 3.53 0 6.82-2.08 9.11-5.68.9-1.41.9-3.78 0-5.19-.33-.52-.69-1.01-1.06-1.47"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
+      ></path>
       <path
-        d="M8.43335 5.7666L10.6667 7.99994L8.43335 10.2333"
+        d="M15.51 12.7a3.565 3.565 0 0 1-2.82 2.82M9.47 14.53 2 22M22 2l-7.47 7.47"
         stroke="currentColor"
         strokeWidth="1.5"
         strokeLinecap="round"
         strokeLinejoin="round"
-      />
+      ></path>
     </svg>
   )
 }

@@ -13,7 +13,6 @@ const Providers = ({ children }: { children: React.ReactNode }) => {
       <AuthProvider>
         <UserProvider>
           <>{children}</>
-          {/* The rest of your application */}
         </UserProvider>
       </AuthProvider>
     </QueryClientProvider>
