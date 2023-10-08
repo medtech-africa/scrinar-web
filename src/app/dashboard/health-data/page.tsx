@@ -1,6 +1,9 @@
 'use client'
 import DropDownMenu from '@/components/drop-down-menu'
+import EmptyData from '@/components/empty-data'
 import { PageHeader } from '@/components/page-header'
+import Pagination from '@/components/pagination'
+import TableLoader from '@/components/table-loader'
 // import { BadgeField } from '@/components/ui/Badge'
 import { Avatar, AvatarRoot } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -17,6 +20,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Text } from '@/components/ui/text'
+import useHealthData from '@/hooks/queries/useHealthData'
+import { usePaginate } from '@/hooks/usePagination'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -93,6 +98,10 @@ export default function HealthData() {
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const [deleteModal, setDeleteModal] = useState(false)
+  const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
+    {}
+  )
+  const { data: healthData, isLoading } = useHealthData(currentPage)
 
   const menuItems = [
     {
@@ -167,8 +176,8 @@ export default function HealthData() {
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
       <Delete open={deleteModal} onClose={setDeleteModal} />
-      <div className="max-h-[500px] overflow-y-auto py-3 md:py-8">
-        <Table>
+      <div className="py-3 md:py-8">
+        <Table className="table-auto">
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Students Name</TableHead>
@@ -186,49 +195,44 @@ export default function HealthData() {
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className="h-[500px]">
-            {data.length === 0 ? (
-              <div className="flex flex-1 justify-center flex-col items-center absolute left-[40%] h-[400px]">
-                <IconPicker icon="grid7" />
-                <Text className="text-grey-400" variant="text/sm">
-                  No Data Entry
-                </Text>
-              </div>
+          <TableBody>
+            {isLoading ? (
+              <TableLoader />
             ) : (
-              data.map((val) => (
+              healthData?.map((val: DataType) => (
                 <TableRow
                   key={val.id}
                   className="font-normal text-sm text-grey-600"
                 >
                   <TableCell className="flex gap-x-2 items-center">
-                    <div>{val.image}</div>
+                    <div>{val?.image}</div>
                     <div className="flex flex-row gap-x-[3px]">
-                      <div>{val.firstName}</div>
-                      <div>{val.lastName}</div>
+                      <div>{val?.firstName}</div>
+                      <div>{val?.lastName}</div>
                     </div>
                   </TableCell>
 
                   <TableCell>
                     <TableCell>
-                      {val.anthropometry.height}{' '}
+                      {val?.height}{' '}
                       {/* <BadgeField variant="success" value={'n'} /> */}
                     </TableCell>
-                    <TableCell>{val.anthropometry.weight}</TableCell>
-                    <TableCell>{val.anthropometry.bmi}</TableCell>
-                    <TableCell>{val.anthropometry.wc}</TableCell>
+                    <TableCell>{val?.weight}</TableCell>
+                    <TableCell>{val?.bmi}</TableCell>
+                    <TableCell>{val?.waist}</TableCell>
                   </TableCell>
-                  <TableCell>{val.bp}</TableCell>
-                  <TableCell>{val.bloodSugar}</TableCell>
-                  <TableCell>{val.nutritional}</TableCell>
-                  <TableCell>{val.exercise}</TableCell>
+                  <TableCell>{val?.bloodPressure}</TableCell>
+                  <TableCell>{val?.glucoseLevel}</TableCell>
+                  <TableCell>{val?.dietaryDiversityScore}</TableCell>
+                  <TableCell>{val?.physicalActivityScore}</TableCell>
                   <TableCell className="relative">
                     <div
-                      onClick={() => handleMoreClick(val.id)}
+                      onClick={() => handleMoreClick(val?.userId)}
                       className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
-                    {selectedRow === val.id && (
+                    {selectedRow === val?.userId && (
                       <DropDownMenu
                         onClose={() => setSelectedRow(null)}
                         menuItems={menuItems}
@@ -240,176 +244,35 @@ export default function HealthData() {
             )}
           </TableBody>
         </Table>
+        {healthData?.length === 0 && <EmptyData />}
       </div>
+      {healthData?.length > 0 && (
+        <Pagination
+          current={currentPage}
+          setCurrent={setCurrentPage}
+          total={healthData?.meta?.total}
+          onNext={handleNext}
+          onPrev={handlePrev}
+        />
+      )}
     </div>
   )
 }
 type DataType = {
-  id?: number
+  id?: string
+  userId?: string
   image?: React.ReactNode
   firstName?: string
   lastName?: string
-  anthropometry: {
-    bmi?: number
-    height?: number
-    weight?: number
-    wc?: number
-  }
-  bp?: string
-  bloodSugar?: number
-  nutritional?: string
-  exercise?: string
+  bmi?: number
+  height?: number
+  weight?: number
+  waist?: number
+  bloodPressure?: string
+  glucoseLevel?: number
+  dietaryDiversityScore?: string
+  physicalActivityScore?: string
   timestamp?: string
   variant?: string
   variantval?: string
-}[]
-
-const data: DataType = [
-  {
-    id: 1,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Emmanuel',
-    lastName: 'adebayo',
-    anthropometry: {
-      bmi: 23.3,
-      height: 23.3,
-      weight: 32.1,
-      wc: 21.1,
-    },
-    bp: 'N/A',
-    bloodSugar: 120,
-    nutritional: '5/10',
-    exercise: '6/15',
-    timestamp: 'Aug 10, 2023',
-    variant: 'success',
-    variantval: 'Healthy',
-  },
-  {
-    id: 2,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    anthropometry: {
-      bmi: 23.3,
-      height: 23.3,
-      weight: 32.1,
-      wc: 21.1,
-    },
-    bp: '100/71',
-    bloodSugar: 100,
-    nutritional: '7/10',
-    exercise: '6/15',
-    timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
-  },
-  {
-    id: 3,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    anthropometry: {
-      bmi: 23.3,
-      height: 23.3,
-      weight: 32.1,
-      wc: 21.1,
-    },
-    bp: '100/71',
-    bloodSugar: 100,
-    nutritional: '7/10',
-    exercise: '6/15',
-    timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
-  },
-  {
-    id: 4,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    anthropometry: {
-      bmi: 23.3,
-      height: 23.3,
-      weight: 32.1,
-      wc: 21.1,
-    },
-    bp: '100/71',
-    bloodSugar: 100,
-    nutritional: '7/10',
-    exercise: '6/15',
-    timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
-  },
-  {
-    id: 5,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    anthropometry: {
-      bmi: 23.3,
-      height: 23.3,
-      weight: 32.1,
-      wc: 21.1,
-    },
-    bp: '100/71',
-    bloodSugar: 100,
-    nutritional: '7/10',
-    exercise: '6/15',
-    timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
-  },
-  {
-    id: 6,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    anthropometry: {
-      bmi: 23.3,
-      height: 23.3,
-      weight: 32.1,
-      wc: 21.1,
-    },
-    bp: '100/71',
-    bloodSugar: 100,
-    nutritional: '7/10',
-    exercise: '6/15',
-    timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
-  },
-  {
-    id: 7,
-    image: (
-      <div className="bg-grey-100 p-3 rounded-full cursor-pointer">Av</div>
-    ),
-    firstName: 'Asah',
-    lastName: 'Benjamin',
-    anthropometry: {
-      bmi: 23.3,
-      height: 23.3,
-      weight: 32.1,
-      wc: 21.1,
-    },
-    bp: '100/71',
-    bloodSugar: 100,
-    nutritional: '7/10',
-    exercise: '6/15',
-    timestamp: 'Aug 10, 2023',
-    variant: 'error',
-    variantval: 'Extremely obese',
-  },
-]
+}
