@@ -11,7 +11,7 @@ import { Select } from '@/components/ui/select'
 import { Text } from '@/components/ui/text'
 import { Controller, useForm } from 'react-hook-form'
 import validation from '@/constants/validation'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQueryClient } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import toast from 'react-hot-toast'
@@ -48,6 +48,7 @@ export interface IDataToSend
 }
 
 export default function AddNewStudent() {
+  const queryClient = useQueryClient()
   const {
     isLoading,
     mutate,
@@ -81,6 +82,7 @@ export default function AddNewStudent() {
           toast.success('Successfully added student')
           reset()
           postReset()
+          queryClient.invalidateQueries('students' as any)
           // toast.success('')
         },
         onError: (err) => {

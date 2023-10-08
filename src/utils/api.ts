@@ -10,13 +10,13 @@ export const API = {
   //students
   students: `${BASE_URL}/api/v1/students`,
   student: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
-  getStudents: (currentPage = 0) =>
-    `${BASE_URL}/api/v1/students${currentPage ? `?page=${currentPage}` : ''}`,
+  getStudents: (lastKey?: string) =>
+    `${BASE_URL}/api/v1/students${lastKey ? `?lastKey=${lastKey}` : ''}`,
 
   //instructors
   instructors: `${BASE_URL}/api/v1/instructors`,
   instructor: (id: string) => `${BASE_URL}/api/v1/instructors/${id}`,
-  getInstructors: (lastKey?: any) =>
+  getInstructors: (lastKey?: string) =>
     `${BASE_URL}/api/v1/instructors${lastKey ? `?lastKey=${lastKey}` : ''}`,
 
   //  health data

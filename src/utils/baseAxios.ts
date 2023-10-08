@@ -2,6 +2,7 @@
 import axios, { AxiosError, AxiosHeaders } from 'axios'
 // import axiosRetry from 'axios-retry';
 import { Cookies } from 'react-cookie'
+import toast from 'react-hot-toast'
 
 const handleError = (error: AxiosError) => {
   if (error.response) {
@@ -40,8 +41,22 @@ baseAxios.interceptors.response.use(
   (response) => {
     return response
   },
-  (error) => Promise.reject(handleError(error))
+  (error) => {
+    if (error.response.status === 401) {
+      // Handle 401 error
+      redirectToLoginAndDeleteToken()
+    }
+
+    return Promise.reject(handleError(error))
+  }
 )
+
+function redirectToLoginAndDeleteToken() {
+  const cookies = new Cookies()
+  toast.error('Token expired! Please login')
+  cookies.remove('token') // Delete the token from cookies
+  window.location.href = '/login' // Redirect to the login page
+}
 
 // https://github.com/softonic/axios-retry/issues/87
 // const retryDelay = (retryNumber = 0) => {
