@@ -92,7 +92,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
           <span className="inline-flex items-center">{onlyIcon}</span>
         ) : loading ? (
           <>
-            <IconPicker icon="loader2" size="1.5rem" className="mr-2" />
+            <IconPicker icon="loader2" size="1rem" className="mr-2" />
             Please wait
           </>
         ) : (
