@@ -6,15 +6,19 @@ const isJwtExpired = (token: string) => {
   }
 
   let expired = false
-  const { exp, nbf } = jwtDecode<{ exp: number; nbf: number }>(token)
-  const currentTime = Date.now().valueOf() / 1000
+  try {
+    const { exp, nbf } = jwtDecode<{ exp: number; nbf: number }>(token)
+    const currentTime = Date.now().valueOf() / 1000
 
-  if (currentTime > exp) expired = true
-  if (typeof exp !== 'undefined' && exp < currentTime) {
-    expired = true
-  }
-  if (typeof nbf !== 'undefined' && nbf > currentTime) {
-    expired = true
+    if (currentTime > exp) expired = true
+    if (typeof exp !== 'undefined' && exp < currentTime) {
+      expired = true
+    }
+    if (typeof nbf !== 'undefined' && nbf > currentTime) {
+      expired = true
+    }
+  } catch {
+    return true
   }
 
   return expired

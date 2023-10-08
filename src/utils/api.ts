@@ -18,9 +18,8 @@ export const API = {
   instructor: (id: string) => `${BASE_URL}/api/v1/instructors/${id}`,
   getInstructors: (lastKey?: any) =>
     `${BASE_URL}/api/v1/instructors${lastKey ? `?lastKey=${lastKey}` : ''}`,
-  // // staff
-  // staff: (currentPage = 1, limit = 10) =>
-  //   `${BASE_URL}/api/v1/hospitals/staff?limit=${limit}${
-  //     currentPage ? `&page=${currentPage}` : ''
-  //   }`,
+
+  //  health data
+  healthData: `${BASE_URL}/api/v1/health-data`,
+  singleHealthData: (id: string) => `${BASE_URL}/api/v1/health-data/${id}`,
 }
