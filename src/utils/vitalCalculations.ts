@@ -18,31 +18,31 @@ export const calculateBloodPressureRisk: IBP = (
   systolic: number,
   diastolic: number
 ) => {
-  if (systolic < 90 || diastolic < 60) {
+  if (systolic < 91 || diastolic < 61) {
     return {
       level: 'Low blood pressure (Hypotension)',
       message: 'Hypotension',
       variant: 'pending',
     }
-  } else if (systolic < 120 && diastolic < 80) {
+  } else if (systolic < 121 && diastolic < 81) {
     return {
       level: 'Normal blood pressure',
       message: 'Normal',
       variant: 'success',
     }
-  } else if (systolic < 130 && diastolic < 85) {
+  } else if (systolic < 131 && diastolic < 86) {
     return {
       level: 'Elevated blood pressure',
       message: 'Elevated',
       variant: 'warning',
     }
-  } else if (systolic < 140 || diastolic < 90) {
+  } else if (systolic < 141 || diastolic < 91) {
     return {
       level: 'Stage 1 hypertension (Mild)',
       message: 'Mild',
       variant: 'danger',
     }
-  } else if (systolic < 180 && diastolic < 120) {
+  } else if (systolic < 181 && diastolic < 121) {
     return {
       level: 'Stage 2 hypertension (Moderate)',
       message: 'Moderate',
