@@ -1,6 +1,5 @@
-// import { Button } from '@/components/ui/button'
+'use client'
 
-// import { DataTable } from '@/components/ui/data-table'
 import { Text } from '@/components/ui/text'
 import {
   DashboardCard,
@@ -20,6 +19,11 @@ import DashboardProgress from '@/components/svg/dashboard-progess'
 import { ActionBlock } from '@/components/ui/action-block'
 import { Divider } from '@/components/ui/divider'
 import Link from 'next/link'
+import { useState } from 'react'
+import Modal from '@/components/ui/modal'
+import { AddNewStudentContent } from './user-profile/students/add-student/page'
+import { AddRecordContent } from './user-profile/instructors/add-instructor/page'
+import { AddHealthDataRecordContent } from './health-data/add-record/page'
 
 const dashboardStats = [
   {
@@ -59,19 +63,19 @@ const actionData1 = [
     title: 'Create New Student Profile',
     subtitle: 'Add Student Profile',
     icon: 'profile2User' as IconNames,
-    href: 'user-profile/students/add-student',
+    type: 'student',
   },
   {
-    title: 'Update Student Health Data',
-    subtitle: 'Track student health progress',
+    title: 'Create Student Health Data',
+    subtitle: 'Add student health progress',
     icon: 'health' as IconNames,
-    href: 'health-data',
+    type: 'health-data',
   },
   {
     title: 'Create New Instructor Profile',
     subtitle: 'Add New Instructor for School',
     icon: 'teacher' as IconNames,
-    href: 'user-profile/instructors/add-instructor',
+    type: 'instructor',
   },
 ]
 
@@ -92,7 +96,10 @@ const actionData2 = [
     status: 'other',
   },
 ]
-export default async function Home() {
+export default function Home() {
+  const [modalType, setModalType] = useState('')
+  const [openModal, setOpenModal] = useState(false)
+
   return (
     <div className="text-grey-900">
       <section className="pb-4">
@@ -204,9 +211,12 @@ export default async function Home() {
           <ActionBlock title="Quick Actions" className="mb-6">
             {actionData1.map((act, _) => (
               <div key={_}>
-                <Link
-                  href={`/dashboard/${act.href}`}
-                  className="flex justify-between items-center"
+                <div
+                  className="flex justify-between items-center cursor-pointer"
+                  onClick={() => {
+                    setModalType(act.type)
+                    setOpenModal(true)
+                  }}
                 >
                   <div className="flex  items-center gap-6">
                     <IconPicker
@@ -228,7 +238,7 @@ export default async function Home() {
                     </div>
                   </div>
                   <IconPicker icon="arrowOutward" className="text-grey-900" />
-                </Link>
+                </div>
                 {_ !== actionData1.length - 1 && <Divider className="my-4" />}
               </div>
             ))}
@@ -284,6 +294,15 @@ export default async function Home() {
           </ActionBlock>
         </section>
       </section>
+      <Modal
+        open={openModal}
+        closeModal={() => setOpenModal(false)}
+        title={`Add new ${modalType}`}
+      >
+        {modalType === 'student' && <AddNewStudentContent />}
+        {modalType === 'instructor' && <AddRecordContent />}
+        {modalType === 'health-data' && <AddHealthDataRecordContent />}
+      </Modal>
     </div>
   )
 }
