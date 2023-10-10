@@ -24,7 +24,7 @@ import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import ContentLoader from '@/components/content-loader'
 import DatePicker from '@/components/ui/date-picker'
-import { Avatar } from '@/components/ui/avatar'
+import ConditionAvatar from '@/components/ui/condition-avatar'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -39,17 +39,6 @@ const genderOptions = [
   { value: 'male', label: 'Male' },
   { value: 'female', label: 'Female' },
 ]
-const ConditionAvatar = ({ data }: { data: { avatarUrl: string } }) => (
-  <>
-    {data?.avatarUrl ? (
-      <Avatar size="sm" src={data?.avatarUrl} />
-    ) : (
-      <div className="p-4 rounded-full border border-lust-100 border-dashed">
-        <IconPicker icon="add" className="text-lust-900" />
-      </div>
-    )}
-  </>
-)
 
 export default function EditRecord({ params }: { params: { id: string } }) {
   const { data, isLoading, refetch } = useInstructor(params.id)
@@ -111,7 +100,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
       />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid md:grid-cols-[2fr_1fr] gap-6 py-7 mt-2">
-          <div className="w-full h-full">
+          <div className="w-full h-full order-last md:order-first">
             <PageCard title="Edit Basic Information" bodyStyle="p-4">
               <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
                 <Controller
@@ -258,7 +247,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
           <div className="">
             <PageCard title="Edit User Picture">
               <div className="flex flex-col justify-center items-center py-4">
-                <ConditionAvatar data={data} />
+                <ConditionAvatar avatarUrl={data?.avatarUrl} />
                 <Text
                   className="mt-4 text-gray-900"
                   variant="text/md"
