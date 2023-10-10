@@ -64,7 +64,13 @@ export const AddRecordContent = () => {
     defaultValues: { avatar: true },
   })
   const inputFile = useRef<HTMLInputElement | null>(null)
-  const { handleFileChange, selectedImg, setSelectedImg } = useSelectImage()
+  const {
+    handleFileChange,
+    selectedImg,
+    setSelectedImg,
+    setImageLoading,
+    imageLoading,
+  } = useSelectImage()
 
   const handleFileSelect = () => {
     if (inputFile.current) {
@@ -76,6 +82,7 @@ export const AddRecordContent = () => {
     const filteredData = filterObject(data)
     let avatarUrlRes
     if (selectedImg) {
+      setImageLoading(true)
       avatarUrlRes = await uploadImage(selectedImg)
     }
     const dataToSend = {
@@ -98,6 +105,7 @@ export const AddRecordContent = () => {
         },
       })
     } finally {
+      setImageLoading(false)
     }
   }
 
@@ -270,7 +278,8 @@ export const AddRecordContent = () => {
               value="Save User"
               leadingIcon={<IconPicker icon="saveAdd" />}
               className="mt-6"
-              loading={isLoading}
+              loading={isLoading || imageLoading}
+              disabled={isLoading || imageLoading}
             />
           </PageCard>
         </div>

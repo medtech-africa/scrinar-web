@@ -72,7 +72,13 @@ export const AddNewStudentContent = () => {
   })
 
   const inputFile = useRef<HTMLInputElement | null>(null)
-  const { handleFileChange, selectedImg, setSelectedImg } = useSelectImage()
+  const {
+    handleFileChange,
+    selectedImg,
+    setSelectedImg,
+    setImageLoading,
+    imageLoading,
+  } = useSelectImage()
 
   const handleFileSelect = () => {
     if (inputFile.current) {
@@ -84,6 +90,7 @@ export const AddNewStudentContent = () => {
     const filteredData = filterObject(data)
     let avatarUrlRes
     if (selectedImg) {
+      setImageLoading(true)
       avatarUrlRes = await uploadImage(selectedImg)
     }
     const dataToSend = {
@@ -110,7 +117,7 @@ export const AddNewStudentContent = () => {
         },
       })
     } finally {
-      //
+      setImageLoading(false)
     }
   }
   return (
@@ -296,8 +303,8 @@ export const AddNewStudentContent = () => {
               type="submit"
               leadingIcon={<IconPicker icon="saveAdd" />}
               className="mt-6"
-              disabled={isLoading}
-              loading={isLoading}
+              disabled={isLoading || imageLoading}
+              loading={isLoading || imageLoading}
             />
           </PageCard>
         </div>
