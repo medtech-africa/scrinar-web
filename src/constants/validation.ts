@@ -106,10 +106,38 @@ const login = yupResolver(
   })
 )
 
+const updatePasswordSchema = yupResolver(
+  yup.object().shape({
+    currentPassword: yup
+      .string()
+      .required('Old password is required')
+      .matches(
+        // /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])(?=.{8,})/,
+        // 'Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character',
+        /^(?=.{3,})/,
+        'Must Contain 3 Characters'
+      ),
+    newPassword: yup
+      .string()
+      .required('New password is required')
+      .matches(
+        /^(?=.{3,})/,
+        'Must Contain 3 Characters'
+        // /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[ !"#$%&'()*+,-./:;<=>?@[\]^_`{|}~])(?=.{8,})/,
+        // "Must contain 8 characters, one uppercase, one lowercase, one number and one special case Character"
+      ),
+    confirmNewPassword: yup
+      .string()
+      .oneOf([yup.ref('newPassword')], 'Passwords must match')
+      .required('Please confirm your Password'),
+  })
+)
+
 const validation = {
   createPatient,
   createInstructor,
   login,
+  updatePasswordSchema,
 }
 
 export default validation
