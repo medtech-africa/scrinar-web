@@ -12,7 +12,7 @@ import { Avatar } from '@/components/ui/avatar'
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
   { label: 'Instructors', icon: IconNames.arrowRight },
-  { label: 'View New Instructor' },
+  { label: 'View Instructor' },
 ]
 export default function ViewRecord({ params }: { params: { id: string } }) {
   const { data, isLoading } = useInstructor(params.id)
@@ -21,12 +21,12 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
     <div className="relative">
       <ContentLoader loading={isLoading} />
       <PageHeader
-        title="View New Instructor"
+        title="View Instructor"
         subtitle="View Instructor: View Teacher Details"
         navigation={navigationItems}
       />
       <div className="grid md:grid-cols-[2fr_1fr] gap-6 py-7 mt-2">
-        <div className="w-full h-full">
+        <div className="w-full h-full order-last md:order-first">
           <PageCard title="View Basic Information" bodyStyle="p-4">
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
               <Input

@@ -157,7 +157,7 @@ const ScreeningList = ({
 
 export default function ScreeningManagement() {
   const [openFilter, setOpenFilter] = useState(false)
-  const [selectedTab, setSelectedTab] = useState('Calendar View')
+  const [selectedTab, setSelectedTab] = useState('Screening List')
   const [actionType, setActionType] = useState('')
 
   return (
@@ -175,7 +175,8 @@ export default function ScreeningManagement() {
 
       <div className="md:flex md:flex-row md:items-start grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
         <TabList
-          labels={['Calendar View', 'Screening List']}
+          //Calendar View',
+          labels={['Screening List']}
           onClickTabItem={setSelectedTab}
           activeTab={selectedTab}
         />

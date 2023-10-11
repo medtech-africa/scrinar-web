@@ -100,7 +100,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
       />
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="grid md:grid-cols-[2fr_1fr] gap-6 py-7 mt-2">
-          <div className="w-full h-full">
+          <div className="w-full h-full order-last md:order-first">
             <PageCard title="Add Basic Information" bodyStyle="p-4">
               <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
                 <Controller

@@ -22,7 +22,7 @@ import {
 import { Text } from '@/components/ui/text'
 import useHealthData from '@/hooks/queries/useHealthData'
 import { usePaginate } from '@/hooks/usePagination'
-import Link from 'next/link'
+// import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -59,7 +59,10 @@ type FilterHeaderProps = {
   setOpenFilter: (value: boolean) => void
   openFilter: boolean
 }
-const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
+const FilterHeader = ({
+  setOpenFilter: _,
+  openFilter: __,
+}: FilterHeaderProps) => {
   return (
     <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
       <Input
@@ -69,7 +72,8 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
         full={false}
       />
       <div className="flex gap-x-4 mt-2 md:mt-0">
-        <Button
+        {/* @Todo:not time */}
+        {/* <Button
           onClick={() => setOpenFilter(!openFilter)}
           value="Filter Data"
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
@@ -87,7 +91,7 @@ const FilterHeader = ({ setOpenFilter, openFilter }: FilterHeaderProps) => {
             className="p-2 md:px-4 md:py-2 h-full"
             leadingIcon={<IconPicker icon="add" />}
           />
-        </Link>
+        </Link> */}
       </div>
     </div>
   )

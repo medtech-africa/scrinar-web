@@ -20,6 +20,10 @@ import schoolLevels from '@/constants/school-levels'
 // import calculateAge from '@/utils/calculateAge'
 import { errorMessage } from '@/utils/errorMessage'
 import filterObject from '@/utils/filterObject'
+import useSelectImage from '@/hooks/useSelectImage'
+import { useRef } from 'react'
+import uploadImage from '@/utils/uploadImage'
+import ConditionAvatar from '@/components/ui/condition-avatar'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -67,13 +71,35 @@ export const AddNewStudentContent = () => {
     defaultValues: { avatar: true },
   })
 
+  const inputFile = useRef<HTMLInputElement | null>(null)
+  const {
+    handleFileChange,
+    selectedImg,
+    setSelectedImg,
+    setImageLoading,
+    imageLoading,
+  } = useSelectImage()
+
+  const handleFileSelect = () => {
+    if (inputFile.current) {
+      inputFile.current.click()
+    }
+  }
+
   const onSubmit = async (data: IFormValue) => {
     const filteredData = filterObject(data)
+    let avatarUrlRes
+    if (selectedImg) {
+      setImageLoading(true)
+      avatarUrlRes = await uploadImage(selectedImg)
+    }
     const dataToSend = {
       ...filteredData,
       gender: data.gender?.value,
       level: data.level?.value,
       dob: new Date(data.dob).toISOString(),
+      ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
+
       // age: calculateAge(data.dob),
     }
     try {
@@ -91,13 +117,13 @@ export const AddNewStudentContent = () => {
         },
       })
     } finally {
-      //
+      setImageLoading(false)
     }
   }
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid md:grid-cols-[2fr_1fr] gap-6 py-7 mt-2">
-        <div className="w-full h-full">
+        <div className="w-full h-full order-last md:order-first">
           <PageCard title="Add Basic Information" bodyStyle="p-4">
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
               <Controller
@@ -277,17 +303,17 @@ export const AddNewStudentContent = () => {
               type="submit"
               leadingIcon={<IconPicker icon="saveAdd" />}
               className="mt-6"
-              disabled={isLoading}
-              loading={isLoading}
+              disabled={isLoading || imageLoading}
+              loading={isLoading || imageLoading}
             />
           </PageCard>
         </div>
         <div className="">
           <PageCard title="Add User Picture">
             <div className="flex flex-col justify-center items-center py-4">
-              <div className="p-4 rounded-full border border-lust-100 border-dashed">
-                <IconPicker icon="add" className="text-lust-900" />
-              </div>
+              <ConditionAvatar
+                avatarUrl={selectedImg ? URL.createObjectURL(selectedImg) : ''}
+              />
               <Text
                 className="mt-4 text-gray-900"
                 variant="text/md"
@@ -295,10 +321,18 @@ export const AddNewStudentContent = () => {
               >
                 Profile Picture
               </Text>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                ref={inputFile}
+                className="hidden"
+                accept="image/*"
+              />
               <Text
                 variant="text/sm"
                 className="text-primary cursor-pointer underline my-1.1"
                 as="span"
+                onClick={handleFileSelect}
               >
                 Upload
               </Text>
@@ -308,8 +342,11 @@ export const AddNewStudentContent = () => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Checkbox
                       onBlur={onBlur}
-                      checked={Boolean(value)}
-                      onCheckedChange={(val) => onChange(val)}
+                      checked={!!selectedImg ? false : Boolean(value)}
+                      onCheckedChange={(val) => {
+                        onChange(val)
+                        setSelectedImg(null)
+                      }}
                     />
                   )}
                   name="avatar"

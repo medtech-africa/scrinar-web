@@ -26,7 +26,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
         navigation={navigationItems}
       />
       <div className="grid md:grid-cols-[2fr_1fr] gap-6 py-7 mt-2">
-        <div className="w-full h-full">
+        <div className="w-full h-full order-last md:order-first">
           <PageCard title="Add Basic Information" bodyStyle="p-4">
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
               <Input

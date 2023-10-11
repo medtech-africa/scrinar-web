@@ -3,6 +3,9 @@ const BASE_URL =
   'http://dev-play4health-api.us-east-1.elasticbeanstalk.com'
 
 export const API = {
+  //school
+  upload: `${BASE_URL}/api/v1/upload`,
+
   // auth
   login: `${BASE_URL}/api/v1/auth/school/login`,
   getProfile: `${BASE_URL}/api/v1/user`,
