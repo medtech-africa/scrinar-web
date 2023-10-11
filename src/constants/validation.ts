@@ -59,11 +59,7 @@ const createInstructor = yupResolver(
       .required('Please enter last name')
       .typeError('Please enter last name')
       .lowercase(),
-    middleName: yup
-      .string()
-      .required('Please enter last name')
-      .typeError('Please enter last name')
-      .lowercase(),
+    middleName: yup.string().lowercase(),
     role: yup
       .object()
       .shape({

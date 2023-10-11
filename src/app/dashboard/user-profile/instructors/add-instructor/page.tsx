@@ -17,6 +17,10 @@ import filterObject from '@/utils/filterObject'
 import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import DatePicker from '@/components/ui/date-picker'
+import { useRef } from 'react'
+import ConditionAvatar from '@/components/ui/condition-avatar'
+import uploadImage from '@/utils/uploadImage'
+import useSelectImage from '@/hooks/useSelectImage'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -28,7 +32,7 @@ export interface InstructorFormValue {
   firstName: string
   lastName: string
   phoneNumber: string
-  middleName: string
+  middleName?: string
   password?: string
   role: { value: string; label: string }
   dob: string
@@ -59,15 +63,36 @@ export const AddRecordContent = () => {
     resolver: validation.createInstructor,
     defaultValues: { avatar: true },
   })
+  const inputFile = useRef<HTMLInputElement | null>(null)
+  const {
+    handleFileChange,
+    selectedImg,
+    setSelectedImg,
+    setImageLoading,
+    imageLoading,
+  } = useSelectImage()
+
+  const handleFileSelect = () => {
+    if (inputFile.current) {
+      inputFile.current.click()
+    }
+  }
 
   const onSubmit = async (data: InstructorFormValue) => {
     const filteredData = filterObject(data)
+    let avatarUrlRes
+    if (selectedImg) {
+      setImageLoading(true)
+      avatarUrlRes = await uploadImage(selectedImg)
+    }
     const dataToSend = {
       ...filteredData,
       role: data.role?.value,
       gender: data.gender?.value,
       dob: new Date(data.dob).toISOString(),
+      ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
     }
+
     try {
       await mutate(dataToSend, {
         onSuccess: () => {
@@ -80,12 +105,14 @@ export const AddRecordContent = () => {
         },
       })
     } finally {
+      setImageLoading(false)
     }
   }
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="grid md:grid-cols-[2fr_1fr] gap-6 py-7 mt-2">
-        <div className="w-full h-full">
+        <div className="w-full h-full order-last md:order-first">
           <PageCard title="Add Basic Information" bodyStyle="p-4">
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
               <Controller
@@ -251,16 +278,17 @@ export const AddRecordContent = () => {
               value="Save User"
               leadingIcon={<IconPicker icon="saveAdd" />}
               className="mt-6"
-              loading={isLoading}
+              loading={isLoading || imageLoading}
+              disabled={isLoading || imageLoading}
             />
           </PageCard>
         </div>
         <div className="">
           <PageCard title="Add User Picture">
             <div className="flex flex-col justify-center items-center py-4">
-              <div className="p-4 rounded-full border border-lust-100 border-dashed ">
-                <IconPicker icon="add" className="text-lust-900" />
-              </div>
+              <ConditionAvatar
+                avatarUrl={selectedImg ? URL.createObjectURL(selectedImg) : ''}
+              />
               <Text
                 className="mt-4 text-gray-900"
                 variant="text/md"
@@ -268,10 +296,18 @@ export const AddRecordContent = () => {
               >
                 Profile Picture
               </Text>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                ref={inputFile}
+                className="hidden"
+                accept="image/*"
+              />
               <Text
                 variant="text/sm"
                 className="text-primary cursor-pointer underline my-1.1"
                 as="span"
+                onClick={handleFileSelect}
               >
                 Upload
               </Text>
@@ -281,8 +317,11 @@ export const AddRecordContent = () => {
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Checkbox
                       onBlur={onBlur}
-                      checked={Boolean(value)}
-                      onCheckedChange={(val) => onChange(val)}
+                      checked={!!selectedImg ? false : Boolean(value)}
+                      onCheckedChange={(val) => {
+                        onChange(val)
+                        setSelectedImg(null)
+                      }}
                     />
                   )}
                   name="avatar"
