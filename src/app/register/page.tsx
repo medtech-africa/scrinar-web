@@ -48,6 +48,9 @@ interface IDataToSend
 }
 const defaultValue = {
   state: { value: '', label: '' },
+  lga: { value: '', label: '' },
+  schoolType: { value: '', label: '' },
+  educationalInstitution: [],
 }
 const Register = () => {
   const { isLoading: stateLoading, data: states } = useStateLGA()
@@ -86,6 +89,7 @@ const Register = () => {
   const lgaOPtions = states
     ?.find((state) => state.name === getValues('state.label'))
     ?.locals.map((local) => ({ value: local.id, label: local.name }))
+
   const onSubmit = async (data: IFormValue) => {
     const filteredData = filterObject(data)
     let avatarUrlRes
