@@ -1,7 +1,7 @@
 import { PageHeader } from '@/components/page-header'
 import DashboardProgress from '@/components/svg/dashboard-progess'
 import DashboardProgressPattern from '@/components/svg/dashboard-progress-pattern'
-import { BadgeField } from '@/components/ui/Badge'
+import { BadgeField } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import { Divider } from '@/components/ui/divider'
 import { IconPicker } from '@/components/ui/icon-picker'

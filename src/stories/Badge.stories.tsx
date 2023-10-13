@@ -1,51 +1,50 @@
-import { Meta, StoryObj } from "@storybook/react";
-import {BadgeField} from '../components/ui/Badge';
+import { Meta, StoryObj } from '@storybook/react'
+import { BadgeField } from '../components/ui/badge'
 
 const meta = {
-title:'Design System/BadgeField',
-component: BadgeField,
-parameters: {
-    layout: 'centered'
-},
-
-} satisfies Meta <typeof BadgeField>
+  title: 'Design System/BadgeField',
+  component: BadgeField,
+  parameters: {
+    layout: 'centered',
+  },
+} satisfies Meta<typeof BadgeField>
 
 export default meta
 type Story = StoryObj<typeof meta>
 
 export const PendingBadge: Story = {
-args: {
+  args: {
     variant: 'pending',
-    children: 'Inprogress'
-}
+    children: 'Inprogress',
+  },
 }
 export const SuccessBadge: Story = {
-args: {
+  args: {
     variant: 'success',
-    children: 'Completed'
-}
+    children: 'Completed',
+  },
 }
 export const WarningBadge: Story = {
-args: {
+  args: {
     variant: 'warning',
-    children: 'Schedule'
-}
+    children: 'Schedule',
+  },
 }
 export const ErrorBadge: Story = {
-args: {
+  args: {
     variant: 'error',
-    children: 'Overdue'
-}
+    children: 'Overdue',
+  },
 }
 export const Pending2Badge: Story = {
-args: {
+  args: {
     variant: 'pending2',
-    children: 'Highly Obese'
-}
+    children: 'Highly Obese',
+  },
 }
 export const DangerBadge: Story = {
-args: {
+  args: {
     variant: 'danger',
-    children: 'Over Weight'
-}
+    children: 'Over Weight',
+  },
 }
