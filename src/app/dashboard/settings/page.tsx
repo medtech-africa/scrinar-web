@@ -12,10 +12,7 @@ import { Label } from '@/components/ui/label'
 import { PageCard } from '@/components/ui/page-card'
 import { Select } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
-// import { Button } from '@/components/ui/button'
-// import { IconPicker } from '@/components/ui/icon-picker'
-// import { IconNames } from '@/components/ui/icon-picker/icon-names'
-// import { Input } from '@/components/ui/input'
+
 import { TabList } from '@/components/ui/tab-list'
 import {
   Table,
@@ -26,16 +23,16 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Text } from '@/components/ui/text'
+import validation from '@/constants/validation'
+import { API } from '@/utils/api'
+import baseAxios from '@/utils/baseAxios'
+import { errorMessage } from '@/utils/errorMessage'
+import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
-// import {
-//   Table,
-//   TableBody,
-//   TableCell,
-//   TableHead,
-//   TableHeader,
-//   TableRow,
-// } from '@/components/ui/table'
+
 import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import toast from 'react-hot-toast'
 
 const AccountSettings = () => {
   return (
@@ -105,41 +102,122 @@ const AccountSettings = () => {
   )
 }
 
+type IFormData = {
+  currentPassword: string
+  newPassword: string
+  confirmNewPassword: string
+}
+
 const SecurityPrivacy = () => {
+  const { isLoading: updateLoading, mutate } = useMutation(
+    (dataToSend: Omit<IFormData, 'confirmNewPassword'>) =>
+      baseAxios.put(API.updatePassword, dataToSend)
+  )
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: validation.updatePasswordSchema,
+  })
+
+  const onSubmit = (data: IFormData) => {
+    mutate(
+      {
+        currentPassword: data?.currentPassword,
+        newPassword: data?.newPassword,
+      },
+      {
+        onSuccess: () => {
+          toast.success('Successfully updated password')
+          reset()
+        },
+        onError: (err) => {
+          errorMessage(err)
+        },
+      }
+    )
+  }
   return (
     <PageCard title="Security & Privacy" bodyStyle="p-4">
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
-        <Input
-          placeholder="Old Password"
-          label="Old Password"
-          labelStyle="lg:text-sm text-xs"
-        />
-        <Input
-          placeholder="Create new password"
-          label="New Password"
-          labelStyle="lg:text-sm text-xs"
-        />
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
+          <Controller
+            control={control}
+            render={({ field: { value, ...field } }) => (
+              <Input
+                {...field}
+                value={value ?? ''}
+                placeholder="Old Password"
+                label="Old Password"
+                labelStyle="lg:text-sm text-xs"
+                variant={errors?.currentPassword ? 'destructive' : 'default'}
+                message={
+                  errors.currentPassword && errors.currentPassword.message
+                }
+                type="password"
+              />
+            )}
+            name="currentPassword"
+          />
 
-        <Input
-          labelStyle="lg:text-sm text-xs"
-          placeholder="Re-enter New Password"
-          label="Re-enter New Password"
-        />
-        <div className="flex items-center">
-          <Text
-            variant="text/sm"
-            className="text-primary cursor-pointer underline my-1.1"
-            as="span"
-          >
-            Forgotten Password? Reset Now
-          </Text>
+          <Controller
+            control={control}
+            render={({ field: { value, ...field } }) => (
+              <Input
+                {...field}
+                value={value ?? ''}
+                placeholder="Create new password"
+                label="New Password"
+                labelStyle="lg:text-sm text-xs"
+                variant={errors?.newPassword ? 'destructive' : 'default'}
+                message={errors.newPassword && errors.newPassword.message}
+                type="password"
+              />
+            )}
+            name="newPassword"
+          />
+
+          <Controller
+            control={control}
+            render={({ field: { value, ...field } }) => (
+              <Input
+                {...field}
+                value={value ?? ''}
+                labelStyle="lg:text-sm text-xs"
+                placeholder="Re-enter New Password"
+                label="Re-enter New Password"
+                variant={errors?.confirmNewPassword ? 'destructive' : 'default'}
+                message={
+                  errors.confirmNewPassword && errors.confirmNewPassword.message
+                }
+                type="password"
+              />
+            )}
+            name="confirmNewPassword"
+          />
+
+          <div className="flex items-center">
+            <Text
+              variant="text/sm"
+              className="text-primary cursor-pointer underline my-1.1"
+              as="span"
+            >
+              Forgotten Password? Reset Now
+            </Text>
+          </div>
         </div>
-      </div>
-      <Button
-        variant={'primary'}
-        value="Update Password"
-        className="mt-6 py-3 px-4"
-      />
+        <Button
+          variant={'primary'}
+          value="Update Password"
+          className="mt-6 py-3 px-4"
+          type="submit"
+          loading={updateLoading}
+          disabled={updateLoading}
+        />
+      </form>
     </PageCard>
   )
 }
