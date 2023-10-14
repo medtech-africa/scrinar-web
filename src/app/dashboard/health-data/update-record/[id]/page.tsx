@@ -1,5 +1,5 @@
 import { PageHeader } from '@/components/page-header'
-import { BadgeField } from '@/components/ui/Badge'
+import { BadgeField } from '@/components/ui/badge'
 import { PageCard } from '@/components/ui/page-card'
 import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'

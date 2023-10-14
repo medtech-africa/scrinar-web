@@ -26,4 +26,10 @@ export const API = {
   //  health data
   healthData: `${BASE_URL}/api/v1/health-data`,
   singleHealthData: (id: string) => `${BASE_URL}/api/v1/health-data/${id}`,
+
+  //  school
+  schoolRegister: `${BASE_URL}/api/v1/school`,
+
+  // misc
+  getState: `${BASE_URL}/api/v1/misc/states-with-lga`,
 }

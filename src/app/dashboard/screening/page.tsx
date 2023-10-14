@@ -7,7 +7,7 @@ import {
   ScreeningView,
 } from '@/components/screening-side'
 import { CC, MD } from '@/components/svg/calendar-content'
-import { BadgeField } from '@/components/ui/Badge'
+import { BadgeField } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
