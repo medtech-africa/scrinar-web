@@ -10,6 +10,7 @@ import { IconNames } from './icon-picker/icon-names'
 import { useRouter } from 'next/navigation'
 import DropDownMenu from '../drop-down-menu'
 import { useAuth } from '@/context/auth'
+import { useUser } from '@/context/user'
 
 interface IHeader {
   sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -21,6 +22,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
   const [visible, setVisible] = useState<boolean>(false)
   const [openDropDown, setOpenDropDown] = useState<boolean>(false)
   const signOut = useAuth((state) => state.signOut)
+  const { user } = useUser()
 
   useClickAway(menuRef, () => setVisible(false))
 
@@ -67,8 +69,8 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
               <IconPicker icon="setting2" size="1.5rem" />
             </Link>
             <Avatar
-              src="/avatar3.svg"
-              fallback="PR"
+              src={user?.avatarUrl}
+              fallback={'SH'}
               size="lg"
               rootClassName="border border-lust-100"
               imgClassName="bg-lust-50"

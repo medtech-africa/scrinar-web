@@ -18,7 +18,7 @@ const UserProvider = ({ children }: WithChildren) => {
     if (cookies.token) {
       setLoading(true)
       refetch().then((res) => {
-        loadUser(res.data)
+        loadUser(res.data?.data)
       })
     }
   }, [cookies.token, loadUser, refetch, setLoading])

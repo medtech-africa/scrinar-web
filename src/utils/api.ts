@@ -9,7 +9,7 @@ export const API = {
   // auth
   login: `${BASE_URL}/api/v1/auth/school/login`,
   updatePassword: `${BASE_URL}/api/v1/auth/update-password`,
-  getProfile: `${BASE_URL}/api/v1/user`,
+  getProfile: `${BASE_URL}/api/v1/auth/me`,
 
   //students
   students: `${BASE_URL}/api/v1/students`,
