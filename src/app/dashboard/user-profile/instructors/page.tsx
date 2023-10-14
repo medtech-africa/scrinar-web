@@ -26,7 +26,7 @@ import { errorMessage } from '@/utils/errorMessage'
 import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 import { useMutation } from '@tanstack/react-query'
 import { format } from 'date-fns'
-// import Link from 'next/link'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
@@ -87,7 +87,7 @@ const FilterHeader = ({
           value="Export Data"
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
           endingIcon={<IconPicker icon="export" />}
-        />
+        /> */}
         <Link href={`instructors/add-instructor`}>
           <Button
             value="Add New Instructor"
@@ -95,7 +95,7 @@ const FilterHeader = ({
             className="p-2 md:px-4 md:py-2 h-full"
             leadingIcon={<IconPicker icon="add" />}
           />
-        </Link> */}
+        </Link>
       </div>
     </div>
   )

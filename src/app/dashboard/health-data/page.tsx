@@ -22,7 +22,7 @@ import {
 import { Text } from '@/components/ui/text'
 import useHealthData from '@/hooks/queries/useHealthData'
 import { usePaginate } from '@/hooks/usePagination'
-// import Link from 'next/link'
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
@@ -83,7 +83,7 @@ const FilterHeader = ({
           value="Export Data"
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
           endingIcon={<IconPicker icon="export" />}
-        />
+        /> */}
         <Link href={`health-data/add-record`}>
           <Button
             value="Add New Record"
@@ -91,7 +91,7 @@ const FilterHeader = ({
             className="p-2 md:px-4 md:py-2 h-full"
             leadingIcon={<IconPicker icon="add" />}
           />
-        </Link> */}
+        </Link>
       </div>
     </div>
   )

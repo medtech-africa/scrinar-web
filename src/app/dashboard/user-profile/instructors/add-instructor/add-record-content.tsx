@@ -15,13 +15,15 @@ import filterObject from '@/utils/filterObject'
 import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import DatePicker from '@/components/ui/date-picker'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import ConditionAvatar from '@/components/ui/condition-avatar'
 import uploadImage from '@/utils/uploadImage'
 import useSelectImage from '@/hooks/useSelectImage'
 import { InstructorDataToSend, InstructorFormValue } from './page'
 
 export const AddRecordContent = () => {
+  const [isVisible, setIsvisible] = useState(false)
+
   const {
     isLoading,
     mutate,
@@ -68,7 +70,6 @@ export const AddRecordContent = () => {
       dob: new Date(data.dob).toISOString(),
       ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
     }
-
     try {
       await mutate(dataToSend, {
         onSuccess: () => {
@@ -242,8 +243,19 @@ export const AddRecordContent = () => {
                     value={value ?? ''}
                     labelStyle="lg:text-sm text-xs"
                     placeholder="••••••••••••"
+                    endingIcon={
+                      isVisible ? (
+                        <div onClick={() => setIsvisible(!isVisible)}>
+                          <IconPicker icon="eyeOpen" />
+                        </div>
+                      ) : (
+                        <div onClick={() => setIsvisible(!isVisible)}>
+                          <IconPicker icon="eyeClose" />
+                        </div>
+                      )
+                    }
                     label="Password"
-                    type="password"
+                    type={isVisible ? 'text' : 'password'}
                     message={'By default, the first name is user’s Password'}
                   />
                 )}
