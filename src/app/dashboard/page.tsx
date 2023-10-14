@@ -21,9 +21,9 @@ import { Divider } from '@/components/ui/divider'
 import Link from 'next/link'
 import { useState } from 'react'
 import Modal from '@/components/ui/modal'
-import { AddNewStudentContent } from './user-profile/students/add-student/page'
-import { AddRecordContent } from './user-profile/instructors/add-instructor/page'
-import { AddHealthDataRecordContent } from './health-data/add-record/page'
+import { AddNewStudentContent } from './user-profile/students/add-student/add-new-student-content'
+import { AddRecordContent } from './user-profile/instructors/add-instructor/add-record-content'
+import { AddHealthDataRecordContent } from './health-data/add-record/add-health-data-record-content'
 
 const dashboardStats = [
   {
