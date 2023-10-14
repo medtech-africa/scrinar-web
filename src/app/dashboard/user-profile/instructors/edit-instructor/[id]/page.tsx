@@ -25,19 +25,12 @@ import { errorMessage } from '@/utils/errorMessage'
 import ContentLoader from '@/components/content-loader'
 import DatePicker from '@/components/ui/date-picker'
 import ConditionAvatar from '@/components/ui/condition-avatar'
+import { genderOptions, roleOptions } from '@/constants/selectOptions'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
   { label: 'Instructors', icon: IconNames.arrowRight },
   { label: 'Edit Instructor' },
-]
-const roleOptions = [
-  { value: 'admin', label: 'Admin' },
-  { value: 'instructor', label: 'Instructor' },
-]
-const genderOptions = [
-  { value: 'male', label: 'Male' },
-  { value: 'female', label: 'Female' },
 ]
 
 export default function EditRecord({ params }: { params: { id: string } }) {
