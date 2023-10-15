@@ -24,7 +24,6 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
   const [openDropDown, setOpenDropDown] = useState<boolean>(false)
   const signOut = useAuth((state) => state.signOut)
   const { user } = useUser()
-
   useClickAway(menuRef, () => setVisible(false))
 
   const handleLogout = () => {
@@ -70,7 +69,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
               <IconPicker icon="setting2" size="1.5rem" />
             </Link>
             <Avatar
-              src={user?.avatarUrl}
+              src={user?.user?.avatarUrl}
               fallback={returnJoinedFirstCharacter(user?.fullName)}
               size="lg"
               rootClassName="border border-lust-100"
@@ -81,7 +80,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
               className="cursor-pointer flex space-x-2 md:space-x-4 items-center relative"
             >
               <Text className="font-medium text-grey-600 text-xs sm:text-base ">
-                {user?.school?.name}
+                {user?.school?.name ?? user?.name}
               </Text>
               <IconPicker icon="arrowDown" />
               {openDropDown && (
