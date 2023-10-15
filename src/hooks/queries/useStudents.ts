@@ -2,11 +2,11 @@ import { useQuery } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 
-const getStudents = (_lastKey = 0) =>
-  baseAxios.get(API.getStudents('')).then((res) => res.data)
+const getStudents = (page?: number, level = '') =>
+  baseAxios.get(API.getStudents(page, level)).then((res) => res.data)
 
-const useStudents = (lastKey = 0) => {
-  return useQuery(['students', lastKey], () => getStudents(lastKey), {
+const useStudents = (page?: number, level?: string) => {
+  return useQuery(['students', page, level], () => getStudents(page, level), {
     keepPreviousData: true,
   })
 }
