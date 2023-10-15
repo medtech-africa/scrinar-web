@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation'
 import DropDownMenu from '../drop-down-menu'
 import { useAuth } from '@/context/auth'
 import { useUser } from '@/context/user'
+import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 
 interface IHeader {
   sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -70,7 +71,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
             </Link>
             <Avatar
               src={user?.avatarUrl}
-              fallback={'SH'}
+              fallback={returnJoinedFirstCharacter(user?.fullName)}
               size="lg"
               rootClassName="border border-lust-100"
               imgClassName="bg-lust-50"
@@ -80,7 +81,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
               className="cursor-pointer flex space-x-2 md:space-x-4 items-center relative"
             >
               <Text className="font-medium text-grey-600 text-xs sm:text-base ">
-                School Name here
+                {user?.school?.name}
               </Text>
               <IconPicker icon="arrowDown" />
               {openDropDown && (
@@ -109,7 +110,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
         )}
       >
         <Text className="font-medium text-grey-600 text-xs">
-          School Name here
+          {user?.school?.name}
         </Text>
         <div className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full">
           <div className="bg-grey-100 p-2 rounded-full">
@@ -127,7 +128,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
           <Text>Settings</Text>
         </Link>
         <div className="flex flex-row items-center space-x-2 cursor-pointer px-2 hover:bg-grey-200 w-full">
-          <Avatar size="sm" fallback="SH" />
+          <Avatar size="sm" fallback="SH" src={user?.avatarUrl} />
           <Text>Profile</Text>
         </div>
         <div

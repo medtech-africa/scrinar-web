@@ -22,6 +22,16 @@ import uploadImage from '@/utils/uploadImage'
 import ConditionAvatar from '@/components/ui/condition-avatar'
 import { IDataToSend, IFormValue } from './page'
 
+const defaultValues = {
+  level: { value: '', label: '' },
+  gender: { value: '', label: '' },
+  email: '',
+  firstName: '',
+  lastName: '',
+  parentMobile: '',
+  parentMobileAlt: '',
+  password: '',
+}
 export const AddNewStudentContent = () => {
   const queryClient = useQueryClient()
   const {
@@ -76,7 +86,8 @@ export const AddNewStudentContent = () => {
       await mutate(dataToSend, {
         onSuccess: () => {
           toast.success('Successfully added student')
-          reset()
+          reset(defaultValues)
+          setSelectedImg(null)
           postReset()
           queryClient.invalidateQueries('students' as any)
           // toast.success('')

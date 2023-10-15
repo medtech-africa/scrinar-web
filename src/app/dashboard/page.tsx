@@ -24,6 +24,7 @@ import Modal from '@/components/ui/modal'
 import { AddNewStudentContent } from './user-profile/students/add-student/add-new-student-content'
 import { AddRecordContent } from './user-profile/instructors/add-instructor/add-record-content'
 import { AddHealthDataRecordContent } from './health-data/add-record/add-health-data-record-content'
+import { useUser } from '@/context/user'
 
 const dashboardStats = [
   {
@@ -99,12 +100,13 @@ const actionData2 = [
 export default function Home() {
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
+  const { user } = useUser()
 
   return (
     <div className="text-grey-900">
       <section className="pb-4">
-        <Text variant="text/sm" className="text-grey-600 mb-4">
-          Hi, “Name” Welcome Back 😄
+        <Text variant="text/sm" className="text-grey-600 mb-4 capitalize">
+          Hi, {user?.firstName} Welcome Back 😄
         </Text>
         <Text variant="display/xs" weight="medium">
           Dashboard Overview

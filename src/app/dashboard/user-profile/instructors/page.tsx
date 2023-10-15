@@ -207,7 +207,7 @@ export default function Instructors() {
             ) : (
               instructorsData?.map((val: DataType) => (
                 <TableRow
-                  key={val?.userId}
+                  key={val?.id}
                   className="font-normal text-sm text-grey-600"
                 >
                   <TableCell className="flex gap-x-2 items-center">
@@ -226,9 +226,11 @@ export default function Instructors() {
                     </div>
                   </TableCell>
 
-                  <TableCell className="capitalize">{val?.role}</TableCell>
-                  <TableCell>{val?.email}</TableCell>
-                  <TableCell>{val?.phoneNumber ?? '-'}</TableCell>
+                  <TableCell className="capitalize">
+                    {val?.user?.roles?.join(', ')}
+                  </TableCell>
+                  <TableCell>{val?.user?.email ?? '-'} </TableCell>
+                  <TableCell>{val?.user?.phoneNumber ?? '-'}</TableCell>
                   <TableCell>
                     {val?.createdAt
                       ? format(new Date(val?.createdAt), 'PPP')
@@ -236,12 +238,12 @@ export default function Instructors() {
                   </TableCell>
                   <TableCell className="relative">
                     <div
-                      onClick={() => handleMoreClick(val?.userId)}
+                      onClick={() => handleMoreClick(val?.id)}
                       className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
-                    {selectedRow === val?.userId && !deleteModal && (
+                    {selectedRow === val?.id && !deleteModal && (
                       <DropDownMenu
                         menuItems={menuItems}
                         onClose={() => setSelectedRow(null)}
@@ -268,12 +270,14 @@ export default function Instructors() {
   )
 }
 type DataType = {
-  userId?: number
+  id?: number
   avatarUrl?: string
   firstName?: string
   lastName?: string
-  role?: string
-  email?: string
-  phoneNumber?: string
+  user: {
+    roles?: string[]
+    email?: string
+    phoneNumber?: string
+  }
   createdAt: string
 }
