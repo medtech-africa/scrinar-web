@@ -42,7 +42,7 @@ baseAxios.interceptors.response.use(
     return response
   },
   (error) => {
-    if (error.response.status === 401) {
+    if (error?.response?.status === 401) {
       // Handle 401 error
       redirectToLoginAndDeleteToken()
     }
