@@ -14,8 +14,10 @@ export const API = {
   //students
   students: `${BASE_URL}/api/v1/students`,
   student: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
-  getStudents: (lastKey?: string) =>
-    `${BASE_URL}/api/v1/students${lastKey ? `?lastKey=${lastKey}` : ''}`,
+  getStudents: (page?: number, level?: string) =>
+    `${BASE_URL}/api/v1/students${page ? `?page=${page}` : ''}${
+      level ? `${page ? '&' : '?'}level=${level}` : ''
+    }`,
 
   //instructors
   instructors: `${BASE_URL}/api/v1/instructors`,

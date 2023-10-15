@@ -2,13 +2,17 @@ import { useQuery } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 
-const getHealthData = (_lastKey = 0) =>
+const getHealthData = (_pageNumber = 1) =>
   baseAxios.get(API.healthData).then((res) => res.data)
 
-const useHealthData = (lastKey = 0) => {
-  return useQuery(['health-data', lastKey], () => getHealthData(lastKey), {
-    keepPreviousData: true,
-  })
+const useHealthData = (pageNumber = 1) => {
+  return useQuery(
+    ['health-data', pageNumber],
+    () => getHealthData(pageNumber),
+    {
+      keepPreviousData: true,
+    }
+  )
 }
 
 const useSingleHealthData = (id: string) => {
