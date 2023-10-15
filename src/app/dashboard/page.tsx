@@ -106,7 +106,7 @@ export default function Home() {
     <div className="text-grey-900">
       <section className="pb-4">
         <Text variant="text/sm" className="text-grey-600 mb-4 capitalize">
-          Hi, {user?.firstName} Welcome Back 😄
+          Hi, {user?.firstName ?? 'Admin'} Welcome Back 😄
         </Text>
         <Text variant="display/xs" weight="medium">
           Dashboard Overview

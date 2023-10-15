@@ -10,7 +10,6 @@ import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { PageCard } from '@/components/ui/page-card'
-import { Select } from '@/components/ui/select'
 import { Switch } from '@/components/ui/switch'
 
 import { TabList } from '@/components/ui/tab-list'
@@ -30,77 +29,13 @@ import { errorMessage } from '@/utils/errorMessage'
 import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
-
-const AccountSettings = () => {
-  return (
-    <PageCard title="Personal Information" bodyStyle="p-4">
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
-        <Input
-          placeholder="e.g university of Ilorin"
-          label="School Name"
-          labelStyle="lg:text-sm text-xs"
-        />
-        <Input
-          placeholder="www.play4health.com"
-          label="School Website"
-          labelStyle="lg:text-sm text-xs"
-        />
-
-        <Input
-          labelStyle="lg:text-sm text-xs"
-          placeholder="0811234567890"
-          label="School Mobile Number"
-        />
-        <Input
-          labelStyle="lg:text-sm text-xs"
-          placeholder="0811234567890"
-          label="School Email Address"
-        />
-
-        <Select
-          labelStyle="lg:text-sm text-xs"
-          placeholder="Select State"
-          label="State"
-        />
-        <Select
-          labelStyle="lg:text-sm text-xs"
-          placeholder="Select City"
-          label="City"
-        />
-
-        <Input
-          labelStyle="lg:text-sm text-xs"
-          placeholder="Add School Address"
-          label="School Address"
-        />
-        <Input
-          labelStyle="lg:text-sm text-xs"
-          placeholder="Add School Address"
-          label="Zip Code"
-        />
-
-        <Select
-          labelStyle="lg:text-sm text-xs"
-          placeholder="e.g Private School"
-          label="School Type"
-        />
-        <Select
-          labelStyle="lg:text-sm text-xs"
-          placeholder="e.g Primary"
-          label="Educational Institutions"
-        />
-      </div>
-      <Button
-        variant={'primary'}
-        value="Update Settings"
-        className="mt-6 py-3 px-4"
-      />
-    </PageCard>
-  )
-}
+import { AccountSettings } from './account-settings'
+import ConditionAvatar from '@/components/ui/condition-avatar'
+import useSelectImage from '@/hooks/useSelectImage'
+import { useUser } from '@/context/user'
 
 type IFormData = {
   currentPassword: string
@@ -222,7 +157,7 @@ const SecurityPrivacy = () => {
   )
 }
 
-const Notifications = () => {
+const _Notifications = () => {
   return (
     <PageCard title="Security & Privacy" bodyStyle="p-4">
       <div className="grid grid-cols-1 gap-6">
@@ -270,7 +205,7 @@ type DataType = {
   lastLogin?: string
   timestamp?: string
 }[]
-const PermissionsRoles = () => {
+const _PermissionsRoles = () => {
   const [deleteModal, setDeleteModal] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)
   const handleMoreClick = (rowIndex: any) => {
@@ -381,7 +316,7 @@ const PermissionsRoles = () => {
   )
 }
 
-const DataPrivacy = () => {
+const _DataPrivacy = () => {
   const [deleteModal, setDeleteModal] = useState(false)
 
   return (
@@ -407,26 +342,37 @@ export default function Settings() {
   const labels = [
     'Account Settings',
     'Security & Privacy',
-    'Notifications',
-    'Permissions & Roles',
-    'Data & Privacy',
+    // 'Notifications',
+    // 'Permissions & Roles',
+    // 'Data & Privacy',
   ]
+
+  const inputFile = useRef<HTMLInputElement | null>(null)
+  const { handleFileChange, selectedImg } = useSelectImage()
+
+  const handleFileSelect = () => {
+    if (inputFile.current) {
+      inputFile.current.click()
+    }
+  }
+
+  const { user } = useUser()
 
   const returnContent = () => {
     switch (selected) {
       case labels[0]:
-        return <AccountSettings />
+        return <AccountSettings selectedImg={selectedImg} />
 
       case labels[1]:
         return <SecurityPrivacy />
 
-      case labels[2]:
-        return <Notifications />
+      // case labels[2]:
+      //   return <Notifications />
 
-      case labels[3]:
-        return <PermissionsRoles />
-      case labels[4]:
-        return <DataPrivacy />
+      // case labels[3]:
+      //   return <PermissionsRoles />
+      // case labels[2]:
+      //   return <DataPrivacy />
 
       default:
         return null
@@ -451,9 +397,13 @@ export default function Settings() {
         <div className="">
           <PageCard title="Profile profile Picture">
             <div className="flex flex-col justify-center items-center py-4">
-              <div className="p-4 rounded-full border border-lust-100 border-dashed ">
-                <IconPicker icon="add" className="text-lust-900" />
-              </div>
+              <ConditionAvatar
+                avatarUrl={
+                  selectedImg
+                    ? URL.createObjectURL(selectedImg)
+                    : user?.user?.avatarUrl
+                }
+              />
               <Text
                 className="mt-4 text-gray-900"
                 variant="text/md"
@@ -461,13 +411,23 @@ export default function Settings() {
               >
                 School Logo
               </Text>
-              <Text
-                variant="text/sm"
-                className="text-primary cursor-pointer underline my-1.1"
-                as="span"
-              >
-                Upload
-              </Text>
+              <input
+                type="file"
+                onChange={handleFileChange}
+                ref={inputFile}
+                className="hidden"
+                accept="image/*"
+              />
+              {selected === labels[0] && (
+                <Text
+                  variant="text/sm"
+                  className="text-primary cursor-pointer underline my-1.1"
+                  as="span"
+                  onClick={handleFileSelect}
+                >
+                  Upload
+                </Text>
+              )}
             </div>
           </PageCard>
         </div>
