@@ -21,6 +21,16 @@ import uploadImage from '@/utils/uploadImage'
 import useSelectImage from '@/hooks/useSelectImage'
 import { InstructorDataToSend, InstructorFormValue } from './page'
 
+const defaultValues = {
+  role: { value: '', label: '' },
+  gender: { value: '', label: '' },
+  email: '',
+  phoneNumber: '',
+  firstName: '',
+  lastName: '',
+  middleName: '',
+  password: '',
+}
 export const AddRecordContent = () => {
   const [isVisible, setIsvisible] = useState(false)
 
@@ -57,7 +67,10 @@ export const AddRecordContent = () => {
   }
 
   const onSubmit = async (data: InstructorFormValue) => {
-    const filteredData = filterObject(data)
+    if (!data?.email && !data.phoneNumber) {
+      return toast.error('Enter a Phone Number or Email')
+    }
+    const { avatar: _, ...filteredData } = filterObject(data)
     let avatarUrlRes
     if (selectedImg) {
       setImageLoading(true)
@@ -74,7 +87,8 @@ export const AddRecordContent = () => {
       await mutate(dataToSend, {
         onSuccess: () => {
           toast.success('Successfully added instructor')
-          reset()
+          reset(defaultValues)
+          setSelectedImg(null)
           postReset()
         },
         onError(error) {
