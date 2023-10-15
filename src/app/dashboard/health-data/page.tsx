@@ -105,7 +105,8 @@ export default function HealthData() {
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
   )
-  const { data: healthData, isLoading } = useHealthData(currentPage)
+  const { data, isLoading } = useHealthData(currentPage)
+  const healthData = data?.data
 
   const menuItems = [
     {
@@ -203,17 +204,14 @@ export default function HealthData() {
             {isLoading ? (
               <TableLoader />
             ) : (
-              healthData?.map((val: DataType) => (
+              healthData?.map?.((val: DataType) => (
                 <TableRow
                   key={val.id}
                   className="font-normal text-sm text-grey-600"
                 >
                   <TableCell className="flex gap-x-2 items-center">
                     <div>{val?.image}</div>
-                    <div className="flex flex-row gap-x-[3px]">
-                      <div>{val?.firstName}</div>
-                      <div>{val?.lastName}</div>
-                    </div>
+                    <div>{val?.student?.fullName}</div>
                   </TableCell>
 
                   <TableCell>
@@ -231,12 +229,12 @@ export default function HealthData() {
                   <TableCell>{val?.physicalActivityScore}</TableCell>
                   <TableCell className="relative">
                     <div
-                      onClick={() => handleMoreClick(val?.userId)}
+                      onClick={() => handleMoreClick(val?.id)}
                       className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
-                    {selectedRow === val?.userId && (
+                    {selectedRow === val?.id && (
                       <DropDownMenu
                         onClose={() => setSelectedRow(null)}
                         menuItems={menuItems}
@@ -266,8 +264,11 @@ type DataType = {
   id?: string
   userId?: string
   image?: React.ReactNode
-  firstName?: string
-  lastName?: string
+  student?: {
+    firstName?: string
+    lastName?: string
+    fullName?: string
+  }
   bmi?: number
   height?: number
   weight?: number

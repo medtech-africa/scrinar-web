@@ -28,7 +28,10 @@ import { SelectVal, Student, IDataToSend } from './page'
 
 export const AddHealthDataRecordContent = () => {
   const [level, setLevel] = useState<SelectVal | null>()
-  const { data: studentsData, isLoading: studentsLoading } = useStudents()
+  const { data: studentsData, isFetching: studentsLoading } = useStudents(
+    0,
+    level?.value
+  )
   const [student, setStudent] = useState<Student | null>()
 
   const [height, setHeight] = useState('')
@@ -158,7 +161,10 @@ export const AddHealthDataRecordContent = () => {
             labelStyle="lg:text-sm text-xs"
             placeholder="Select Class"
             options={schoolLevels}
-            onChange={(val) => setLevel(val as SelectVal)}
+            onChange={(val) => {
+              setLevel(val as SelectVal)
+              setStudent(null)
+            }}
             value={level}
           />
 
@@ -168,7 +174,7 @@ export const AddHealthDataRecordContent = () => {
             labelStyle="lg:text-sm text-xs"
             placeholder="Select Student"
             isLoading={studentsLoading}
-            isDisabled={!level}
+            isDisabled={!level || studentsLoading}
             options={students}
             onChange={(val) => setStudent(val as Student)}
             value={student}
