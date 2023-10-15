@@ -51,6 +51,12 @@ const defaultValue = {
   lga: { value: '', label: '' },
   schoolType: { value: '', label: '' },
   educationalInstitution: [],
+  email: '',
+  website: '',
+  name: '',
+  zipCode: '',
+  phoneNumber: undefined,
+  address: '',
 }
 const Register = () => {
   const { isLoading: stateLoading, data: states } = useStateLGA()
@@ -91,7 +97,10 @@ const Register = () => {
     ?.locals.map((local) => ({ value: local.id, label: local.name }))
 
   const onSubmit = async (data: IFormValue) => {
-    const filteredData = filterObject(data)
+    if (!data?.email && !data.phoneNumber) {
+      return toast.error('Enter a Phone Number or Email')
+    }
+    const { avatar: _, ...filteredData } = filterObject(data)
     let avatarUrlRes
     if (selectedImg) {
       setImageLoading(true)
@@ -111,6 +120,7 @@ const Register = () => {
         onSuccess: () => {
           toast.success('Successful')
           reset(defaultValue)
+          setSelectedImg(null)
         },
         onError: (err) => {
           errorMessage(err)

@@ -197,7 +197,7 @@ export default function Students() {
             ) : (
               studentsData?.map((val: DataType) => (
                 <TableRow
-                  key={val.userId}
+                  key={val.id}
                   className="font-normal text-sm text-grey-600"
                 >
                   <TableCell className="flex gap-x-2 items-center">
@@ -224,7 +224,7 @@ export default function Students() {
                   </TableCell>
                   <TableCell className="relative">
                     <div
-                      onClick={() => handleMoreClick(val.userId)}
+                      onClick={() => handleMoreClick(val.id)}
                       className="p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                       id="menu-button"
                       aria-expanded="true"
@@ -232,7 +232,7 @@ export default function Students() {
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
-                    {selectedRow === val.userId && !deleteModal && (
+                    {selectedRow === val.id && !deleteModal && (
                       <DropDownMenu
                         menuItems={menuItems}
                         onClose={() => setSelectedRow(null)}
@@ -259,8 +259,7 @@ export default function Students() {
   )
 }
 type DataType = {
-  id?: string
-  userId: string
+  id: string
   avatarUrl?: string
   firstName: string
   lastName: string

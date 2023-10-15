@@ -9,10 +9,10 @@ const navigationItems = [
   { label: 'Add New Instructor' },
 ]
 export interface InstructorFormValue {
-  email: string
+  email?: string
   firstName: string
   lastName: string
-  phoneNumber: string
+  phoneNumber?: string
   middleName?: string
   password?: string
   role: { value: string; label: string }

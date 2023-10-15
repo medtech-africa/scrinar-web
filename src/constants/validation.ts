@@ -44,11 +44,7 @@ const createPatient = yupResolver(
 )
 const createInstructor = yupResolver(
   yup.object().shape({
-    email: yup
-      .string()
-      .required('Please enter email address')
-      .typeError('Please enter email address')
-      .email(),
+    email: yup.string().typeError('Please enter email address').email(),
     firstName: yup
       .string()
       .required('Please enter first name')
@@ -80,7 +76,6 @@ const createInstructor = yupResolver(
       .typeError('Please enter date of birth'),
     phoneNumber: yup
       .string()
-      .required('Phone number is required')
       .typeError('Please enter a number')
       .matches(
         /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
