@@ -232,6 +232,7 @@ const exercise = yupResolver(
       })
       .required('Food amount is required'),
     mealsPerDay: yup.number().required('Number of meals is required'),
+    dietary: yup.string(),
     fruitsTimes: yup.object().shape({
       vegetable: yup.number().required('Food amount is required'),
       meat: yup.number().required('Food amount is required'),

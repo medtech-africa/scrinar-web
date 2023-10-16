@@ -8,6 +8,8 @@ import { Controller, useForm } from 'react-hook-form'
 import validation from '@/constants/validation'
 import { foodAmountOptions } from '@/constants/selectOptions'
 import filterObject from '@/utils/filterObject'
+import { useState } from 'react'
+import { Text } from '@/components/ui/text'
 
 // const defaultValues = {
 //   question1: { value: '', label: '' },
@@ -31,8 +33,15 @@ interface IFormValue {
     sugar: number
     friedFood: number
   }
+  dietary?: string
 }
+// interface IDataToSend extends Omit<IFormValue, 'foodAmount'> {
+//     foodAmount: string
+// }
 export const ExerciseModal = () => {
+  const [dietaries, setDietaries] = useState<string[]>([])
+  const [dietary, setDietary] = useState('')
+
   //   const queryClient = useQueryClient()
   //   const {
   //     isLoading,
@@ -55,6 +64,8 @@ export const ExerciseModal = () => {
 
     const dataToSend = {
       ...filteredData,
+      dieraty: dietaries,
+      foodAmount: data.foodAmount.label,
     }
 
     try {
@@ -328,6 +339,67 @@ export const ExerciseModal = () => {
                     )}
                   />
                 </div>
+              </div>
+              <div className="flex flex-col">
+                <Text className="text-grey-700 font-medium text-sm ">
+                  Using the 24-hour dietary recall (recall all food eaten in the
+                  last 24 hours, including drinks. Do not include weekends or
+                  days with special occasions),
+                </Text>
+                <div className="py-[12px] px-4 bg-grey-100 rounded-lg w-full">
+                  <div className="flex flex-wrap">
+                    {dietaries.map((al, i) => (
+                      <div
+                        key={i}
+                        className="mr-1 px-2 py-1 flex border-[0.5px] border-[#8C8CA2] rounded-2xl items-center mb-1"
+                      >
+                        <p className="text-body text-xs mr-[6.9px]">{al}</p>
+                        <div
+                          onClick={() =>
+                            setDietaries((pr) =>
+                              pr.filter((item, index) => index !== i)
+                            )
+                          }
+                        >
+                          <IconPicker icon="closeSquare" />
+                        </div>
+                      </div>
+                    ))}
+                    <Controller
+                      name="dietary"
+                      control={control}
+                      render={({}) => (
+                        <Input
+                          onChange={(e) => setDietary(e.target.value)}
+                          value={dietary}
+                          full
+                          className="ml-[12px] flex-1 bg-grey-100 border-grey-100"
+                          type="text"
+                          onBlur={() => {
+                            if (!dietaries.includes(dietary) && dietary) {
+                              setDietaries((pr) => [...pr, dietary])
+                              setDietary('')
+                            }
+                          }}
+                          onKeyDown={(e) => {
+                            if (
+                              e.key === 'Enter' &&
+                              !dietaries.includes(dietary) &&
+                              dietary
+                            ) {
+                              setDietaries((pr) => [...pr, dietary])
+                              setDietary('')
+                              e.preventDefault()
+                            }
+                          }}
+                        />
+                      )}
+                    />
+                  </div>
+                </div>
+                <Text variant="text/sm" className="mt-[6px] text-error-500">
+                  {errors.dietary && errors.dietary.message}
+                </Text>
               </div>
             </div>
             <Button
