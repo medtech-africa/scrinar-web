@@ -59,6 +59,8 @@ export const AddHealthDataRecordContent = () => {
   const [student, setStudent] = useState<Student | null>()
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
+  const [nutritionalData, setNutritionalData] = useState({})
+  const [exerciseData, setExerciseData] = useState({})
 
   const [height, setHeight] = useState('')
   const [weight, setWeight] = useState('')
@@ -129,6 +131,9 @@ export const AddHealthDataRecordContent = () => {
       ...(sys && dys && { bloodPressure: `${sys}/${dys}` }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
+      dietaryDiversity: nutritionalData,
+      physicalActivity: exerciseData,
+
       // ...(dietaryDiversityScore && { dietaryDiversityScore }),
       // ...(physicalActivityScore && { physicalActivityScore }),
     }
@@ -393,8 +398,18 @@ export const AddHealthDataRecordContent = () => {
         closeModal={() => setOpenModal(false)}
         title={`Add new ${modalType}`}
       >
-        {modalType === 'Nutritional' && <NutritionalModal />}
-        {modalType === 'Exercise' && <ExerciseModal />}
+        {modalType === 'Nutritional' && (
+          <NutritionalModal
+            setNutritionalData={setNutritionalData}
+            onClose={() => setOpenModal(false)}
+          />
+        )}
+        {modalType === 'Exercise' && (
+          <ExerciseModal
+            setExerciseData={setExerciseData}
+            onClose={() => setOpenModal(false)}
+          />
+        )}
       </Modal>
     </div>
   )

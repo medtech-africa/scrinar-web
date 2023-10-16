@@ -12,14 +12,13 @@ import {
 } from '@/constants/selectOptions'
 import { useState } from 'react'
 import filterObject from '@/utils/filterObject'
+import toast from 'react-hot-toast'
+import { errorMessage } from '@/utils/errorMessage'
 
-// const defaultValues = {
-//   question1: { value: '', label: '' },
-//   question2: { value: '', label: '' },
-//   question3: '',
-//   question4: '',
-//   question5: '',
-// }
+interface IProps {
+  setNutritionalData: (val: IDataToSend) => void
+  onClose: () => void
+}
 interface IFormValue {
   school_transport_question: { value: string; label: string }
   sport_question: { value: string; label: string }
@@ -28,44 +27,40 @@ interface IFormValue {
   hours_on_computer: number
   school_transport_question_alt?: string
 }
-export const NutritionalModal = () => {
+interface IDataToSend
+  extends Omit<IFormValue, 'sport_question' | 'school_transport_question'> {
+  sport_question: string
+  school_transport_question: string | undefined
+}
+export const NutritionalModal = ({ setNutritionalData, onClose }: IProps) => {
   const [specify, setSpecify] = useState('')
-  //   const queryClient = useQueryClient()
-  //   const {
-  //     isLoading,
-  //     mutate,
-  //     reset: postReset,
-  //   } = useMutation((dataToSend: IDataToSend) =>
-  //     baseAxios.post(API.students, dataToSend)
-  //   )
-
   const {
     control,
-    // reset,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormValue>({
     resolver: validation.nutritional,
+    defaultValues: {},
   })
+
   const onSubmit = async (data: IFormValue) => {
-    const { ...filteredData } = filterObject(data)
+    const { school_transport_question_alt: _, ...filteredData } =
+      filterObject(data)
 
     const dataToSend = {
       ...filteredData,
+      school_transport_question:
+        specify === 'others'
+          ? data?.school_transport_question_alt
+          : data?.school_transport_question?.value,
+      sport_question: data?.sport_question?.value,
     }
-
-    try {
-      console.log(dataToSend)
-      //   await mutate(dataToSend, {
-      //     onSuccess: () => {
-      //       toast.success('Successful')
-      //       reset(defaultValue)
-      //     },
-      //     onError: (err) => {
-      //       errorMessage(err)
-      //     },
-      //   })
-    } finally {
+    if (dataToSend) {
+      setNutritionalData(dataToSend)
+      toast.success('Successfully saved')
+      onClose()
+    } else {
+      errorMessage('Failed to save')
     }
   }
   return (
@@ -76,7 +71,7 @@ export const NutritionalModal = () => {
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6 [&>div]:flex [&>div]:flex-col [&>div]:justify-between">
               <Controller
                 control={control}
-                render={({ field: { onChange, ...field } }: any) => (
+                render={({ field: { onChange, ...field } }) => (
                   <Select
                     onChange={(val: any) => {
                       onChange(val)
@@ -92,7 +87,10 @@ export const NutritionalModal = () => {
                         ? 'destructive'
                         : 'default'
                     }
-                    message={errors.school_transport_question?.message}
+                    message={
+                      errors.school_transport_question &&
+                      errors.school_transport_question?.message
+                    }
                   />
                 )}
                 name="school_transport_question"
@@ -188,12 +186,10 @@ export const NutritionalModal = () => {
             </div>
             <Button
               variant={'primary'}
-              value="Send"
+              value="Save"
               type="submit"
               leadingIcon={<IconPicker icon="saveAdd" />}
               className="mt-6"
-              //   disabled={isLoading || imageLoading}
-              //   loading={isLoading || imageLoading}
             />
           </PageCard>
         </div>

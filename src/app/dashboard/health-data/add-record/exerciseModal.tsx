@@ -10,14 +10,13 @@ import { foodAmountOptions } from '@/constants/selectOptions'
 import filterObject from '@/utils/filterObject'
 import { useState } from 'react'
 import { Text } from '@/components/ui/text'
+import toast from 'react-hot-toast'
+import { errorMessage } from '@/utils/errorMessage'
+interface IProps {
+  setExerciseData: (val: IDataToSend) => void
+  onClose: () => void
+}
 
-// const defaultValues = {
-//   question1: { value: '', label: '' },
-//   question2: { value: '', label: '' },
-//   question3: '',
-//   question4: '',
-//   question5: '',
-// }
 interface IFormValue {
   foodAmount: { value: string; label: string }
   mealsPerDay: number
@@ -35,25 +34,17 @@ interface IFormValue {
   }
   dietary?: string
 }
-// interface IDataToSend extends Omit<IFormValue, 'foodAmount'> {
-//     foodAmount: string
-// }
-export const ExerciseModal = () => {
+interface IDataToSend extends Omit<IFormValue, 'foodAmount' | 'dietary'> {
+  foodAmount: string
+  dietary: string[]
+}
+export const ExerciseModal = ({ setExerciseData, onClose }: IProps) => {
   const [dietaries, setDietaries] = useState<string[]>([])
   const [dietary, setDietary] = useState('')
 
-  //   const queryClient = useQueryClient()
-  //   const {
-  //     isLoading,
-  //     mutate,
-  //     reset: postReset,
-  //   } = useMutation((dataToSend: IDataToSend) =>
-  //     baseAxios.post(API.students, dataToSend)
-  //   )
-
   const {
     control,
-    // reset,
+    reset,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormValue>({
@@ -64,22 +55,16 @@ export const ExerciseModal = () => {
 
     const dataToSend = {
       ...filteredData,
-      dieraty: dietaries,
+      dietary: dietaries,
       foodAmount: data.foodAmount.label,
     }
-
-    try {
-      console.log(dataToSend)
-      //   await mutate(dataToSend, {
-      //     onSuccess: () => {
-      //       toast.success('Successful')
-      //       reset(defaultValue)
-      //     },
-      //     onError: (err) => {
-      //       errorMessage(err)
-      //     },
-      //   })
-    } finally {
+    if (dataToSend) {
+      setExerciseData(dataToSend)
+      reset()
+      toast.success('Successfully saved')
+      onClose()
+    } else {
+      errorMessage('Failed to save')
     }
   }
   return (
@@ -404,7 +389,7 @@ export const ExerciseModal = () => {
             </div>
             <Button
               variant={'primary'}
-              value="Send"
+              value="Save"
               type="submit"
               leadingIcon={<IconPicker icon="saveAdd" />}
               className="mt-6"
