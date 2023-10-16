@@ -25,6 +25,30 @@ import { useMutation } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import { errorMessage } from '@/utils/errorMessage'
 import { SelectVal, Student, IDataToSend } from './page'
+import Modal from '@/components/ui/modal'
+import { NutritionalModal } from './nutritionalModal'
+import { ExerciseModal } from './exerciseModal'
+
+// const actionData = [
+//   {
+//     title: 'Create New Student Profile',
+//     subtitle: 'Add Student Profile',
+//     icon: 'profile2User' as IconNames,
+//     type: 'student',
+//   },
+//   {
+//     title: 'Create Student Health Data',
+//     subtitle: 'Add student health progress',
+//     icon: 'health' as IconNames,
+//     type: 'health-data',
+//   },
+//   {
+//     title: 'Create New Instructor Profile',
+//     subtitle: 'Add New Instructor for School',
+//     icon: 'teacher' as IconNames,
+//     type: 'instructor',
+//   },
+// ]
 
 export const AddHealthDataRecordContent = () => {
   const [level, setLevel] = useState<SelectVal | null>()
@@ -33,6 +57,8 @@ export const AddHealthDataRecordContent = () => {
     level?.value
   )
   const [student, setStudent] = useState<Student | null>()
+  const [modalType, setModalType] = useState('')
+  const [openModal, setOpenModal] = useState(false)
 
   const [height, setHeight] = useState('')
   const [weight, setWeight] = useState('')
@@ -327,6 +353,10 @@ export const AddHealthDataRecordContent = () => {
               variant="text/sm"
               className="text-primary cursor-pointer underline"
               as="span"
+              onClick={() => {
+                setModalType('Nutritional')
+                setOpenModal(true)
+              }}
             >
               Open Questionaire
             </Text>
@@ -340,6 +370,10 @@ export const AddHealthDataRecordContent = () => {
               variant="text/sm"
               className="text-primary cursor-pointer underline"
               as="span"
+              onClick={() => {
+                setModalType('Exercise')
+                setOpenModal(true)
+              }}
             >
               Open Questionaire
             </Text>
@@ -354,6 +388,14 @@ export const AddHealthDataRecordContent = () => {
         onClick={handleSubmit}
         loading={isLoading}
       />
+      <Modal
+        open={openModal}
+        closeModal={() => setOpenModal(false)}
+        title={`Add new ${modalType}`}
+      >
+        {modalType === 'Nutritional' && <NutritionalModal />}
+        {modalType === 'Exercise' && <ExerciseModal />}
+      </Modal>
     </div>
   )
 }
