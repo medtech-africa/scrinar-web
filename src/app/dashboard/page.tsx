@@ -25,37 +25,42 @@ import { AddNewStudentContent } from './user-profile/students/add-student/add-ne
 import { AddRecordContent } from './user-profile/instructors/add-instructor/add-record-content'
 import { AddHealthDataRecordContent } from './health-data/add-record/add-health-data-record-content'
 import { useUser } from '@/context/user'
+import useDashboardStats from '@/hooks/queries/useDashboardStats'
+import ContentLoader from '@/components/content-loader'
 
 const dashboardStats = [
   {
     title: 'Students',
     icon: 'profile2User' as IconNames,
-    count: '300',
+    count: 'totalStudents',
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',
       'https://i.pravatar.cc/60',
     ],
+    slug: '/user-profile/students',
   },
   {
     title: 'Instructors',
     icon: 'teacher' as IconNames,
-    count: '300',
+    count: 'totalInstructors',
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',
       'https://i.pravatar.cc/60',
     ],
+    slug: '/user-profile/instructors',
   },
   {
     title: 'Health Data',
     icon: 'health' as IconNames,
-    count: '300',
+    count: 'totalHealthData',
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',
       'https://i.pravatar.cc/60',
     ],
+    slug: '/health-data',
   },
 ]
 
@@ -101,6 +106,7 @@ export default function Home() {
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
   const { user } = useUser()
+  const { isLoading, data } = useDashboardStats()
 
   return (
     <div className="text-grey-900">
@@ -123,9 +129,9 @@ export default function Home() {
                   ? 'green'
                   : 'iris'
               return (
-                <DashboardCard className="w-full" key={_}>
+                <DashboardCard className="w-ful relative" key={_}>
                   <DashboardCardHeader
-                    title={stat.count}
+                    title={data?.[stat.count] ?? '..'}
                     subtitle={stat.title}
                     icon={
                       <DashboardCardIcon
@@ -178,6 +184,9 @@ export default function Home() {
                       />
                     </div>
                   </DashboardCardFooter>
+                  <Link href={`/dashboard${stat.slug}`}>
+                    <span className="absolute inset-0" />
+                  </Link>
                 </DashboardCard>
               )
             })}
@@ -305,6 +314,7 @@ export default function Home() {
         {modalType === 'instructor' && <AddRecordContent />}
         {modalType === 'health-data' && <AddHealthDataRecordContent />}
       </Modal>
+      <ContentLoader loading={isLoading} />
     </div>
   )
 }
