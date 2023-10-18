@@ -31,6 +31,7 @@ export const API = {
 
   //  school
   schoolRegister: `${BASE_URL}/api/v1/school`,
+  schoolUpdate: `${BASE_URL}/api/v1/school/me`,
 
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,

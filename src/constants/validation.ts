@@ -187,6 +187,66 @@ const register = yupResolver(
       .min(1, 'Select at least one educational institution'),
   })
 )
+const nutritional = yupResolver(
+  yup.object().shape({
+    school_transport_question: yup
+      .object()
+      .shape({ label: yup.string().required(), value: yup.string().required() })
+      .required('Please fill this field')
+      .typeError('Please fill this field'),
+    sport_question: yup
+      .object()
+      .shape({ label: yup.string().required(), value: yup.string().required() })
+      .required('Please fill this field')
+      .typeError('Please fill this field'),
+    hours_on_sleep: yup
+      .number()
+      .typeError('Please fill this field')
+      .required('Please fill this field')
+      .min(0, 'Number must be at least 0')
+      .max(27, 'Number must not exceed 27'),
+    hours_on_tv: yup
+      .number()
+      .required('Please fill this field')
+      .typeError('Please fill this field')
+      .min(0, 'Number must be at least 0')
+      .max(27, 'Number must not exceed 27'),
+    hours_on_computer: yup
+      .number()
+      .required('Please fill this field')
+      .typeError('Please fill this field')
+      .min(0, 'Number must be at least 0')
+      .max(27, 'Number must not exceed 27'),
+    school_transport_question_alt: yup
+      .string()
+      .typeError('Please fill this field'),
+  })
+)
+const exercise = yupResolver(
+  yup.object().shape({
+    foodAmount: yup
+      .object()
+      .shape({
+        label: yup.string().required(),
+        value: yup.string().required(),
+      })
+      .required('Food amount is required'),
+    mealsPerDay: yup.number().required('Number of meals is required'),
+    dietary: yup.string(),
+    fruitsTimes: yup.object().shape({
+      vegetable: yup.number().required('Food amount is required'),
+      meat: yup.number().required('Food amount is required'),
+      fruits: yup.number().required('Food amount is required'),
+      egg: yup.number().required('Food amount is required'),
+      carbonhydrates: yup.number().required('Food amount is required'),
+      sweets: yup.number().required('Food amount is required'),
+      pastries: yup.number().required('Food amount is required'),
+      sugar: yup.number().required('Food amount is required'),
+      friedFood: yup.number().required('Food amount is required'),
+      fish: yup.number().required('Food amount is required'),
+    }),
+  })
+)
 
 const validation = {
   createPatient,
@@ -194,6 +254,8 @@ const validation = {
   login,
   updatePasswordSchema,
   register,
+  nutritional,
+  exercise,
 }
 
 export default validation
