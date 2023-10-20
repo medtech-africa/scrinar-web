@@ -189,35 +189,35 @@ const register = yupResolver(
 )
 const nutritional = yupResolver(
   yup.object().shape({
-    school_transport_question: yup
+    schoolTransportQuestion: yup
       .object()
       .shape({ label: yup.string().required(), value: yup.string().required() })
       .required('Please fill this field')
       .typeError('Please fill this field'),
-    sport_question: yup
+    sportQuestion: yup
       .object()
       .shape({ label: yup.string().required(), value: yup.string().required() })
       .required('Please fill this field')
       .typeError('Please fill this field'),
-    hours_on_sleep: yup
+    hoursOnSleep: yup
       .number()
       .typeError('Please fill this field')
       .required('Please fill this field')
       .min(0, 'Number must be at least 0')
       .max(27, 'Number must not exceed 27'),
-    hours_on_tv: yup
+    hoursOnTv: yup
       .number()
       .required('Please fill this field')
       .typeError('Please fill this field')
       .min(0, 'Number must be at least 0')
       .max(27, 'Number must not exceed 27'),
-    hours_on_computer: yup
+    hoursOnComputer: yup
       .number()
       .required('Please fill this field')
       .typeError('Please fill this field')
       .min(0, 'Number must be at least 0')
       .max(27, 'Number must not exceed 27'),
-    school_transport_question_alt: yup
+    schoolTransportQuestionAlt: yup
       .string()
       .typeError('Please fill this field'),
   })

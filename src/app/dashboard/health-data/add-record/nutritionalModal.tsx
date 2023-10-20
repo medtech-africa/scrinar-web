@@ -14,46 +14,60 @@ import { useState } from 'react'
 import filterObject from '@/utils/filterObject'
 import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
+import { useHealthValue } from '@/context/health-data-context'
 
 interface IProps {
-  setNutritionalData: (val: IDataToSend) => void
   onClose: () => void
 }
-interface IFormValue {
-  school_transport_question: { value: string; label: string }
-  sport_question: { value: string; label: string }
-  hours_on_sleep: number
-  hours_on_tv: number
-  hours_on_computer: number
-  school_transport_question_alt?: string
+interface IFormData {
+  schoolTransportQuestion: { value: string; label: string }
+  sportQuestion: { value: string; label: string }
+  hoursOnSleep: number
+  hoursOnTv: number
+  hoursOnComputer: number
+  schoolTransportQuestionAlt?: string
 }
-interface IDataToSend
-  extends Omit<IFormValue, 'sport_question' | 'school_transport_question'> {
-  sport_question: string
-  school_transport_question: string | undefined
+export interface INutritionalValue
+  extends Omit<IFormData, 'sportQuestion' | 'schoolTransportQuestion'> {
+  sportQuestion: string
+  schoolTransportQuestion: string | undefined
 }
-export const NutritionalModal = ({ setNutritionalData, onClose }: IProps) => {
+export const NutritionalModal = ({ onClose }: IProps) => {
   const [specify, setSpecify] = useState('')
+  const { setNutritionalData, nutritionalData } = useHealthValue()
+
   const {
     control,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormValue>({
+  } = useForm<IFormData>({
     resolver: validation.nutritional,
-    defaultValues: {},
+    defaultValues: {
+      schoolTransportQuestion: {
+        value: nutritionalData?.schoolTransportQuestion,
+        label: nutritionalData?.schoolTransportQuestion,
+      },
+      sportQuestion: {
+        value: nutritionalData?.sportQuestion,
+        label: nutritionalData?.sportQuestion,
+      },
+      hoursOnSleep: nutritionalData?.hoursOnSleep,
+      hoursOnTv: nutritionalData?.hoursOnTv,
+      hoursOnComputer: nutritionalData?.hoursOnComputer,
+      schoolTransportQuestionAlt: nutritionalData?.schoolTransportQuestionAlt,
+    },
   })
-
-  const onSubmit = async (data: IFormValue) => {
-    const { school_transport_question_alt: _, ...filteredData } =
+  const onSubmit = async (data: IFormData) => {
+    const { schoolTransportQuestionAlt: _, ...filteredData } =
       filterObject(data)
 
     const dataToSend = {
       ...filteredData,
-      school_transport_question:
+      schoolTransportQuestion:
         specify === 'others'
-          ? data?.school_transport_question_alt
-          : data?.school_transport_question?.value,
-      sport_question: data?.sport_question?.value,
+          ? data?.schoolTransportQuestionAlt
+          : data?.schoolTransportQuestion?.value,
+      sportQuestion: data?.sportQuestion?.value,
     }
     if (dataToSend) {
       setNutritionalData(dataToSend)
@@ -83,17 +97,17 @@ export const NutritionalModal = ({ setNutritionalData, onClose }: IProps) => {
                     {...field}
                     options={schoolTransportQuestionOptions}
                     variant={
-                      errors?.school_transport_question
+                      errors?.schoolTransportQuestion
                         ? 'destructive'
                         : 'default'
                     }
                     message={
-                      errors.school_transport_question &&
-                      errors.school_transport_question?.message
+                      errors.schoolTransportQuestion &&
+                      errors.schoolTransportQuestion?.message
                     }
                   />
                 )}
-                name="school_transport_question"
+                name="schoolTransportQuestion"
               />
               <div>
                 {specify === 'others' && (
@@ -105,17 +119,17 @@ export const NutritionalModal = ({ setNutritionalData, onClose }: IProps) => {
                         label="Specify here"
                         labelStyle="lg:text-sm text-xs"
                         variant={
-                          errors?.school_transport_question_alt
+                          errors?.schoolTransportQuestionAlt
                             ? 'destructive'
                             : 'default'
                         }
                         message={
-                          errors.school_transport_question_alt &&
-                          errors.school_transport_question_alt.message
+                          errors.schoolTransportQuestionAlt &&
+                          errors.schoolTransportQuestionAlt.message
                         }
                       />
                     )}
-                    name="school_transport_question_alt"
+                    name="schoolTransportQuestionAlt"
                   />
                 )}
               </div>
@@ -128,11 +142,11 @@ export const NutritionalModal = ({ setNutritionalData, onClose }: IProps) => {
                     labelStyle="lg:text-sm text-xs"
                     {...field}
                     options={sportQuestionOptions}
-                    variant={errors?.sport_question ? 'destructive' : 'default'}
-                    message={errors.sport_question?.message}
+                    variant={errors?.sportQuestion ? 'destructive' : 'default'}
+                    message={errors.sportQuestion?.message}
                   />
                 )}
-                name="sport_question"
+                name="sportQuestion"
               />
               <Controller
                 control={control}
@@ -142,13 +156,11 @@ export const NutritionalModal = ({ setNutritionalData, onClose }: IProps) => {
                     label="Average hours of sleep per day"
                     type="number"
                     labelStyle="lg:text-sm text-xs"
-                    variant={errors?.hours_on_sleep ? 'destructive' : 'default'}
-                    message={
-                      errors.hours_on_sleep && errors.hours_on_sleep.message
-                    }
+                    variant={errors?.hoursOnSleep ? 'destructive' : 'default'}
+                    message={errors.hoursOnSleep && errors.hoursOnSleep.message}
                   />
                 )}
-                name="hours_on_sleep"
+                name="hoursOnSleep"
               />
               <Controller
                 control={control}
@@ -158,11 +170,11 @@ export const NutritionalModal = ({ setNutritionalData, onClose }: IProps) => {
                     label="Average hours spent watching TV/Video/Satellite in a day"
                     labelStyle="lg:text-sm text-xs"
                     type="number"
-                    variant={errors?.hours_on_tv ? 'destructive' : 'default'}
-                    message={errors.hours_on_tv && errors.hours_on_tv.message}
+                    variant={errors?.hoursOnTv ? 'destructive' : 'default'}
+                    message={errors.hoursOnTv && errors.hoursOnTv.message}
                   />
                 )}
-                name="hours_on_tv"
+                name="hoursOnTv"
               />
               <Controller
                 control={control}
@@ -173,15 +185,14 @@ export const NutritionalModal = ({ setNutritionalData, onClose }: IProps) => {
                     labelStyle="lg:text-sm text-xs"
                     type="number"
                     variant={
-                      errors?.hours_on_computer ? 'destructive' : 'default'
+                      errors?.hoursOnComputer ? 'destructive' : 'default'
                     }
                     message={
-                      errors.hours_on_computer &&
-                      errors.hours_on_computer.message
+                      errors.hoursOnComputer && errors.hoursOnComputer.message
                     }
                   />
                 )}
-                name="hours_on_computer"
+                name="hoursOnComputer"
               />
             </div>
             <Button

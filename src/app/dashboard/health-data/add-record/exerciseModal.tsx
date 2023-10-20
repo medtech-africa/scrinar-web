@@ -12,12 +12,12 @@ import { useState } from 'react'
 import { Text } from '@/components/ui/text'
 import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
+import { useHealthValue } from '@/context/health-data-context'
 interface IProps {
-  setExerciseData: (val: IDataToSend) => void
   onClose: () => void
 }
 
-interface IFormValue {
+interface IFormData {
   foodAmount: { value: string; label: string }
   mealsPerDay: number
   fruitsTimes: {
@@ -34,29 +34,54 @@ interface IFormValue {
   }
   dietary?: string
 }
-interface IDataToSend extends Omit<IFormValue, 'foodAmount' | 'dietary'> {
+export interface IExerciseValue
+  extends Omit<IFormData, 'foodAmount' | 'dietary'> {
   foodAmount: string
   dietary: string[]
 }
-export const ExerciseModal = ({ setExerciseData, onClose }: IProps) => {
-  const [dietaries, setDietaries] = useState<string[]>([])
+export const ExerciseModal = ({ onClose }: IProps) => {
   const [dietary, setDietary] = useState('')
+  const { setExerciseData, exerciseData } = useHealthValue()
+  const defaultDietaries = exerciseData?.dietary
+    ? [...exerciseData?.dietary]
+    : []
+  const [dietaries, setDietaries] = useState<string[]>(defaultDietaries)
 
   const {
     control,
     reset,
     handleSubmit,
     formState: { errors },
-  } = useForm<IFormValue>({
+  } = useForm<IFormData>({
     resolver: validation.exercise,
+    defaultValues: {
+      foodAmount: {
+        value: exerciseData?.foodAmount,
+        label: exerciseData?.foodAmount,
+      },
+      mealsPerDay: exerciseData?.mealsPerDay,
+      fruitsTimes: {
+        vegetable: exerciseData?.fruitsTimes.vegetable,
+        fruits: exerciseData?.fruitsTimes.fruits,
+        fish: exerciseData?.fruitsTimes.fish,
+        egg: exerciseData?.fruitsTimes.egg,
+        meat: exerciseData?.fruitsTimes.meat,
+        carbonhydrates: exerciseData?.fruitsTimes.carbonhydrates,
+        sweets: exerciseData?.fruitsTimes.sweets,
+        pastries: exerciseData?.fruitsTimes.pastries,
+        sugar: exerciseData?.fruitsTimes.sugar,
+        friedFood: exerciseData?.fruitsTimes.friedFood,
+      },
+    },
   })
-  const onSubmit = async (data: IFormValue) => {
+
+  const onSubmit = async (data: IFormData) => {
     const { ...filteredData } = filterObject(data)
 
     const dataToSend = {
       ...filteredData,
       dietary: dietaries,
-      foodAmount: data.foodAmount.label,
+      foodAmount: data?.foodAmount?.label,
     }
     if (dataToSend) {
       setExerciseData(dataToSend)
