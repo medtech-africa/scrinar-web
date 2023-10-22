@@ -61,12 +61,16 @@ const ScreeningList = ({
     {
       title: 'Screening Details',
       icon: IconNames.calendar,
-      action: () => setActionType('view'),
+      action: () => {
+        setActionType('view'), setSelectedRow(null)
+      },
     },
     {
       title: 'Edit Schedule',
       icon: IconNames.calendarEdit,
-      action: () => setActionType('edit'),
+      action: () => {
+        setActionType('edit'), setSelectedRow(null)
+      },
     },
     { title: 'Delete Data', icon: IconNames.trash },
   ]

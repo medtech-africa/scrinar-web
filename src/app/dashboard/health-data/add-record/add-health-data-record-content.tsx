@@ -28,6 +28,7 @@ import { SelectVal, Student, IDataToSend } from './page'
 import Modal from '@/components/ui/modal'
 import { NutritionalModal } from './nutritionalModal'
 import { ExerciseModal } from './exerciseModal'
+import { useHealthValue } from '@/context/health-data-context'
 
 // const actionData = [
 //   {
@@ -52,6 +53,7 @@ import { ExerciseModal } from './exerciseModal'
 
 export const AddHealthDataRecordContent = () => {
   const [level, setLevel] = useState<SelectVal | null>()
+
   const { data: studentsData, isFetching: studentsLoading } = useStudents(
     0,
     level?.value
@@ -59,8 +61,8 @@ export const AddHealthDataRecordContent = () => {
   const [student, setStudent] = useState<Student | null>()
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
-  const [nutritionalData, setNutritionalData] = useState({})
-  const [exerciseData, setExerciseData] = useState({})
+  const { exerciseData, nutritionalData, setExerciseData, setNutritionalData } =
+    useHealthValue()
 
   const [height, setHeight] = useState('')
   const [weight, setWeight] = useState('')
@@ -80,7 +82,7 @@ export const AddHealthDataRecordContent = () => {
     () =>
       studentsData?.data?.map((st: Omit<Student, 'value' | 'label'>) => ({
         label: `${st?.firstName} ${st?.lastName}`,
-        value: st?.userId,
+        value: st?.id,
         ...st,
       })) ?? [],
     [studentsData]
@@ -123,8 +125,8 @@ export const AddHealthDataRecordContent = () => {
     }
 
     const dataToSend = {
-      userId: student?.userId,
-      ...(bmi && { bmi }),
+      userId: student?.id,
+      bmi: bmi.toString(),
       ...(height && { height }),
       ...(weight && { weight }),
       ...(waist && { waist }),
@@ -138,7 +140,6 @@ export const AddHealthDataRecordContent = () => {
       // ...(physicalActivityScore && { physicalActivityScore }),
     }
     console.log(dataToSend)
-
     mutate(dataToSend, {
       onSuccess: () => {
         setHeight('')
@@ -149,8 +150,9 @@ export const AddHealthDataRecordContent = () => {
         setStudent(null)
         setBloodSugar('')
         setLevel(null)
+        setNutritionalData(null)
+        setExerciseData(null)
         toast.success('Successfully added health data')
-        // toast.success('')
       },
       onError: (err) => {
         errorMessage(err)
@@ -365,6 +367,9 @@ export const AddHealthDataRecordContent = () => {
             >
               Open Questionaire
             </Text>
+            {nutritionalData && (
+              <BadgeField variant="success" value="Changes Saved" />
+            )}
           </div>
         </PageCard>
         <PageCard title="Exercise/Activity" bodyStyle="p-4">
@@ -382,6 +387,9 @@ export const AddHealthDataRecordContent = () => {
             >
               Open Questionaire
             </Text>
+            {exerciseData && (
+              <BadgeField variant="success" value="Changes Saved" />
+            )}
           </div>
         </PageCard>
       </div>
@@ -393,24 +401,20 @@ export const AddHealthDataRecordContent = () => {
         onClick={handleSubmit}
         loading={isLoading}
       />
+
       <Modal
         open={openModal}
         closeModal={() => setOpenModal(false)}
         title={`Add new ${modalType}`}
       >
         {modalType === 'Nutritional' && (
-          <NutritionalModal
-            setNutritionalData={setNutritionalData}
-            onClose={() => setOpenModal(false)}
-          />
+          <NutritionalModal onClose={() => setOpenModal(false)} />
         )}
         {modalType === 'Exercise' && (
-          <ExerciseModal
-            setExerciseData={setExerciseData}
-            onClose={() => setOpenModal(false)}
-          />
+          <ExerciseModal onClose={() => setOpenModal(false)} />
         )}
       </Modal>
+      <form />
     </div>
   )
 }

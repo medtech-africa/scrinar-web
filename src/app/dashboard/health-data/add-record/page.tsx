@@ -13,7 +13,7 @@ export interface SelectVal {
 }
 
 export interface Student extends SelectVal {
-  userId: string
+  id: string
   firstName?: string
   lastName?: string
   avatarUrl?: string
@@ -28,7 +28,7 @@ export type IDataToSend = {
   waist?: string
   weight?: string
   height?: string
-  bmi?: number
+  bmi?: string
   dietaryDiversityScore?: string
   physicalActivityScore?: string
 }
