@@ -14,8 +14,7 @@ import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 interface IFormValue {
-  email?: string
-  phoneNumber?: string
+  loginId?: string
   password: string
 }
 interface IDataToSend {
@@ -24,7 +23,7 @@ interface IDataToSend {
 }
 const Login = () => {
   const [isVisible, setIsvisible] = useState(false)
-  const [useEmail, setUseEmail] = useState(true)
+  const [authLoading, setAuthLoading] = useState(false)
   const { authenticate, isAuth } = useAuth()
   const router = useRouter()
 
@@ -42,7 +41,6 @@ const Login = () => {
   const {
     control,
     reset,
-    setValue,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormValue>({
@@ -51,17 +49,19 @@ const Login = () => {
 
   const onSubmit = async (data: IFormValue) => {
     const dataToSend = {
-      loginId: data?.email || data?.phoneNumber,
+      loginId: data?.loginId,
       password: data?.password,
     }
     try {
       await mutate(dataToSend, {
         onSuccess: async (response) => {
+          setAuthLoading(true)
           const responseData = response.data
           const accessToken = responseData?.access_token
           if (accessToken) {
             await authenticate(accessToken)
           }
+          setAuthLoading(false)
           router.push('/dashboard')
           reset()
           postReset()
@@ -102,17 +102,17 @@ const Login = () => {
             className="border border-grey-100 bg-white p-8 w-full mt-6 flex flex-col rounded-md"
           >
             <div className="flex justify-end">
-              <Text
+              {/* <Text
                 variant={'text/md'}
                 weight={'medium'}
                 onClick={() => setUseEmail(!useEmail)}
                 className="text-right text-lust-800 underline cursor-pointer"
               >
                 {useEmail ? 'use your mobile number' : 'use your email'}
-              </Text>
+              </Text> */}
             </div>
             <div className="flex flex-col gap-y-4">
-              {useEmail ? (
+              {/* {useEmail ? (
                 <Controller
                   control={control}
                   name="email"
@@ -136,32 +136,25 @@ const Login = () => {
                     />
                   )}
                 />
-              ) : (
-                <Controller
-                  control={control}
-                  name="phoneNumber"
-                  key="phoneNumber"
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
-                      onChange={(e) => {
-                        if (errors.email) {
-                          setValue('email', '')
-                        }
-                        onChange(e.target.value)
-                      }}
-                      onBlur={onBlur}
-                      value={value ?? ''}
-                      labelStyle="lg:text-sm text-xs"
-                      placeholder="0812367890"
-                      label="Mobile Number"
-                      variant={errors?.phoneNumber ? 'destructive' : 'default'}
-                      message={
-                        errors.phoneNumber && errors.phoneNumber?.message
-                      }
-                    />
-                  )}
-                />
-              )}
+              ) : ( */}
+              <Controller
+                control={control}
+                name="loginId"
+                key="loginId"
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value ?? ''}
+                    labelStyle="lg:text-sm text-xs"
+                    placeholder="Email or mobile number"
+                    label="Enter Email Address or Mobile Number"
+                    variant={errors?.loginId ? 'destructive' : 'default'}
+                    message={errors.loginId && errors.loginId?.message}
+                  />
+                )}
+              />
+              {/* )} */}
 
               <Controller
                 control={control}
@@ -202,8 +195,8 @@ const Login = () => {
             <Button
               value="Login"
               variant="primary"
-              loading={isLoading}
-              disabled={isLoading}
+              loading={isLoading || authLoading}
+              disabled={isLoading || authLoading}
             />
           </form>
         </div>

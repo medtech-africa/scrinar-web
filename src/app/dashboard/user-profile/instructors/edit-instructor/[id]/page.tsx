@@ -26,6 +26,9 @@ import ContentLoader from '@/components/content-loader'
 import DatePicker from '@/components/ui/date-picker'
 import ConditionAvatar from '@/components/ui/condition-avatar'
 import { genderOptions, roleOptions } from '@/constants/selectOptions'
+import { useUser } from '@/context/user'
+import restrictNonAdmin from '@/utils/checkPermission'
+import { notFound } from 'next/navigation'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -34,6 +37,10 @@ const navigationItems = [
 ]
 
 export default function EditRecord({ params }: { params: { id: string } }) {
+  const { user } = useUser()
+  if (!restrictNonAdmin(user?.user?.roles)) {
+    notFound()
+  }
   const { data, isLoading, refetch } = useInstructor(params.id)
   const { isLoading: updateLoading, mutate } = useMutation(
     (dataToSend: InstructorDataToSend) =>
