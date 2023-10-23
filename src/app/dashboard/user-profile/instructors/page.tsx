@@ -18,16 +18,18 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useUser } from '@/context/user'
 import useInstructors from '@/hooks/queries/useInstructors'
 import { usePaginate } from '@/hooks/usePagination'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
+import restrictNonAdmin from '@/utils/checkPermission'
 import { errorMessage } from '@/utils/errorMessage'
 import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 import { useMutation } from '@tanstack/react-query'
 import { format } from 'date-fns'
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
+import { notFound, useRouter } from 'next/navigation'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 
@@ -102,6 +104,10 @@ const FilterHeader = ({
 }
 
 export default function Instructors() {
+  const { user } = useUser()
+  if (!restrictNonAdmin(user?.user?.roles)) {
+    notFound()
+  }
   const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState(null)

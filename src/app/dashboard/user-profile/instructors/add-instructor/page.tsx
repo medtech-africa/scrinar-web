@@ -2,6 +2,9 @@
 import { PageHeader } from '@/components/page-header'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { AddRecordContent } from './add-record-content'
+import { useUser } from '@/context/user'
+import restrictNonAdmin from '@/utils/checkPermission'
+import { notFound } from 'next/navigation'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -27,6 +30,10 @@ export interface InstructorDataToSend
 }
 
 export default function AddRecord() {
+  const { user } = useUser()
+  if (!restrictNonAdmin(user?.user?.roles)) {
+    notFound()
+  }
   return (
     <div>
       <PageHeader

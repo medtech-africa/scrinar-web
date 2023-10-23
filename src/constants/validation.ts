@@ -86,14 +86,24 @@ const createInstructor = yupResolver(
 )
 const login = yupResolver(
   yup.object().shape({
-    phoneNumber: yup
+    loginId: yup
       .string()
-      .typeError('Please enter a number')
-      .matches(
-        /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
-        'Enter a valid phone number'
-      ),
-    email: yup.string().typeError('Please enter email address').email(),
+      .test('is-email-or-phone', 'Invalid email or phone number', (value) => {
+        // Regular expression for a valid email address
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+
+        // Regular expression for a valid phone number
+        const phoneRegex = /^(?:\+234|0)[789]\d{9}$/
+        if (value) {
+          if (emailRegex.test(value)) {
+            return true // It's a valid email
+          } else if (phoneRegex.test(value)) {
+            return true // It's a valid phone number
+          } else {
+            return false // It's invalid
+          }
+        }
+      }),
     password: yup
       .string()
       .required('Password is required')
