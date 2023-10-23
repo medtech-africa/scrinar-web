@@ -27,6 +27,7 @@ import { AddHealthDataRecordContent } from './health-data/add-record/add-health-
 import { useUser } from '@/context/user'
 import useDashboardStats from '@/hooks/queries/useDashboardStats'
 import ContentLoader from '@/components/content-loader'
+import restrictNonAdmin from '@/utils/checkPermission'
 
 const dashboardStats = [
   {
@@ -82,10 +83,11 @@ const actionData1 = [
     subtitle: 'Add New Instructor for School',
     icon: 'teacher' as IconNames,
     type: 'instructor',
+    admin: true,
   },
 ]
 
-const actionData2 = [
+const _actionData2 = [
   {
     date: 'Aug 10, 2023  •  8:00AM',
     location: 'School Hall',
@@ -120,7 +122,7 @@ export default function Home() {
       </section>
       <section className="grid lg:grid-cols-[2.5fr_1fr] gap-6 mt-2.2 py-8">
         <section>
-          <div className="md:grid !dashboard-home-cards-container lg:grid-cols-3 flex flex-wrap gap-4 mb-6">
+          <div className="lg:grid-cols-3 flex flex-wrap gap-4 mb-6">
             {dashboardStats.map((stat, _) => {
               const statColor =
                 stat.icon === 'health'
@@ -220,43 +222,55 @@ export default function Home() {
         </section>
         <section>
           <ActionBlock title="Quick Actions" className="mb-6">
-            {actionData1.map((act, _) => (
-              <div key={_}>
-                <div
-                  className="flex justify-between items-center cursor-pointer"
-                  onClick={() => {
-                    setModalType(act.type)
-                    setOpenModal(true)
-                  }}
-                >
-                  <div className="flex  items-center gap-6">
-                    <IconPicker
-                      icon={act.icon}
-                      size="1.5rem"
-                      className="text-grey-900"
-                    />
-                    <div>
-                      <Text
-                        variant="text/sm"
-                        weight="medium"
-                        className="mb-1.1"
-                      >
-                        {act.title}
-                      </Text>
-                      <Text variant="text/sm" className="text-grey-500">
-                        {act.subtitle}
-                      </Text>
+            {actionData1.map(
+              (act, _) =>
+                ((act?.admin && restrictNonAdmin(user?.user?.roles)) ||
+                  !act?.admin) && (
+                  <div key={_}>
+                    <div
+                      className="flex justify-between items-center cursor-pointer"
+                      onClick={() => {
+                        setModalType(act.type)
+                        setOpenModal(true)
+                      }}
+                    >
+                      <div className="flex  items-center gap-6">
+                        <IconPicker
+                          icon={act.icon}
+                          size="1.5rem"
+                          className="text-grey-900"
+                        />
+                        <div>
+                          <Text
+                            variant="text/sm"
+                            weight="medium"
+                            className="mb-1.1"
+                          >
+                            {act.title}
+                          </Text>
+                          <Text variant="text/sm" className="text-grey-500">
+                            {act.subtitle}
+                          </Text>
+                        </div>
+                      </div>
+                      <IconPicker
+                        icon="arrowOutward"
+                        className="text-grey-900"
+                      />
                     </div>
+                    {_ !== actionData1.length - 1 && (
+                      <Divider className="my-4" />
+                    )}
                   </div>
-                  <IconPicker icon="arrowOutward" className="text-grey-900" />
-                </div>
-                {_ !== actionData1.length - 1 && <Divider className="my-4" />}
-              </div>
-            ))}
+                )
+            )}
           </ActionBlock>
 
           <ActionBlock title="Upcoming Screening">
-            {actionData2.map((act, _) => {
+            <Text variant="text/sm" weight="medium" className="mb-1.1">
+              No upcoming screening
+            </Text>
+            {/* {actionData2.map((act, _) => {
               const statusColor =
                 act.status === 'upcoming'
                   ? 'sunglow'
@@ -301,7 +315,7 @@ export default function Home() {
                   </div>
                 </div>
               )
-            })}
+            })} */}
           </ActionBlock>
         </section>
       </section>
