@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction } from 'react'
+import React, { Dispatch, SetStateAction, useMemo } from 'react'
 import { Text } from './ui/text'
 import { IconPicker } from './ui/icon-picker'
 import { Input } from './ui/input'
@@ -6,10 +6,39 @@ import { Button } from './ui/button'
 import { AnimatePresence, motion } from 'framer-motion'
 import { Select } from './ui/select'
 import { Label } from './ui/label'
+import validation from '@/constants/validation'
+import { Controller, useForm } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+import { API } from '@/utils/api'
+import baseAxios from '@/utils/baseAxios'
+import { errorMessage } from '@/utils/errorMessage'
+import DatePicker from './ui/date-picker'
+import toast from 'react-hot-toast'
+import useScreenings, {
+  useAssessmentStatus,
+  useAssessmentType,
+} from '@/hooks/queries/useScreenings'
 
 type Iprops = {
   actionOpened: boolean
   setActionType: Dispatch<SetStateAction<string>>
+  refetchScreenings?: () => void
+}
+
+interface IFormValue {
+  title: string
+  location: string
+  type: { value: string; label: string }
+  date: string
+  time: string
+  note?: string
+  status: { value: string; label: string }
+}
+
+type IData = Omit<IFormValue, 'time' | 'type' | 'status' | 'date'> & {
+  assessmentType: string
+  status: string
+  assessmentDate: string
 }
 
 const ViewLayout = ({
@@ -26,7 +55,7 @@ const ViewLayout = ({
         animate={{ x: 0 }}
         exit={{ x: 200 }}
         transition={{ duration: 0.1 }}
-        className="p-8 w-full md:w-[396px] z-50 fixed right-0 top-0 bg-white bottom-0"
+        className="p-8 w-full md:w-[396px] z-50 fixed right-0 top-0 bg-white bottom-0 overflow-y-auto"
       >
         {children}
       </motion.section>
@@ -109,7 +138,80 @@ const ScreeningView = ({ actionOpened = false, setActionType }: Iprops) => {
   )
 }
 
-const ScreeningAdd = ({ actionOpened = false, setActionType }: Iprops) => {
+const ScreeningAdd = ({
+  actionOpened = false,
+  setActionType,
+  refetchScreenings,
+}: Iprops) => {
+  const { data: assessmentTypesData, isFetching: assessmentTypesLoading } =
+    useAssessmentType()
+  const {
+    data: assessmentStatusesData,
+    isFetching: assessmentStatusesLoading,
+  } = useAssessmentStatus()
+
+  const assessmentTypes = useMemo(
+    () =>
+      assessmentTypesData?.map((st: Omit<any, 'value' | 'label'>) => ({
+        label: st?.name,
+        value: st?.name,
+        ...st,
+      })) ?? [],
+    [assessmentTypesData]
+  )
+
+  const assessmentStatuses = useMemo(
+    () =>
+      assessmentStatusesData?.map((st: Omit<any, 'value' | 'label'>) => ({
+        label: st?.name,
+        value: st?.name,
+        ...st,
+      })) ?? [],
+    [assessmentStatusesData]
+  )
+
+  const {
+    control,
+    reset,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<IFormValue>({ resolver: validation.createScreening })
+  const {
+    isLoading,
+    mutate,
+    reset: postReset,
+  } = useMutation((data: IData) => baseAxios.post(API.schedules, data))
+  const { refetch } = useScreenings()
+
+  const onSubmit = async (data: IFormValue) => {
+    const dataToSend = {
+      title: data.title,
+      location: data.location,
+      ...(data?.note && { note: data.note }),
+      assessmentType: data.type?.value,
+      status: data.status?.value,
+      assessmentDate: new Date(
+        `${new Date(data.date).toISOString().split('T')[0]}T${data.time}`
+      ).toISOString(),
+    }
+    console.log(dataToSend)
+    try {
+      await mutate(dataToSend, {
+        onSuccess: () => {
+          refetch()
+          reset()
+          postReset()
+          toast.success('Successfully created new screening event')
+          refetchScreenings && refetchScreenings()
+        },
+        onError: (err) => {
+          errorMessage(err)
+        },
+      })
+    } finally {
+      //
+    }
+  }
   return (
     <ViewLayout actionOpened={actionOpened}>
       <Text variant="text/lg" weight="medium" className="mb-4">
@@ -119,58 +221,147 @@ const ScreeningAdd = ({ actionOpened = false, setActionType }: Iprops) => {
         Schedule a New Screening Event
       </Text>
 
-      <Input
-        label="Screening Title"
-        placeholder="e.g Data Collection"
-        className="mb-4"
-      />
-      <div className="flex gap-4 mb-4">
-        <Input
-          label="Screening Date"
-          placeholder="DD/MM/YYYY"
-          leadingIcon={<IconPicker icon="calendar" size="1.25rem" />}
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Controller
+          control={control}
+          render={({ field: { value, ...field } }) => (
+            <Input
+              {...field}
+              value={value ?? ''}
+              label="Screening Title"
+              placeholder="e.g Data Collection"
+              className="mb-4"
+              variant={errors?.title ? 'destructive' : 'default'}
+              message={errors.title && errors.title.message}
+            />
+          )}
+          name="title"
         />
-        <Input
-          label="Screening Time"
-          placeholder="HH:MM"
-          leadingIcon={<IconPicker icon="clock" size="1.25rem" />}
-        />
-      </div>
 
-      <Input
-        label="Screening Location"
-        placeholder="e.g School Halln"
-        className="mb-4"
-      />
+        <div className="flex gap-4 mb-4">
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <DatePicker
+                label="Screening Date"
+                placeholder="DD/MM/YYYY"
+                // leadingIcon={<IconPicker icon="calendar" size="1.25rem" />}
+                onBlur={onBlur}
+                value={value}
+                onChange={onChange}
+                variant={errors?.date ? 'destructive' : 'default'}
+                message={errors.date && errors.date.message}
+              />
+            )}
+            name="date"
+          />
 
-      <Select
-        label="Assessment Type"
-        placeholder="e.g Physical Assessment"
-        className="mb-4"
-      />
+          <Controller
+            control={control}
+            render={({ field: { onChange, onBlur, value } }) => (
+              <Input
+                type="time"
+                className="py-[12px] px-4 bg-accent rounded-lg w-full"
+                onBlur={onBlur}
+                value={value}
+                onChange={(e) => onChange(e.target.value)}
+                label="Screening Time"
+                placeholder="HH:MM"
+                variant={errors?.time ? 'destructive' : 'default'}
+                message={errors.time && errors.time.message}
+                // leadingIcon={<IconPicker icon="clock" size="1.25rem" />}
+              />
+            )}
+            name="time"
+          />
+        </div>
 
-      <div>
-        <Label htmlFor="de">Screening Note</Label>
-        <textarea
-          name="de"
-          className="py-2.2 px-3.5 rounded-lg bg-white utils-focus-outset mb-4 w-full"
-          rows={4}
-          placeholder="Enter a description..."
+        <Controller
+          control={control}
+          render={({ field: { value, ...field } }) => (
+            <Input
+              {...field}
+              value={value ?? ''}
+              label="Screening Location"
+              placeholder="e.g School Halln"
+              className="mb-4"
+              variant={errors?.location ? 'destructive' : 'default'}
+              message={errors.location && errors.location.message}
+            />
+          )}
+          name="location"
         />
-      </div>
-      <div className="flex gap-4">
-        <Button
-          onClick={() => setActionType('')}
-          value="Cancel"
-          className="bg-grey-50 text-grey-900 hover:bg-grey-100 w-full py-3"
-          leadingIcon={<IconPicker icon="closeSquare" />}
+
+        <Controller
+          control={control}
+          render={({ field: { value, ...field } }) => (
+            <Select
+              {...field}
+              value={value ?? ''}
+              label="Assessment Type"
+              placeholder="e.g Physical Assessment"
+              className="mb-4"
+              variant={errors?.type ? 'destructive' : 'default'}
+              message={errors.type && errors.type.message}
+              isLoading={assessmentTypesLoading}
+              isDisabled={assessmentTypesLoading}
+              options={assessmentTypes}
+            />
+          )}
+          name="type"
         />
-        <Button
-          value="Schedule Now"
-          className="w-full py-3"
-          leadingIcon={<IconPicker icon="calendarTick" />}
+        <Controller
+          control={control}
+          render={({ field: { value, ...field } }) => (
+            <Select
+              {...field}
+              value={value ?? ''}
+              label="Assessment Status"
+              placeholder="Select Status"
+              className="mb-4"
+              variant={errors?.status ? 'destructive' : 'default'}
+              message={errors.status && errors.status.message}
+              isLoading={assessmentStatusesLoading}
+              isDisabled={assessmentStatusesLoading}
+              options={assessmentStatuses}
+            />
+          )}
+          name="status"
         />
-      </div>
+
+        <div>
+          <Label htmlFor="de">Screening Note</Label>
+          <Controller
+            control={control}
+            render={({ field: { value, ...field } }) => (
+              <textarea
+                {...field}
+                value={value}
+                className="py-2.2 px-3.5 rounded-lg bg-white utils-focus-outset mb-4 w-full"
+                rows={4}
+                placeholder="Enter a description..."
+              />
+            )}
+            name="note"
+          />
+        </div>
+        <div className="flex gap-4">
+          <Button
+            onClick={() => setActionType('')}
+            value="Cancel"
+            className="bg-grey-50 text-grey-900 hover:bg-grey-100 w-full py-3"
+            leadingIcon={<IconPicker icon="closeSquare" />}
+            type="button"
+          />
+          <Button
+            value="Schedule Now"
+            className="w-full py-3"
+            leadingIcon={<IconPicker icon="calendarTick" />}
+            type="submit"
+            loading={isLoading}
+          />
+        </div>
+      </form>
     </ViewLayout>
   )
 }

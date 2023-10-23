@@ -258,6 +258,30 @@ const exercise = yupResolver(
   })
 )
 
+const createScreening = yupResolver(
+  yup.object().shape({
+    title: yup.string().required('Please enter a title'),
+    location: yup.string().required('Please enter a location'),
+    type: yup
+      .object()
+      .shape({ label: yup.string().required(), value: yup.string().required() })
+      .required('Please select an assessment type'),
+    status: yup
+      .object()
+      .shape({ label: yup.string().required(), value: yup.string().required() })
+      .required('Please select an assessment status'),
+    date: yup
+      .string()
+      .required('Please pick a date')
+      .typeError('Please pick a date'),
+    time: yup
+      .string()
+      .required('Please pick a time')
+      .typeError('Please pick a date'),
+    note: yup.string().optional(),
+  })
+)
+
 const validation = {
   createPatient,
   createInstructor,
@@ -266,6 +290,7 @@ const validation = {
   register,
   nutritional,
   exercise,
+  createScreening,
 }
 
 export default validation
