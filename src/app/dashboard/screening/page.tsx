@@ -213,10 +213,13 @@ const ScreeningList = ({
       <ScreeningView
         actionOpened={actionType === 'view'}
         setActionType={setActionType}
+        id={selectedRow ?? ''}
       />
       <ScreeningEdit
         actionOpened={actionType === 'edit'}
         setActionType={setActionType}
+        id={selectedRow ?? ''}
+        refetchScreenings={refetch}
       />
     </div>
   )
