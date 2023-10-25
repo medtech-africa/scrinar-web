@@ -30,7 +30,7 @@ const DropDownMenu = ({ menuItems, onClose, className }: IProps) => {
       aria-labelledby="menu-option"
       tabIndex={1}
       className={cn(
-        'flex flex-col p-2 bg-white justify-center space-y-2 items-start shadow-xl absolute right-4 whitespace-nowrap z-[1000] origin-top-right',
+        'flex flex-col p-2 bg-white justify-center space-y-2 items-start shadow-xl absolute right-4 whitespace-nowrap z-[49] origin-top-right',
         className
       )}
     >
