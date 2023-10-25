@@ -115,12 +115,7 @@ export default function HealthData() {
       action: () =>
         router.push(`/dashboard/health-data/view-record/${selectedRow ?? ''}`),
     },
-    // {
-    //   title: 'Edit Data',
-    //   icon: IconNames.userEdit,
-    //   action: () =>
-    //     router.push(`/dashboard/health-data/update-record/${selectedRow}`),
-    // },
+
     {
       title: 'Delete Data',
       icon: IconNames.trash,

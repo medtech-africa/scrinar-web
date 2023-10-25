@@ -3,14 +3,14 @@ import { ResizableBox as ReactResizableBox } from 'react-resizable'
 
 import 'react-resizable/css/styles.css'
 
-export default function ResizableBox({
+export const ResizableBox = ({
   children,
   width = 500,
   height = 300,
   resizable = true,
   style = {},
   className = '',
-}) {
+}: any) => {
   return (
     <div style={{}}>
       <div
@@ -20,7 +20,6 @@ export default function ResizableBox({
           background: 'white',
           padding: '.5rem',
           borderRadius: '0.5rem',
-          // boxShadow: '0 30px 40px rgba(0,0,0,.1)',
           ...style,
         }}
       >

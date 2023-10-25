@@ -53,7 +53,13 @@ const _DashboardProgress2 = ({ progress = 30 }) => {
   )
 }
 
-const DashboardProgress = ({ progress = 10, variant = 'success' }: any) => {
+const DashboardProgress = ({
+  progress = 10,
+  variant = 'success',
+}: {
+  progress: number
+  variant?: any
+}) => {
   const radius = 75
   const strokeWidth = 20
   const normalizedRadius = radius - strokeWidth / 2

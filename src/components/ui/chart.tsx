@@ -1,9 +1,7 @@
-import ResizableBox from '@/utils/resizableBox'
 import React from 'react'
 import { AxisOptions, Chart } from 'react-charts'
 import { Text } from './text'
-
-// export type Root = { data: Root2[] }
+import { ResizableBox } from '../resizableBox'
 
 export interface Root2 {
   name: string
