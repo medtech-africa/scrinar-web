@@ -30,31 +30,62 @@ export const calculateBloodPressureRisk: IBP = (
       message: 'Normal',
       variant: 'success',
     }
-  } else if (systolic < 131 && diastolic < 86) {
+  } else if (
+    systolic >= 120 &&
+    systolic <= 139 &&
+    diastolic >= 80 &&
+    diastolic <= 89
+  ) {
     return {
-      level: 'Elevated blood pressure',
-      message: 'Elevated',
+      level: 'Prehypertension',
+      message: 'Prehypertension',
       variant: 'warning',
     }
-  } else if (systolic < 141 || diastolic < 91) {
+  } else systolic >= 140 && diastolic >= 90
+  {
     return {
-      level: 'Stage 1 hypertension (Mild)',
-      message: 'Mild',
+      level: 'Hypertension',
+      message: 'Hypertension',
       variant: 'danger',
     }
-  } else if (systolic < 181 && diastolic < 121) {
-    return {
-      level: 'Stage 2 hypertension (Moderate)',
-      message: 'Moderate',
-      variant: 'pending2',
-    }
-  } else {
-    return {
-      level: 'Stage 3 hypertension (Severe)',
-      message: 'Severe',
-      variant: 'error',
-    }
   }
+  // if (systolic < 91 || diastolic < 61) {
+  //   return {
+  //     level: 'Low blood pressure (Hypotension)',
+  //     message: 'Hypotension',
+  //     variant: 'pending',
+  //   }
+  // } else if (systolic < 121 && diastolic < 81) {
+  //   return {
+  //     level: 'Normal blood pressure',
+  //     message: 'Normal',
+  //     variant: 'success',
+  //   }
+  // } else if (systolic < 131 && diastolic < 86) {
+  //   return {
+  //     level: 'Elevated blood pressure',
+  //     message: 'Elevated',
+  //     variant: 'warning',
+  //   }
+  // } else if (systolic < 141 || diastolic < 91) {
+  //   return {
+  //     level: 'Stage 1 hypertension (Mild)',
+  //     message: 'Mild',
+  //     variant: 'danger',
+  //   }
+  // } else if (systolic < 181 && diastolic < 121) {
+  //   return {
+  //     level: 'Stage 2 hypertension (Moderate)',
+  //     message: 'Moderate',
+  //     variant: 'pending2',
+  //   }
+  // } else {
+  //   return {
+  //     level: 'Stage 3 hypertension (Severe)',
+  //     message: 'Severe',
+  //     variant: 'error',
+  //   }
+  // }
 }
 
 export const calculateBmiRisk: IBMI = (val: number) => {
@@ -76,7 +107,7 @@ export const categorizeBloodSugarLevel: IBS = (glucoseLevel: number) => {
       message: 'Hypoglycemia',
       variant: 'pending',
     }
-  } else if (glucoseLevel >= 70 && glucoseLevel < 100) {
+  } else if (glucoseLevel >= 126 && glucoseLevel < 200) {
     return {
       level: 'Normal blood sugar',
       message: 'Normal',
@@ -84,9 +115,18 @@ export const categorizeBloodSugarLevel: IBS = (glucoseLevel: number) => {
     }
   } else if (glucoseLevel >= 100 && glucoseLevel < 126) {
     return { level: 'Prediabetes', message: 'Prediabetes', variant: 'danger' }
-  } else if (glucoseLevel >= 126) {
+  } else if (glucoseLevel >= 200) {
     return { level: 'Diabetes', message: 'Diabetes', variant: 'error' }
   } else {
     return { level: 'Unknown', message: 'Unknown', variant: 'pending2' }
   }
+}
+export const getVariantColor = (variant: 'success' | 'pending' | 'danger') => {
+  const colorMap = {
+    success: '#12B76A',
+    pending: '#F79009',
+    danger: '#F04438',
+  }
+
+  return colorMap[variant] || '#E31B23'
 }

@@ -89,7 +89,7 @@ export const PageHeader = ({
               <Text
                 variant="display/xs"
                 weight="medium"
-                className="text-grey-900 "
+                className="text-grey-900 capitalize"
               >
                 {title}
               </Text>

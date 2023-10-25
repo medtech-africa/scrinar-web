@@ -113,14 +113,14 @@ export default function HealthData() {
       title: 'View Data',
       icon: IconNames.documentText,
       action: () =>
-        router.push(`/dashboard/health-data/view-record/${selectedRow}`),
+        router.push(`/dashboard/health-data/view-record/${selectedRow ?? ''}`),
     },
-    {
-      title: 'Edit Data',
-      icon: IconNames.userEdit,
-      action: () =>
-        router.push(`/dashboard/health-data/update-record/${selectedRow}`),
-    },
+    // {
+    //   title: 'Edit Data',
+    //   icon: IconNames.userEdit,
+    //   action: () =>
+    //     router.push(`/dashboard/health-data/update-record/${selectedRow}`),
+    // },
     {
       title: 'Delete Data',
       icon: IconNames.trash,
@@ -130,7 +130,6 @@ export default function HealthData() {
       },
     },
   ]
-
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
@@ -195,8 +194,8 @@ export default function HealthData() {
               </TableHead>
               <TableHead>BP(mmHg)</TableHead>
               <TableHead>Blood Sugar(mg/dL)</TableHead>
-              <TableHead>Nutritional Access</TableHead>
-              <TableHead>Exercise Activity</TableHead>
+              {/* <TableHead>Nutritional Access</TableHead>
+              <TableHead>Exercise Activity</TableHead> */}
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -225,8 +224,8 @@ export default function HealthData() {
                   </TableCell>
                   <TableCell>{val?.bloodPressure}</TableCell>
                   <TableCell>{val?.glucoseLevel}</TableCell>
-                  <TableCell>{val?.dietaryDiversityScore}</TableCell>
-                  <TableCell>{val?.physicalActivityScore}</TableCell>
+                  {/* <TableCell>{val?.dietaryDiversityScore}</TableCell>
+                  <TableCell>{val?.physicalActivityScore}</TableCell> */}
                   <TableCell className="relative">
                     <div
                       onClick={() => handleMoreClick(val?.id)}
