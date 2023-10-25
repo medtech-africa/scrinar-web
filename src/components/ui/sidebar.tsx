@@ -14,6 +14,8 @@ import { Text } from './text'
 import { usePathname } from 'next/navigation'
 import { IconPicker } from './icon-picker'
 import { IconNames } from './icon-picker/icon-names'
+import restrictNonAdmin from '@/utils/checkPermission'
+import { useUser } from '@/context/user'
 
 interface NavLinkProps {
   children: React.ReactNode
@@ -93,6 +95,8 @@ interface ISideBar {
 
 const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
   const pathname = usePathname()
+  const { user } = useUser()
+
   const [open, toggleOpen] = useState(false)
   const sidebarRef = useRef(null)
   const windowSize = useWindowSize()
@@ -241,21 +245,25 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           },
                         }}
                       >
-                        <NavLink
-                          href={'/dashboard/user-profile/instructors'}
-                          className={cn(
-                            'pl-11',
-                            pathname.includes('/instructors') && 'bg-grey-100'
-                          )}
-                        >
-                          <DotIcon />
-                          <Text variant="text/md">
-                            <span className="block md:hidden lg:block">
-                              Instructors
-                            </span>
-                            <span className="hidden md:block lg:hidden">-</span>
-                          </Text>
-                        </NavLink>
+                        {restrictNonAdmin(user?.user?.roles) && (
+                          <NavLink
+                            href={'/dashboard/user-profile/instructors'}
+                            className={cn(
+                              'pl-11',
+                              pathname.includes('/instructors') && 'bg-grey-100'
+                            )}
+                          >
+                            <DotIcon />
+                            <Text variant="text/md">
+                              <span className="block md:hidden lg:block">
+                                Instructors
+                              </span>
+                              <span className="hidden md:block lg:hidden">
+                                -
+                              </span>
+                            </Text>
+                          </NavLink>
+                        )}
 
                         <NavLink
                           href="/dashboard/user-profile/students"

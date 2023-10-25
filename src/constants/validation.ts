@@ -86,14 +86,24 @@ const createInstructor = yupResolver(
 )
 const login = yupResolver(
   yup.object().shape({
-    phoneNumber: yup
+    loginId: yup
       .string()
-      .typeError('Please enter a number')
-      .matches(
-        /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
-        'Enter a valid phone number'
-      ),
-    email: yup.string().typeError('Please enter email address').email(),
+      .test('is-email-or-phone', 'Invalid email or phone number', (value) => {
+        // Regular expression for a valid email address
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+
+        // Regular expression for a valid phone number
+        const phoneRegex = /^(?:\+234|0)[789]\d{9}$/
+        if (value) {
+          if (emailRegex.test(value)) {
+            return true // It's a valid email
+          } else if (phoneRegex.test(value)) {
+            return true // It's a valid phone number
+          } else {
+            return false // It's invalid
+          }
+        }
+      }),
     password: yup
       .string()
       .required('Password is required')
@@ -248,24 +258,29 @@ const exercise = yupResolver(
   })
 )
 
-// const updateHealhData = yup.object().shape({
-//   studentName: yup.string(),
-//   level: yup.string(),
-//   age: yup.object().shape({
-//     label: yup.string().required(),
-//     value: yup.string().required(),
-//   }),
-//   dob: yup.string(),
-//   nutritionalHealth: yup.string(),
-//   exerciseHabit: yup.string(),
-//   glucoseLevel: yup.string(),
-//   gender: yup
-//     .object()
-//     .shape({ label: yup.string().required(), value: yup.string().required() }),
-//   parentMobile: yup.string(),
-//   familyHistory: yup.string(),
-//   avatar: yup.boolean(),
-// })
+const createScreening = yupResolver(
+  yup.object().shape({
+    title: yup.string().required('Please enter a title'),
+    location: yup.string().required('Please enter a location'),
+    type: yup
+      .object()
+      .shape({ label: yup.string().required(), value: yup.string().required() })
+      .required('Please select an assessment type'),
+    status: yup
+      .object()
+      .shape({ label: yup.string().required(), value: yup.string().required() })
+      .required('Please select an assessment status'),
+    date: yup
+      .string()
+      .required('Please pick a date')
+      .typeError('Please pick a date'),
+    time: yup
+      .string()
+      .required('Please pick a time')
+      .typeError('Please pick a date'),
+    note: yup.string().optional(),
+  })
+)
 
 const validation = {
   createPatient,
@@ -275,7 +290,7 @@ const validation = {
   register,
   nutritional,
   exercise,
-  // updateHealhData,
+  createScreening,
 }
 
 export default validation

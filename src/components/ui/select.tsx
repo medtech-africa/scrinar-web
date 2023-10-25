@@ -92,88 +92,94 @@ export interface SelectProps extends Props, VariantProps<typeof inputVariants> {
   customOption?: boolean
 }
 
-const Select = ({
-  className,
-  variant,
-  full = true,
-  message,
-  leadingIcon,
-  label,
-  labelStyle,
-  customOption,
-  ...props
-}: SelectProps) => {
-  return (
-    <div>
-      {!!label && (
-        <label
-          htmlFor={props.name}
-          className={cn(
-            'text-grey-700 font-medium text-sm mb-[6px]',
-            labelStyle
-          )}
-        >
-          {label}
-        </label>
-      )}
-      <div className="relative">
-        <span className=" absolute flex items-center left-[14px] top-0 bottom-0 text-grey-900 z-30">
-          {leadingIcon}
-        </span>
-        <RectSelect
-          {...props}
-          classNames={{
-            container: () => '!rounded-lg',
-            valueContainer: () => '!p-0',
-            indicatorsContainer: () => 'h-6',
-            input: () => '!p-0 !my-0',
-            indicatorSeparator: () => 'hidden',
+const Select = React.forwardRef<typeof RectSelect, SelectProps>(
+  (
+    {
+      className,
+      variant,
+      full = true,
+      message,
+      leadingIcon,
+      label,
+      labelStyle,
+      customOption,
+      ...props
+    },
+    ref
+  ) => {
+    return (
+      <div>
+        {!!label && (
+          <label
+            htmlFor={props.name}
+            className={cn(
+              'text-grey-700 font-medium text-sm mb-[6px]',
+              labelStyle
+            )}
+          >
+            {label}
+          </label>
+        )}
+        <div className="relative">
+          <span className=" absolute flex items-center left-[14px] top-0 bottom-0 text-grey-900 z-30">
+            {leadingIcon}
+          </span>
+          <RectSelect
+            ref={ref as any}
+            {...props}
+            classNames={{
+              container: () => '!rounded-lg',
+              valueContainer: () => '!p-0',
+              indicatorsContainer: () => 'h-6',
+              input: () => '!p-0 !my-0',
+              indicatorSeparator: () => 'hidden',
 
-            control: (state) =>
-              cn(
-                inputVariants({
-                  variant,
-                  className,
-                  isFocused: state.isFocused ? 'active' : 'inactive',
-                  disabled: state.isDisabled,
-                }),
-                full && 'w-full',
-                !!leadingIcon && 'pl-[42px]'
-              ),
-          }}
-          defaultValue={[]}
-          components={
-            customOption
-              ? {
-                  Option: InputOption,
-                }
-              : undefined
-          }
-          theme={(theme) => ({
-            ...theme,
-            colors: {
-              ...theme.colors,
-              primary: colors.lust[900],
-              primary25: colors.lust[50],
-            },
-          })}
-          {...props}
-        />
+              control: (state) =>
+                cn(
+                  inputVariants({
+                    variant,
+                    className,
+                    isFocused: state.isFocused ? 'active' : 'inactive',
+                    disabled: state.isDisabled,
+                  }),
+                  full && 'w-full',
+                  !!leadingIcon && 'pl-[42px]'
+                ),
+            }}
+            defaultValue={[]}
+            components={
+              customOption
+                ? {
+                    Option: InputOption,
+                  }
+                : undefined
+            }
+            theme={(theme) => ({
+              ...theme,
+              colors: {
+                ...theme.colors,
+                primary: colors.lust[900],
+                primary25: colors.lust[50],
+              },
+            })}
+            {...props}
+          />
+        </div>
+
+        {!!message && (
+          <Text
+            className={cn(
+              'text-grey-500 mt-[6px]',
+              variant === 'destructive' && 'text-error-500'
+            )}
+            variant="text/sm"
+          >
+            {message}
+          </Text>
+        )}
       </div>
-
-      {!!message && (
-        <Text
-          className={cn(
-            'text-grey-500 mt-[6px]',
-            variant === 'destructive' && 'text-error-500'
-          )}
-          variant="text/sm"
-        >
-          {message}
-        </Text>
-      )}
-    </div>
-  )
-}
-
+    )
+  }
+)
+Select.displayName = 'Select'
 export { Select, inputVariants }

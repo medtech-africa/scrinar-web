@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react'
-import { Input } from '@/components/ui/input'
+// import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
 import useClickAway from '@/hooks/useClickAway'
@@ -50,12 +50,12 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
           <IconPicker size={24} icon="hamburger" />
         </div>
         <div>
-          <Input
+          {/* <Input
             leadingIcon={<IconPicker icon="search" />}
             className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
             placeholder="Search for something..."
             full={false}
-          />
+          /> */}
         </div>
         <div>
           <div className="md:flex flex-row space-x-2 md:space-x-4 items-center hidden">

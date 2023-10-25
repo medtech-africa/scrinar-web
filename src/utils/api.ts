@@ -29,6 +29,14 @@ export const API = {
   healthData: `${BASE_URL}/api/v1/health-data`,
   singleHealthData: (id: string) => `${BASE_URL}/api/v1/health-data/${id}`,
 
+  //screening
+  getScreenings: (page?: number) =>
+    `${BASE_URL}/api/v1/schedules${page ? `?page=${page}` : ''}`,
+  screening: (id: string) => `${BASE_URL}/api/v1/schedules/${id}`,
+  schedules: `${BASE_URL}/api/v1/schedules`,
+  getAssessmentType: `${BASE_URL}/api/v1/schedules/assessment-type`,
+  getAssessmentStatus: `${BASE_URL}/api/v1/schedules/assessment-status`,
+
   //  school
   schoolRegister: `${BASE_URL}/api/v1/school`,
   schoolUpdate: `${BASE_URL}/api/v1/school/me`,

@@ -1,14 +1,18 @@
 'use client'
 import DropDownMenu from '@/components/drop-down-menu'
+import EmptyData from '@/components/empty-data'
 import { PageHeader } from '@/components/page-header'
+import Pagination from '@/components/pagination'
 import {
   ScreeningAdd,
   ScreeningEdit,
   ScreeningView,
 } from '@/components/screening-side'
 import { CC, MD } from '@/components/svg/calendar-content'
+import TableLoader from '@/components/table-loader'
 import { BadgeField } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { TabList } from '@/components/ui/tab-list'
@@ -20,9 +24,17 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Text } from '@/components/ui/text'
+import useScreenings from '@/hooks/queries/useScreenings'
+import { usePaginate } from '@/hooks/usePagination'
+import { cn } from '@/lib/utils'
+import { API } from '@/utils/api'
+import baseAxios from '@/utils/baseAxios'
+import { errorMessage } from '@/utils/errorMessage'
+import { formatDate, formatTime } from '@/utils/formatDate'
+import { useMutation } from '@tanstack/react-query'
 // import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 
 const FilterData = () => {
   return (
@@ -56,33 +68,78 @@ const ScreeningList = ({
   setActionType: React.Dispatch<React.SetStateAction<string>>
 }) => {
   const [selectedRow, setSelectedRow] = useState(null)
+  const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
+    {}
+  )
+
+  const { data, isLoading, refetch } = useScreenings(currentPage)
+  const screeningData: DataType = data?.data
+  const [deleteModal, setDeleteModal] = useState(false)
+  const { isLoading: deleteLoading, mutate } = useMutation(() =>
+    baseAxios.delete(API.screening(encodeURIComponent(selectedRow ?? '')))
+  )
 
   const menuItems = [
     {
       title: 'Screening Details',
       icon: IconNames.calendar,
       action: () => {
-        setActionType('view'), setSelectedRow(null)
+        setActionType('view')
       },
     },
     {
       title: 'Edit Schedule',
       icon: IconNames.calendarEdit,
       action: () => {
-        setActionType('edit'), setSelectedRow(null)
+        setActionType('edit')
       },
     },
-    { title: 'Delete Data', icon: IconNames.trash },
+    {
+      title: 'Delete Data',
+      icon: IconNames.trash,
+      action: () => {
+        setDeleteModal(true)
+      },
+    },
   ]
 
-  const handleMoreClick = (rowIndex: any) => {
-    setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
+  const handleMoreClick = (id: any) => {
+    setSelectedRow(selectedRow === id ? null : id)
+  }
+
+  const handleDelete = async () => {
+    try {
+      await mutate(undefined, {
+        onSuccess: () => {
+          setSelectedRow(null)
+          setDeleteModal(false)
+          refetch()
+          toast.success('Successfully deleted screening')
+        },
+        onError: (err) => {
+          errorMessage(err)
+        },
+      })
+    } finally {
+      //
+    }
   }
 
   return (
     <div>
-      <div className="max-h-[500px] overflow-y-auto pb-3 md:pb-8">
-        <Table>
+      <Delete
+        open={deleteModal}
+        onClose={setDeleteModal}
+        action={handleDelete}
+        actionLoading={deleteLoading}
+      />
+      <div className="pb-3 md:pb-8 ">
+        <Table
+          className={cn(
+            'table-auto',
+            screeningData?.length !== 0 && 'min-h-[200px]'
+          )}
+        >
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Date</TableHead>
@@ -94,25 +151,24 @@ const ScreeningList = ({
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody className="h-[500px]">
-            {data.length === 0 ? (
-              <div className="flex flex-1 justify-center flex-col items-center absolute left-[40%] h-[400px]">
-                <IconPicker icon="grid7" />
-                <Text className="text-grey-400" variant="text/sm">
-                  No Data Entry
-                </Text>
-              </div>
+          <TableBody>
+            {isLoading ? (
+              <TableLoader />
             ) : (
-              data.map((val) => (
+              screeningData?.map((val) => (
                 <TableRow
                   key={val.id}
                   className="font-normal text-sm text-grey-600"
                 >
-                  <TableCell>{val.date}</TableCell>
-                  <TableCell>{val.time}</TableCell>
+                  <TableCell>
+                    {val?.assessmentDate && formatDate(val?.assessmentDate)}
+                  </TableCell>
+                  <TableCell>
+                    {val?.assessmentDate && formatTime(val?.assessmentDate)}
+                  </TableCell>
                   <TableCell>{val.title}</TableCell>
                   <TableCell>{val.location}</TableCell>
-                  <TableCell>{val.acessmentType}</TableCell>
+                  <TableCell>{val.assessmentType}</TableCell>
                   <TableCell>
                     <BadgeField
                       variant={
@@ -136,7 +192,9 @@ const ScreeningList = ({
                     </div>
                     {selectedRow === val.id && (
                       <DropDownMenu
-                        onClose={() => setSelectedRow(null)}
+                        onClose={() =>
+                          !deleteModal && !actionType && setSelectedRow(null)
+                        }
                         menuItems={menuItems}
                       />
                     )}
@@ -146,15 +204,32 @@ const ScreeningList = ({
             )}
           </TableBody>
         </Table>
+        {screeningData?.length === 0 && <EmptyData />}
       </div>
-      <ScreeningView
-        actionOpened={actionType === 'view'}
-        setActionType={setActionType}
-      />
-      <ScreeningEdit
-        actionOpened={actionType === 'edit'}
-        setActionType={setActionType}
-      />
+      {screeningData?.length > 0 && (
+        <Pagination
+          current={currentPage}
+          setCurrent={setCurrentPage}
+          total={data?.total}
+          onNext={handleNext}
+          onPrev={handlePrev}
+        />
+      )}
+      {actionType === 'view' && (
+        <ScreeningView
+          actionOpened={actionType === 'view'}
+          setActionType={setActionType}
+          id={selectedRow ?? ''}
+        />
+      )}
+      {actionType === 'edit' && (
+        <ScreeningEdit
+          actionOpened={actionType === 'edit'}
+          setActionType={setActionType}
+          id={selectedRow ?? ''}
+          refetchScreenings={refetch}
+        />
+      )}
     </div>
   )
 }
@@ -205,85 +280,87 @@ export default function ScreeningManagement() {
         <ScreeningList actionType={actionType} setActionType={setActionType} />
       )}
 
-      <ScreeningAdd
-        setActionType={setActionType}
-        actionOpened={actionType === 'add'}
-      />
+      {actionType === 'add' && (
+        <ScreeningAdd
+          setActionType={setActionType}
+          actionOpened={actionType === 'add'}
+        />
+      )}
     </div>
   )
 }
 type DataType = {
-  id?: number
-  date?: string
+  id: string
+  assessmentDate?: string
   time?: string
   title?: string
   location?: string
-  acessmentType?: string
+  assessmentType?: string
   status?: string
 }[]
 
-const data: DataType = [
-  {
-    id: 1,
-    date: '10 Aug, 2023',
-    time: '10:30AM',
-    title: 'Health Data Collection',
-    location: 'School Hall',
-    acessmentType: 'Physical Health Ass...',
-    status: 'Schedule',
-  },
-  {
-    id: 2,
-    date: '10 Aug, 2023',
-    time: '10:30AM',
-    title: 'Health Data Collection',
-    location: 'School Hall',
-    acessmentType: 'Physical Health Ass...',
-    status: 'Overdue',
-  },
-  {
-    id: 3,
-    date: '10 Aug, 2023',
-    time: '10:30AM',
-    title: 'Health Data Collection',
-    location: 'School Hall',
-    acessmentType: 'Physical Health Ass...',
-    status: 'In Progress',
-  },
-  {
-    id: 4,
-    date: '10 Aug, 2023',
-    time: '10:30AM',
-    title: 'Health Data Collection',
-    location: 'School Hall',
-    acessmentType: 'Physical Health Ass...',
-    status: 'Schedule',
-  },
-  {
-    id: 5,
-    date: '10 Aug, 2023',
-    time: '10:30AM',
-    title: 'Health Data Collection',
-    location: 'School Hall',
-    acessmentType: 'Physical Health Ass...',
-    status: 'Overdue',
-  },
-  {
-    id: 6,
-    date: '10 Aug, 2023',
-    time: '10:30AM',
-    title: 'Health Data Collection',
-    location: 'School Hall',
-    acessmentType: 'Physical Health Ass...',
-    status: 'Completed',
-  },
-  {
-    id: 7,
-    date: '10 Aug, 2023',
-    time: '10:30AM',
-    title: 'Health Data Collection',
-    location: 'School Hall',
-    acessmentType: 'Physical Health Ass...',
-    status: 'Completed',
-  },
-]
+// const data: DataType = [
+//   {
+//     id: 1,
+//     date: '10 Aug, 2023',
+//     time: '10:30AM',
+//     title: 'Health Data Collection',
+//     location: 'School Hall',
+//     acessmentType: 'Physical Health Ass...',
+//     status: 'Schedule',
+//   },
+//   {
+//     id: 2,
+//     date: '10 Aug, 2023',
+//     time: '10:30AM',
+//     title: 'Health Data Collection',
+//     location: 'School Hall',
+//     acessmentType: 'Physical Health Ass...',
+//     status: 'Overdue',
+//   },
+//   {
+//     id: 3,
+//     date: '10 Aug, 2023',
+//     time: '10:30AM',
+//     title: 'Health Data Collection',
+//     location: 'School Hall',
+//     acessmentType: 'Physical Health Ass...',
+//     status: 'In Progress',
+//   },
+//   {
+//     id: 4,
+//     date: '10 Aug, 2023',
+//     time: '10:30AM',
+//     title: 'Health Data Collection',
+//     location: 'School Hall',
+//     acessmentType: 'Physical Health Ass...',
+//     status: 'Schedule',
+//   },
+//   {
+//     id: 5,
+//     date: '10 Aug, 2023',
+//     time: '10:30AM',
+//     title: 'Health Data Collection',
+//     location: 'School Hall',
+//     acessmentType: 'Physical Health Ass...',
+//     status: 'Overdue',
+//   },
+//   {
+//     id: 6,
+//     date: '10 Aug, 2023',
+//     time: '10:30AM',
+//     title: 'Health Data Collection',
+//     location: 'School Hall',
+//     acessmentType: 'Physical Health Ass...',
+//     status: 'Completed',
+//   },
+//   {
+//     id: 7,
+//     date: '10 Aug, 2023',
+//     time: '10:30AM',
+//     title: 'Health Data Collection',
+//     location: 'School Hall',
+//     acessmentType: 'Physical Health Ass...',
+//     status: 'Completed',
+//   },
+// ]

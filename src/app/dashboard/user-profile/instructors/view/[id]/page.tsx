@@ -8,6 +8,9 @@ import { Text } from '@/components/ui/text'
 import { useInstructor } from '@/hooks/queries/useInstructors'
 import ContentLoader from '@/components/content-loader'
 import { Avatar } from '@/components/ui/avatar'
+import { useUser } from '@/context/user'
+import restrictNonAdmin from '@/utils/checkPermission'
+import { notFound } from 'next/navigation'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -15,6 +18,10 @@ const navigationItems = [
   { label: 'View Instructor' },
 ]
 export default function ViewRecord({ params }: { params: { id: string } }) {
+  const { user } = useUser()
+  if (!restrictNonAdmin(user?.user?.roles)) {
+    notFound()
+  }
   const { data, isLoading } = useInstructor(params.id)
 
   return (
