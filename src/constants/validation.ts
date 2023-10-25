@@ -248,6 +248,25 @@ const exercise = yupResolver(
   })
 )
 
+// const updateHealhData = yup.object().shape({
+//   studentName: yup.string(),
+//   level: yup.string(),
+//   age: yup.object().shape({
+//     label: yup.string().required(),
+//     value: yup.string().required(),
+//   }),
+//   dob: yup.string(),
+//   nutritionalHealth: yup.string(),
+//   exerciseHabit: yup.string(),
+//   glucoseLevel: yup.string(),
+//   gender: yup
+//     .object()
+//     .shape({ label: yup.string().required(), value: yup.string().required() }),
+//   parentMobile: yup.string(),
+//   familyHistory: yup.string(),
+//   avatar: yup.boolean(),
+// })
+
 const validation = {
   createPatient,
   createInstructor,
@@ -256,6 +275,7 @@ const validation = {
   register,
   nutritional,
   exercise,
+  // updateHealhData,
 }
 
 export default validation
