@@ -3,6 +3,7 @@ import ContentLoader from '@/components/content-loader'
 import { PageHeader } from '@/components/page-header'
 import DashboardProgress from '@/components/svg/dashboard-progess'
 import DashboardProgressPattern from '@/components/svg/dashboard-progress-pattern'
+import { Avatar } from '@/components/ui/avatar'
 import { BadgeField } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import ChartComp from '@/components/ui/chart'
@@ -12,6 +13,7 @@ import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { PageCard } from '@/components/ui/page-card'
 import { Text } from '@/components/ui/text'
 import { useSingleHealthData } from '@/hooks/queries/useHealthData'
+import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 import { calculateBmiRisk } from '@/utils/vitalCalculations'
 import { format } from 'date-fns'
 
@@ -91,15 +93,23 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
       <ContentLoader loading={isLoading} />
 
       <PageHeader
+        isAvatar
         title={
           data?.student?.firstName && data?.student?.lastName
             ? data?.student.firstName + ' ' + data?.student.lastName
             : '-'
         }
         subtitle={`Last updated: ${formattedDate || '-'}`}
-        avatar="avatar"
+        user={
+          <Avatar
+            src={data?.student?.avatarUrl}
+            fallback={returnJoinedFirstCharacter(
+              data?.student.firstName,
+              data?.student.lastName
+            )}
+          />
+        }
         navigation={navigationItems}
-        user
       />
       <div className="grid grid-cols-2 gap-x-3">
         <div>

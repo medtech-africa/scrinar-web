@@ -17,7 +17,7 @@ type PageHeaderTypes = {
   subtitle?: string
   navigation?: NavigationItem[]
   avatar?: React.ReactNode
-  user?: boolean
+  user?: React.ReactNode
   isAvatar?: boolean
 }
 
@@ -79,11 +79,7 @@ export const PageHeader = ({
       )}
       <div className="flex justify-between">
         <div className="flex items-center">
-          {user && (
-            <div className="bg-grey-100 p-3 rounded-full cursor-pointer mr-4">
-              Av
-            </div>
-          )}
+          {user && <div className="mr-4">{user}</div>}
           <div>
             <div className="flex items-center gap-4 mb-2">
               <Text
