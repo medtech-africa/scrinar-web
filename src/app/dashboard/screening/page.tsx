@@ -30,6 +30,7 @@ import { cn } from '@/lib/utils'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { errorMessage } from '@/utils/errorMessage'
+import { formatDate, formatTime } from '@/utils/formatDate'
 import { useMutation } from '@tanstack/react-query'
 // import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -84,7 +85,6 @@ const ScreeningList = ({
       icon: IconNames.calendar,
       action: () => {
         setActionType('view')
-        setSelectedRow(null)
       },
     },
     {
@@ -92,7 +92,6 @@ const ScreeningList = ({
       icon: IconNames.calendarEdit,
       action: () => {
         setActionType('edit')
-        setSelectedRow(null)
       },
     },
     {
@@ -161,8 +160,12 @@ const ScreeningList = ({
                   key={val.id}
                   className="font-normal text-sm text-grey-600"
                 >
-                  <TableCell>{val.date}</TableCell>
-                  <TableCell>{val.time}</TableCell>
+                  <TableCell>
+                    {val?.assessmentDate && formatDate(val?.assessmentDate)}
+                  </TableCell>
+                  <TableCell>
+                    {val?.assessmentDate && formatTime(val?.assessmentDate)}
+                  </TableCell>
                   <TableCell>{val.title}</TableCell>
                   <TableCell>{val.location}</TableCell>
                   <TableCell>{val.assessmentType}</TableCell>
@@ -189,7 +192,9 @@ const ScreeningList = ({
                     </div>
                     {selectedRow === val.id && (
                       <DropDownMenu
-                        onClose={() => !deleteModal && setSelectedRow(null)}
+                        onClose={() =>
+                          !deleteModal && !actionType && setSelectedRow(null)
+                        }
                         menuItems={menuItems}
                       />
                     )}
@@ -210,17 +215,21 @@ const ScreeningList = ({
           onPrev={handlePrev}
         />
       )}
-      <ScreeningView
-        actionOpened={actionType === 'view'}
-        setActionType={setActionType}
-        id={selectedRow ?? ''}
-      />
-      <ScreeningEdit
-        actionOpened={actionType === 'edit'}
-        setActionType={setActionType}
-        id={selectedRow ?? ''}
-        refetchScreenings={refetch}
-      />
+      {actionType === 'view' && (
+        <ScreeningView
+          actionOpened={actionType === 'view'}
+          setActionType={setActionType}
+          id={selectedRow ?? ''}
+        />
+      )}
+      {actionType === 'edit' && (
+        <ScreeningEdit
+          actionOpened={actionType === 'edit'}
+          setActionType={setActionType}
+          id={selectedRow ?? ''}
+          refetchScreenings={refetch}
+        />
+      )}
     </div>
   )
 }
@@ -271,16 +280,18 @@ export default function ScreeningManagement() {
         <ScreeningList actionType={actionType} setActionType={setActionType} />
       )}
 
-      <ScreeningAdd
-        setActionType={setActionType}
-        actionOpened={actionType === 'add'}
-      />
+      {actionType === 'add' && (
+        <ScreeningAdd
+          setActionType={setActionType}
+          actionOpened={actionType === 'add'}
+        />
+      )}
     </div>
   )
 }
 type DataType = {
   id: string
-  date?: string
+  assessmentDate?: string
   time?: string
   title?: string
   location?: string

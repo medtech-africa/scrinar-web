@@ -20,6 +20,7 @@ import {
   useScreening,
 } from '@/hooks/queries/useScreenings'
 import ContentLoader from './content-loader'
+import { formatDate, formatTime } from '@/utils/formatDate'
 
 type Iprops = {
   actionOpened: boolean
@@ -57,7 +58,7 @@ const ViewLayout = ({
         animate={{ x: 0 }}
         exit={{ x: 200 }}
         transition={{ duration: 0.1 }}
-        className="p-8 w-full md:w-[396px] z-50 fixed right-0 top-0 bg-white bottom-0 overflow-y-auto"
+        className="p-8 w-full md:w-[396px] z-50 fixed right-0 top-0 bg-white bottom-0 overflow-y-auto "
       >
         {children}
       </motion.section>
@@ -71,6 +72,7 @@ const ScreeningView = ({
   id,
 }: Iprops & { id: string }) => {
   const { data, isLoading } = useScreening(id)
+  console.log(data)
 
   return (
     <ViewLayout actionOpened={actionOpened}>
@@ -91,7 +93,9 @@ const ScreeningView = ({
         <div className="w-full">
           <Input
             disabled
-            defaultValue={new Date(data?.created).toLocaleString()}
+            defaultValue={
+              data?.assessmentDate ? formatDate(data?.assessmentDate) : ''
+            }
           />
         </div>
       </div>
@@ -102,11 +106,9 @@ const ScreeningView = ({
         <div className="w-full">
           <Input
             disabled
-            defaultValue={new Date(data?.created).toLocaleTimeString([], {
-              hour: '2-digit',
-              minute: '2-digit',
-              hour12: true,
-            })}
+            defaultValue={
+              data?.assessmentDate ? formatTime(data?.assessmentDate) : ''
+            }
           />
         </div>
       </div>
@@ -134,11 +136,13 @@ const ScreeningView = ({
           <Input disabled defaultValue={data?.status} />
         </div>
       </div>
-      <textarea
-        disabled
-        defaultValue="More description about the screening"
-        className="py-2.2 px-3.5 rounded-lg bg-white utils-focus-outset mb-4 w-full"
-      />
+      {data?.note && (
+        <textarea
+          disabled
+          defaultValue={data?.note}
+          className="py-2.2 px-3.5 rounded-lg bg-white utils-focus-outset mb-4 w-full"
+        />
+      )}
       <div className="flex gap-4">
         <Button
           onClick={() => setActionType('')}
@@ -469,7 +473,7 @@ const ScreeningEdit = ({
       screeningData?.assessmentDate &&
         setValue(
           'date',
-          new Date(screeningData?.assessmentDate)?.toLocaleDateString()
+          new Date(screeningData?.assessmentDate)?.toDateString()
         )
       screeningData?.assessmentDate &&
         setValue(
