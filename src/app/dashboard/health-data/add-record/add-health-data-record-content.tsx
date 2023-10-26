@@ -70,7 +70,7 @@ export const AddHealthDataRecordContent = () => {
     [studentsData]
   )
   const formattedDia = student?.latestHealthData?.bloodPressure?.split('/')[0]
-  const formattedeSys = student?.latestHealthData?.bloodPressure?.split('/')[1]
+  const formattedSys = student?.latestHealthData?.bloodPressure?.split('/')[1]
 
   useEffect(() => {
     setHeight(student?.latestHealthData?.height ?? '')
@@ -78,7 +78,7 @@ export const AddHealthDataRecordContent = () => {
     setWaist(student?.latestHealthData?.waist ?? '')
     setBmi(Number(student?.latestHealthData?.bmi) ?? '')
     setDys(formattedDia ?? '')
-    setSys(formattedeSys ?? '')
+    setSys(formattedSys ?? '')
     setBloodSugar(student?.latestHealthData?.glucoseLevel ?? '')
     setTotalCholesterol(student?.latestHealthData?.cholesterol ?? '')
     student?.latestHealthData?.dietaryDiversity &&
@@ -87,7 +87,7 @@ export const AddHealthDataRecordContent = () => {
       setExerciseData(student?.latestHealthData?.physicalActivity)
   }, [
     formattedDia,
-    formattedeSys,
+    formattedSys,
     setExerciseData,
     setNutritionalData,
     student?.latestHealthData?.bmi,
