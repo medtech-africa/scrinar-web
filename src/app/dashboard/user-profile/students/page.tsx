@@ -179,7 +179,7 @@ export default function Students() {
       />
 
       <div className="py-3 md:py-8">
-        <Table className="table-auto">
+        <Table className="table-auto" hasEmptyData={studentsData?.length === 0}>
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Name</TableHead>

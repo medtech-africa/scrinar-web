@@ -19,6 +19,7 @@ import {
   calculateBloodPressureRisk,
   calculateBmiRisk,
   categorizeBloodSugarLevel,
+  categorizeTotalCholesterol,
 } from '@/utils/vitalCalculations'
 import baseAxios from '@/utils/baseAxios'
 import { useMutation } from '@tanstack/react-query'
@@ -29,27 +30,6 @@ import Modal from '@/components/ui/modal'
 import { NutritionalModal } from './nutritionalModal'
 import { ExerciseModal } from './exerciseModal'
 import { useHealthValue } from '@/context/health-data-context'
-
-// const actionData = [
-//   {
-//     title: 'Create New Student Profile',
-//     subtitle: 'Add Student Profile',
-//     icon: 'profile2User' as IconNames,
-//     type: 'student',
-//   },
-//   {
-//     title: 'Create Student Health Data',
-//     subtitle: 'Add student health progress',
-//     icon: 'health' as IconNames,
-//     type: 'health-data',
-//   },
-//   {
-//     title: 'Create New Instructor Profile',
-//     subtitle: 'Add New Instructor for School',
-//     icon: 'teacher' as IconNames,
-//     type: 'instructor',
-//   },
-// ]
 
 export const AddHealthDataRecordContent = () => {
   const [level, setLevel] = useState<SelectVal | null>()
@@ -68,6 +48,7 @@ export const AddHealthDataRecordContent = () => {
   const [weight, setWeight] = useState('')
   const [waist, setWaist] = useState('')
   const [bmi, setBmi] = useState(0)
+  const [totalCholesterol, setTotalCholesterol] = useState('')
 
   const [sys, setSys] = useState('')
   const [dys, setDys] = useState('')
@@ -87,6 +68,36 @@ export const AddHealthDataRecordContent = () => {
       })) ?? [],
     [studentsData]
   )
+  const formattedDia = student?.latestHealthData?.bloodPressure?.split('/')[0]
+  const formattedeSys = student?.latestHealthData?.bloodPressure?.split('/')[1]
+
+  useEffect(() => {
+    setHeight(student?.latestHealthData?.height ?? '')
+    setWeight(student?.latestHealthData?.weight ?? '')
+    setWaist(student?.latestHealthData?.waist ?? '')
+    setBmi(Number(student?.latestHealthData?.bmi) ?? '')
+    setDys(formattedDia ?? '')
+    setSys(formattedeSys ?? '')
+    setBloodSugar(student?.latestHealthData?.glucoseLevel ?? '')
+    setTotalCholesterol(student?.latestHealthData?.cholesterol ?? '')
+    student?.latestHealthData?.dietaryDiversity &&
+      setNutritionalData(student?.latestHealthData?.dietaryDiversity)
+    student?.latestHealthData?.physicalActivity &&
+      setExerciseData(student?.latestHealthData?.physicalActivity)
+  }, [
+    formattedDia,
+    formattedeSys,
+    setExerciseData,
+    setNutritionalData,
+    student?.latestHealthData?.bmi,
+    student?.latestHealthData?.cholesterol,
+    student?.latestHealthData?.dietaryDiversity,
+    student?.latestHealthData?.glucoseLevel,
+    student?.latestHealthData?.height,
+    student?.latestHealthData?.physicalActivity,
+    student?.latestHealthData?.waist,
+    student?.latestHealthData?.weight,
+  ])
 
   const variantValidityCheck = (val: string) =>
     val && !isValidNumber(val) ? 'destructive' : 'default'
@@ -104,7 +115,6 @@ export const AddHealthDataRecordContent = () => {
       setBmi(0)
     }
   }, [height, weight])
-
   const handleSubmit = () => {
     if (!student)
       return toast.custom(
@@ -133,22 +143,21 @@ export const AddHealthDataRecordContent = () => {
       ...(sys && dys && { bloodPressure: `${sys}/${dys}` }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
+      ...(totalCholesterol && { cholesterol: totalCholesterol }),
       dietaryDiversity: nutritionalData,
       physicalActivity: exerciseData,
-
-      // ...(dietaryDiversityScore && { dietaryDiversityScore }),
-      // ...(physicalActivityScore && { physicalActivityScore }),
     }
-    console.log(dataToSend)
     mutate(dataToSend, {
       onSuccess: () => {
         setHeight('')
         setWeight('')
+        setWaist('')
         setBmi(0)
         setDys('')
         setSys('')
         setStudent(null)
         setBloodSugar('')
+        setTotalCholesterol('')
         setLevel(null)
         setNutritionalData(null)
         setExerciseData(null)
@@ -333,6 +342,7 @@ export const AddHealthDataRecordContent = () => {
               <Input
                 placeholder="170"
                 label="RBS (mg/dL)"
+                value={bloodSugar}
                 labelStyle="lg:text-sm text-xs"
                 onChange={(e) => setBloodSugar(e.target.value)}
                 variant={variantValidityCheck(bloodSugar)}
@@ -344,6 +354,30 @@ export const AddHealthDataRecordContent = () => {
                     categorizeBloodSugarLevel(Number(bloodSugar)).variant
                   }
                   value={categorizeBloodSugarLevel(Number(bloodSugar)).message}
+                  className="ml-2 mt-6"
+                />
+              )}
+            </div>
+          </PageCard>
+          <PageCard title="Total Cholesterol" bodyStyle="p-4 mt-4">
+            <div className="grid grid-cols-[2fr_1fr]  items-center">
+              <Input
+                placeholder="170"
+                label="(mg/dL)"
+                value={totalCholesterol}
+                labelStyle="lg:text-sm text-xs"
+                onChange={(e) => setTotalCholesterol(e.target.value)}
+                variant={variantValidityCheck(totalCholesterol)}
+                message={messageCheck(totalCholesterol)}
+              />
+              {totalCholesterol && (
+                <BadgeField
+                  variant={
+                    categorizeTotalCholesterol(Number(totalCholesterol)).variant
+                  }
+                  value={
+                    categorizeTotalCholesterol(Number(totalCholesterol)).message
+                  }
                   className="ml-2 mt-6"
                 />
               )}

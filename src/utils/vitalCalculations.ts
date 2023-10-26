@@ -121,6 +121,21 @@ export const categorizeBloodSugarLevel: IBS = (glucoseLevel: number) => {
     return { level: 'Unknown', message: 'Unknown', variant: 'pending2' }
   }
 }
+export const categorizeTotalCholesterol: IBS = (totalCholesterol: number) => {
+  if (totalCholesterol > 170) {
+    return {
+      level: 'High Cholesterol',
+      message: 'High',
+      variant: 'error',
+    }
+  } else {
+    return {
+      level: 'Normal Cholesterol',
+      message: 'Normal',
+      variant: 'success',
+    }
+  }
+}
 export const getVariantColor = (variant: 'success' | 'pending' | 'danger') => {
   const colorMap = {
     success: '#12B76A',

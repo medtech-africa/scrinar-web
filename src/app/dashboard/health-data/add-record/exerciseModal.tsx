@@ -26,7 +26,7 @@ interface IFormData {
     fish: number
     egg: number
     meat: number
-    carbonhydrates: number
+    carbohydrates: number
     sweets: number
     pastries: number
     sugar: number
@@ -66,7 +66,7 @@ export const ExerciseModal = ({ onClose }: IProps) => {
         fish: exerciseData?.fruitsTimes.fish,
         egg: exerciseData?.fruitsTimes.egg,
         meat: exerciseData?.fruitsTimes.meat,
-        carbonhydrates: exerciseData?.fruitsTimes.carbonhydrates,
+        carbohydrates: exerciseData?.fruitsTimes.carbohydrates,
         sweets: exerciseData?.fruitsTimes.sweets,
         pastries: exerciseData?.fruitsTimes.pastries,
         sugar: exerciseData?.fruitsTimes.sugar,
@@ -241,7 +241,7 @@ export const ExerciseModal = ({ onClose }: IProps) => {
                     )}
                   />
                   <Controller
-                    name="fruitsTimes.carbonhydrates"
+                    name="fruitsTimes.carbohydrates"
                     control={control}
                     render={({ field }) => (
                       <Input
@@ -251,13 +251,13 @@ export const ExerciseModal = ({ onClose }: IProps) => {
                         label="CARBONHYDRATES"
                         labelStyle="lg:text-sm text-xs"
                         variant={
-                          errors?.fruitsTimes?.carbonhydrates
+                          errors?.fruitsTimes?.carbohydrates
                             ? 'destructive'
                             : 'default'
                         }
                         message={
-                          errors.fruitsTimes?.carbonhydrates &&
-                          errors.fruitsTimes?.carbonhydrates.message
+                          errors.fruitsTimes?.carbohydrates &&
+                          errors.fruitsTimes?.carbohydrates.message
                         }
                       />
                     )}

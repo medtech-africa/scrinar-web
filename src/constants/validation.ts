@@ -248,7 +248,7 @@ const exercise = yupResolver(
       meat: yup.number().required('Food amount is required'),
       fruits: yup.number().required('Food amount is required'),
       egg: yup.number().required('Food amount is required'),
-      carbonhydrates: yup.number().required('Food amount is required'),
+      carbohydrates: yup.number().required('Food amount is required'),
       sweets: yup.number().required('Food amount is required'),
       pastries: yup.number().required('Food amount is required'),
       sugar: yup.number().required('Food amount is required'),

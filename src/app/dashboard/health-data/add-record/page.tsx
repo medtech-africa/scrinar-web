@@ -19,8 +19,45 @@ export interface Student extends SelectVal {
   avatarUrl?: string
   age?: string
   gender?: string
+  latestHealthData?: {
+    bmi: string
+    height: string
+    weight: string
+    waist: string
+    bloodPressure: string
+    glucoseLevel: string
+    cholesterol: string
+    dietaryDiversity: DietaryDiversity
+    physicalActivity: PhysicalActivity
+  }
+}
+export interface DietaryDiversity {
+  hoursOnComputer: number
+  hoursOnTv: number
+  hoursOnSleep: number
+  sportQuestion: string
+  schoolTransportQuestion: string
 }
 
+export interface PhysicalActivity {
+  fruitsTimes: FruitsTimes
+  mealsPerDay: number
+  foodAmount: string
+  dietary: any[]
+}
+
+export interface FruitsTimes {
+  fish: number
+  friedFood: number
+  sugar: number
+  pastries: number
+  sweets: number
+  carbohydrates: number
+  egg: number
+  fruits: number
+  meat: number
+  vegetable: number
+}
 export type IDataToSend = {
   userId: string
   glucoseLevel?: string
