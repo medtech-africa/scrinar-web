@@ -137,22 +137,19 @@ export default function HealthData() {
   )
 
   const handleDelete = async () => {
-    try {
-      await mutate(undefined, {
-        onSuccess: () => {
-          setSelectedRow(null)
-          setDeleteModal(false)
-          refetch()
-          toast.success('Successfully deleted Health Data')
-        },
-        onError: (err) => {
-          errorMessage(err)
-        },
-      })
-    } finally {
-      //
-    }
+    await mutate(undefined, {
+      onSuccess: () => {
+        setSelectedRow(null)
+        setDeleteModal(false)
+        refetch()
+        toast.success('Successfully deleted Health Data')
+      },
+      onError: (err) => {
+        errorMessage(err)
+      },
+    })
   }
+
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }

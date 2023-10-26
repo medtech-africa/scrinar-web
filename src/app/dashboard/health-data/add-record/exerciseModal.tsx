@@ -13,6 +13,7 @@ import { Text } from '@/components/ui/text'
 import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import { useHealthValue } from '@/context/health-data-context'
+import { FruitsTimes } from '@/types/healthData.types'
 interface IProps {
   onClose: () => void
 }
@@ -20,18 +21,7 @@ interface IProps {
 interface IFormData {
   foodAmount: { value: string; label: string }
   mealsPerDay: number
-  fruitsTimes: {
-    vegetable: number
-    fruits: number
-    fish: number
-    egg: number
-    meat: number
-    carbohydrates: number
-    sweets: number
-    pastries: number
-    sugar: number
-    friedFood: number
-  }
+  fruitsTimes: FruitsTimes
   dietary?: string
 }
 export interface IExerciseValue

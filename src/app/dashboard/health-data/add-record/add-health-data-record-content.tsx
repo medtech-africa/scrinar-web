@@ -25,11 +25,12 @@ import baseAxios from '@/utils/baseAxios'
 import { useMutation } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import { errorMessage } from '@/utils/errorMessage'
-import { SelectVal, Student, IDataToSend } from './page'
 import Modal from '@/components/ui/modal'
 import { NutritionalModal } from './nutritionalModal'
 import { ExerciseModal } from './exerciseModal'
 import { useHealthValue } from '@/context/health-data-context'
+import { Student } from '@/types/student.types'
+import { HealthDataPayload, SelectVal } from '@/types/healthData.types'
 
 export const AddHealthDataRecordContent = () => {
   const [level, setLevel] = useState<SelectVal | null>()
@@ -55,7 +56,7 @@ export const AddHealthDataRecordContent = () => {
 
   const [bloodSugar, setBloodSugar] = useState('')
 
-  const { isLoading, mutate } = useMutation((data: IDataToSend) =>
+  const { isLoading, mutate } = useMutation((data: HealthDataPayload) =>
     baseAxios.post(API.healthData, data)
   )
 
