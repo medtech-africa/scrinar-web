@@ -45,25 +45,25 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
     },
     {
       id: '3',
-      title: data?.student?.gender ? data?.student.gender : '-',
+      title: data?.student?.gender ?? '-',
       description: 'Gender',
       icon: <IconPicker icon="gender" size={40} className="text-white" />,
     },
     {
       id: '4',
-      title: data?.weight ? data?.weight + 'KG' : '-',
+      title: data?.weight ?? '-',
       description: 'Weight',
       icon: <IconPicker icon="weight" size={40} className="text-white" />,
     },
     {
       id: '5',
-      title: data?.student?.age ? data?.student.age + ' years' : '-',
+      title: data?.student?.age + ' years' ?? '-',
       description: 'Age',
       icon: <IconPicker icon="ageIcon" size={40} className="text-white" />,
     },
     {
       id: '6',
-      title: data?.waist ? data?.waist + 'CM' : '-',
+      title: data?.waist + 'CM' ?? '-',
       description: 'Waist',
       icon: <IconPicker icon="waist" size={40} className="text-white" />,
     },
@@ -81,7 +81,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
     },
     {
       id: '9',
-      title: data?.bmi ? data?.bmi + ' mmoI/L' : '-',
+      title: data?.bmi + ' mmoI/L' ?? '-',
       description: 'Blood Sugar level',
       icon: <IconPicker icon="blood" size={40} className="text-white" />,
     },
@@ -120,7 +120,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
           )}
         </div>
         <div>
-          {glucoseLevelData ? (
+          {bmiData ? (
             <ChartComp healthData={bmiData} name="BMI" />
           ) : (
             <Text>No Data </Text>

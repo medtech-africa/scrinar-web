@@ -4,6 +4,7 @@ import Calendar from 'react-calendar'
 import { Input, InputProps } from './input'
 import { IconPicker } from './icon-picker'
 import useClickAway from '@/hooks/useClickAway'
+import 'react-calendar/dist/Calendar.css'
 
 type val = string | Date | null
 type Range<T> = [T, T]

@@ -1,6 +1,7 @@
 import React from 'react'
 import { Text } from '../ui/text'
 import { getVariantColor } from '@/utils/vitalCalculations'
+import { TVariantEnum } from '@/types/variants.types'
 
 const cleanPercentage = (percentage: number) => {
   const isNegativeOrNaN = !Number.isFinite(+percentage) || percentage < 0 // we can set non-numbers to 0 here
@@ -53,7 +54,13 @@ const _DashboardProgress2 = ({ progress = 30 }) => {
   )
 }
 
-const DashboardProgress = ({ progress = 10, variant = 'success' }: any) => {
+const DashboardProgress = ({
+  progress = 10,
+  variant = TVariantEnum.Success,
+}: {
+  progress: number
+  variant?: TVariantEnum
+}) => {
   const radius = 75
   const strokeWidth = 20
   const normalizedRadius = radius - strokeWidth / 2

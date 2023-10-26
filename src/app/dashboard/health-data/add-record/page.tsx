@@ -7,31 +7,6 @@ const navigationItems = [
   { label: 'Health Data', icon: IconNames.arrowRight },
   { label: 'Add New Record' },
 ]
-export interface SelectVal {
-  label: string
-  value: string
-}
-
-export interface Student extends SelectVal {
-  id: string
-  firstName?: string
-  lastName?: string
-  avatarUrl?: string
-  age?: string
-  gender?: string
-}
-
-export type IDataToSend = {
-  userId: string
-  glucoseLevel?: string
-  bloodPressure?: string
-  waist?: string
-  weight?: string
-  height?: string
-  bmi?: string
-  dietaryDiversityScore?: string
-  physicalActivityScore?: string
-}
 
 export default function AddRecord() {
   return (

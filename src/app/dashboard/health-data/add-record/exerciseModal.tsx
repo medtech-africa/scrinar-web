@@ -13,6 +13,7 @@ import { Text } from '@/components/ui/text'
 import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import { useHealthValue } from '@/context/health-data-context'
+import { FruitsTimes } from '@/types/healthData.types'
 interface IProps {
   onClose: () => void
 }
@@ -20,18 +21,7 @@ interface IProps {
 interface IFormData {
   foodAmount: { value: string; label: string }
   mealsPerDay: number
-  fruitsTimes: {
-    vegetable: number
-    fruits: number
-    fish: number
-    egg: number
-    meat: number
-    carbonhydrates: number
-    sweets: number
-    pastries: number
-    sugar: number
-    friedFood: number
-  }
+  fruitsTimes: FruitsTimes
   dietary?: string
 }
 export interface IExerciseValue
@@ -66,7 +56,7 @@ export const ExerciseModal = ({ onClose }: IProps) => {
         fish: exerciseData?.fruitsTimes.fish,
         egg: exerciseData?.fruitsTimes.egg,
         meat: exerciseData?.fruitsTimes.meat,
-        carbonhydrates: exerciseData?.fruitsTimes.carbonhydrates,
+        carbohydrates: exerciseData?.fruitsTimes.carbohydrates,
         sweets: exerciseData?.fruitsTimes.sweets,
         pastries: exerciseData?.fruitsTimes.pastries,
         sugar: exerciseData?.fruitsTimes.sugar,
@@ -241,7 +231,7 @@ export const ExerciseModal = ({ onClose }: IProps) => {
                     )}
                   />
                   <Controller
-                    name="fruitsTimes.carbonhydrates"
+                    name="fruitsTimes.carbohydrates"
                     control={control}
                     render={({ field }) => (
                       <Input
@@ -251,13 +241,13 @@ export const ExerciseModal = ({ onClose }: IProps) => {
                         label="CARBONHYDRATES"
                         labelStyle="lg:text-sm text-xs"
                         variant={
-                          errors?.fruitsTimes?.carbonhydrates
+                          errors?.fruitsTimes?.carbohydrates
                             ? 'destructive'
                             : 'default'
                         }
                         message={
-                          errors.fruitsTimes?.carbonhydrates &&
-                          errors.fruitsTimes?.carbonhydrates.message
+                          errors.fruitsTimes?.carbohydrates &&
+                          errors.fruitsTimes?.carbohydrates.message
                         }
                       />
                     )}

@@ -22,9 +22,14 @@ import {
 import { Text } from '@/components/ui/text'
 import useHealthData from '@/hooks/queries/useHealthData'
 import { usePaginate } from '@/hooks/usePagination'
+import { API } from '@/utils/api'
+import baseAxios from '@/utils/baseAxios'
+import { errorMessage } from '@/utils/errorMessage'
+import { useMutation } from '@tanstack/react-query'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import toast from 'react-hot-toast'
 
 const FilterData = () => {
   return (
@@ -105,7 +110,7 @@ export default function HealthData() {
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
   )
-  const { data, isLoading } = useHealthData(currentPage)
+  const { data, isLoading, refetch } = useHealthData(currentPage)
   const healthData = data?.data
 
   const menuItems = [
@@ -115,21 +120,36 @@ export default function HealthData() {
       action: () =>
         router.push(`/dashboard/health-data/view-record/${selectedRow ?? ''}`),
     },
-    // {
-    //   title: 'Edit Data',
-    //   icon: IconNames.userEdit,
-    //   action: () =>
-    //     router.push(`/dashboard/health-data/update-record/${selectedRow}`),
-    // },
+
     {
       title: 'Delete Data',
       icon: IconNames.trash,
       action: () => {
         setDeleteModal(true)
-        setSelectedRow(null)
       },
     },
   ]
+
+  const { isLoading: deleteLoading, mutate } = useMutation(() =>
+    baseAxios.delete(
+      API.singleHealthData(encodeURIComponent(selectedRow ?? ''))
+    )
+  )
+
+  const handleDelete = async () => {
+    await mutate(undefined, {
+      onSuccess: () => {
+        setSelectedRow(null)
+        setDeleteModal(false)
+        refetch()
+        toast.success('Successfully deleted Health Data')
+      },
+      onError: (err) => {
+        errorMessage(err)
+      },
+    })
+  }
+
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
@@ -137,7 +157,7 @@ export default function HealthData() {
   return (
     <div>
       <PageHeader
-        title="Header"
+        title="Health Data Logs"
         subtitle="Tracking Vital Metrics: BMI and Nutritional Information"
         avatar={
           <div className="flex">
@@ -179,9 +199,14 @@ export default function HealthData() {
       />
       <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
       {openFilter && <FilterData />}
-      <Delete open={deleteModal} onClose={setDeleteModal} />
+      <Delete
+        open={deleteModal}
+        onClose={setDeleteModal}
+        action={handleDelete}
+        actionLoading={deleteLoading}
+      />
       <div className="py-3 md:py-8">
-        <Table className="table-auto">
+        <Table className="table-auto" hasEmptyData={healthData?.length === 0}>
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Students Name</TableHead>
@@ -194,6 +219,7 @@ export default function HealthData() {
               </TableHead>
               <TableHead>BP(mmHg)</TableHead>
               <TableHead>Blood Sugar(mg/dL)</TableHead>
+              <TableHead>Total Cholesterol(mg/dL)</TableHead>
               {/* <TableHead>Nutritional Access</TableHead>
               <TableHead>Exercise Activity</TableHead> */}
               <TableHead>Action</TableHead>
@@ -224,6 +250,7 @@ export default function HealthData() {
                   </TableCell>
                   <TableCell>{val?.bloodPressure}</TableCell>
                   <TableCell>{val?.glucoseLevel}</TableCell>
+                  <TableCell>{val?.cholesterol}</TableCell>
                   {/* <TableCell>{val?.dietaryDiversityScore}</TableCell>
                   <TableCell>{val?.physicalActivityScore}</TableCell> */}
                   <TableCell className="relative">
@@ -233,10 +260,10 @@ export default function HealthData() {
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </div>
-                    {selectedRow === val?.id && (
+                    {selectedRow === val?.id && !deleteModal && (
                       <DropDownMenu
-                        onClose={() => setSelectedRow(null)}
                         menuItems={menuItems}
+                        onClose={() => setSelectedRow(null)}
                       />
                     )}
                   </TableCell>
@@ -273,6 +300,7 @@ type DataType = {
   weight?: number
   waist?: number
   bloodPressure?: string
+  cholesterol?: string
   glucoseLevel?: number
   dietaryDiversityScore?: string
   physicalActivityScore?: string

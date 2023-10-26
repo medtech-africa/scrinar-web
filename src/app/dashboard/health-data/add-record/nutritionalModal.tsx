@@ -15,16 +15,15 @@ import filterObject from '@/utils/filterObject'
 import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import { useHealthValue } from '@/context/health-data-context'
+import { DietaryDiversity } from '@/types/healthData.types'
 
 interface IProps {
   onClose: () => void
 }
-interface IFormData {
+interface IFormData
+  extends Omit<DietaryDiversity, 'schoolTransportQuestion' | 'sportQuestion'> {
   schoolTransportQuestion: { value: string; label: string }
   sportQuestion: { value: string; label: string }
-  hoursOnSleep: number
-  hoursOnTv: number
-  hoursOnComputer: number
   schoolTransportQuestionAlt?: string
 }
 export interface INutritionalValue
@@ -32,6 +31,7 @@ export interface INutritionalValue
   sportQuestion: string
   schoolTransportQuestion: string | undefined
 }
+
 export const NutritionalModal = ({ onClose }: IProps) => {
   const [specify, setSpecify] = useState('')
   const { setNutritionalData, nutritionalData } = useHealthValue()
@@ -101,10 +101,7 @@ export const NutritionalModal = ({ onClose }: IProps) => {
                         ? 'destructive'
                         : 'default'
                     }
-                    message={
-                      errors.schoolTransportQuestion &&
-                      errors.schoolTransportQuestion?.message
-                    }
+                    message={errors.schoolTransportQuestion?.message ?? ''}
                   />
                 )}
                 name="schoolTransportQuestion"
@@ -124,8 +121,7 @@ export const NutritionalModal = ({ onClose }: IProps) => {
                             : 'default'
                         }
                         message={
-                          errors.schoolTransportQuestionAlt &&
-                          errors.schoolTransportQuestionAlt.message
+                          errors.schoolTransportQuestionAlt?.message ?? ''
                         }
                       />
                     )}

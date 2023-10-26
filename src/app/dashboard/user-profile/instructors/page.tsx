@@ -196,7 +196,7 @@ export default function Instructors() {
         actionLoading={deleteLoading}
       />
       <div className="py-3 md:py-8 ">
-        <Table>
+        <Table hasEmptyData={instructorsData?.length === 0}>
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Name</TableHead>

@@ -6,7 +6,6 @@ import { Select } from '@/components/ui/select'
 import useStateLGA from '@/hooks/queries/useStateLGA'
 import uploadImage from '@/utils/uploadImage'
 import { useMutation } from '@tanstack/react-query'
-import { IDataToSend } from '../health-data/add-record/page'
 import filterObject from '@/utils/filterObject'
 import { Controller, useForm } from 'react-hook-form'
 import baseAxios from '@/utils/baseAxios'
@@ -26,6 +25,7 @@ import { useUser } from '@/context/user'
 import useProfile from '@/hooks/queries/useProfile'
 import { InstructorFormValue } from '../user-profile/instructors/add-instructor/page'
 import DatePicker from '@/components/ui/date-picker'
+import { HealthDataPayload } from '@/types/healthData.types'
 
 interface IFormValue {
   email?: string
@@ -42,7 +42,7 @@ interface IFormValue {
 
 const AdminUpdate = ({ selectedImg = null as File | null }) => {
   const { isLoading: stateLoading, data: states } = useStateLGA()
-  const { isLoading, mutate } = useMutation((dataToSend: IDataToSend) =>
+  const { isLoading, mutate } = useMutation((dataToSend: HealthDataPayload) =>
     baseAxios.patch(API.schoolUpdate, dataToSend)
   )
   const {
@@ -316,7 +316,7 @@ const AdminUpdate = ({ selectedImg = null as File | null }) => {
 }
 
 const InstructorUpdate = ({ selectedImg = null as File | null, id = '' }) => {
-  const { isLoading, mutate } = useMutation((dataToSend: IDataToSend) =>
+  const { isLoading, mutate } = useMutation((dataToSend: HealthDataPayload) =>
     baseAxios.patch(API.instructor(id), dataToSend)
   )
   const {
