@@ -43,7 +43,7 @@ export interface PhysicalActivity {
   fruitsTimes: FruitsTimes
   mealsPerDay: number
   foodAmount: string
-  dietary: any[]
+  dietary: string[]
 }
 
 export interface FruitsTimes {

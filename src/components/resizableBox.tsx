@@ -10,7 +10,14 @@ export const ResizableBox = ({
   resizable = true,
   style = {},
   className = '',
-}: any) => {
+}: {
+  children: React.ReactNode
+  width?: number
+  height?: number
+  resizable?: boolean
+  style?: React.CSSProperties
+  className?: string
+}) => {
   return (
     <div style={{}}>
       <div

@@ -101,10 +101,7 @@ export const NutritionalModal = ({ onClose }: IProps) => {
                         ? 'destructive'
                         : 'default'
                     }
-                    message={
-                      errors.schoolTransportQuestion &&
-                      errors.schoolTransportQuestion?.message
-                    }
+                    message={errors.schoolTransportQuestion?.message ?? ''}
                   />
                 )}
                 name="schoolTransportQuestion"
@@ -124,8 +121,7 @@ export const NutritionalModal = ({ onClose }: IProps) => {
                             : 'default'
                         }
                         message={
-                          errors.schoolTransportQuestionAlt &&
-                          errors.schoolTransportQuestionAlt.message
+                          errors.schoolTransportQuestionAlt?.message ?? ''
                         }
                       />
                     )}
