@@ -14,7 +14,7 @@ import { PageCard } from '@/components/ui/page-card'
 import { Text } from '@/components/ui/text'
 import { useSingleHealthData } from '@/hooks/queries/useHealthData'
 import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
-import { calculateBmiRisk } from '@/utils/vitalCalculations'
+import { categorizeBMIWHO2007 } from '@/utils/vitalCalculations'
 import { format } from 'date-fns'
 
 const navigationItems = [
@@ -51,7 +51,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
     },
     {
       id: '4',
-      title: data?.weight ?? '-',
+      title: data?.weight + 'KG' ?? '-',
       description: 'Weight',
       icon: <IconPicker icon="weight" size={40} className="text-white" />,
     },
@@ -140,12 +140,30 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
                 <DashboardProgressPattern className="absolute right-0 left-0 hidden md:block" />
                 <DashboardProgress
                   progress={data?.bmi}
-                  variant={calculateBmiRisk(data?.bmi)?.variant}
+                  variant={
+                    categorizeBMIWHO2007(
+                      data?.student?.age,
+                      data?.student?.gender,
+                      data?.bmi
+                    )?.variant
+                  }
                 />
               </div>
               <BadgeField
-                variant={calculateBmiRisk(data?.bmi)?.variant}
-                value={calculateBmiRisk(data?.bmi)?.message}
+                variant={
+                  categorizeBMIWHO2007(
+                    data?.student?.age,
+                    data?.student?.gender,
+                    data?.bmi
+                  )?.variant
+                }
+                value={
+                  categorizeBMIWHO2007(
+                    data?.student?.age,
+                    data?.student?.gender,
+                    data?.bmi
+                  )?.message
+                }
               />
             </div>
             <div className="grid md:grid-rows-3 md:grid-cols-1 gap-x-6 gap-y-2 ">

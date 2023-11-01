@@ -17,7 +17,7 @@ import { ToastField } from '@/components/ui/toast'
 import isValidNumber from '@/utils/isValidNumber'
 import {
   calculateBloodPressureRisk,
-  calculateBmiRisk,
+  categorizeBMIWHO2007,
   categorizeBloodSugarLevel,
   categorizeTotalCholesterol,
 } from '@/utils/vitalCalculations'
@@ -170,6 +170,12 @@ export const AddHealthDataRecordContent = () => {
     })
   }
 
+  useEffect(() => {
+    if (height && weight && !student) {
+      toast.error('Please select a student')
+    }
+  }, [height, weight, student])
+
   return (
     <div className="w-full h-full">
       <PageCard title="Student Bio Data" bodyStyle="p-4">
@@ -287,8 +293,24 @@ export const AddHealthDataRecordContent = () => {
               </Text>
               {!!bmi && (
                 <BadgeField
-                  variant={calculateBmiRisk(bmi)?.variant}
-                  value={calculateBmiRisk(bmi)?.message}
+                  variant={
+                    student?.gender
+                      ? categorizeBMIWHO2007(
+                          Number(student?.age),
+                          student?.gender,
+                          bmi
+                        )?.variant
+                      : undefined
+                  }
+                  value={
+                    student?.gender
+                      ? categorizeBMIWHO2007(
+                          Number(student?.age),
+                          student?.gender,
+                          bmi
+                        )?.message
+                      : undefined
+                  }
                 />
               )}
             </div>

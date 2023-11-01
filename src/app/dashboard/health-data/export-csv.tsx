@@ -1,5 +1,3 @@
-// import { Button } from '@/components/ui/button'
-// import { IconPicker } from '@/components/ui/icon-picker'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { useHealthRiskData } from '@/hooks/queries/useHealthData'
 import React from 'react'
