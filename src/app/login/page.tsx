@@ -52,31 +52,36 @@ const Login = () => {
       loginId: data?.loginId,
       password: data?.password,
     }
+    setAuthLoading(true)
     try {
       await mutate(dataToSend, {
         onSuccess: async (response) => {
-          setAuthLoading(true)
           const responseData = response.data
           const accessToken = responseData?.access_token
           if (accessToken) {
             await authenticate(accessToken)
           }
-          setAuthLoading(false)
-          router.push('/dashboard')
           reset()
           postReset()
+          router.push('/dashboard')
         },
         onError(error) {
           errorMessage(error)
         },
       })
     } finally {
+      setAuthLoading(false)
     }
   }
   return (
     <div className="grid md:grid-cols-2 grid-rows-1  h-screen">
       <div className="hidden md:block relative w-full h-full">
-        <Image src="/login_image.png" alt="login" fill={true} />
+        <Image
+          src="/login_image.png"
+          alt="login"
+          fill={true}
+          className="object-cover"
+        />
         <div className="bg-gradient-to-t from-black  opacity-[150.49%] absolute w-full h-full top-0 left-0"></div>
       </div>
       <div className="grid place-items-center">

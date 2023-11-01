@@ -259,7 +259,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                                 Instructors
                               </span>
                               <span className="hidden md:block lg:hidden">
-                                -
+                                I
                               </span>
                             </Text>
                           </NavLink>
@@ -277,7 +277,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                             <span className="block md:hidden lg:block">
                               Students
                             </span>
-                            <span className="hidden md:block lg:hidden">-</span>
+                            <span className="hidden md:block lg:hidden">S</span>
                           </Text>
                         </NavLink>
                       </motion.div>

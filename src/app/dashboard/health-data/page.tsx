@@ -30,6 +30,7 @@ import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
+import DropDownMenuExport from './drop-down-export'
 
 const FilterData = () => {
   return (
@@ -68,6 +69,7 @@ const FilterHeader = ({
   setOpenFilter: _,
   openFilter: __,
 }: FilterHeaderProps) => {
+  const [openExport, setOpenExport] = useState(false)
   return (
     <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
       <Input
@@ -83,12 +85,18 @@ const FilterHeader = ({
           value="Filter Data"
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
           endingIcon={<IconPicker icon="arrowDown" />}
-        />
-        <Button
-          value="Export Data"
-          className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
-          endingIcon={<IconPicker icon="export" />}
-        /> */}
+        />*/}
+        <div className="relative">
+          <Button
+            value="Export Health Risk"
+            className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
+            endingIcon={<IconPicker icon="export" />}
+            onClick={() => setOpenExport(true)}
+          />
+          {openExport && (
+            <DropDownMenuExport onClose={() => setOpenExport(false)} />
+          )}
+        </div>
         <Link href={`health-data/add-record`}>
           <Button
             value="Add New Record"
