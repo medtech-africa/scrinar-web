@@ -28,6 +28,7 @@ export const API = {
   //  health data
   healthData: `${BASE_URL}/api/v1/health-data`,
   singleHealthData: (id: string) => `${BASE_URL}/api/v1/health-data/${id}`,
+  highRisk: `${BASE_URL}/api/v1/health-data/high-risk`,
 
   //screening
   getScreenings: (page?: number) =>

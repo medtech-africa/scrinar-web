@@ -21,6 +21,12 @@ const useSingleHealthData = (id: string) => {
   )
 }
 
-export { useSingleHealthData }
+const useHealthRiskData = () => {
+  return useQuery(['health-risk-data'], () =>
+    baseAxios.get(API.highRisk).then((res) => res.data)
+  )
+}
+
+export { useSingleHealthData, useHealthRiskData }
 
 export default useHealthData

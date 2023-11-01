@@ -386,7 +386,7 @@ export const AddHealthDataRecordContent = () => {
           </PageCard>
         </div>
       </div>
-      <div className="grid md:grid-cols-2 gap-6 py-7 mt-2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-7 mt-2">
         <PageCard title="Nutritional Assess" bodyStyle="p-4">
           <div className="flex gap-3 items-center">
             <Label>Dietary Diversity Score - 0/15</Label>

@@ -1,17 +1,5 @@
 const schoolLevels = [
   {
-    label: 'Nursery 1',
-    value: 'nursery 1',
-  },
-  {
-    label: 'Nursery 2',
-    value: 'nursery 2',
-  },
-  {
-    label: 'Nursery 3',
-    value: 'nursery 3',
-  },
-  {
     label: 'Primary 1',
     value: 'primary 1',
   },
