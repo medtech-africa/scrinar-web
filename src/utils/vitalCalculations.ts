@@ -1,4 +1,4 @@
-import { TVariant, TVariantEnum } from "@/types/variants.types";
+import { TVariant, TVariantEnum } from '@/types/variants.types'
 
 type IBP = (
   systolic: number,
@@ -80,18 +80,6 @@ export const calculateBloodPressureRisk: IBP = (
   // }
 }
 
-export const calculateBmiRisk = (val: number) => {
-  if (val < 18.5) {
-    return { variant: TVariantEnum.Pending, message: 'Under Weight 😒' }
-  } else if (val > 18.5 && val <= 24.9) {
-    return { variant: TVariantEnum.Success, message: 'Healthy 😍' }
-  } else if (val > 24.9 && val < 30) {
-    return { variant: TVariantEnum.Danger, message: 'Overweight 😮' }
-  } else {
-    return { variant: TVariantEnum.Error, message: 'Obese 😱' }
-  }
-}
-
 export const categorizeBloodSugarLevel: IBS = (glucoseLevel: number) => {
   if (glucoseLevel < 70) {
     return {
@@ -106,9 +94,17 @@ export const categorizeBloodSugarLevel: IBS = (glucoseLevel: number) => {
       variant: TVariantEnum.Success,
     }
   } else if (glucoseLevel >= 100 && glucoseLevel < 126) {
-    return { level: 'Prediabetes', message: 'Prediabetes', variant: TVariantEnum.Danger }
+    return {
+      level: 'Prediabetes',
+      message: 'Prediabetes',
+      variant: TVariantEnum.Danger,
+    }
   } else if (glucoseLevel >= 200) {
-    return { level: 'Diabetes', message: 'Diabetes', variant: TVariantEnum.Error }
+    return {
+      level: 'Diabetes',
+      message: 'Diabetes',
+      variant: TVariantEnum.Error,
+    }
   } else {
     return { level: 'Unknown', message: 'Unknown', variant: 'pending2' }
   }
@@ -138,5 +134,67 @@ export const getVariantColor = (variant: TVariantEnum) => {
       return '#F04438'
     default:
       return '#E31B23'
+  }
+}
+
+export const calculateBmiRisk = (val: number) => {
+  if (val < 18.5) {
+    return { variant: TVariantEnum.Pending, message: 'Under Weight 😒' }
+  } else if (val > 18.5 && val <= 24.9) {
+    return { variant: TVariantEnum.Success, message: 'Healthy 😍' }
+  } else if (val > 24.9 && val < 30) {
+    return { variant: TVariantEnum.Danger, message: 'Overweight 😮' }
+  } else {
+    return { variant: TVariantEnum.Error, message: 'Obese 😱' }
+  }
+}
+
+export function categorizeBMIWHO2007(age: number, gender: string, bmi: number) {
+  if (age < 19) {
+    // BMI categories for children and adolescents
+    if (gender === 'male') {
+      if (bmi < 16) {
+        return { variant: TVariantEnum.Error, message: 'Severely Thin 😔' }
+      } else if (bmi >= 16 && bmi < 17) {
+        return { variant: TVariantEnum.Pending2, message: 'Moderately Thin 😟' }
+      } else if (bmi >= 17 && bmi < 18.5) {
+        return { variant: TVariantEnum.Warning, message: 'Mildly Thin 🙁' }
+      } else if (bmi >= 18.5 && bmi < 25) {
+        return { variant: TVariantEnum.Success, message: 'Healthy 😍' }
+      } else if (bmi >= 25 && bmi < 30) {
+        return { variant: TVariantEnum.Danger, message: 'Overweight 😮' }
+      } else {
+        return { variant: TVariantEnum.Error, message: 'Obese 😱' }
+      }
+    } else if (gender === 'female') {
+      if (bmi < 16) {
+        return { variant: TVariantEnum.Error, message: 'Severely Thin 😔' }
+      } else if (bmi >= 16 && bmi < 17) {
+        return { variant: TVariantEnum.Pending2, message: 'Moderately Thin 😟' }
+      } else if (bmi >= 17 && bmi < 18.5) {
+        return { variant: TVariantEnum.Warning, message: 'Mildly Thin 🙁' }
+      } else if (bmi >= 18.5 && bmi < 24) {
+        return { variant: TVariantEnum.Success, message: 'Healthy 😍' }
+      } else if (bmi >= 24 && bmi < 30) {
+        return { variant: TVariantEnum.Danger, message: 'Overweight 😮' }
+      } else {
+        return { variant: TVariantEnum.Error, message: 'Obese 😱' }
+      }
+    }
+  } else {
+    // BMI categories for adults
+    if (bmi < 16) {
+      return { variant: TVariantEnum.Error, message: 'Severely Thin 😔' }
+    } else if (bmi >= 16 && bmi < 17) {
+      return { variant: TVariantEnum.Pending2, message: 'Moderately Thin 😟' }
+    } else if (bmi >= 17 && bmi < 18.5) {
+      return { variant: TVariantEnum.Warning, message: 'Mildly Thin 🙁' }
+    } else if (bmi >= 18.5 && bmi < 25) {
+      return { variant: TVariantEnum.Success, message: 'Healthy 😍' }
+    } else if (bmi >= 25 && bmi < 30) {
+      return { variant: TVariantEnum.Danger, message: 'Overweight 😮' }
+    } else {
+      return { variant: TVariantEnum.Error, message: 'Obese 😱' }
+    }
   }
 }

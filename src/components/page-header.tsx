@@ -19,6 +19,7 @@ type PageHeaderTypes = {
   avatar?: React.ReactNode
   user?: React.ReactNode
   isAvatar?: boolean
+  hasAction?: boolean
 }
 
 export const PageHeader = ({
@@ -28,16 +29,17 @@ export const PageHeader = ({
   avatar,
   user,
   isAvatar,
+  hasAction,
 }: PageHeaderTypes) => {
   const router = useRouter()
   const [deleteModal, setDeleteModal] = useState(false)
 
   const menuItems: MenuItemProp[] = [
-    {
-      title: 'Edit',
-      icon: IconNames.userEdit,
-      action: () => router.push('/dashboard/health-data/update-record/1'), //user.id
-    },
+    // {
+    //   title: 'Edit',
+    //   icon: IconNames.userEdit,
+    //   action: () => router.push('/dashboard/health-data/update-record/1'), //user.id
+    // },
     {
       title: 'Delete',
       icon: IconNames.trash,
@@ -103,7 +105,7 @@ export const PageHeader = ({
             </div>
           </div>
         </div>
-        {user && (
+        {hasAction && (
           <div className="mt-4">
             <Button
               onClick={() => setToggle(!toggle)}
