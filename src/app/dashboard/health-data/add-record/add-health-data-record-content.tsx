@@ -19,6 +19,9 @@ import {
   calculateBloodPressureRisk,
   categorizeBMIWHO2007,
   categorizeBloodSugarLevel,
+  categorizeHDLC,
+  categorizeLDLC,
+  categorizeTG,
   categorizeTotalCholesterol,
 } from '@/utils/vitalCalculations'
 import baseAxios from '@/utils/baseAxios'
@@ -50,6 +53,9 @@ export const AddHealthDataRecordContent = () => {
   const [waist, setWaist] = useState('')
   const [bmi, setBmi] = useState(0)
   const [totalCholesterol, setTotalCholesterol] = useState('')
+  const [ldlc, setLdlc] = useState('')
+  const [hdlc, setHdlc] = useState('')
+  const [tg, setTg] = useState('')
 
   const [sys, setSys] = useState('')
   const [dys, setDys] = useState('')
@@ -79,8 +85,11 @@ export const AddHealthDataRecordContent = () => {
     setBmi(Number(student?.latestHealthData?.bmi) ?? '')
     setDys(formattedDia ?? '')
     setSys(formattedSys ?? '')
+    setLdlc(student?.latestHealthData?.cholesterol.ldlc ?? '')
+    setHdlc(student?.latestHealthData?.cholesterol.hdlc ?? '')
+    setTg(student?.latestHealthData?.cholesterol.tg ?? '')
     setBloodSugar(student?.latestHealthData?.glucoseLevel ?? '')
-    setTotalCholesterol(student?.latestHealthData?.cholesterol ?? '')
+    setTotalCholesterol(student?.latestHealthData?.cholesterol.tc ?? '')
     student?.latestHealthData?.dietaryDiversity &&
       setNutritionalData(student?.latestHealthData?.dietaryDiversity)
     student?.latestHealthData?.physicalActivity &&
@@ -91,11 +100,14 @@ export const AddHealthDataRecordContent = () => {
     setExerciseData,
     setNutritionalData,
     student?.latestHealthData?.bmi,
-    student?.latestHealthData?.cholesterol,
+    student?.latestHealthData?.cholesterol.tc,
     student?.latestHealthData?.dietaryDiversity,
     student?.latestHealthData?.glucoseLevel,
+    student?.latestHealthData?.cholesterol.hdlc,
     student?.latestHealthData?.height,
+    student?.latestHealthData?.cholesterol.ldlc,
     student?.latestHealthData?.physicalActivity,
+    student?.latestHealthData?.cholesterol.tg,
     student?.latestHealthData?.waist,
     student?.latestHealthData?.weight,
   ])
@@ -144,7 +156,9 @@ export const AddHealthDataRecordContent = () => {
       ...(sys && dys && { bloodPressure: `${sys}/${dys}` }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
-      ...(totalCholesterol && { cholesterol: totalCholesterol }),
+      ...(totalCholesterol && {
+        cholesterol: { tc: totalCholesterol, ldlc: ldlc, hdlc: hdlc, tg: tg },
+      }),
       dietaryDiversity: nutritionalData,
       physicalActivity: exerciseData,
     }
@@ -159,6 +173,9 @@ export const AddHealthDataRecordContent = () => {
         setStudent(null)
         setBloodSugar('')
         setTotalCholesterol('')
+        setLdlc('')
+        setHdlc('')
+        setTg('')
         setLevel(null)
         setNutritionalData(null)
         setExerciseData(null)
@@ -382,28 +399,88 @@ export const AddHealthDataRecordContent = () => {
               )}
             </div>
           </PageCard>
-          <PageCard title="Total Cholesterol" bodyStyle="p-4 mt-4">
-            <div className="grid grid-cols-[2fr_1fr]  items-center">
-              <Input
-                placeholder="170"
-                label="(mg/dL)"
-                value={totalCholesterol}
-                labelStyle="lg:text-sm text-xs"
-                onChange={(e) => setTotalCholesterol(e.target.value)}
-                variant={variantValidityCheck(totalCholesterol)}
-                message={messageCheck(totalCholesterol)}
-              />
-              {totalCholesterol && (
-                <BadgeField
-                  variant={
-                    categorizeTotalCholesterol(Number(totalCholesterol)).variant
-                  }
-                  value={
-                    categorizeTotalCholesterol(Number(totalCholesterol)).message
-                  }
-                  className="ml-2 mt-6"
+          <PageCard title="Cholesterol (mg/dL)" bodyStyle="p-4 mt-4">
+            <div className="grid grid-cols-[2fr_2fr] gap-2 items-baseline">
+              <div className="flex flex-col">
+                <Input
+                  placeholder="170"
+                  label="TC"
+                  value={totalCholesterol}
+                  labelStyle="lg:text-sm text-xs"
+                  onChange={(e) => setTotalCholesterol(e.target.value)}
+                  variant={variantValidityCheck(totalCholesterol)}
+                  message={messageCheck(totalCholesterol)}
                 />
-              )}
+
+                {totalCholesterol && (
+                  <BadgeField
+                    variant={
+                      categorizeTotalCholesterol(Number(totalCholesterol))
+                        .variant
+                    }
+                    value={
+                      categorizeTotalCholesterol(Number(totalCholesterol))
+                        .message
+                    }
+                    className="ml-2 mt-6"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <Input
+                  placeholder="170"
+                  label="LDLC"
+                  value={ldlc}
+                  labelStyle="lg:text-sm text-xs"
+                  onChange={(e) => setLdlc(e.target.value)}
+                  variant={variantValidityCheck(ldlc)}
+                  message={messageCheck(ldlc)}
+                />
+                {ldlc && (
+                  <BadgeField
+                    variant={categorizeLDLC(Number(ldlc)).variant}
+                    value={categorizeLDLC(Number(ldlc)).message}
+                    className="ml-2 mt-6"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <Input
+                  placeholder="170"
+                  label="HDLC"
+                  value={hdlc}
+                  labelStyle="lg:text-sm text-xs"
+                  onChange={(e) => setHdlc(e.target.value)}
+                  variant={variantValidityCheck(hdlc)}
+                  message={messageCheck(hdlc)}
+                />
+                {hdlc && (
+                  <BadgeField
+                    variant={categorizeHDLC(Number(hdlc)).variant}
+                    value={categorizeHDLC(Number(hdlc)).message}
+                    className="ml-2 mt-6"
+                  />
+                )}
+              </div>
+              <div className="flex flex-col">
+                <Input
+                  placeholder="170"
+                  label="TG"
+                  value={tg}
+                  labelStyle="lg:text-sm text-xs"
+                  onChange={(e) => setTg(e.target.value)}
+                  variant={variantValidityCheck(tg)}
+                  message={messageCheck(tg)}
+                />
+
+                {tg && (
+                  <BadgeField
+                    variant={categorizeTG(Number(tg)).variant}
+                    value={categorizeTG(Number(tg)).message}
+                    className="ml-2 mt-6"
+                  />
+                )}
+              </div>
             </div>
           </PageCard>
         </div>
@@ -422,7 +499,7 @@ export const AddHealthDataRecordContent = () => {
                 setOpenModal(true)
               }}
             >
-              Open Questionaire
+              Open Questionnaire
             </Text>
             {nutritionalData && (
               <BadgeField variant="success" value="Changes Saved" />
@@ -431,7 +508,7 @@ export const AddHealthDataRecordContent = () => {
         </PageCard>
         <PageCard title="Exercise/Activity" bodyStyle="p-4">
           <div className="flex gap-3 items-center">
-            <Label>Phyical Activity Score - 0/15</Label>
+            <Label>Physical Activity Score - 0/15</Label>
             <BadgeField variant="error" value="Poor" />
             <Text
               variant="text/sm"
@@ -442,7 +519,7 @@ export const AddHealthDataRecordContent = () => {
                 setOpenModal(true)
               }}
             >
-              Open Questionaire
+              Open Questionnaire
             </Text>
             {exerciseData && (
               <BadgeField variant="success" value="Changes Saved" />

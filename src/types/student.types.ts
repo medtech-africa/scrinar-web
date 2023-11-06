@@ -1,4 +1,8 @@
-import { DietaryDiversity, PhysicalActivity, SelectVal } from "./healthData.types"
+import {
+  DietaryDiversity,
+  PhysicalActivity,
+  SelectVal,
+} from './healthData.types'
 
 export interface Student extends SelectVal {
   id: string
@@ -14,7 +18,7 @@ export interface Student extends SelectVal {
     waist: string
     bloodPressure: string
     glucoseLevel: string
-    cholesterol: string
+    cholesterol: { tc: string; ldlc: string; hdlc: string; tg: string }
     dietaryDiversity: DietaryDiversity
     physicalActivity: PhysicalActivity
   }
