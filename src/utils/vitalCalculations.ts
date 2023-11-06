@@ -110,17 +110,80 @@ export const categorizeBloodSugarLevel: IBS = (glucoseLevel: number) => {
   }
 }
 export const categorizeTotalCholesterol: IBS = (totalCholesterol: number) => {
-  if (totalCholesterol > 170) {
+  if (totalCholesterol < 170) {
     return {
-      level: 'High Cholesterol',
-      message: 'High',
-      variant: TVariantEnum.Error,
+      level: 'Desirable Level',
+      message: 'Desirable Level',
+      variant: TVariantEnum.Success,
+    }
+  } else if (totalCholesterol >= 170 && totalCholesterol <= 199) {
+    return {
+      level: 'Borderline Level',
+      message: 'Borderline Level',
+      variant: TVariantEnum.Pending,
     }
   } else {
     return {
-      level: 'Normal Cholesterol',
-      message: 'Normal',
+      level: 'Undesirable Level',
+      message: 'Undesirable Level',
+      variant: TVariantEnum.Error,
+    }
+  }
+}
+export const categorizeLDLC: IBS = (totalCholesterol: number) => {
+  if (totalCholesterol < 110) {
+    return {
+      level: 'Desirable Level',
+      message: 'Desirable Level',
       variant: TVariantEnum.Success,
+    }
+  } else if (totalCholesterol >= 110 && totalCholesterol <= 129) {
+    return {
+      level: 'Borderline Level',
+      message: 'Borderline Level',
+      variant: TVariantEnum.Pending,
+    }
+  } else {
+    return {
+      level: 'Undesirable Level',
+      message: 'Undesirable Level',
+      variant: TVariantEnum.Error,
+    }
+  }
+}
+export const categorizeHDLC: IBS = (totalCholesterol: number) => {
+  if (totalCholesterol < 35) {
+    return {
+      level: 'Undesirable Level',
+      message: 'Undesirable Level',
+      variant: TVariantEnum.Error,
+    }
+  } else if (totalCholesterol >= 35 && totalCholesterol <= 45) {
+    return {
+      level: 'Borderline Level',
+      message: 'Borderline Level',
+      variant: TVariantEnum.Pending,
+    }
+  } else {
+    return {
+      level: 'Desirable Level',
+      message: 'Desirable Level',
+      variant: TVariantEnum.Success,
+    }
+  }
+}
+export const categorizeTG: IBS = (totalCholesterol: number) => {
+  if (totalCholesterol < 125) {
+    return {
+      level: 'Desirable Level',
+      message: 'Desirable Level',
+      variant: TVariantEnum.Success,
+    }
+  } else {
+    return {
+      level: 'Undesirable Level',
+      message: 'Undesirable Level',
+      variant: TVariantEnum.Error,
     }
   }
 }
