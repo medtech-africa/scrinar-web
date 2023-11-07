@@ -1,6 +1,5 @@
 const BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL ??
-  'http://dev-play4health-api.us-east-1.elasticbeanstalk.com'
+  process.env.NEXT_PUBLIC_API_URL ?? 'https://dev-play4health-api.onrender.com'
 
 export const API = {
   //school

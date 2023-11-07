@@ -85,11 +85,13 @@ export const AddHealthDataRecordContent = () => {
     setBmi(Number(student?.latestHealthData?.bmi) ?? '')
     setDys(formattedDia ?? '')
     setSys(formattedSys ?? '')
-    setLdlc(student?.latestHealthData?.cholesterol.ldlc ?? '')
-    setHdlc(student?.latestHealthData?.cholesterol.hdlc ?? '')
-    setTg(student?.latestHealthData?.cholesterol.tg ?? '')
+    setLdlc(student?.latestHealthData?.cholesterol.ldl ?? '')
+    setHdlc(student?.latestHealthData?.cholesterol.hdl ?? '')
+    setTg(student?.latestHealthData?.cholesterol.triglycerides ?? '')
     setBloodSugar(student?.latestHealthData?.glucoseLevel ?? '')
-    setTotalCholesterol(student?.latestHealthData?.cholesterol.tc ?? '')
+    setTotalCholesterol(
+      student?.latestHealthData?.cholesterol.totalCholesterol ?? ''
+    )
     student?.latestHealthData?.dietaryDiversity &&
       setNutritionalData(student?.latestHealthData?.dietaryDiversity)
     student?.latestHealthData?.physicalActivity &&
@@ -100,14 +102,14 @@ export const AddHealthDataRecordContent = () => {
     setExerciseData,
     setNutritionalData,
     student?.latestHealthData?.bmi,
-    student?.latestHealthData?.cholesterol.tc,
+    student?.latestHealthData?.cholesterol.totalCholesterol,
     student?.latestHealthData?.dietaryDiversity,
     student?.latestHealthData?.glucoseLevel,
-    student?.latestHealthData?.cholesterol.hdlc,
+    student?.latestHealthData?.cholesterol.hdl,
     student?.latestHealthData?.height,
-    student?.latestHealthData?.cholesterol.ldlc,
+    student?.latestHealthData?.cholesterol.ldl,
     student?.latestHealthData?.physicalActivity,
-    student?.latestHealthData?.cholesterol.tg,
+    student?.latestHealthData?.cholesterol.triglycerides,
     student?.latestHealthData?.waist,
     student?.latestHealthData?.weight,
   ])
@@ -157,7 +159,12 @@ export const AddHealthDataRecordContent = () => {
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
       ...(totalCholesterol && {
-        cholesterol: { tc: totalCholesterol, ldlc: ldlc, hdlc: hdlc, tg: tg },
+        cholesterol: {
+          totalCholesterol: totalCholesterol,
+          ldl: ldlc,
+          hdl: hdlc,
+          triglycerides: tg,
+        },
       }),
       dietaryDiversity: nutritionalData,
       physicalActivity: exerciseData,

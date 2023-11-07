@@ -42,3 +42,9 @@ export type HealthDataPayload = {
   dietaryDiversityScore?: string
   physicalActivityScore?: string
 }
+export type TCholesterol = {
+  totalCholesterol: string
+  ldl: string
+  hdl: string
+  triglycerides: string
+}

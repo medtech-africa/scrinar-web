@@ -2,6 +2,7 @@ import {
   DietaryDiversity,
   PhysicalActivity,
   SelectVal,
+  TCholesterol,
 } from './healthData.types'
 
 export interface Student extends SelectVal {
@@ -18,7 +19,7 @@ export interface Student extends SelectVal {
     waist: string
     bloodPressure: string
     glucoseLevel: string
-    cholesterol: { tc: string; ldlc: string; hdlc: string; tg: string }
+    cholesterol: TCholesterol
     dietaryDiversity: DietaryDiversity
     physicalActivity: PhysicalActivity
   }

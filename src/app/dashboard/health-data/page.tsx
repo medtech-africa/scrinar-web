@@ -31,6 +31,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
 import DropDownMenuExport from './drop-down-export'
+import { TCholesterol } from '@/types/healthData.types'
 
 const FilterData = () => {
   return (
@@ -217,17 +218,37 @@ export default function HealthData() {
         <Table className="table-auto" hasEmptyData={healthData?.length === 0}>
           <TableHeader className="bg-grey-100">
             <TableRow>
-              <TableHead>Students Name</TableHead>
-              <TableHead>
+              <TableHead></TableHead>
+              <TableHead className="bg-grey-200"></TableHead>
+              <TableHead className="bg-grey-200 absolute pt-3 ">
                 Anthropometry
-                <TableHead className="pl-0">Ht(m)</TableHead>
-                <TableHead>Wt</TableHead>
-                <TableHead>BMI</TableHead>
-                <TableHead>WC(cm)</TableHead>
               </TableHead>
+              <TableHead className="bg-grey-200"></TableHead>
+              <TableHead className="bg-grey-200"></TableHead>
+              <TableHead></TableHead>
+              <TableHead></TableHead>
+              <TableHead className="bg-grey-200"></TableHead>
+              <TableHead className="bg-grey-200 absolute pt-3 ">
+                Cholesterol(mg/dL)
+              </TableHead>
+              <TableHead className="bg-grey-200"></TableHead>
+              <TableHead className="bg-grey-200"></TableHead>
+              <TableHead></TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableHeader className="bg-grey-100">
+            <TableRow>
+              <TableHead>Students Name</TableHead>
+              <TableHead>Ht(m)</TableHead>
+              <TableHead>Wt</TableHead>
+              <TableHead className="w-3">BMI</TableHead>
+              <TableHead>WC(cm)</TableHead>
               <TableHead>BP(mmHg)</TableHead>
               <TableHead>Blood Sugar(mg/dL)</TableHead>
-              <TableHead>Total Cholesterol(mg/dL)</TableHead>
+              <TableHead>Total Cholesterol</TableHead>
+              <TableHead>LDL</TableHead>
+              <TableHead>HDL</TableHead>
+              <TableHead>Triglycerides</TableHead>
               {/* <TableHead>Nutritional Access</TableHead>
               <TableHead>Exercise Activity</TableHead> */}
               <TableHead>Action</TableHead>
@@ -242,23 +263,26 @@ export default function HealthData() {
                   key={val.id}
                   className="font-normal text-sm text-grey-600"
                 >
-                  <TableCell className="flex gap-x-2 items-center">
-                    <div>{val?.image}</div>
-                    <div>{val?.student?.fullName}</div>
+                  <TableCell>
+                    <div className="flex w-[100px] items-center capitalize">
+                      <div>{val?.image}</div>
+                      <div>{val?.student?.fullName}</div>
+                    </div>
                   </TableCell>
 
                   <TableCell>
-                    <TableCell>
-                      {val?.height}{' '}
-                      {/* <BadgeField variant="success" value={'n'} /> */}
-                    </TableCell>
-                    <TableCell>{val?.weight}</TableCell>
-                    <TableCell>{val?.bmi}</TableCell>
-                    <TableCell>{val?.waist}</TableCell>
+                    {val?.height}{' '}
+                    {/* <BadgeField variant="success" value={'n'} /> */}
                   </TableCell>
+                  <TableCell>{val?.weight}</TableCell>
+                  <TableCell>{val?.bmi}</TableCell>
+                  <TableCell>{val?.waist}</TableCell>
                   <TableCell>{val?.bloodPressure}</TableCell>
                   <TableCell>{val?.glucoseLevel}</TableCell>
-                  <TableCell>{val?.cholesterol}</TableCell>
+                  <TableCell>{val?.cholesterol?.totalCholesterol}</TableCell>
+                  <TableCell>{val?.cholesterol?.ldl}</TableCell>
+                  <TableCell>{val?.cholesterol?.hdl}</TableCell>
+                  <TableCell>{val?.cholesterol?.triglycerides}</TableCell>
                   {/* <TableCell>{val?.dietaryDiversityScore}</TableCell>
                   <TableCell>{val?.physicalActivityScore}</TableCell> */}
                   <TableCell className="relative">
@@ -308,7 +332,7 @@ type DataType = {
   weight?: number
   waist?: number
   bloodPressure?: string
-  cholesterol?: string
+  cholesterol?: TCholesterol
   glucoseLevel?: number
   dietaryDiversityScore?: string
   physicalActivityScore?: string
