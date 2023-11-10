@@ -5,7 +5,7 @@ import { PageHeader } from '@/components/page-header'
 import Pagination from '@/components/pagination'
 import TableLoader from '@/components/table-loader'
 // import { BadgeField } from '@/components/ui/Badge'
-import { Avatar, AvatarRoot } from '@/components/ui/avatar'
+import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Text } from '@/components/ui/text'
+// import { Text } from '@/components/ui/text'
 import useHealthData from '@/hooks/queries/useHealthData'
 import { usePaginate } from '@/hooks/usePagination'
 import { API } from '@/utils/api'
@@ -32,6 +32,7 @@ import { useState } from 'react'
 import toast from 'react-hot-toast'
 import DropDownMenuExport from './drop-down-export'
 import { TCholesterol } from '@/types/healthData.types'
+import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 
 const FilterData = () => {
   return (
@@ -120,6 +121,7 @@ export default function HealthData() {
     {}
   )
   const { data, isLoading, refetch } = useHealthData(currentPage)
+  useSchoolChangeRefresh(refetch)
   const healthData = data?.data
 
   const menuItems = [
@@ -192,7 +194,7 @@ export default function HealthData() {
               rootClassName="border border-iris-100 -ml-2"
               imgClassName="bg-iris-50"
             />
-            <AvatarRoot className="w-8 h-8 rounded-full border border-green-100 -ml-2">
+            {/* <AvatarRoot className="w-8 h-8 rounded-full border border-green-100 -ml-2">
               <div className="w-full h-full rounded-full flex items-center justify-center border border-white bg-green-50">
                 <Text variant="text/sm" weight="x-bold">
                   50
@@ -201,7 +203,7 @@ export default function HealthData() {
                   +
                 </Text>
               </div>
-            </AvatarRoot>
+            </AvatarRoot> */}
           </div>
         }
         isAvatar

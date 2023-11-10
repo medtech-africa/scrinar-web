@@ -7,8 +7,8 @@ const fetchStats = async () => {
   return data
 }
 
-const useDashboardStats = () => {
-  return useQuery(['dashboard-stats'], fetchStats)
+const useDashboardStats = (enabled: boolean) => {
+  return useQuery(['dashboard-stats'], fetchStats, { enabled: enabled })
 }
 
 export default useDashboardStats

@@ -156,6 +156,7 @@ const Login = () => {
                     label="Enter Email Address or Mobile Number"
                     variant={errors?.loginId ? 'destructive' : 'default'}
                     message={errors.loginId && errors.loginId?.message}
+                    autoComplete="email"
                   />
                 )}
               />

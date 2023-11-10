@@ -26,6 +26,7 @@ import useProfile from '@/hooks/queries/useProfile'
 import { InstructorFormValue } from '../user-profile/instructors/add-instructor/page'
 import DatePicker from '@/components/ui/date-picker'
 import { HealthDataPayload } from '@/types/healthData.types'
+import { isMasterInstructor } from '@/utils/checkPermission'
 
 interface IFormValue {
   email?: string
@@ -512,14 +513,16 @@ const InstructorUpdate = ({ selectedImg = null as File | null, id = '' }) => {
             name="phoneNumber"
           />
         </div>
-        <Button
-          value="Update Settings"
-          className="mt-6 py-3 px-4"
-          variant="primary"
-          loading={isLoading || imageLoading}
-          disabled={isLoading || imageLoading}
-          type="submit"
-        />
+        {!isMasterInstructor(user?.roles) && (
+          <Button
+            value="Update Settings"
+            className="mt-6 py-3 px-4"
+            variant="primary"
+            loading={isLoading || imageLoading}
+            disabled={isLoading || imageLoading}
+            type="submit"
+          />
+        )}
       </form>
     </PageCard>
   )

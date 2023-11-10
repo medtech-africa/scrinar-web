@@ -20,6 +20,7 @@ import {
 } from '@/components/ui/table'
 import useStudents from '@/hooks/queries/useStudents'
 import { usePaginate } from '@/hooks/usePagination'
+import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { errorMessage } from '@/utils/errorMessage'
@@ -112,6 +113,7 @@ export default function Students() {
   )
 
   const { data, isLoading, refetch } = useStudents(currentPage)
+  useSchoolChangeRefresh(refetch)
 
   const studentsData = data?.data
 

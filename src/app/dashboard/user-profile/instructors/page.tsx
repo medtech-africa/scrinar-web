@@ -21,6 +21,7 @@ import {
 import { useUser } from '@/context/user'
 import useInstructors from '@/hooks/queries/useInstructors'
 import { usePaginate } from '@/hooks/usePagination'
+import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import restrictNonAdmin from '@/utils/checkPermission'
@@ -117,6 +118,8 @@ export default function Instructors() {
   const { data, isLoading, refetch } = useInstructors(
     encodeURIComponent(JSON.stringify(lastKey))
   )
+  useSchoolChangeRefresh(refetch)
+
   const instructorsData = data?.data
 
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate({

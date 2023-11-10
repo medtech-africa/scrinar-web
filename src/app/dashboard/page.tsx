@@ -27,7 +27,8 @@ import { AddHealthDataRecordContent } from './health-data/add-record/add-health-
 import { useUser } from '@/context/user'
 import useDashboardStats from '@/hooks/queries/useDashboardStats'
 import ContentLoader from '@/components/content-loader'
-import restrictNonAdmin from '@/utils/checkPermission'
+import restrictNonAdmin, { isMasterInstructor } from '@/utils/checkPermission'
+import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 
 const dashboardStats = [
   {
@@ -108,14 +109,23 @@ const _actionData2 = [
 export default function Home() {
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
-  const { user } = useUser()
-  const { isLoading, data } = useDashboardStats()
+  const { user, selectedSchool } = useUser()
+  const isMI = isMasterInstructor(user?.roles)
+  const { isLoading, data, refetch } = useDashboardStats(
+    isMI ? (selectedSchool ? true : false) : true
+  )
+  useSchoolChangeRefresh(refetch)
+
+  if (isMI && !selectedSchool) {
+    return null
+  }
 
   return (
     <div className="text-grey-900">
       <section className="pb-4">
         <Text variant="text/sm" className="text-grey-600 mb-4 capitalize">
-          Hi, {user?.firstName ?? 'Admin'} Welcome Back 😄
+          Hi, {user?.firstName ?? isMI ? 'Master Instructor' : 'Admin'} Welcome
+          Back 😄
         </Text>
         <Text variant="display/xs" weight="medium">
           Dashboard Overview

@@ -8,10 +8,13 @@ import NextTopLoader from 'nextjs-toploader'
 import colors from '@/constants/colors'
 import ContentLoader from '@/components/content-loader'
 import { useUser } from '@/context/user'
+import SelectSchoolModal from './select-school-modal'
+import { isMasterInstructor } from '@/utils/checkPermission'
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const [sideOpen, sideToggleOpen] = useState(false)
-  const { loading } = useUser()
+  const { loading, user } = useUser()
+
   return (
     <>
       <ContentLoader loading={loading} />
@@ -29,6 +32,7 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
           </AnimatePresence>
         </div>
       </div>
+      {isMasterInstructor(user?.roles) && <SelectSchoolModal />}
     </>
   )
 }
