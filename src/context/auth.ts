@@ -4,6 +4,7 @@ import { Cookies } from 'react-cookie'
 
 interface IAuthState {
   isAuth: boolean
+  authLoading: boolean
   hydrate: () => void
   signOut: () => void
   authenticate: (token: string) => void
@@ -11,6 +12,7 @@ interface IAuthState {
 
 const useAuth = create<IAuthState>((set) => ({
   isAuth: false,
+  authLoading: false,
   hydrate: () => {
     const cookies = new Cookies()
     const token = cookies.get('token')
@@ -26,10 +28,11 @@ const useAuth = create<IAuthState>((set) => ({
     } catch (_e) {}
   },
   authenticate: async (token: string) => {
+    set({ authLoading: true })
     const cookies = new Cookies()
     try {
-      cookies.set('token', token, { secure: true, sameSite: 'none' })
-      set({ isAuth: true })
+      await cookies.set('token', token, { secure: true, sameSite: 'none' })
+      set({ isAuth: true, authLoading: false })
       return Promise.resolve('')
     } catch (error) {
       cookies.remove('token')

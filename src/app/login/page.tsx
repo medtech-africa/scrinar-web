@@ -23,8 +23,7 @@ interface IDataToSend {
 }
 const Login = () => {
   const [isVisible, setIsvisible] = useState(false)
-  const [authLoading, setAuthLoading] = useState(false)
-  const { authenticate, isAuth } = useAuth()
+  const { authenticate, isAuth, authLoading } = useAuth()
   const router = useRouter()
 
   useEffect(() => {
@@ -42,7 +41,7 @@ const Login = () => {
     control,
     reset,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm<IFormValue>({
     resolver: validation.login,
   })
@@ -52,7 +51,6 @@ const Login = () => {
       loginId: data?.loginId,
       password: data?.password,
     }
-    setAuthLoading(true)
     try {
       await mutate(dataToSend, {
         onSuccess: async (response) => {
@@ -70,7 +68,6 @@ const Login = () => {
         },
       })
     } finally {
-      setAuthLoading(false)
     }
   }
   return (
@@ -201,8 +198,8 @@ const Login = () => {
             <Button
               value="Login"
               variant="primary"
-              loading={isLoading || authLoading}
-              disabled={isLoading || authLoading}
+              loading={isLoading || authLoading || isSubmitting || authLoading}
+              disabled={isLoading || authLoading || isSubmitting || authLoading}
             />
           </form>
         </div>
