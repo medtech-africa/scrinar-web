@@ -21,7 +21,8 @@ const UserProvider = ({ children }: WithChildren) => {
         loadUser(res.data?.data)
       })
     }
-  }, [cookies.token, loadUser, refetch, setLoading])
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [cookies.token, loadUser, refetch])
 
   return <>{children}</>
 }

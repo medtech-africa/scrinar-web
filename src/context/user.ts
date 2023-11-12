@@ -9,6 +9,11 @@ interface IUserState {
   setUser: (val: any) => void
   updateUser: (val: any) => void
   setLoading: (val: boolean) => void
+  //master instructor
+  openSchoolModal: boolean
+  setOpenSchoolModal: (val: boolean) => void
+  selectedSchool: string
+  setSelectedSchool: (val: string) => void
 }
 
 const useUser = create<IUserState>((set, get) => ({
@@ -40,6 +45,10 @@ const useUser = create<IUserState>((set, get) => ({
       set({ loading: false, user: null })
     }
   },
+  openSchoolModal: false,
+  setOpenSchoolModal: (val: boolean) => set({ openSchoolModal: val }),
+  selectedSchool: '',
+  setSelectedSchool: (val: string) => set({ selectedSchool: val }),
 }))
 
 export { useUser }

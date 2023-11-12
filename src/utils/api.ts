@@ -9,7 +9,9 @@ export const API = {
   login: `${BASE_URL}/api/v1/auth/school/login`,
   updatePassword: `${BASE_URL}/api/v1/auth/update-password`,
   getProfile: `${BASE_URL}/api/v1/auth/me`,
-
+  // master instructor
+  attachToSchool: (schoolId: string) =>
+    `${BASE_URL}/api/v1/auth/attach-to-school?school=${schoolId}`,
   //students
   students: `${BASE_URL}/api/v1/students`,
   student: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
@@ -41,6 +43,7 @@ export const API = {
   schoolRegister: `${BASE_URL}/api/v1/school`,
   schoolUpdate: `${BASE_URL}/api/v1/school/me`,
   schoolDashboard: `${BASE_URL}/api/v1/school/dashboard`,
+  getSchools: (state: string) => `${BASE_URL}/api/v1/school/${state}`,
 
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,

@@ -26,6 +26,7 @@ import {
 } from '@/components/ui/table'
 import useScreenings from '@/hooks/queries/useScreenings'
 import { usePaginate } from '@/hooks/usePagination'
+import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { cn } from '@/lib/utils'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
@@ -73,6 +74,8 @@ const ScreeningList = ({
   )
 
   const { data, isLoading, refetch } = useScreenings(currentPage)
+  useSchoolChangeRefresh(refetch)
+
   const screeningData: DataType = data?.data
   const [deleteModal, setDeleteModal] = useState(false)
   const { isLoading: deleteLoading, mutate } = useMutation(() =>
@@ -235,7 +238,7 @@ const ScreeningList = ({
 }
 
 export default function ScreeningManagement() {
-  const [openFilter, setOpenFilter] = useState(false)
+  const [openFilter, _setOpenFilter] = useState(false)
   const [selectedTab, setSelectedTab] = useState('Screening List')
   const [actionType, setActionType] = useState('')
 
@@ -260,12 +263,12 @@ export default function ScreeningManagement() {
           activeTab={selectedTab}
         />
         <div className="mt-2 md:mt-0 flex flex-col justify-end items-end">
-          <Button
+          {/* <Button
             onClick={() => setOpenFilter(!openFilter)}
             value="Filter Screening"
             className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-3"
             endingIcon={<IconPicker icon="arrowDown" />}
-          />
+          /> */}
           {openFilter && <FilterData />}
         </div>
       </div>

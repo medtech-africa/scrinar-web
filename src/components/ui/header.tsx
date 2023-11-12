@@ -12,6 +12,8 @@ import DropDownMenu from '../drop-down-menu'
 import { useAuth } from '@/context/auth'
 import { useUser } from '@/context/user'
 import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
+import { Button } from './button'
+import { useQueryClient } from '@tanstack/react-query'
 
 interface IHeader {
   sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
@@ -23,13 +25,18 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
   const [visible, setVisible] = useState<boolean>(false)
   const [openDropDown, setOpenDropDown] = useState<boolean>(false)
   const signOut = useAuth((state) => state.signOut)
-  const { user } = useUser()
+  const { user, selectedSchool, setOpenSchoolModal, setSelectedSchool } =
+    useUser()
   useClickAway(menuRef, () => setVisible(false))
+  const queryClient = useQueryClient()
 
   const handleLogout = () => {
     signOut()
+    setSelectedSchool('')
+    queryClient.removeQueries()
     router.push('/login')
   }
+
   const menuItems = [
     {
       title: 'Profile',
@@ -56,6 +63,13 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
             placeholder="Search for something..."
             full={false}
           /> */}
+          {selectedSchool && (
+            <Button
+              value={`Selected School - ${selectedSchool}`}
+              className="bg-grey-50 text-grey-900 hover:bg-grey-100"
+              onClick={() => setOpenSchoolModal(true)}
+            />
+          )}
         </div>
         <div>
           <div className="md:flex flex-row space-x-2 md:space-x-4 items-center hidden">
