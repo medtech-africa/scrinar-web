@@ -1,5 +1,6 @@
 import React from 'react'
 import { TrainingCard } from './training-card'
+
 export const CardData = [
   {
     id: 1,
@@ -42,6 +43,7 @@ export const CardData = [
     category: ['Health Assessment', 'Exercise', 'dancing'],
   },
 ]
+
 export type CardDataProps = {
   id: number
   image: string
@@ -53,9 +55,11 @@ export type CardDataProps = {
 }
 const AllTrainingModuleBottom = () => {
   return (
-    <div className="py-8 grid lg:grid-cols-2 grid-cols-1">
-      <TrainingCard data={CardData} />
-    </div>
+    <>
+      <div className="py-8 grid lg:grid-cols-2 grid-cols-1">
+        <TrainingCard data={CardData} />
+      </div>
+    </>
   )
 }
 
