@@ -47,4 +47,8 @@ export const API = {
 
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,
+
+  //training modules
+  trainingModules: `${BASE_URL}/api/v1/training-modules`,
+  trainingModule: (id: string) => `${BASE_URL}/api/v1/training-modules/${id}`,
 }
