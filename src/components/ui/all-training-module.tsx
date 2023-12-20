@@ -26,7 +26,7 @@ const AllTrainingModule = ({ modules }: TMProps) => {
                 key={module.id}
                 href={`training-module/course/${module.id}`}
               >
-                <div className="relative rounded-2xl overflow-hidden w-full h-[200px] hover:border-[4px] hover:border-black/30">
+                <div className="relative rounded-2xl overflow-hidden w-full h-[200px] border border-grey hover:border-[3px] hover:border-black/30">
                   <Image
                     src={module.imageUrl ?? '/module.png'}
                     alt={module.title}
@@ -57,7 +57,7 @@ const AllTrainingModule = ({ modules }: TMProps) => {
                     </Text>
                     <Text variant="text/xs">{module.description}</Text>
                   </div>
-                  <div className="bg-gradient-to-b from-transparent from-10% via-transparent via-10% to-black to-70% absolute top-0 left-0 w-full h-full opacity-90"></div>
+                  <div className="bg-gradient-to-b from-transparent from-10% via-transparent via-10% to-[#00000075] to-150% absolute top-0 left-0 w-full h-full opacity-90"></div>
                 </div>
               </Link>
             ))}
