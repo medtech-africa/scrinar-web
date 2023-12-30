@@ -17,7 +17,7 @@ import {
   AccordionTrigger,
   AccordionContent,
 } from '@/components/ui/accordion'
-import { TrainingCourse, TrainingModule } from '@/types/trainingModules.types'
+import { TrainingModule } from '@/types/trainingModules.types'
 import { Button } from '@/components/ui/button'
 import { formatDuration } from 'date-fns'
 import { useMemo, useState } from 'react'
@@ -143,23 +143,13 @@ const Module = ({
   )
 }
 
-const CourseDetailsPage = ({
-  courseId,
-  modules: initialModules,
-  course: initialCourse,
-}: {
-  courseId: string
-  modules?: TrainingModule[]
-  course?: TrainingCourse
-}) => {
+const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
   const id = courseId
   const { data: course, isLoading } = useTrainingCourse({
     courseId,
-    initialCourse,
   })
   const { data: modules, isLoading: isModulesLoading } = useTrainingModules({
     courseId: id,
-    initialData: initialModules,
   })
   const { data: userProgress, refetch } = useUserTrainingProgress({
     courseId: id,
@@ -172,7 +162,7 @@ const CourseDetailsPage = ({
 
   const [currentModule, setCurrentModule] = useState<
     TrainingModule | undefined
-  >(initialModules?.[0])
+  >(modules?.[0])
 
   const courseDetails = course
 

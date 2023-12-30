@@ -11,7 +11,7 @@
  * not available, it will return an empty array.
  */
 import { ApiResponse, PaginatedResponse } from "@/types/paginatedResponse.types"
-import { TrainingModule, TrainingCourse } from "@/types/trainingModules.types"
+import { TrainingModule, TrainingCourse, TrainingCourseProgress } from "@/types/trainingModules.types"
 import { API } from "@/utils/api"
 import baseServerAxios from "@/utils/baseAxios.server"
 
@@ -27,5 +27,9 @@ export const fetchCourses = async () => {
 
 export const fetchCourse = async (id: string) => {
   const { data } = await baseServerAxios.get<ApiResponse<TrainingCourse>>(API.trainingCourse(id)).then((res) => res.data)
+  return data
+}
+export const fetchUserProgress = async (courseId:string) => {
+  const data = await baseServerAxios.get<TrainingCourseProgress>(API.trainingModuleProgress(courseId)).then((res) => res.data)
   return data
 }

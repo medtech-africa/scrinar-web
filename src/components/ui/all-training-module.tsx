@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { IconPicker } from './icon-picker'
 import Link from 'next/link'
 import { TrainingCourse } from '@/types/trainingModules.types'
+import { truncateString } from '@/utils/truncateString'
 
 interface TMProps {
   modules: TrainingCourse[]
@@ -20,7 +21,7 @@ const AllTrainingModule = ({ modules }: TMProps) => {
         </Text>
 
         {!!modules?.length && (
-          <div className="grid md:grid-cols-3 gap-6 mt-6">
+          <div className="grid sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
             {modules.map((module) => (
               <Link
                 key={module.id}
@@ -58,9 +59,11 @@ const AllTrainingModule = ({ modules }: TMProps) => {
                     <Text variant="text/md" weight="bold">
                       {module.title}
                     </Text>
-                    <Text variant="text/xs">{module.description}</Text>
+                    <Text variant="text/xs">
+                      {truncateString(module.description, 120)}
+                    </Text>
                   </div>
-                  <div className="bg-gradient-to-b from-[rgba(0,0,0,0.60)] from-10% via-[rgba(0,0,0,0.60)] via-10% to-[rgba(0,0,0,0.60)] to-150% absolute top-0 left-0 w-full h-full"></div>
+                  <div className="bg-gradient-to-b from-[rgba(0,0,0,0.70)] from-10% via-[rgba(0,0,0,0.70)] via-10% to-[rgba(0,0,0,0.80)] to-150% absolute top-0 left-0 w-full h-full"></div>
                 </div>
               </Link>
             ))}

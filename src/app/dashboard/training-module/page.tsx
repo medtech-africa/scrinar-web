@@ -4,8 +4,8 @@ import { PageHeader } from '@/components/page-header'
 import AllTrainingModule from '@/components/ui/all-training-module'
 //@todo: uncomment
 import AllTrainingModuleBottom from '@/components/ui/all-training-module-bottom'
-import { IconPicker } from '@/components/ui/icon-picker'
-import { Input } from '@/components/ui/input'
+// import { IconPicker } from '@/components/ui/icon-picker'
+// import { Input } from '@/components/ui/input'
 // import Bookmark from '@/components/ui/bookmark'
 // import OngoingLesson from '@/components/ui/ongoing-lesson'
 import { TabList, TabListButton } from '@/components/ui/tab-list'
@@ -82,14 +82,15 @@ const TrainingModule = () => {
               beyond.
             </Text>
           </div>
-          <div>
+          {/* TODO filter */}
+          {/* <div>
             <Input
               leadingIcon={<IconPicker icon="search" />}
               placeholder="Search for topic or course"
               className="bg-grey-100 rounded-[49px]"
               full
             />
-          </div>
+          </div> */}
         </div>
         <div className="mt-6">
           <TabListButton

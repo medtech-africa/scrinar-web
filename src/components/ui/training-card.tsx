@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { Text } from './text'
 import { TrainingCourse } from '@/types/trainingModules.types'
 import Link from 'next/link'
+import { truncateString } from '@/utils/truncateString'
 type TypeProp = 'ongoing' | 'bookmark'
 
 type IProps = {
@@ -39,7 +40,7 @@ export const TrainingCard = ({ data, type }: IProps) => {
             {val.title}
           </Text>
           <Text variant="text/sm" className="text-grey-600 mt-2">
-            {val.description}
+            {truncateString(val.description, 120)}
           </Text>
         </div>
         {type === 'ongoing' ? (

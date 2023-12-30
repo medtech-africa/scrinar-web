@@ -5,13 +5,18 @@ import baseAxios from '@/utils/baseAxios'
 import { TrainingCourse, TrainingCourseProgress, TrainingModule } from '@/types/trainingModules.types'
 import { PaginatedResponse } from "@/types/paginatedResponse.types"
 
-const fetchModules = async (courseId: string) => {
+export const fetchModules = async (courseId: string) => {
   const { data } = await baseAxios.get<PaginatedResponse<TrainingModule[]>>(API.trainingModules(courseId))
   return data?.data?.data ?? []
 }
 
 const fetchCourses = async () => {
   const { data } = await baseAxios.get<PaginatedResponse<TrainingCourse[]>>(API.trainingCourses)
+  return data
+}
+
+const fetchUserProgress = async (courseId:string) => {
+  const data = await baseAxios.get<TrainingCourseProgress>(API.trainingModuleProgress(courseId)).then((res) => res.data)
   return data
 }
 
@@ -24,7 +29,7 @@ export const useTrainingModules = ({ courseId, initialData }: {
   initialData?: TrainingModule[];
 }) => {
   return useQuery({
-    queryKey: ['training-modules'],
+    queryKey: ['training-modules', courseId],
     queryFn: () => fetchModules(courseId),
     initialData
   });
@@ -51,8 +56,7 @@ export const useUserTrainingProgress = ({ courseId, initialData }: { courseId: s
   return useQuery({
     queryKey: ['training-course-progress', courseId],
 
-    queryFn: () =>
-      baseAxios.get<TrainingCourseProgress>(API.trainingModuleProgress(courseId)).then((res) => res.data),
+    queryFn: () => fetchUserProgress(courseId),
     initialData: initialData
   });
 }
