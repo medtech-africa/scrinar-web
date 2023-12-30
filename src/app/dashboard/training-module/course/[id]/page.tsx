@@ -5,11 +5,9 @@ import {
   dehydrate,
 } from '@tanstack/react-query'
 import CourseDetailsPage from './CourseDetailsPage'
-// import { fetchModules } from '@/hooks/queries/useTrainingModules'
 import {
   fetchCourse,
   fetchModules,
-  fetchUserProgress,
 } from '@/hooks/queries/trainingModules.server'
 
 const CoursePage = async ({ params }: { params: { id: string } }) => {
@@ -25,10 +23,6 @@ const CoursePage = async ({ params }: { params: { id: string } }) => {
     queryClient.prefetchQuery({
       queryKey: ['training-course', id],
       queryFn: () => fetchCourse(id),
-    }),
-    queryClient.prefetchQuery({
-      queryKey: ['training-course-progress', id],
-      queryFn: () => fetchUserProgress(id),
     }),
   ])
 

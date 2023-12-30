@@ -18,6 +18,7 @@ export interface TrainingModule {
   createdAt: string
   updatedAt: string
   id: string
+  isCompleted?: boolean;
 }
 
 export interface TrainingVideo {

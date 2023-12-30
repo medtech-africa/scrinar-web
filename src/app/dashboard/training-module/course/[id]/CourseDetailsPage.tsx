@@ -6,7 +6,6 @@ import {
   markAsComplete,
   useTrainingCourse,
   useTrainingModules,
-  useUserTrainingProgress,
 } from '@/hooks/queries/useTrainingModules'
 import ContentLoader from '@/components/content-loader'
 import { PageCard } from '@/components/ui/page-card'
@@ -35,7 +34,6 @@ const navigationItems = [
 type TModule = TrainingModule & {
   onPlay: () => void
   isActive?: boolean
-  hasCompleted?: boolean
 }
 
 const CheckIcon = ({ fill = '#E31B23' }) => (
@@ -72,7 +70,7 @@ const Module = ({
   video: { duration = 0 },
   onPlay,
   isActive = false,
-  hasCompleted = false,
+  isCompleted = false,
 }: TModule) => {
   return (
     <div
@@ -125,7 +123,7 @@ const Module = ({
               0%
             </div>
             <div className="flex justify-center items-center w-full h-2.5 rounded-full bg-gray-50">
-              <Progress value={hasCompleted ? 100 : 0} className="h-2" />
+              <Progress value={isCompleted ? 100 : 0} className="h-2" />
             </div>
             <div className="text-[#344054] font-['Aeonik'] text-xs leading-[1.125rem]">
               100%
@@ -148,12 +146,12 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
   const { data: course, isLoading } = useTrainingCourse({
     courseId,
   })
-  const { data: modules, isLoading: isModulesLoading } = useTrainingModules({
+  const {
+    data: modules,
+    isLoading: isModulesLoading,
+    refetch,
+  } = useTrainingModules({
     courseId: id,
-  })
-  const { data: userProgress, refetch } = useUserTrainingProgress({
-    courseId: id,
-    // initialData: initialModules,
   })
   const { mutate, isPending: isMarking } = useMutation({
     mutationFn: (moduleId: string) => markAsComplete(id, moduleId),
@@ -198,12 +196,6 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
       scrollToTop()
       setCurrentModule(nextModule)
     }
-  }
-
-  const hasCompletedModule = (module?: TrainingModule) => {
-    return userProgress?.completedTrainingModule?.some(
-      (progress) => progress.id === module?.id
-    )
   }
 
   const markCompleted = () => {
@@ -251,7 +243,7 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
               loading={isMarking}
               leadingIcon={<CheckIcon fill="#fff" />}
               onClick={markCompleted}
-              disabled={hasCompletedModule(currentModule)}
+              disabled={currentModule?.isCompleted}
             >
               Mark completed
             </Button>
@@ -323,7 +315,6 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
                     <Module
                       key={module.id}
                       {...module}
-                      hasCompleted={hasCompletedModule(module)}
                       isActive={currentModule?.id === module.id}
                       onPlay={() => setCurrentModule(module)}
                     />
