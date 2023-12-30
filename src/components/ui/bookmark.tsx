@@ -1,6 +1,5 @@
 import React from 'react'
 import { Text } from './text'
-import { CardData } from './all-training-module-bottom'
 import { TrainingCard } from './training-card'
 
 const Bookmark = () => {
@@ -14,7 +13,7 @@ const Bookmark = () => {
           Here are the overview of your watch later training module
         </Text>
         <div className="pt-6 grid lg:grid-cols-2 grid-cols-1">
-          <TrainingCard data={CardData} type="bookmark" />
+          <TrainingCard data={[]} type="bookmark" />
         </div>
       </div>
     </div>
