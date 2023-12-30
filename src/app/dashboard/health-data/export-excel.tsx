@@ -3,7 +3,7 @@ import { useHealthRiskData } from '@/hooks/queries/useHealthData'
 import React from 'react'
 import ExcelJS from 'exceljs'
 import { excelHeaders } from './custom-header'
-import flat from 'flat'
+import { flatten as flat } from 'flat'
 
 export const ExportAsExcel = () => {
   const { data, isLoading } = useHealthRiskData()

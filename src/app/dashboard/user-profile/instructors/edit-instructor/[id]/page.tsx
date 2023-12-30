@@ -42,10 +42,10 @@ export default function EditRecord({ params }: { params: { id: string } }) {
     notFound()
   }
   const { data, isLoading, refetch } = useInstructor(params.id)
-  const { isLoading: updateLoading, mutate } = useMutation(
-    (dataToSend: InstructorDataToSend) =>
-      baseAxios.patch(API.instructor(params.id), dataToSend)
-  )
+  const { isPending: updateLoading, mutate } = useMutation({
+    mutationFn: (dataToSend: InstructorDataToSend) =>
+      baseAxios.patch(API.instructor(params.id), dataToSend),
+  })
   const {
     control,
     handleSubmit,

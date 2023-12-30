@@ -128,9 +128,10 @@ export default function Instructors() {
       refetch()
     },
   })
-  const { isLoading: deleteLoading, mutate } = useMutation(() =>
-    baseAxios.delete(API.instructor(encodeURIComponent(selectedRow ?? '')))
-  )
+  const { isPending: deleteLoading, mutate } = useMutation({
+    mutationFn: () =>
+      baseAxios.delete(API.instructor(encodeURIComponent(selectedRow ?? ''))),
+  })
 
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)

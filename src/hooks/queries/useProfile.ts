@@ -8,9 +8,11 @@ const fetchProfile = async () => {
 }
 
 const useProfile = () => {
-  return useQuery(['profile'], fetchProfile, {
-    enabled: false,
-  })
+  return useQuery({
+    queryKey: ['profile'],
+    queryFn: fetchProfile,
+    enabled: false
+  });
 }
 
 export default useProfile

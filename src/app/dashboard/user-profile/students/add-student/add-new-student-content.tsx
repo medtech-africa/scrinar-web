@@ -35,12 +35,13 @@ const defaultValues = {
 export const AddNewStudentContent = () => {
   const queryClient = useQueryClient()
   const {
-    isLoading,
+    isPending: isLoading,
     mutate,
     reset: postReset,
-  } = useMutation((dataToSend: IDataToSend) =>
-    baseAxios.post(API.students, dataToSend)
-  )
+  } = useMutation({
+    mutationFn: (dataToSend: IDataToSend) =>
+      baseAxios.post(API.students, dataToSend),
+  })
 
   const {
     control,

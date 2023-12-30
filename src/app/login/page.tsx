@@ -31,12 +31,13 @@ const Login = () => {
   }, [isAuth, router])
 
   const {
-    isLoading,
+    isPending: isLoading,
     mutate,
     reset: postReset,
-  } = useMutation((dataToSend: IDataToSend) =>
-    baseAxios.post(API.login, dataToSend)
-  )
+  } = useMutation({
+    mutationFn: (dataToSend: IDataToSend) =>
+      baseAxios.post(API.login, dataToSend),
+  })
   const {
     control,
     reset,

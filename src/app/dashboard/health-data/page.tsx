@@ -141,14 +141,15 @@ export default function HealthData() {
     },
   ]
 
-  const { isLoading: deleteLoading, mutate } = useMutation(() =>
-    baseAxios.delete(
-      API.singleHealthData(encodeURIComponent(selectedRow ?? ''))
-    )
-  )
+  const { isPending: deleteLoading, mutate } = useMutation({
+    mutationFn: () =>
+      baseAxios.delete(
+        API.singleHealthData(encodeURIComponent(selectedRow ?? ''))
+      ),
+  })
 
-  const handleDelete = async () => {
-    await mutate(undefined, {
+  const handleDelete = () => {
+    mutate(undefined, {
       onSuccess: () => {
         setSelectedRow(null)
         setDeleteModal(false)

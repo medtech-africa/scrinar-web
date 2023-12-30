@@ -9,18 +9,19 @@ export const ExportAsCsv = () => {
 
   const dataToExport = data?.data
   return !isLoading ? (
-    <CSVLink
+    // TODO remove ts-ignore
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    (<CSVLink
       headers={csvHeaders}
       data={dataToExport ?? []}
       filename={'health-risk-data.csv'}
       className="py-2"
-    >
-      Export to CSV
-    </CSVLink>
+    >Export to CSV</CSVLink>)
   ) : (
     <>
       <IconPicker icon="loader2" size="1rem" className="mr-2" />
       Please wait
     </>
-  )
+  );
 }

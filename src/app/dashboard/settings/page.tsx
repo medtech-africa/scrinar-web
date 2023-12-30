@@ -44,10 +44,10 @@ type IFormData = {
 }
 
 const SecurityPrivacy = () => {
-  const { isLoading: updateLoading, mutate } = useMutation(
-    (dataToSend: Omit<IFormData, 'confirmNewPassword'>) =>
-      baseAxios.put(API.updatePassword, dataToSend)
-  )
+  const { isPending: updateLoading, mutate } = useMutation({
+    mutationFn: (dataToSend: Omit<IFormData, 'confirmNewPassword'>) =>
+      baseAxios.put(API.updatePassword, dataToSend),
+  })
 
   const {
     control,

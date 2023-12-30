@@ -62,9 +62,10 @@ export const AddHealthDataRecordContent = () => {
 
   const [bloodSugar, setBloodSugar] = useState('')
 
-  const { isLoading, mutate } = useMutation((data: HealthDataPayload) =>
-    baseAxios.post(API.healthData, data)
-  )
+  const { isPending: isLoading, mutate } = useMutation({
+    mutationFn: (data: HealthDataPayload) =>
+      baseAxios.post(API.healthData, data),
+  })
 
   const students = useMemo(
     () =>

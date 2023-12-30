@@ -200,10 +200,12 @@ const ScreeningAdd = ({
     formState: { errors },
   } = useForm<IFormValue>({ resolver: validation.createScreening })
   const {
-    isLoading,
+    isPending: isLoading,
     mutate,
     reset: postReset,
-  } = useMutation((data: IData) => baseAxios.post(API.schedules, data))
+  } = useMutation({
+    mutationFn: (data: IData) => baseAxios.post(API.schedules, data),
+  })
   const queryClient = useQueryClient()
 
   const onSubmit = async (data: IFormValue) => {
@@ -431,10 +433,12 @@ const ScreeningEdit = ({
     setValue,
   } = useForm<IFormValue>({ resolver: validation.createScreening })
   const {
-    isLoading,
+    isPending: isLoading,
     mutate,
     reset: postReset,
-  } = useMutation((data: IData) => baseAxios.patch(API.schedules, data))
+  } = useMutation({
+    mutationFn: (data: IData) => baseAxios.patch(API.schedules, data),
+  })
   const queryClient = useQueryClient()
 
   const onSubmit = async (data: IFormValue) => {

@@ -43,9 +43,10 @@ interface IFormValue {
 
 const AdminUpdate = ({ selectedImg = null as File | null }) => {
   const { isLoading: stateLoading, data: states } = useStateLGA()
-  const { isLoading, mutate } = useMutation((dataToSend: HealthDataPayload) =>
-    baseAxios.patch(API.schoolUpdate, dataToSend)
-  )
+  const { isPending: isLoading, mutate } = useMutation({
+    mutationFn: (dataToSend: HealthDataPayload) =>
+      baseAxios.patch(API.schoolUpdate, dataToSend),
+  })
   const {
     control,
     handleSubmit,
@@ -317,9 +318,10 @@ const AdminUpdate = ({ selectedImg = null as File | null }) => {
 }
 
 const InstructorUpdate = ({ selectedImg = null as File | null, id = '' }) => {
-  const { isLoading, mutate } = useMutation((dataToSend: HealthDataPayload) =>
-    baseAxios.patch(API.instructor(id), dataToSend)
-  )
+  const { isPending: isLoading, mutate } = useMutation({
+    mutationFn: (dataToSend: HealthDataPayload) =>
+      baseAxios.patch(API.instructor(id), dataToSend),
+  })
   const {
     control,
     handleSubmit,

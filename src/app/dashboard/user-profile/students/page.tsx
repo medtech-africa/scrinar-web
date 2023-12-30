@@ -117,9 +117,10 @@ export default function Students() {
 
   const studentsData = data?.data
 
-  const { isLoading: deleteLoading, mutate } = useMutation(() =>
-    baseAxios.delete(API.student(encodeURIComponent(selectedRow ?? '')))
-  )
+  const { isPending: deleteLoading, mutate } = useMutation({
+    mutationFn: () =>
+      baseAxios.delete(API.student(encodeURIComponent(selectedRow ?? ''))),
+  })
 
   const handleMoreClick = (rowIndex: string) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)

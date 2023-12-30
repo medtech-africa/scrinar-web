@@ -8,13 +8,19 @@ const fetchModules = async () => {
 }
 
 const useTrainingModules = () => {
-  return useQuery(['training-modules'], fetchModules)
+  return useQuery({
+    queryKey: ['training-modules'],
+    queryFn: fetchModules
+  });
 }
 
 export const useTrainingModule = (id: string) => {
-  return useQuery(['training-module', id], () =>
-    baseAxios.get(API.trainingModule(id)).then((res) => res.data)
-  )
+  return useQuery({
+    queryKey: ['training-module', id],
+
+    queryFn: () =>
+      baseAxios.get(API.trainingModule(id)).then((res) => res.data)
+  });
 }
 
 export default useTrainingModules
