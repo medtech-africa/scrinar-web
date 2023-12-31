@@ -223,7 +223,7 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
         navigation={navigationItems}
       />
 
-      <section className="grid md:grid-cols-2">
+      <section className="grid lg:grid-cols-[3fr_2fr]">
         <section className="w-full my-4">
           <div className="">
             <Text variant="display/xs" weight="bold">
@@ -262,19 +262,25 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
               </AccordionTrigger>
               <AccordionContent className="gap-y-4 grid">
                 {currentModule?.resources?.map((resource) => (
-                  <div
-                    key={resource.title}
-                    className="w-full flex justify-between items-center"
-                  >
-                    <Text variant="text/sm">{resource.title}</Text>
-                    <a target="_blank" href={resource.url}>
-                      <button
-                        type="button"
-                        className="relative inline-flex items-center rounded-md bg-primary px-3 py-2 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                      >
-                        Open
-                      </button>
-                    </a>
+                  <div key={resource.title} className="w-full grid">
+                    <div className="w-full flex justify-between items-center mb-1">
+                      <Text variant="text/sm">{resource.title}</Text>
+                      <a target="_blank" href={resource.url}>
+                        <button
+                          type="button"
+                          className="relative inline-flex items-center rounded-md bg-primary px-3 py-1 text-sm font-semibold text-white shadow-sm focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                        >
+                          Open in new tab
+                        </button>
+                      </a>
+                    </div>
+                    <iframe
+                      src={resource.url}
+                      height="480"
+                      title={resource.title}
+                      allow="autoplay"
+                      className="w-full h-[calc(100vh-200px)]"
+                    ></iframe>
                   </div>
                 ))}
               </AccordionContent>
@@ -293,7 +299,7 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
 
         <div className="bg-white px-4 py-5 sm:px-6">
           <PageCard title="Module Summary" bodyStyle="px-4 pb-4">
-            <Text className="text-gray-800" variant="text/xs" weight="medium">
+            <Text className="text-gray-800" variant="text/xs">
               {courseDetails.description}
             </Text>
           </PageCard>

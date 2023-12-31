@@ -3,7 +3,7 @@
 @tailwind utilities;
 
 /* custom fonts */
-@font-face {
+/* @font-face {
   font-family: 'Aeonik';
   src: url('../fonts/Aeonik-Air.otf') format('otf');
   font-weight: 100;
@@ -17,24 +17,24 @@
   font-weight: 200;
   font-style: normal;
   font-display: swap;
-}
+} */
 
-@font-face {
+/* @font-face {
   font-family: 'Aeonik';
   src: url('../fonts/Aeonik-Light.otf') format('otf');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
-}
-@font-face {
+} */
+/* @font-face {
   font-family: 'Aeonik';
   src: url('../fonts/Aeonik-LightItalic.otf') format('otf');
   font-weight: 300;
   font-style: italic;
   font-display: swap;
-}
+} */
 
-@font-face {
+/* @font-face {
   font-family: 'Aeonik';
   src: url('../fonts/Aeonik-Regular.otf') format('otf');
   font-weight: 400;
@@ -48,9 +48,47 @@
   font-weight: 400;
   font-style: italic;
   font-display: swap;
+} */
+
+@font-face {
+  font-family: 'Aeonik';
+  src: url('https://db.onlinewebfonts.com/t/757ff6da05e4f945c71c9751b485a9ad.eot');
+  src:
+    url('https://db.onlinewebfonts.com/t/757ff6da05e4f945c71c9751b485a9ad.eot?#iefix')
+      format('embedded-opentype'),
+    url('https://db.onlinewebfonts.com/t/757ff6da05e4f945c71c9751b485a9ad.woff2')
+      format('woff2'),
+    url('https://db.onlinewebfonts.com/t/757ff6da05e4f945c71c9751b485a9ad.woff')
+      format('woff'),
+    url('https://db.onlinewebfonts.com/t/757ff6da05e4f945c71c9751b485a9ad.ttf')
+      format('truetype'),
+    url('https://db.onlinewebfonts.com/t/757ff6da05e4f945c71c9751b485a9ad.svg#Aeonik Medium')
+      format('svg');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
 }
 
 @font-face {
+  font-family: 'Aeonik';
+  src: url('https://db.onlinewebfonts.com/t/8f2a9d487bbbc60974cd132fc3a63862.eot');
+  src:
+    url('https://db.onlinewebfonts.com/t/8f2a9d487bbbc60974cd132fc3a63862.eot?#iefix')
+      format('embedded-opentype'),
+    url('https://db.onlinewebfonts.com/t/8f2a9d487bbbc60974cd132fc3a63862.woff2')
+      format('woff2'),
+    url('https://db.onlinewebfonts.com/t/8f2a9d487bbbc60974cd132fc3a63862.woff')
+      format('woff'),
+    url('https://db.onlinewebfonts.com/t/8f2a9d487bbbc60974cd132fc3a63862.ttf')
+      format('truetype'),
+    url('https://db.onlinewebfonts.com/t/8f2a9d487bbbc60974cd132fc3a63862.svg#Aeonik Regular')
+      format('svg');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* @font-face {
   font-family: 'Aeonik';
   src: url('../fonts/Aeonik-Medium.otf') format('otf');
   font-weight: 400;
@@ -64,9 +102,9 @@
   font-weight: 400;
   font-style: italic;
   font-display: swap;
-}
+} */
 
-@font-face {
+/* @font-face {
   font-family: 'Aeonik';
   src: url('../fonts/Aeonik-Bold.otf') format('otf');
   font-weight: 700;
@@ -80,7 +118,7 @@
   font-weight: 900;
   font-style: normal;
   font-display: swap;
-}
+} */
 
 @layer base {
   :root {
@@ -149,9 +187,6 @@
 @layer base {
   * {
     @apply border-border;
-  }
-  html {
-    font-family: 'Aeonik', sans-serif;
   }
   body {
     @apply bg-background;

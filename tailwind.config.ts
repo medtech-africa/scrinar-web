@@ -21,7 +21,7 @@ const config: Config = {
       },
     },
     fontFamily: {
-      sans: ['Aeonik', 'sans-serif'],
+      sans: ['var(--font-aeonik)', 'Aeonik', 'sans-serif'],
     },
     extend: {
       backgroundImage: {
