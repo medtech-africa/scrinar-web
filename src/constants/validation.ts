@@ -90,7 +90,7 @@ const login = yupResolver(
       .string()
       .test('is-email-or-phone', 'Invalid email or phone number', (value) => {
         // Regular expression for a valid email address
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,40}$/
 
         // Regular expression for a valid phone number
         const phoneRegex = /^(?:\+234|0)[789]\d{9}$/
