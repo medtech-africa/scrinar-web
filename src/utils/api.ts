@@ -7,6 +7,7 @@ export const API = {
 
   // auth
   login: `${BASE_URL}/api/v1/auth/school/login`,
+  masterLogin: `${BASE_URL}/api/v1/auth/admin/master?type=trainer`,
   updatePassword: `${BASE_URL}/api/v1/auth/update-password`,
   getProfile: `${BASE_URL}/api/v1/auth/me`,
   // master instructor
@@ -49,6 +50,14 @@ export const API = {
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,
 
   //training modules
-  trainingModules: `${BASE_URL}/api/v1/training-modules`,
+  trainingModules: (courseId: string) =>
+    `${BASE_URL}/api/v1/training-modules/courses/${courseId}/modules`,
+  trainingCourses: `${BASE_URL}/api/v1/training-modules/courses`,
   trainingModule: (id: string) => `${BASE_URL}/api/v1/training-modules/${id}`,
+  trainingCourse: (id: string) =>
+    `${BASE_URL}/api/v1/training-modules/courses/${id}`,
+  trainingModuleComplete: (id: string, moduleId: string) =>
+    `${BASE_URL}/api/v1/training-modules/courses/${id}/modules/${moduleId}/complete`,
+  trainingModuleProgress: (id: string) =>
+    `${BASE_URL}/api/v1/training-modules/courses/${id}/progress`,
 }

@@ -90,7 +90,7 @@ const login = yupResolver(
       .string()
       .test('is-email-or-phone', 'Invalid email or phone number', (value) => {
         // Regular expression for a valid email address
-        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,40}$/
 
         // Regular expression for a valid phone number
         const phoneRegex = /^(?:\+234|0)[789]\d{9}$/
@@ -104,6 +104,21 @@ const login = yupResolver(
           }
         }
       }),
+    password: yup
+      .string()
+      .required('Password is required')
+      .typeError('Please enter your password'),
+  })
+)
+
+const createMasterLogin = yupResolver(
+  yup.object().shape({
+    email: yup
+      .string()
+      .required()
+      .typeError('Please enter email address')
+      .email(),
+    name: yup.string().required().typeError('Please enter your name'),
     password: yup
       .string()
       .required('Password is required')
@@ -286,6 +301,7 @@ const validation = {
   createPatient,
   createInstructor,
   login,
+  createMasterLogin,
   updatePasswordSchema,
   register,
   nutritional,

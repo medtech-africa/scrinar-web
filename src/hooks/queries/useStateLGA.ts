@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query'
+import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 
@@ -19,9 +19,11 @@ const getState = () =>
   baseAxios.get<State[]>(API.getState).then((res) => res.data)
 
 const useStateLGA = () => {
-  return useQuery(['state'], () => getState(), {
-    keepPreviousData: true,
-  })
+  return useQuery({
+    queryKey: ['state'],
+    queryFn: () => getState(),
+    placeholderData: keepPreviousData
+  });
 }
 
 export default useStateLGA

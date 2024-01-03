@@ -1,6 +1,5 @@
 import React from 'react'
 import { Text } from './text'
-import { CardData } from './all-training-module-bottom'
 import { TrainingCard } from './training-card'
 
 const OngoingLesson = () => {
@@ -14,7 +13,7 @@ const OngoingLesson = () => {
           Continue from where you stopped.
         </Text>
         <div className="pt-6 grid lg:grid-cols-2 grid-cols-1">
-          <TrainingCard data={CardData} type="ongoing" />
+          <TrainingCard data={[]} type="ongoing" />
         </div>
       </div>
     </div>

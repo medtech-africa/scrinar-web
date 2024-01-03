@@ -39,9 +39,10 @@ const SelectSchoolModal = () => {
   const { data: schoolsData, isLoading: schoolsLoading } = useSchools()
   // state?.value
 
-  const { isLoading, mutate } = useMutation((schoolId: string) =>
-    baseAxios.get(API.attachToSchool(schoolId))
-  )
+  const { isPending: isLoading, mutate } = useMutation({
+    mutationFn: (schoolId: string) =>
+      baseAxios.get(API.attachToSchool(schoolId)),
+  })
 
   // const { isFetching: stateLoading, data: states } = useStateLGA()
 

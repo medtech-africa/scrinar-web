@@ -60,9 +60,10 @@ const defaultValue = {
 }
 const Register = () => {
   const { isLoading: stateLoading, data: states } = useStateLGA()
-  const { isLoading, mutate } = useMutation((dataToSend: IDataToSend) =>
-    baseAxios.post(API.schoolRegister, dataToSend)
-  )
+  const { isPending: isLoading, mutate } = useMutation({
+    mutationFn: (dataToSend: IDataToSend) =>
+      baseAxios.post(API.schoolRegister, dataToSend),
+  })
   const {
     control,
     reset,

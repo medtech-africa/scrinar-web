@@ -35,12 +35,13 @@ export const AddRecordContent = () => {
   const [isVisible, setIsvisible] = useState(false)
 
   const {
-    isLoading,
+    isPending: isLoading,
     mutate,
     reset: postReset,
-  } = useMutation((dataToSend: InstructorDataToSend) =>
-    baseAxios.post(API.instructors, dataToSend)
-  )
+  } = useMutation({
+    mutationFn: (dataToSend: InstructorDataToSend) =>
+      baseAxios.post(API.instructors, dataToSend),
+  })
 
   const {
     control,

@@ -78,9 +78,10 @@ const ScreeningList = ({
 
   const screeningData: DataType = data?.data
   const [deleteModal, setDeleteModal] = useState(false)
-  const { isLoading: deleteLoading, mutate } = useMutation(() =>
-    baseAxios.delete(API.screening(encodeURIComponent(selectedRow ?? '')))
-  )
+  const { isPending: deleteLoading, mutate } = useMutation({
+    mutationFn: () =>
+      baseAxios.delete(API.screening(encodeURIComponent(selectedRow ?? ''))),
+  })
 
   const menuItems = [
     {
@@ -178,10 +179,10 @@ const ScreeningList = ({
                         val.status === 'Completed'
                           ? 'success'
                           : val.status === 'Overdue'
-                          ? 'error'
-                          : val.status === 'Schedule'
-                          ? 'warning'
-                          : 'pending'
+                            ? 'error'
+                            : val.status === 'Schedule'
+                              ? 'warning'
+                              : 'pending'
                       }
                       value={val.status}
                     />
@@ -243,7 +244,7 @@ export default function ScreeningManagement() {
   const [actionType, setActionType] = useState('')
 
   return (
-    <div>
+    (<div>
       <PageHeader
         title="Screening Management"
         subtitle="Tracking and Schedule Screenings"
@@ -254,7 +255,6 @@ export default function ScreeningManagement() {
         leadingIcon={<IconPicker icon="add" />}
         onClick={() => setActionType('add')}
       />
-
       <div className="md:flex md:flex-row md:items-start grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
         <TabList
           //Calendar View',
@@ -272,25 +272,23 @@ export default function ScreeningManagement() {
           {openFilter && <FilterData />}
         </div>
       </div>
-
       {selectedTab === 'Calendar View' ? (
         // @TODO: This is a dummy content
-        <div>
+        (<div>
           <MD />
           <CC />
-        </div>
+        </div>)
       ) : (
         <ScreeningList actionType={actionType} setActionType={setActionType} />
       )}
-
       {actionType === 'add' && (
         <ScreeningAdd
           setActionType={setActionType}
           actionOpened={actionType === 'add'}
         />
       )}
-    </div>
-  )
+    </div>)
+  );
 }
 type DataType = {
   id: string

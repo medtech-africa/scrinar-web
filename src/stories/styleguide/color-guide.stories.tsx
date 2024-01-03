@@ -2,7 +2,7 @@ import React from 'react'
 import { Meta } from '@storybook/react'
 import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
-import flatten from 'flat'
+import { flatten } from 'flat'
 import colors from '@/constants/colors'
 
 const getContrastYIQ = (hexcolor = '') => {

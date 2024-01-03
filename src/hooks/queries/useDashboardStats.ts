@@ -8,7 +8,11 @@ const fetchStats = async () => {
 }
 
 const useDashboardStats = (enabled: boolean) => {
-  return useQuery(['dashboard-stats'], fetchStats, { enabled: enabled })
+  return useQuery({
+    queryKey: ['dashboard-stats'],
+    queryFn: fetchStats,
+    enabled: enabled
+  });
 }
 
 export default useDashboardStats
