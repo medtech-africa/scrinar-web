@@ -4,8 +4,7 @@ import { Header } from '@/components/ui/header'
 import { SideBar } from '@/components/ui/sidebar'
 import { AnimatePresence } from 'framer-motion'
 import { ReactNode, useState } from 'react'
-import NextTopLoader from 'nextjs-toploader'
-import colors from '@/constants/colors'
+
 import ContentLoader from '@/components/content-loader'
 import { useUser } from '@/context/user'
 import SelectSchoolModal from './select-school-modal'
@@ -18,7 +17,6 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   return (
     <>
       <ContentLoader loading={loading} />
-      <NextTopLoader color={colors.lust[500]} showSpinner={false} />
       <div className="w-full bg-grey-100 h-screen md:overflow-hidden">
         <div className="absolute z-30 md:py-4 md:pr-2 md:pl-4 h-full">
           <SideBar sideOpen={sideOpen} sideToggleOpen={sideToggleOpen} />

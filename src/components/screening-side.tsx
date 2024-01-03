@@ -437,7 +437,7 @@ const ScreeningEdit = ({
     mutate,
     reset: postReset,
   } = useMutation({
-    mutationFn: (data: IData) => baseAxios.patch(API.schedules, data),
+    mutationFn: (data: IData) => baseAxios.patch(API.screening(id), data),
   })
   const queryClient = useQueryClient()
 

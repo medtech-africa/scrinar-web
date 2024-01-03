@@ -111,6 +111,21 @@ const login = yupResolver(
   })
 )
 
+const createMasterLogin = yupResolver(
+  yup.object().shape({
+    email: yup
+      .string()
+      .required()
+      .typeError('Please enter email address')
+      .email(),
+    name: yup.string().required().typeError('Please enter your name'),
+    password: yup
+      .string()
+      .required('Password is required')
+      .typeError('Please enter your password'),
+  })
+)
+
 const updatePasswordSchema = yupResolver(
   yup.object().shape({
     currentPassword: yup
@@ -286,6 +301,7 @@ const validation = {
   createPatient,
   createInstructor,
   login,
+  createMasterLogin,
   updatePasswordSchema,
   register,
   nutritional,

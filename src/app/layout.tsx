@@ -4,6 +4,8 @@ import 'react-loading-skeleton/dist/skeleton.css'
 import type { Metadata } from 'next'
 import CustomToaster from '@/components/custom-toaster'
 import localFont from 'next/font/local'
+import NextTopLoader from 'nextjs-toploader'
+import colors from '@/constants/colors'
 
 export const metadata: Metadata = {
   title: 'Play4Health Admin',
@@ -45,6 +47,8 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${aeonikFont.variable} font-sans`}>
       <body className="">
+        <NextTopLoader color={colors.lust[500]} showSpinner={false} />
+
         <Providers>
           {children}
           <CustomToaster />
