@@ -140,12 +140,12 @@ const Module = ({
               100%
             </div>
           </div>
-          <Button className="flex justify-center items-center hover:bg-transparent gap-2 p-0 bg-transparent">
+          {/* <Button className="flex justify-center items-center hover:bg-transparent gap-2 p-0 bg-transparent">
             <CheckIcon />
             <Text className="text-primary" variant="text/xs">
               Mark as complete
             </Text>
-          </Button>
+          </Button> */}
         </div>
       </div>
     </div>
