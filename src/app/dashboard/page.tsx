@@ -109,7 +109,8 @@ const _actionData2 = [
 export default function Home() {
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
-  const { user, selectedSchool } = useUser()
+  const user = useUser((state) => state.user)
+  const selectedSchool = useUser((state) => state.selectedSchool)
   const isMI = isMasterInstructor(user?.roles)
   const { isLoading, data, refetch } = useDashboardStats(
     isMI ? (selectedSchool ? true : false) : true
@@ -139,10 +140,11 @@ export default function Home() {
                 stat.icon === 'health'
                   ? 'lust'
                   : stat.icon === 'teacher'
-                  ? 'green'
-                  : 'iris'
+                    ? 'green'
+                    : 'iris'
               return (
-                ((stat?.admin && restrictNonAdmin(user?.user?.roles)) ||
+                ((stat?.admin &&
+                  restrictNonAdmin(user?.user?.roles ?? user?.roles)) ||
                   !stat?.admin) && (
                   <DashboardCard className="w-ful relative" key={_}>
                     <DashboardCardHeader
@@ -238,7 +240,8 @@ export default function Home() {
           <ActionBlock title="Quick Actions" className="mb-6">
             {actionData1.map(
               (act, _) =>
-                ((act?.admin && restrictNonAdmin(user?.user?.roles)) ||
+                ((act?.admin &&
+                  restrictNonAdmin(user?.user?.roles ?? user?.roles)) ||
                   !act?.admin) && (
                   <div key={_}>
                     <div

@@ -71,17 +71,23 @@ const AdminUpdate = ({ selectedImg = null as File | null }) => {
   useEffect(() => {
     setValue('email', user?.user?.email)
     setValue('phoneNumber', user?.user?.phoneNumber)
-    setValue('website', user?.website)
-    setValue('name', user?.name)
-    setValue('schoolType', { value: user?.schoolType, label: user?.schoolType })
-    setValue('state', { value: user?.state, label: user?.state })
+    setValue('website', user?.website ?? '')
+    setValue('name', user?.name ?? '')
+    setValue('schoolType', {
+      value: user?.schoolType ?? '',
+      label: user?.schoolType ?? '',
+    })
+    setValue('state', { value: user?.state ?? '', label: user?.state ?? '' })
     setValue('zipCode', user?.zipCode)
     setValue(
       'educationalInstitution',
-      user?.educationalInstitution?.map((v: string) => ({ value: v, label: v }))
+      user?.educationalInstitution?.map((v: string) => ({
+        value: v,
+        label: v,
+      })) ?? []
     )
-    setValue('address', user?.address)
-    setValue('lga', { value: user?.lga, label: user?.lga })
+    setValue('address', user?.address ?? '')
+    setValue('lga', { value: user?.lga ?? '', label: user?.lga ?? '' })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [user])
 
@@ -332,7 +338,8 @@ const InstructorUpdate = ({ selectedImg = null as File | null, id = '' }) => {
   })
   const [imageLoading, setImageLoading] = useState(false)
   const { refetch } = useProfile()
-  const { user, setUser } = useUser()
+  const user = useUser((state) => state.user)
+  const setUser = useUser((state) => state.setUser)
 
   useEffect(() => {
     if (user) {
@@ -342,7 +349,7 @@ const InstructorUpdate = ({ selectedImg = null as File | null, id = '' }) => {
       setValue('email', user?.email)
       setValue('dob', user?.dob)
       setValue('gender', { value: user?.gender, label: user?.gender })
-      setValue('role', { value: user?.role, label: user?.role })
+      setValue('role', { value: user?.roles?.[0], label: user?.roles?.[0] })
       setValue('phoneNumber', user?.phoneNumber)
       setValue('avatar', !!user?.avatarUrl)
     }

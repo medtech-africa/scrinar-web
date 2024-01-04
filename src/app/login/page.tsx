@@ -5,8 +5,10 @@ import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
 import validation from '@/constants/validation'
 import { useAuth } from '@/context/auth'
+import { useUser } from '@/context/user'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
+import { isTrainer } from '@/utils/checkPermission'
 import { errorMessage } from '@/utils/errorMessage'
 import { useMutation } from '@tanstack/react-query'
 import Image from 'next/image'
@@ -24,6 +26,7 @@ interface IDataToSend {
 const Login = () => {
   const [isVisible, setIsvisible] = useState(false)
   const { authenticate, isAuth, authLoading } = useAuth()
+  const setUser = useUser((state) => state.setUser)
   const [loading, setLoading] = useState(false)
   const router = useRouter()
 
@@ -62,9 +65,14 @@ const Login = () => {
           if (accessToken) {
             await authenticate(accessToken)
           }
+          setUser(responseData?.data)
           reset()
           postReset()
-          router.push('/dashboard')
+          router.push(
+            isTrainer(responseData?.data?.roles)
+              ? '/dashboard/training-module'
+              : '/dashboard'
+          )
         },
         onError(error) {
           errorMessage(error)

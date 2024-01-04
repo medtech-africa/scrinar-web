@@ -2,9 +2,57 @@ import isJwtExpired from '@/utils/isJwtExpired'
 import { create } from 'zustand'
 import { Cookies } from 'react-cookie'
 
+export interface NestedUser {
+    email: string
+    phoneNumber: string
+    avatarUrl: string
+    roles: string[]
+}
+  
+export interface ISchool {
+  userId: string
+  name: string
+  website: string
+  address: string
+  zipCode: string
+  schoolType: string
+  educationalInstitution: string[]
+  lga: string
+  state: string
+  user: NestedUser
+  createdAt: string
+  updatedAt: string
+  id: string
+  email: string
+  phoneNumber: string
+  avatarUrl: string
+  roles: string[]
+  school?:{name:string}
+  fullName: string
+}
+export interface IUser {
+  email: string
+  isSuspended: boolean
+  leaderBoardScore: number
+  isVerified: boolean
+  roles: string[]
+  loginDevices: any[]
+  userId: string
+  createdAt: string
+  updatedAt: string
+  schoolID: string
+  id: string
+  firstName: string
+  lastName: string
+  middleName: string
+  dob: string
+  gender: string
+  //
+}
+
 interface IUserState {
   loading: boolean
-  user: null | any
+  user: null | (IUser & ISchool)
   loadUser: (user?: any) => void
   setUser: (val: any) => void
   updateUser: (val: any) => void

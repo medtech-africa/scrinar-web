@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import useClickAway from '@/hooks/useClickAway'
@@ -14,7 +14,7 @@ import { Text } from './text'
 import { usePathname } from 'next/navigation'
 import { IconPicker } from './icon-picker'
 import { IconNames } from './icon-picker/icon-names'
-import restrictNonAdmin from '@/utils/checkPermission'
+import restrictNonAdmin, { isTrainer } from '@/utils/checkPermission'
 import { useUser } from '@/context/user'
 
 interface NavLinkProps {
@@ -28,6 +28,7 @@ interface Datatype {
   title: string
   href: string
   icon: IconNames
+  roles?: string[]
 }
 
 const NavLink = ({ children, href, active, className }: NavLinkProps) => {
@@ -57,21 +58,25 @@ const generalData = [
     title: 'Dashboard',
     icon: 'grid7',
     href: '',
+    roles: ['school', 'instructor', 'play4health_admin'],
   },
   {
     title: 'Health Data',
     icon: 'health',
     href: 'health-data',
+    roles: ['school', 'instructor', 'play4health_admin'],
   },
   {
     title: 'Screening',
     icon: 'calendar',
     href: 'screening',
+    roles: ['school', 'instructor', 'play4health_admin'],
   },
   {
     title: 'Training Module',
     icon: 'book',
     href: 'training-module',
+    roles: ['school', 'instructor', 'play4health_admin', 'trainer'],
   },
 ] as Datatype[]
 
@@ -95,7 +100,7 @@ interface ISideBar {
 
 const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
   const pathname = usePathname()
-  const { user } = useUser()
+  const user = useUser((state) => state.user)
 
   const [open, toggleOpen] = useState(false)
   const sidebarRef = useRef(null)
@@ -117,6 +122,19 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [pathname])
+
+  const generalSidebarMenu = useMemo(() => {
+    return generalData.filter((item) => {
+      if (item.roles) {
+        return item.roles.some((role) => user?.roles?.includes(role))
+      }
+      return true
+    })
+  }, [user?.roles])
+
+  const showUserProfileTab = !isTrainer(user?.roles)
+
+  console.log({ showUserProfileTab })
 
   return (
     <AnimatePresence initial={false}>
@@ -166,7 +184,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                   <span className="hidden md:block lg:hidden">...</span>
                 </Text>
 
-                {generalData.map((item, __) => (
+                {generalSidebarMenu.map((item, __) => (
                   <div key={__} className="mb-2">
                     <NavLink
                       href={`/dashboard/${item?.href}`}
@@ -193,39 +211,41 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                   layout
                   transition={{ layout: { duration: 0.5, type: 'spring' } }}
                 >
-                  <motion.button
-                    className={cn(
-                      'flex items-center justify-between text-grey-600 py-3 px-4 rounded-lg hover:opacity-80 w-full',
-                      {
-                        'bg-primary text-white':
-                          pathname.includes('/user-profile'),
-                        'opacity-95': !pathname.includes('/user-profile'),
-                      }
-                    )}
-                    onClick={() => toggleOpen(!open)}
-                    layout="position"
-                  >
-                    <div className="flex gap-2">
-                      <IconPicker icon="profile2User" size="1.5rem" />
-                      <Text
-                        className="block md:hidden lg:block"
-                        variant="text/md"
-                      >
-                        User Profile
-                      </Text>
-                    </div>
-                    <motion.div
-                      key="arrow"
-                      animate={{ rotate: open ? 0 : -90 }}
-                      transition={{
-                        type: 'spring',
-                        stiffness: 500,
-                        damping: 50,
-                      }}
+                  {showUserProfileTab && (
+                    <motion.button
+                      className={cn(
+                        'flex items-center justify-between text-grey-600 py-3 px-4 rounded-lg hover:opacity-80 w-full',
+                        {
+                          'bg-primary text-white':
+                            pathname.includes('/user-profile'),
+                          'opacity-95': !pathname.includes('/user-profile'),
+                        }
+                      )}
+                      onClick={() => toggleOpen(!open)}
+                      layout="position"
                     >
-                      <IconPicker icon="arrowDown" />
-                    </motion.div>
-                  </motion.button>
+                      <div className="flex gap-2">
+                        <IconPicker icon="profile2User" size="1.5rem" />
+                        <Text
+                          className="block md:hidden lg:block"
+                          variant="text/md"
+                        >
+                          User Profile
+                        </Text>
+                      </div>
+                      <motion.div
+                        key="arrow"
+                        animate={{ rotate: open ? 0 : -90 }}
+                        transition={{
+                          type: 'spring',
+                          stiffness: 500,
+                          damping: 50,
+                        }}
+                      >
+                        <IconPicker icon="arrowDown" />
+                      </motion.div>
+                    </motion.button>
+                  )}
                   <AnimatePresence initial={false}>
                     {open && (
                       <motion.div
@@ -245,7 +265,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           },
                         }}
                       >
-                        {restrictNonAdmin(user?.user?.roles) && (
+                        {restrictNonAdmin(user?.roles) && (
                           <NavLink
                             href={'/dashboard/user-profile/instructors'}
                             className={cn(

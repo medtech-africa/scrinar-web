@@ -1,5 +1,5 @@
 /* eslint-disable import/no-unused-modules */
-const restrictNonAdmin = (roles: string[]) => {
+const restrictNonAdmin = (roles: string[] = []) => {
   if (
     roles?.includes('school') ||
     roles?.includes('admin') ||
@@ -13,5 +13,7 @@ const restrictNonAdmin = (roles: string[]) => {
 
 export default restrictNonAdmin
 
-export const isMasterInstructor = (roles: string[]) =>
+export const isMasterInstructor = (roles: string[] = []) =>
   roles?.includes('play4health_admin')
+export const isTrainer = (roles: string[] = []) =>
+  roles?.includes('trainer')
