@@ -49,7 +49,7 @@ const MasterLogin = () => {
         onSuccess: () => {
           reset()
           postReset()
-          toast.success('Login create successfully')
+          toast.success('Login created successfully')
           router.push('/login')
         },
         onError(error) {
