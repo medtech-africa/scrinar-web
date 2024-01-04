@@ -36,6 +36,7 @@ import {
 import Quiz from './Quiz'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
+import YouTube from 'react-youtube'
 
 const navigationItems = [
   { label: 'Training Module', icon: IconNames.arrowRight },
@@ -253,13 +254,31 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
             <Text variant="display/xs" weight="bold">
               {currentModule?.moduleNumber}. {currentModule?.title}
             </Text>
-            {!!currentModule?.video.url && (
+            {!!currentModule?.video?.url && (
+              // <iframe
+              //   className="h-[500px] w-full"
+              //   src={currentModule.video.url}
+              // />
+              <YouTube
+                videoId={currentModule.video.url.replace(
+                  'https://youtu.be/',
+                  ''
+                )} // defaults -> ''
+                id={currentModule.video.url} // defaults -> ''
+                className="h-[500px] w-full"
+                // iframeClassName={string} // defaults -> ''
+                // style={object} // defaults -> {}
+                title={currentModule?.title} // defaults -> ''
+                // loading={string} // defaults -> noop
+              />
+            )}
+            {/* {!!currentModule?.video.url && (
               <video
                 className="h-[500px] w-full"
                 src={currentModule.video.url}
                 controls
               />
-            )}
+            )} */}
           </div>
 
           <div className="flex justify-between items-center my-8">
