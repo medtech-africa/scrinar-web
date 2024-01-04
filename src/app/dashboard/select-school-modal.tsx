@@ -94,11 +94,11 @@ const SelectSchoolModal = () => {
             ? toast.error('Please select a school to contine')
             : setOpenSchoolModal(false)
         }
-        className="!max-h-[400px]"
+        className="md:h-[80%]"
         title={'Master Instructor - Select school'}
       >
         <form
-          className="m-auto h-full max-w-sm"
+          className="m-auto h-full w-4/5 max-w-sm"
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="grid grid-cols-1 h-full content-center gap-6">
@@ -136,6 +136,9 @@ const SelectSchoolModal = () => {
                   variant={errors?.school ? 'destructive' : 'default'}
                   message={errors.school?.message ?? ''}
                   isDisabled={schoolsLoading}
+                  classNames={{
+                    menuList: () => 'h-[200px]',
+                  }}
                 />
               )}
               name="school"

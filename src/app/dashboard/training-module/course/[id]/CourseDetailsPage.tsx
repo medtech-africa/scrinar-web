@@ -21,10 +21,21 @@ import { Button } from '@/components/ui/button'
 import { formatDuration } from 'date-fns'
 import { useMemo, useState } from 'react'
 import { cn } from '@/lib/utils'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { Progress } from '@/components/ui/progress'
 import { scrollToTop } from '@/utils/scrollToTop'
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@/components/ui/dialog'
+import Quiz from './Quiz'
+import { API } from '@/utils/api'
+import baseAxios from '@/utils/baseAxios'
 
 const navigationItems = [
   { label: 'Training Module', icon: IconNames.arrowRight },
@@ -153,6 +164,7 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
   } = useTrainingModules({
     courseId: id,
   })
+
   const { mutate, isPending: isMarking } = useMutation({
     mutationFn: (moduleId: string) => markAsComplete(id, moduleId),
     mutationKey: ['training-course-progress'],
@@ -161,6 +173,18 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
   const [currentModule, setCurrentModule] = useState<
     TrainingModule | undefined
   >(modules?.[0])
+
+  const { data: quizQuestions } = useQuery({
+    queryKey: ['quiz', currentModule?.quiz],
+    enabled: !!currentModule?.quiz,
+    queryFn: () =>
+      currentModule?.quiz
+        ? baseAxios
+            .get(API.quizQuestions(currentModule.quiz))
+            .then((res) => res.data?.data)
+        : null,
+  })
+  console.log('quizQuestions', quizQuestions)
 
   const courseDetails = course
 
@@ -247,6 +271,25 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
             >
               Mark completed
             </Button>
+            {/* <Button onClick={markCompleted}>Take Quiz</Button> */}
+
+            <Dialog>
+              <DialogTrigger>Take Quiz</DialogTrigger>
+              <DialogContent
+                className="sm:max-w-[425px]"
+                title={`${currentModule?.content} Quiz Questions`}
+              >
+                <DialogHeader>
+                  <DialogTitle>
+                    {currentModule?.content} Quiz Questions
+                  </DialogTitle>
+                  <DialogDescription>
+                    Answer the questions below
+                  </DialogDescription>
+                </DialogHeader>
+                <Quiz questions={quizQuestions} />
+              </DialogContent>
+            </Dialog>
           </div>
 
           <Accordion type="single" collapsible defaultValue="resources">

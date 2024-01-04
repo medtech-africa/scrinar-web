@@ -56,6 +56,7 @@ export const API = {
   trainingModule: (id: string) => `${BASE_URL}/api/v1/training-modules/${id}`,
   trainingCourse: (id: string) =>
     `${BASE_URL}/api/v1/training-modules/courses/${id}`,
+  quizQuestions: (id: string) => `${BASE_URL}/api/v1/quiz/${id}/questions?type=trainer`,
   trainingModuleComplete: (id: string, moduleId: string) =>
     `${BASE_URL}/api/v1/training-modules/courses/${id}/modules/${moduleId}/complete`,
   trainingModuleProgress: (id: string) =>

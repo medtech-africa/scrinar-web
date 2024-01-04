@@ -12,6 +12,7 @@ export interface TrainingModule {
   content: string
   moduleNumber: number
   thumbnail: string
+  quiz: string
   video: TrainingVideo
   resources: TrainingResource[]
   course: string
