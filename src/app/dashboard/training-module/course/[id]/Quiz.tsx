@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 type IQuiz = {
   id: string
@@ -20,6 +20,7 @@ type IQuiz = {
 }
 type QuizProps = {
   questions: IQuiz[]
+  onComplete: () => void
 }
 
 const convertToQuiz = (data: IQuiz) => {
@@ -36,7 +37,7 @@ const convertToQuiz = (data: IQuiz) => {
   }
 }
 
-const Quiz = ({ questions = [] }: QuizProps) => {
+const Quiz = ({ questions = [], onComplete }: QuizProps) => {
   const [activeQuestion, setActiveQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null)
   const [showResult, setShowResult] = useState(false)
@@ -49,9 +50,12 @@ const Quiz = ({ questions = [] }: QuizProps) => {
     wrongAnswers: 0,
   })
 
-  const { question, choices, correctAnswer } =
-    questions.map(convertToQuiz)?.[activeQuestion]
+  const currentQuestion = useMemo(
+    () => questions.map(convertToQuiz)?.[activeQuestion],
+    [questions, activeQuestion]
+  )
 
+  const { question, choices, correctAnswer } = currentQuestion
   const onClickNext = () => {
     setSelectedAnswerIndex(null)
     setResult((prev) =>
@@ -68,6 +72,7 @@ const Quiz = ({ questions = [] }: QuizProps) => {
     } else {
       setActiveQuestion(0)
       setShowResult(true)
+      onComplete()
     }
   }
 
