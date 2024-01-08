@@ -3,7 +3,7 @@
 import { PageHeader } from '@/components/page-header'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import {
-  markQuizAsComplete,
+  submitQuiz,
   useTrainingCourse,
   useTrainingModules,
 } from '@/hooks/queries/useTrainingModules'
@@ -140,8 +140,9 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
   })
 
   const { mutate, isPending: _isMarking } = useMutation({
-    mutationFn: (moduleId: string) => markQuizAsComplete(id, moduleId),
-    mutationKey: ['training-course-quiz-progress'],
+    mutationFn: (data: { moduleId: string; score: number }) =>
+      submitQuiz(data.moduleId, data.score),
+    mutationKey: ['submit-training-course-quiz'],
   })
 
   const [currentModule, setCurrentModule] = useState<
@@ -151,6 +152,7 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
   const { data: quizQuestions } = useQuery({
     queryKey: ['quiz', currentModule?.quiz],
     enabled: !!currentModule?.quiz,
+    refetchOnWindowFocus: false,
     queryFn: () =>
       currentModule?.quiz
         ? baseAxios
@@ -195,16 +197,19 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
     }
   }
 
-  const markCompleted = () => {
+  const markCompleted = (score: number) => {
     try {
       if (currentModule?.id) {
-        mutate(currentModule.id, {
-          onSuccess: () => {
-            refetch()
-            goToModule('next')
-            toast.success('Module marked as completed')
-          },
-        })
+        mutate(
+          { moduleId: currentModule.id, score },
+          {
+            onSuccess: () => {
+              refetch()
+              goToModule('next')
+              toast.success('Quiz completed and module marked as completed')
+            },
+          }
+        )
       }
     } catch (error) {
       //

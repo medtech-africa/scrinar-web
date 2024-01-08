@@ -34,6 +34,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'aceondo.edu.ng',
       },
+      {
+        protocol: 'https',
+        hostname: 'play4health.s3.amazonaws.com',
+      },
     ],
   },
 }

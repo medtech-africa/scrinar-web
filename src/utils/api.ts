@@ -16,10 +16,10 @@ export const API = {
   //students
   students: `${BASE_URL}/api/v1/students`,
   student: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
-  getStudents: (page?: number, level?: string) =>
+  getStudents: (page?: number, level?: string, searchVal?: string) =>
     `${BASE_URL}/api/v1/students${page ? `?page=${page}` : ''}${
       level ? `${page ? '&' : '?'}level=${level}` : ''
-    }`,
+    }${searchVal ? `&search=${searchVal}` : ''}`,
 
   //instructors
   instructors: `${BASE_URL}/api/v1/instructors`,
@@ -60,8 +60,8 @@ export const API = {
     `${BASE_URL}/api/v1/quiz/${id}/questions?type=trainer`,
   trainingModuleComplete: (id: string, moduleId: string) =>
     `${BASE_URL}/api/v1/training-modules/courses/${id}/modules/${moduleId}/complete`,
-  trainingModuleQuizComplete: (id: string, moduleId: string) =>
-    `${BASE_URL}/api/v1/training-modules/courses/${id}/modules/${moduleId}/quiz/complete`,
+  trainingModuleQuizComplete: (moduleId: string) =>
+    `${BASE_URL}/api/v1/training-modules/${moduleId}/submit-quiz`,
   trainingModuleProgress: (id: string) =>
     `${BASE_URL}/api/v1/training-modules/courses/${id}/progress`,
 }
