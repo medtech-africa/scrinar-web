@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 
 type IQuiz = {
   id: string
@@ -20,6 +20,7 @@ type IQuiz = {
 }
 type QuizProps = {
   questions: IQuiz[]
+  onComplete: (score: number) => void
 }
 
 const convertToQuiz = (data: IQuiz) => {
@@ -36,7 +37,7 @@ const convertToQuiz = (data: IQuiz) => {
   }
 }
 
-const Quiz = ({ questions = [] }: QuizProps) => {
+const Quiz = ({ questions = [], onComplete }: QuizProps) => {
   const [activeQuestion, setActiveQuestion] = useState(0)
   const [selectedAnswer, setSelectedAnswer] = useState<boolean | null>(null)
   const [showResult, setShowResult] = useState(false)
@@ -49,8 +50,17 @@ const Quiz = ({ questions = [] }: QuizProps) => {
     wrongAnswers: 0,
   })
 
-  const { question, choices, correctAnswer } =
-    questions.map(convertToQuiz)?.[activeQuestion]
+  const currentQuestion = useMemo(
+    () => questions.map(convertToQuiz)?.[activeQuestion],
+    [questions, activeQuestion]
+  )
+
+  const { question, choices, correctAnswer } = currentQuestion
+
+  const hasPassScore = useMemo(() => {
+    const questionsMedian = Math.round(questions.length / 2)
+    return result.score >= questionsMedian
+  }, [questions, result])
 
   const onClickNext = () => {
     setSelectedAnswerIndex(null)
@@ -58,7 +68,7 @@ const Quiz = ({ questions = [] }: QuizProps) => {
       selectedAnswer
         ? {
             ...prev,
-            score: prev.score + 5,
+            score: prev.score + 1,
             correctAnswers: prev.correctAnswers + 1,
           }
         : { ...prev, wrongAnswers: prev.wrongAnswers + 1 }
@@ -68,6 +78,10 @@ const Quiz = ({ questions = [] }: QuizProps) => {
     } else {
       setActiveQuestion(0)
       setShowResult(true)
+
+      if (hasPassScore) {
+        onComplete(result.score)
+      }
     }
   }
 
@@ -84,7 +98,7 @@ const Quiz = ({ questions = [] }: QuizProps) => {
     number > 9 ? number : `0${number}`
 
   return (
-    <div className="max-w-[500px] min-w-[250px] rounded mt-[100px] px-[60px] py-[30px] flex justify-center items-center">
+    <div className="max-w-[500px] min-w-[250px] rounded mt-[100px] px-[60px] py-[30px] flex justify-center items-center mx-auto">
       {!showResult ? (
         <div>
           <div>
@@ -131,31 +145,43 @@ const Quiz = ({ questions = [] }: QuizProps) => {
         </div>
       ) : (
         <div className="">
-          <h3 className="text-2xl tracking-[1.4px] text-center">Result</h3>
-          <p className="text-base font-medium">
+          <h3 className="text-2xl tracking-[1.4px] text-center mb-2">
+            Message
+          </h3>
+          {/* <p className="text-base font-medium">
             Total Question:{' '}
             <span className="text-[#800080] text-[22px]">
               {questions.length}
             </span>
-          </p>
-          <p className="text-base font-medium">
+          </p> */}
+          {/* <p className="text-base font-medium">
             Total Score:
             <span className="text-[#800080] text-[22px]"> {result.score}</span>
-          </p>
-          <p className="text-base font-medium">
+          </p> */}
+          {/* <p className="text-base font-medium">
             Correct Answers:
             <span className="text-[#800080] text-[22px]">
               {' '}
               {result.correctAnswers}
             </span>
-          </p>
-          <p className="text-base font-medium">
+          </p> */}
+          {/* <p className="text-base font-medium">
             Wrong Answers:
             <span className="text-[#800080] text-[22px]">
               {' '}
               {result.wrongAnswers}
             </span>
-          </p>
+          </p> */}
+
+          {hasPassScore ? (
+            <p className="text-lg font-medium text-green-900 text-center">
+              Congratulations! You have successfully completed this module
+            </p>
+          ) : (
+            <p className="text-lg font-medium text-center">
+              Score too low. Please take the quiz again!!!
+            </p>
+          )}
         </div>
       )}
     </div>

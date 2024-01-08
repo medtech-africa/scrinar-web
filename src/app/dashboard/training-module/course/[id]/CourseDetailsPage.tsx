@@ -3,7 +3,7 @@
 import { PageHeader } from '@/components/page-header'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import {
-  markAsComplete,
+  submitQuiz,
   useTrainingCourse,
   useTrainingModules,
 } from '@/hooks/queries/useTrainingModules'
@@ -37,6 +37,7 @@ import Quiz from './Quiz'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import YouTube from 'react-youtube'
+import { BadgeField } from '@/components/ui/badge'
 
 const navigationItems = [
   { label: 'Training Module', icon: IconNames.arrowRight },
@@ -47,34 +48,6 @@ type TModule = TrainingModule & {
   onPlay: () => void
   isActive?: boolean
 }
-
-const CheckIcon = ({ fill = '#E31B23' }) => (
-  <svg
-    width={16}
-    height={16}
-    viewBox="0 0 16 16"
-    fill="none"
-    xmlns="http://www.w3.org/2000/svg"
-  >
-    <mask
-      id="mask0_157_8927"
-      style={{ maskType: 'alpha' }}
-      maskUnits="userSpaceOnUse"
-      x={0}
-      y={0}
-      width={16}
-      height={16}
-    >
-      <rect width={16} height={16} fill="#D9D9D9" />
-    </mask>
-    <g mask="url(#mask0_157_8927)">
-      <path
-        d="M4.46662 11.9991L0.699951 8.23242L1.64995 7.29909L5.41662 11.0658L4.46662 11.9991ZM8.23328 11.9991L4.46662 8.23242L5.39995 7.28242L8.23328 10.1158L14.3666 3.98242L15.2999 4.93242L8.23328 11.9991ZM8.23328 8.23242L7.28328 7.29909L10.5833 3.99909L11.5333 4.93242L8.23328 8.23242Z"
-        fill={fill}
-      />
-    </g>
-  </svg>
-)
 
 const Module = ({
   title,
@@ -166,9 +139,10 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
     courseId: id,
   })
 
-  const { mutate, isPending: isMarking } = useMutation({
-    mutationFn: (moduleId: string) => markAsComplete(id, moduleId),
-    mutationKey: ['training-course-progress'],
+  const { mutate, isPending: _isMarking } = useMutation({
+    mutationFn: (data: { moduleId: string; score: number }) =>
+      submitQuiz(data.moduleId, data.score),
+    mutationKey: ['submit-training-course-quiz'],
   })
 
   const [currentModule, setCurrentModule] = useState<
@@ -178,6 +152,7 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
   const { data: quizQuestions } = useQuery({
     queryKey: ['quiz', currentModule?.quiz],
     enabled: !!currentModule?.quiz,
+    refetchOnWindowFocus: false,
     queryFn: () =>
       currentModule?.quiz
         ? baseAxios
@@ -185,7 +160,6 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
             .then((res) => res.data?.data)
         : null,
   })
-  console.log('quizQuestions', quizQuestions)
 
   const courseDetails = course
 
@@ -223,16 +197,19 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
     }
   }
 
-  const markCompleted = () => {
+  const markCompleted = (score: number) => {
     try {
       if (currentModule?.id) {
-        mutate(currentModule.id, {
-          onSuccess: () => {
-            refetch()
-            goToModule('next')
-            toast.success('Module marked as completed')
-          },
-        })
+        mutate(
+          { moduleId: currentModule.id, score },
+          {
+            onSuccess: () => {
+              refetch()
+              goToModule('next')
+              toast.success('Quiz completed and module marked as completed')
+            },
+          }
+        )
       }
     } catch (error) {
       //
@@ -251,9 +228,11 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
       <section className="grid lg:grid-cols-[3fr_2fr]">
         <section className="w-full my-4">
           <div className="">
-            <Text variant="display/xs" weight="bold">
-              {currentModule?.moduleNumber}. {currentModule?.title}
-            </Text>
+            <div className="mb-2">
+              <Text variant="display/xs" weight="bold">
+                {currentModule?.moduleNumber}. {currentModule?.title}{' '}
+              </Text>
+            </div>
             {!!currentModule?.video?.url && (
               // <iframe
               //   className="h-[500px] w-full"
@@ -282,33 +261,29 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
           </div>
 
           <div className="flex justify-between items-center my-8">
-            <Button
-              loading={isMarking}
-              leadingIcon={<CheckIcon fill="#fff" />}
-              onClick={markCompleted}
-              disabled={currentModule?.isCompleted}
-            >
-              Mark completed
-            </Button>
-            {/* <Button onClick={markCompleted}>Take Quiz</Button> */}
+            {currentModule?.isCompleted && (
+              <BadgeField value="Completed" variant="success" />
+            )}
 
-            <Dialog>
-              <DialogTrigger>Take Quiz</DialogTrigger>
-              <DialogContent
-                className="sm:max-w-[425px]"
-                title={`${currentModule?.content} Quiz Questions`}
-              >
-                <DialogHeader>
-                  <DialogTitle>
-                    {currentModule?.content} Quiz Questions
-                  </DialogTitle>
-                  <DialogDescription>
-                    Answer the questions below
-                  </DialogDescription>
-                </DialogHeader>
-                <Quiz questions={quizQuestions} />
-              </DialogContent>
-            </Dialog>
+            {!!quizQuestions?.length && !currentModule?.isCompleted && (
+              <Dialog>
+                <DialogTrigger>Take Quiz</DialogTrigger>
+                <DialogContent
+                  className="sm:max-w-[425px]"
+                  title={`${currentModule?.content} Quiz Questions`}
+                >
+                  <DialogHeader>
+                    <DialogTitle>
+                      {currentModule?.content} Quiz Questions
+                    </DialogTitle>
+                    <DialogDescription>
+                      Answer the questions below
+                    </DialogDescription>
+                  </DialogHeader>
+                  <Quiz onComplete={markCompleted} questions={quizQuestions} />
+                </DialogContent>
+              </Dialog>
+            )}
           </div>
 
           <Accordion type="single" collapsible defaultValue="resources">
