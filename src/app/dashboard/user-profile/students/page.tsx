@@ -19,6 +19,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import useStudents from '@/hooks/queries/useStudents'
+import { useDebouncedState } from '@/hooks/useDebouncedState'
 import { usePaginate } from '@/hooks/usePagination'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { API } from '@/utils/api'
@@ -63,18 +64,28 @@ const FilterData = () => {
 type FilterHeaderProps = {
   setOpenFilter: (value: boolean) => void
   openFilter: boolean
+  onSearchChange: (val: string) => void
+  searchVal?: string
+  loading?: boolean
 }
 const FilterHeader = ({
   setOpenFilter: _,
   openFilter: __,
+  onSearchChange,
+  searchVal,
+  loading,
 }: FilterHeaderProps) => {
   return (
     <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
       <Input
         leadingIcon={<IconPicker icon="search" />}
         className="rounded-[49px] bg-grey-100 text-sm  md:w-[17.25rem] w-[15rem]"
-        placeholder="Search by Name, Level, Gender or Age...."
+        placeholder="Search by Name, Level or Gender...."
         full={false}
+        onChange={(e) => onSearchChange(e.target.value)}
+        endingIcon={
+          loading && searchVal && <IconPicker icon="loader2" size={20} />
+        }
       />
       <div className="flex gap-x-4 mt-2 md:mt-0">
         {/* @Todo:not time */}
@@ -111,8 +122,12 @@ export default function Students() {
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
   )
-
-  const { data, isLoading, refetch } = useStudents(currentPage)
+  const [search, setSearch] = useDebouncedState('')
+  const { data, isLoading, refetch, isFetching } = useStudents(
+    currentPage,
+    '',
+    search
+  )
   useSchoolChangeRefresh(refetch)
 
   const studentsData = data?.data
@@ -172,7 +187,13 @@ export default function Students() {
         subtitle="Manage Students profiles, Add, View and Delete Profile."
         avatar="avatar"
       />
-      <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
+      <FilterHeader
+        setOpenFilter={setOpenFilter}
+        openFilter={openFilter}
+        onSearchChange={setSearch}
+        searchVal={search}
+        loading={isFetching}
+      />
       {openFilter && <FilterData />}
       <Delete
         open={deleteModal}
