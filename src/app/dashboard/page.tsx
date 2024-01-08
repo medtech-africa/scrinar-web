@@ -75,7 +75,7 @@ const actionData1 = [
     type: 'student',
   },
   {
-    title: 'Create Student Health Data',
+    title: 'Enter Student Health Data',
     subtitle: 'Add student health progress',
     icon: 'health' as IconNames,
     type: 'health-data',
