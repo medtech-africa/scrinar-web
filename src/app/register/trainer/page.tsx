@@ -74,7 +74,7 @@ const MasterLogin = () => {
                 weight="medium"
                 className="flex justify-center"
               >
-                Create Master Login
+                Create Trainer Login
               </Text>
               <Text
                 variant="text/sm"
