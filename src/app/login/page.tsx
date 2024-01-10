@@ -68,7 +68,7 @@ const Login = () => {
           setUser(responseData?.data)
           reset()
           postReset()
-          router.push(
+          router.replace(
             isTrainer(responseData?.data?.roles)
               ? '/dashboard/training-module'
               : '/dashboard'
