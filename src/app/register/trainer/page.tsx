@@ -49,7 +49,9 @@ const MasterLogin = () => {
         onSuccess: () => {
           reset()
           postReset()
-          toast.success('Login created successfully')
+          toast.success(
+            'Account was created successfully! You can now login with your credentials.'
+          )
           router.push('/login')
         },
         onError(error) {
@@ -74,7 +76,7 @@ const MasterLogin = () => {
                 weight="medium"
                 className="flex justify-center"
               >
-                Create Master Login
+                Create Trainer Login
               </Text>
               <Text
                 variant="text/sm"
