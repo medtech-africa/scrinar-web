@@ -1,14 +1,14 @@
 import isJwtExpired from '@/utils/isJwtExpired'
 import { create } from 'zustand'
-import { Cookies } from 'react-cookie'
+import { getCookie, deleteCookie } from 'cookies-next'
 
 export interface NestedUser {
-    email: string
-    phoneNumber: string
-    avatarUrl: string
-    roles: string[]
+  email: string
+  phoneNumber: string
+  avatarUrl: string
+  roles: string[]
 }
-  
+
 export interface ISchool {
   userId: string
   name: string
@@ -27,7 +27,7 @@ export interface ISchool {
   phoneNumber: string
   avatarUrl: string
   roles: string[]
-  school?:{name:string}
+  school?: { name: string }
   fullName: string
 }
 export interface IUser {
@@ -76,15 +76,14 @@ const useUser = create<IUserState>((set, get) => ({
     set({ user })
   },
   loadUser: (userData) => {
-    const cookies = new Cookies()
-    const { token } = cookies.getAll()
-    if (!isJwtExpired(token) && userData) {
+    const token = getCookie('token')
+    if (!isJwtExpired(token ?? '') && userData) {
       try {
         set({ loading: true, user: userData })
       } catch (error) {
         console.log('loadUser', '>>>>>>>>>>>')
 
-        cookies.remove('token')
+        deleteCookie('token')
         set({ user: null })
       } finally {
         set({ loading: false })

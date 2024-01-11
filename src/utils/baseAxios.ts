@@ -1,7 +1,7 @@
 // First we need to import axios.js
 import axios, { AxiosError, AxiosHeaders } from 'axios'
 // import axiosRetry from 'axios-retry';
-import { Cookies } from 'react-cookie'
+import { getCookie, deleteCookie } from 'cookies-next'
 import toast from 'react-hot-toast'
 
 const handleError = (error: AxiosError) => {
@@ -18,8 +18,7 @@ const baseAxios = axios.create({})
 baseAxios.interceptors.request.use(
   async (config) => {
     if (!config.headers?.Authorization) {
-      const cookies = new Cookies()
-      const credentials = cookies.get('token')
+      const credentials = getCookie('token')
       if (credentials) {
         // config.headers = {
         //   ...config.headers,
@@ -52,9 +51,8 @@ baseAxios.interceptors.response.use(
 )
 
 function redirectToLoginAndDeleteToken() {
-  const cookies = new Cookies()
   toast.error('Token expired! Please login')
-  cookies.remove('token') // Delete the token from cookies
+  deleteCookie('token') // Delete the token from cookies
   window.location.href = '/login' // Redirect to the login page
 }
 
