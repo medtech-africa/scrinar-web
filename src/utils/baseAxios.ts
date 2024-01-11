@@ -51,9 +51,11 @@ baseAxios.interceptors.response.use(
 )
 
 function redirectToLoginAndDeleteToken() {
-  toast.error('Token expired! Please login')
+  if (window.location.href.includes('dashboard')) {
+    toast.error('Token expired! Please login')
+    window.location.href = '/login' // Redirect to the login pag
+  }
   deleteCookie('token') // Delete the token from cookies
-  window.location.href = '/login' // Redirect to the login page
 }
 
 // https://github.com/softonic/axios-retry/issues/87
