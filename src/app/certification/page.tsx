@@ -2,10 +2,14 @@
 /* eslint-disable @next/next/no-img-element */
 'use client'
 import { Text } from '@/components/ui/text'
+import useCertificate from '@/hooks/queries/useCertificate'
 import usePdfGenerator from '@/hooks/usePdfGenerator'
+import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useRef } from 'react'
 
 const Certification = () => {
+  const searchParams = useSearchParams()
+  const userId = searchParams.get('id')
   const certificateData = {
     recipientName: 'John Doe',
     courseName: 'React Certificate Course',
@@ -13,6 +17,8 @@ const Certification = () => {
   }
   const generatePdf = usePdfGenerator()
   const html_pdf = useRef<any>(null)
+  const { data, isLoading } = useCertificate(userId ?? '')
+  console.log(data, isLoading)
 
   useEffect(() => {
     const handleGeneratePdf = () => {
@@ -21,7 +27,7 @@ const Certification = () => {
     handleGeneratePdf()
   }, [])
   return (
-    <div className=" w-screen h-screen flex justify-center items-center bg-white">
+    <div className="w-screen h-screen flex justify-center items-center bg-white">
       <div ref={html_pdf} className="p-10 tracking-widest">
         <div className="max-w-2xl mx-auto border-2 border-green-200 p-8 flex flex-col justify-center relative">
           <div className="absolute -top-[70px] -right-5">
