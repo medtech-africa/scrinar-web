@@ -34,6 +34,10 @@ export const markAsComplete = async (courseId: string, moduleId: string) => {
   return baseAxios.patch(API.trainingModuleComplete(courseId, moduleId))
 }
 
+export const submitQuiz = async (moduleId: string, score: number) => {
+  return baseAxios.post(API.trainingModuleQuizComplete(moduleId), { score })
+}
+
 export const useTrainingModules = ({
   courseId,
   initialData,

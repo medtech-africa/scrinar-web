@@ -1,8 +1,8 @@
 // import useProfile from '@/hooks/queries/useProfile'
 import React, { useEffect } from 'react'
-import { useCookies } from 'react-cookie'
 import { useUser } from './user'
 import useProfile from '@/hooks/queries/useProfile'
+import { getCookie } from 'cookies-next'
 
 export interface WithChildren {
   children: React.ReactNode
@@ -12,17 +12,17 @@ const UserProvider = ({ children }: WithChildren) => {
   const { loadUser, setLoading } = useUser()
   const { refetch } = useProfile()
 
-  const [cookies] = useCookies(['token'])
+  const token = getCookie('token')
 
   useEffect(() => {
-    if (cookies.token) {
+    if (token) {
       setLoading(true)
       refetch().then((res) => {
         loadUser(res.data?.data)
       })
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [cookies.token, loadUser, refetch])
+  }, [token, loadUser, refetch])
 
   return <>{children}</>
 }

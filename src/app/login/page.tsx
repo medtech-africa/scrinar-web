@@ -14,6 +14,8 @@ import { useMutation } from '@tanstack/react-query'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
+import { setCookie } from 'cookies-next'
+
 import { Controller, useForm } from 'react-hook-form'
 interface IFormValue {
   loginId?: string
@@ -63,12 +65,17 @@ const Login = () => {
           const responseData = response.data
           const accessToken = responseData?.access_token
           if (accessToken) {
+            try {
+              await setCookie('token', accessToken)
+            } catch (e) {
+              console.log(e, 'cookies err')
+            }
             await authenticate(accessToken)
           }
           setUser(responseData?.data)
           reset()
           postReset()
-          router.push(
+          router.replace(
             isTrainer(responseData?.data?.roles)
               ? '/dashboard/training-module'
               : '/dashboard'
