@@ -1,7 +1,7 @@
 import Providers from '@/context'
 import './globals.css'
 import 'react-loading-skeleton/dist/skeleton.css'
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import CustomToaster from '@/components/custom-toaster'
 import localFont from 'next/font/local'
 import NextTopLoader from 'nextjs-toploader'
@@ -10,12 +10,16 @@ import colors from '@/constants/colors'
 export const metadata: Metadata = {
   title: 'Play4Health Admin',
   description: 'Play4health admin page',
-  manifest: '/manifest.json',
+  manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
     title: 'Play4Health Admin',
   },
+}
+
+export const viewport: Viewport = {
+  themeColor: '#E31B23',
 }
 
 const aeonikFont = localFont({
