@@ -10,6 +10,12 @@ import colors from '@/constants/colors'
 export const metadata: Metadata = {
   title: 'Play4Health Admin',
   description: 'Play4health admin page',
+  manifest: '/manifest.json',
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'Play4Health Admin',
+  },
 }
 
 const aeonikFont = localFont({
