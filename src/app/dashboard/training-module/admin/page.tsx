@@ -61,17 +61,12 @@ export default function TrainerPage() {
   useSchoolChangeRefresh(refetch)
   const healthData = data?.data
 
-  console.log({ healthData })
-  console.log({ selectedTrainer, trainer })
-
   const menuItems = [
     {
       title: 'View Data',
       icon: IconNames.documentText,
       action: () => {
-        console.log('trainer', healthData?.find((v) => v.id === selectedRow))
-        healthData &&
-          setSelectedTrainer(healthData.find((v) => v.id === selectedRow))
+        setSelectedTrainer(healthData?.find((v) => v.id === selectedRow))
       },
     },
   ]
