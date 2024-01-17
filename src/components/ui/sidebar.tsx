@@ -78,6 +78,12 @@ const generalData = [
     href: 'training-module',
     roles: ['school', 'instructor', 'play4health_admin', 'trainer'],
   },
+  {
+    title: 'Trainers Data',
+    icon: 'book',
+    href: 'training-module/admin',
+    roles: ['play4health_admin', 'admin'],
+  },
 ] as Datatype[]
 
 const othersData = [
@@ -134,8 +140,6 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
 
   const showUserProfileTab = !isTrainer(user?.roles)
 
-  console.log({ showUserProfileTab })
-
   return (
     <AnimatePresence initial={false}>
       {!sideOpen && (
@@ -190,7 +194,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                       href={`/dashboard/${item?.href}`}
                       active={
                         item.href
-                          ? pathname.includes(item.href)
+                          ? pathname === '/dashboard/' + item.href
                           : pathname === '/dashboard'
                       }
                     >
