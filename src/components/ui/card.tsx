@@ -4,13 +4,17 @@ import { cn } from '@/lib/utils'
 
 export interface CardProps
   extends React.HTMLAttributes<Omit<HTMLDivElement, 'title'>> {
-  description: React.ReactNode
-  icon: React.ReactNode
+  description?: React.ReactNode
+  icon?: React.ReactNode
   iconClassName?: string
+  children?: React.ReactNode
 }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, title, description, icon, iconClassName, ...props }, ref) => (
+  (
+    { className, title, description, icon, iconClassName, children, ...props },
+    ref
+  ) => (
     <div
       ref={ref}
       className={cn(
@@ -19,22 +23,28 @@ const Card = React.forwardRef<HTMLDivElement, CardProps>(
       )}
       {...props}
     >
-      <div
-        className={cn(
-          'p-2 rounded-lg flex-col justify-center items-start gap-[5px] inline-flex',
-          iconClassName
-        )}
-      >
-        {icon}
-      </div>
-      <div className="flex-col justify-center items-start gap-[5px] inline-flex">
-        <div className="text-gray-900 text-base font-medium leading-normal">
-          {title}
-        </div>
-        <div className="text-gray-500 text-xs font-normal leading-3">
-          {description}
-        </div>
-      </div>
+      {children ? (
+        children
+      ) : (
+        <>
+          <div
+            className={cn(
+              'p-2 rounded-lg flex-col justify-center items-start gap-[5px] inline-flex',
+              iconClassName
+            )}
+          >
+            {icon}
+          </div>
+          <div className="flex-col justify-center items-start gap-[5px] inline-flex">
+            <div className="text-gray-900 text-base font-medium leading-normal">
+              {title}
+            </div>
+            <div className="text-gray-500 text-xs font-normal leading-3">
+              {description}
+            </div>
+          </div>
+        </>
+      )}
     </div>
   )
 )
