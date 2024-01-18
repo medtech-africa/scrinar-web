@@ -53,6 +53,8 @@ export const API = {
   trainingModules: (courseId: string) =>
     `${BASE_URL}/api/v1/training-modules/courses/${courseId}/modules`,
   trainingCourses: `${BASE_URL}/api/v1/training-modules/courses`,
+  trainers: `${BASE_URL}/api/v1/training-modules/trainers`,
+  trainer: (id: string) => `${BASE_URL}/api/v1/training-modules/trainers/${id}`,
   trainingModule: (id: string) => `${BASE_URL}/api/v1/training-modules/${id}`,
   trainingCourse: (id: string) =>
     `${BASE_URL}/api/v1/training-modules/courses/${id}`,

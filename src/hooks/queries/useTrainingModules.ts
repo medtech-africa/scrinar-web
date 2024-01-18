@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import {
+  ITrainer,
   TrainingCourse,
   TrainingCourseProgress,
   TrainingModule,
@@ -89,6 +90,51 @@ export const useUserTrainingProgress = ({
 
     queryFn: () => fetchUserProgress(courseId),
     initialData: initialData,
+  })
+}
+
+const fetchTrainers = async () => {
+  const { data } = await baseAxios.get<PaginatedResponse<{
+  _id: string
+  email: string
+  isSuspended: boolean
+  leaderBoardScore: number
+  roles: string[]
+  loginDevices: any[]
+  userId: string
+  createdAt: string
+  updatedAt: string
+  completedModulesCount: number
+  id: string
+}[]>>(
+    API.trainers
+  )
+  return data?.data
+}
+export const useTrainers = () => {
+  return useQuery({
+    queryKey: ['trainers'],
+
+    queryFn: () => fetchTrainers(),
+  })
+}
+
+const fetchTrainer = async (id: string) => {
+  const { data } = await baseAxios.get<ApiResponse<ITrainer>>(
+    API.trainer(id)
+  )
+  return data?.data
+}
+export const useTrainer = ({ id, placeholderData }: {
+  id?: string
+  placeholderData?: Partial<ITrainer>
+}) => {
+  return useQuery({
+    queryKey: ['trainer', id],
+    queryFn: () => id ? fetchTrainer(id) : undefined,
+    enabled: !!id,
+    // @ts-expect-error types missing
+    placeholderData: placeholderData
   })
 }
 

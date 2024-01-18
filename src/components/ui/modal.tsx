@@ -12,7 +12,7 @@ const Modal = ({ open, children, closeModal, title }: IProps) => {
   return (
     <Dialog open={open} onOpenChange={closeModal}>
       <DialogContent title={title}>
-        <div className="overflow-y-auto">{children}</div>
+        <div className="overflow-y-auto h-full">{children}</div>
       </DialogContent>
     </Dialog>
   )
