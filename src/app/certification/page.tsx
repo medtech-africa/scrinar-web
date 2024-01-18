@@ -5,10 +5,9 @@ import { IconPicker } from '@/components/ui/icon-picker'
 import { Text } from '@/components/ui/text'
 import useCertificate from '@/hooks/queries/useCertificate'
 import usePdfGenerator from '@/hooks/usePdfGenerator'
+import { formatDate } from '@/utils/formatDate'
 import { useSearchParams } from 'next/navigation'
 import React, { useEffect, useRef } from 'react'
-const currentDate = new Date()
-const formattedDate = currentDate.toLocaleDateString()
 const Certification = () => {
   const searchParams = useSearchParams()
   const userId = searchParams.get('id')
@@ -18,11 +17,8 @@ const Certification = () => {
   const certificate = data?.data
 
   useEffect(() => {
-    const handleGeneratePdf = () => {
-      generatePdf(html_pdf, 'Certificate')
-    }
     if (html_pdf?.current) {
-      handleGeneratePdf()
+      generatePdf(html_pdf, 'Certificate')
     }
   }, [isLoading])
   return (
@@ -119,7 +115,7 @@ const Certification = () => {
                   Forcardio Play4Health
                 </Text>
                 <Text className="font-normal text-[#0E0E2C] text-sm">
-                  {formattedDate}
+                  {formatDate(certificate?.user?.completedAt)}
                 </Text>
               </div>
               <div className="flex flex-col items-center gap-y-1 relative">

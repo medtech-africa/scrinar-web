@@ -7,7 +7,7 @@ const getCertificate = (userId: string) =>
 
 const useCertificate = (userId: string) => {
   return useQuery({
-    queryKey: ['certificate'],
+    queryKey: ['certificate', userId],
     queryFn: () => getCertificate(userId),
   })
 }
