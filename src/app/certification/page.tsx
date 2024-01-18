@@ -17,7 +17,7 @@ const Certification = () => {
   const certificate = data?.data
 
   useEffect(() => {
-    if (html_pdf?.current) {
+    if (html_pdf?.current && !isLoading) {
       generatePdf(html_pdf, 'Certificate')
     }
   }, [isLoading])
@@ -25,7 +25,7 @@ const Certification = () => {
     <div className="w-[50rem] h-full sm:w-screen sm:h-screen flex justify-center items-center bg-white">
       {isLoading ? (
         <IconPicker icon="loader2" size={20} />
-      ) : !certificate?.showCertificate ? (
+      ) : certificate?.showCertificate ? (
         <div ref={html_pdf} className="p-10 tracking-widest">
           <div className="max-w-4xl p-8 flex flex-col justify-center relative">
             <img
@@ -144,7 +144,9 @@ const Certification = () => {
           </div>
         </div>
       ) : (
-        <Text className="flex justify-center items-center">No Certificate</Text>
+        <Text className="flex justify-center items-center">
+          You need to complete all Training Modules to get a certificate
+        </Text>
       )}
     </div>
   )
