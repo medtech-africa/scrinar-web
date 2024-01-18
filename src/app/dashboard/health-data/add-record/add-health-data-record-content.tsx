@@ -314,7 +314,7 @@ export const AddHealthDataRecordContent = () => {
                 weight="bold"
                 className="text-grey-700"
               >
-                {bmi}
+                {!!bmi ? bmi : '-'}
               </Text>
               {!!bmi && (
                 <BadgeField
@@ -496,8 +496,8 @@ export const AddHealthDataRecordContent = () => {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 py-7 mt-2">
         <PageCard title="Nutritional Assess" bodyStyle="p-4">
           <div className="flex gap-3 items-center">
-            <Label>Dietary Diversity Score - 0/15</Label>
-            <BadgeField variant="error" value="Poor" />
+            <Label>Dietary Diversity Score </Label>
+            {/* <BadgeField variant="error" value="Poor" />*/}
             <Text
               variant="text/sm"
               className="text-primary cursor-pointer underline"
@@ -516,8 +516,8 @@ export const AddHealthDataRecordContent = () => {
         </PageCard>
         <PageCard title="Exercise/Activity" bodyStyle="p-4">
           <div className="flex gap-3 items-center">
-            <Label>Physical Activity Score - 0/15</Label>
-            <BadgeField variant="error" value="Poor" />
+            <Label>Physical Activity Score </Label>
+            {/* <BadgeField variant="error" value="Poor" />*/}
             <Text
               variant="text/sm"
               className="text-primary cursor-pointer underline"
