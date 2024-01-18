@@ -311,8 +311,10 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
                         </button>
                       </a>
                     </div>
+                    {/* TODO swap to iframe after test */}
                     <iframe
-                      src={resource.url}
+                      src={`/modules/${currentModule.content}.pdf`}
+                      // src={resource.url}
                       height="480"
                       title={resource.title}
                       allow="autoplay"
