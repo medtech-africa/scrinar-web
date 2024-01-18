@@ -136,7 +136,7 @@ export default function TrainerPage() {
                   </TableCell>
 
                   <TableCell>{val?.completedModulesCount}</TableCell>
-                  <TableCell>{val?.leaderBoardScore}</TableCell>
+                  <TableCell>{val?.totalScore}</TableCell>
                   <TableCell>{val?.userId}</TableCell>
                   <TableCell className="relative">
                     <div

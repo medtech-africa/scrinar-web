@@ -102,6 +102,7 @@ const fetchTrainers = async ({ search, page }: {
   email: string
   isSuspended: boolean
   leaderBoardScore: number
+  totalScore: number
   roles: string[]
   loginDevices: any[]
   userId: string
