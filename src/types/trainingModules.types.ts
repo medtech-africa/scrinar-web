@@ -50,3 +50,32 @@ export interface CompletedTrainingModule {
   moduleNumber: number
   id: string
 }
+
+export interface ITrainer {
+  userId: string
+  email: string
+  phoneNumber?: string
+  isSuspended: boolean
+  avatarUrl?: string
+  isVerified?: boolean
+  roles: string[]
+  loginDevices: any[]
+  lga?: string
+  state?: string
+  schoolID?: string
+  createdAt: string
+  updatedAt: string
+  leaderBoardScore: number
+  id: string
+  name?: string
+  completedModules?: CompletedModule[]
+}
+
+export interface CompletedModule {
+  user: string
+  trainingModule: TrainingModule
+  score: number
+  createdAt: string
+  updatedAt: string
+  id: string
+}

@@ -11,15 +11,16 @@ interface Iprops {
   onPrev: () => void
   onNext: (max?: number) => void
   total: number
+  pageSize?: number
 }
 
-const pageSize = 10
 const Pagination = ({
   current = 0,
   setCurrent,
   total,
   onNext,
   onPrev,
+  pageSize = 10,
 }: Iprops) => {
   const max = useMemo(() => (total ? Math.ceil(total / pageSize) : 0), [total])
   const pageRange = usePagination({
