@@ -53,7 +53,19 @@ export const API = {
   trainingModules: (courseId: string) =>
     `${BASE_URL}/api/v1/training-modules/courses/${courseId}/modules`,
   trainingCourses: `${BASE_URL}/api/v1/training-modules/courses`,
-  trainers: `${BASE_URL}/api/v1/training-modules/trainers`,
+  trainers: ({ search, page }: {
+    search?: string
+    page?: number
+  }) => {
+    const params = new URLSearchParams()
+    if (search) {
+      params.append('search', search)
+    }
+    if (page) {
+      params.append('page', page.toString())
+    }
+    return `${BASE_URL}/api/v1/training-modules/trainers?${params.toString()}`
+  },
   trainer: (id: string) => `${BASE_URL}/api/v1/training-modules/trainers/${id}`,
   trainingModule: (id: string) => `${BASE_URL}/api/v1/training-modules/${id}`,
   trainingCourse: (id: string) =>

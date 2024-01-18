@@ -93,7 +93,10 @@ export const useUserTrainingProgress = ({
   })
 }
 
-const fetchTrainers = async () => {
+const fetchTrainers = async ({ search, page }: {
+  search?: string
+  page?: number
+}) => {
   const { data } = await baseAxios.get<PaginatedResponse<{
   _id: string
   email: string
@@ -107,15 +110,18 @@ const fetchTrainers = async () => {
   completedModulesCount: number
   id: string
 }[]>>(
-    API.trainers
+    API.trainers({search, page})
   )
   return data?.data
 }
-export const useTrainers = () => {
+export const useTrainers = ({ search, page }: {
+  search?: string
+  page?: number
+}) => {
   return useQuery({
-    queryKey: ['trainers'],
+    queryKey: ['trainers', search, page],
 
-    queryFn: () => fetchTrainers(),
+    queryFn: () => fetchTrainers({search, page}),
   })
 }
 
