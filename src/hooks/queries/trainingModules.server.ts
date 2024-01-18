@@ -1,4 +1,4 @@
-"use server"
+'use server'
 /**
  * The above code defines two functions, `fetchModules` and `fetchCourses`, that make API calls to
  * fetch training modules and training courses respectively.
@@ -10,26 +10,38 @@
  * an array of `TrainingModule` objects. If the response is not successful or the `data` property is
  * not available, it will return an empty array.
  */
-import { ApiResponse, PaginatedResponse } from "@/types/paginatedResponse.types"
-import { TrainingModule, TrainingCourse, TrainingCourseProgress } from "@/types/trainingModules.types"
-import { API } from "@/utils/api"
-import baseServerAxios from "@/utils/baseAxios.server"
+import { ApiResponse, PaginatedResponse } from '@/types/paginatedResponse.types'
+import {
+  TrainingModule,
+  TrainingCourse,
+  TrainingCourseProgress,
+} from '@/types/trainingModules.types'
+import { API } from '@/utils/api'
+import baseServerAxios from '@/utils/baseAxios.server'
 
 export const fetchModules = async (courseId: string) => {
-  const { data } = await baseServerAxios.get<PaginatedResponse<TrainingModule[]>>(API.trainingModules(courseId))
+  const { data } = await baseServerAxios.get<
+    PaginatedResponse<TrainingModule[]>
+  >(API.trainingModules(courseId))
   return data?.data?.data ?? []
 }
 
 export const fetchCourses = async () => {
-  const { data } = await baseServerAxios.get<PaginatedResponse<TrainingCourse[]>>(API.trainingCourses)
+  const { data } = await baseServerAxios.get<
+    PaginatedResponse<TrainingCourse[]>
+  >(API.trainingCourses)
   return data
 }
 
 export const fetchCourse = async (id: string) => {
-  const { data } = await baseServerAxios.get<ApiResponse<TrainingCourse>>(API.trainingCourse(id)).then((res) => res.data)
+  const { data } = await baseServerAxios
+    .get<ApiResponse<TrainingCourse>>(API.trainingCourse(id))
+    .then((res) => res.data)
   return data
 }
-export const fetchUserProgress = async (courseId:string) => {
-  const data = await baseServerAxios.get<TrainingCourseProgress>(API.trainingModuleProgress(courseId)).then((res) => res.data)
+export const fetchUserProgress = async (courseId: string) => {
+  const data = await baseServerAxios
+    .get<TrainingCourseProgress>(API.trainingModuleProgress(courseId))
+    .then((res) => res.data)
   return data
 }

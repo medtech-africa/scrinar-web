@@ -64,4 +64,6 @@ export const API = {
     `${BASE_URL}/api/v1/training-modules/${moduleId}/submit-quiz`,
   trainingModuleProgress: (id: string) =>
     `${BASE_URL}/api/v1/training-modules/courses/${id}/progress`,
+  getCertificate: (userId: string) =>
+    `${BASE_URL}/api/v1/training-modules/certificate/users/${userId}`,
 }

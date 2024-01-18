@@ -12,6 +12,9 @@ import { TabList, TabListButton } from '@/components/ui/tab-list'
 import { useTrainingCourses } from '@/hooks/queries/useTrainingModules'
 import { Text } from '@/components/ui/text'
 import React, { useMemo, useState } from 'react'
+import { Button } from '@/components/ui/button'
+import { useRouter } from 'next/navigation'
+import { useUser } from '@/context/user'
 
 const data = [
   'All Training Module',
@@ -27,6 +30,8 @@ const coursesTab = [
 ]
 
 const TrainingModule = () => {
+  const router = useRouter()
+  const user = useUser((state) => state.user)
   const [activeTab, setActiveTab] = useState('All Training Module')
   const [activeTab2, setActiveTab2] = useState('all')
   const { data: trainingData, isLoading } = useTrainingCourses()
@@ -52,11 +57,17 @@ const TrainingModule = () => {
   return (
     <div>
       <ContentLoader loading={isLoading} />
-
-      <PageHeader
-        title="Training Module"
-        subtitle="Explore, Learn, and Grow through Comprehensive Health Training Modules."
-      />
+      <div className="flex flex-row flex-wrap gap-4 justify-between items-center">
+        <PageHeader
+          title="Training Module"
+          subtitle="Explore, Learn, and Grow through Comprehensive Health Training Modules."
+        />
+        <Button
+          onClick={() => router.push(`/certification?id=${user?.id}`)}
+          value="Download Certificate"
+          className="bg-grey-50 text-grey-900 hover:bg-grey-100"
+        />
+      </div>
 
       <TabList
         labels={data}
