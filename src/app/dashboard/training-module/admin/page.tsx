@@ -23,29 +23,27 @@ import { useTrainer, useTrainers } from '@/hooks/queries/useTrainingModules'
 import Modal from '@/components/ui/modal'
 import { ITrainer } from '@/types/trainingModules.types'
 import Trainer from './Trainer'
+import { useDebouncedState } from '@/hooks/useDebouncedState'
 
 type FilterHeaderProps = {
-  setOpenFilter: (value: boolean) => void
-  openFilter: boolean
+  onChange: (value: string) => void
+  value: string
 }
-const FilterHeader = ({
-  setOpenFilter: _,
-  openFilter: __,
-}: FilterHeaderProps) => {
+const FilterHeader = ({ onChange }: FilterHeaderProps) => {
   return (
     <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
       <Input
         leadingIcon={<IconPicker icon="search" />}
         className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
-        placeholder="Search by Name, Gender or Age.."
+        placeholder="Search by email, userId, name ..."
         full={false}
+        onChange={(e) => onChange(e.target.value)}
       />
     </div>
   )
 }
 
 export default function TrainerPage() {
-  const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState<string | null>('')
   const [selectedTrainer, setSelectedTrainer] = useState<ITrainer | undefined>(
     undefined
@@ -53,7 +51,11 @@ export default function TrainerPage() {
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
   )
-  const { data, isLoading, refetch } = useTrainers()
+  const [search, setSearch] = useDebouncedState('')
+  const { data, isLoading, refetch } = useTrainers({
+    search,
+    page: currentPage,
+  })
   const { data: trainer } = useTrainer({
     id: selectedTrainer?.id,
     placeholderData: selectedTrainer,
@@ -79,7 +81,7 @@ export default function TrainerPage() {
     <div>
       <PageHeader
         title="Trainer"
-        subtitle="Tracking Vital Metrics: BMI and Nutritional Information"
+        subtitle="Check trainers data"
         avatar={
           <div className="flex">
             <Avatar
@@ -108,7 +110,7 @@ export default function TrainerPage() {
         }
         isAvatar
       />
-      <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
+      <FilterHeader onChange={setSearch} value={search} />
       <div className="py-3 md:py-8">
         <Table className="table-auto" hasEmptyData={healthData?.length === 0}>
           <TableHeader className="bg-grey-100">
@@ -134,7 +136,7 @@ export default function TrainerPage() {
                   </TableCell>
 
                   <TableCell>{val?.completedModulesCount}</TableCell>
-                  <TableCell>{val?.leaderBoardScore}</TableCell>
+                  <TableCell>{val?.totalScore}</TableCell>
                   <TableCell>{val?.userId}</TableCell>
                   <TableCell className="relative">
                     <div
@@ -162,9 +164,9 @@ export default function TrainerPage() {
           current={currentPage}
           setCurrent={setCurrentPage}
           total={data?.total ?? 0}
+          pageSize={data?.per_page}
           onNext={handleNext}
           onPrev={handlePrev}
-          pageSize={data?.per_page}
         />
       )}
       <Modal

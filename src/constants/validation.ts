@@ -212,7 +212,7 @@ const register = yupResolver(
       .min(1, 'Select at least one educational institution'),
   })
 )
-const nutritional = yupResolver(
+const exercise = yupResolver(
   yup.object().shape({
     schoolTransportQuestion: yup
       .object()
@@ -247,7 +247,7 @@ const nutritional = yupResolver(
       .typeError('Please fill this field'),
   })
 )
-const exercise = yupResolver(
+const nutritional = yupResolver(
   yup.object().shape({
     foodAmount: yup
       .object()
