@@ -3,7 +3,7 @@ export interface SelectVal {
   value: string
 }
 
-export interface DietaryDiversity {
+export interface PhysicalActivity {
   hoursOnComputer: number
   hoursOnTv: number
   hoursOnSleep: number
@@ -11,7 +11,7 @@ export interface DietaryDiversity {
   schoolTransportQuestion: string
 }
 
-export interface PhysicalActivity {
+export interface DietaryDiversity {
   fruitsTimes: FruitsTimes
   mealsPerDay: number
   foodAmount: string
