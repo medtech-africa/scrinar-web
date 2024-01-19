@@ -7,15 +7,17 @@ interface School {
   id: number
 }
 
-const getSchools = (state = '') =>
-  baseAxios.get<School[]>(API.getSchools(state)).then((res) => res.data)
+export const getSchools = (search = '') =>
+  baseAxios.get<School[]>(API.getSchools(search)).then((res) => res.data)
 
-const useSchools = (state?: string) => {
+const useSchools = (search?: string) => {
   return useQuery({
-    queryKey: ['schools', state],
-    queryFn: () => getSchools(state),
-    placeholderData: keepPreviousData
-  });
+    queryKey: ['schools', search],
+    queryFn: () => getSchools(search),
+    placeholderData: keepPreviousData,
+    refetchOnWindowFocus: false,
+    refetchOnMount: false,
+  })
 }
 
 export default useSchools

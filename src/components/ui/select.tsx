@@ -4,7 +4,13 @@ import { cva, type VariantProps } from 'class-variance-authority'
 
 import { cn } from '@/lib/utils'
 import { Text } from './text'
-import RectSelect, { components, Props, OptionProps } from 'react-select'
+import RectSelect, {
+  components,
+  Props,
+  OptionProps,
+  GroupBase,
+} from 'react-select'
+import RectSelectASync, { AsyncProps } from 'react-select/async'
 import colors from '@/constants/colors'
 
 const inputVariants = cva(
@@ -83,7 +89,7 @@ const InputOption = ({
   )
 }
 
-export interface SelectProps extends Props, VariantProps<typeof inputVariants> {
+interface CommonProps extends VariantProps<typeof inputVariants> {
   full?: boolean
   label?: string
   message?: string
@@ -91,6 +97,17 @@ export interface SelectProps extends Props, VariantProps<typeof inputVariants> {
   labelStyle?: string
   customOption?: boolean
 }
+
+interface AllAsyncProps
+  extends AsyncProps<unknown, boolean, GroupBase<unknown>>,
+    CommonProps {
+  isAsync: true
+}
+
+interface AllNonAsyncProps extends Props, CommonProps {
+  isAsync?: false
+}
+export type SelectProps = AllAsyncProps | AllNonAsyncProps
 
 const Select = React.forwardRef<typeof RectSelect, SelectProps>(
   (
@@ -103,10 +120,12 @@ const Select = React.forwardRef<typeof RectSelect, SelectProps>(
       label,
       labelStyle,
       customOption,
+      isAsync,
       ...props
     },
     ref
   ) => {
+    const Comp = isAsync ? RectSelectASync : RectSelect
     return (
       <div>
         {!!label && (
@@ -124,7 +143,7 @@ const Select = React.forwardRef<typeof RectSelect, SelectProps>(
           <span className=" absolute flex items-center left-[14px] top-0 bottom-0 text-grey-900 z-30">
             {leadingIcon}
           </span>
-          <RectSelect
+          <Comp
             ref={ref as any}
             {...props}
             classNames={{

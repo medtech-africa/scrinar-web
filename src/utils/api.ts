@@ -44,7 +44,7 @@ export const API = {
   schoolRegister: `${BASE_URL}/api/v1/school`,
   schoolUpdate: `${BASE_URL}/api/v1/school/me`,
   schoolDashboard: `${BASE_URL}/api/v1/school/dashboard`,
-  getSchools: (state: string) => `${BASE_URL}/api/v1/school/${state}`,
+  getSchools: (search: string) => `${BASE_URL}/api/v1/school?search=${search}`,
 
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,
@@ -53,10 +53,7 @@ export const API = {
   trainingModules: (courseId: string) =>
     `${BASE_URL}/api/v1/training-modules/courses/${courseId}/modules`,
   trainingCourses: `${BASE_URL}/api/v1/training-modules/courses`,
-  trainers: ({ search, page }: {
-    search?: string
-    page?: number
-  }) => {
+  trainers: ({ search, page }: { search?: string; page?: number }) => {
     const params = new URLSearchParams()
     if (search) {
       params.append('search', search)
