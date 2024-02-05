@@ -15,10 +15,14 @@ const createPatient = yupResolver(
       .required('Please enter last name')
       .typeError('Please enter last name')
       .lowercase(),
-    dob: yup
-      .string()
-      .required('Please enter date of birth')
-      .typeError('Please enter date of birth'),
+    // dob: yup
+    //   .string()
+    //   .required('Please enter date of birth')
+    //   .typeError('Please enter date of birth'),
+    age: yup
+      .number()
+      .required('Please enter age')
+      .typeError('Please enter a valid age'),
     gender: yup
       .object()
       .shape({ label: yup.string().required(), value: yup.string().required() })
@@ -176,7 +180,6 @@ const register = yupResolver(
         /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
         'Enter a valid web address'
       )
-      .required('Enter a valid web address')
       .typeError('Enter a valid web address'),
     state: yup
       .object()

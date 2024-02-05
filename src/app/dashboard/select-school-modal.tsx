@@ -5,6 +5,7 @@ import { Select } from '@/components/ui/select'
 import { useAuth } from '@/context/auth'
 import { useUser } from '@/context/user'
 import useSchools from '@/hooks/queries/useSchools'
+import { useDebouncedState } from '@/hooks/useDebouncedState'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { isMasterInstructor } from '@/utils/checkPermission'
@@ -26,7 +27,6 @@ const SelectSchoolModal = () => {
     selectedSchool,
     setSelectedSchool,
   } = useUser()
-  // const [state, setState] = useState<SelectVal | null>()
 
   const {
     control,
@@ -35,25 +35,15 @@ const SelectSchoolModal = () => {
     // resetField,
   } = useForm<IFormData>()
   const { authenticate } = useAuth()
+  const [searchValue, setSearchValue] = useDebouncedState('')
 
-  const { data: schoolsData, isLoading: schoolsLoading } = useSchools()
-  // state?.value
+  const { data: schoolsData, isFetching: schoolsLoading } =
+    useSchools(searchValue)
 
   const { isPending: isLoading, mutate } = useMutation({
     mutationFn: (schoolId: string) =>
       baseAxios.get(API.attachToSchool(schoolId)),
   })
-
-  // const { isFetching: stateLoading, data: states } = useStateLGA()
-
-  // const stateOptions = useMemo(
-  //   () =>
-  //     states?.map((state) => ({
-  //       value: state.slug,
-  //       label: state.name,
-  //     })),
-  //   [states]
-  // )
 
   const schools = useMemo(
     () =>
@@ -63,6 +53,10 @@ const SelectSchoolModal = () => {
       })) ?? [],
     [schoolsData]
   )
+
+  const filterOptions = (option: any) => {
+    return option
+  }
 
   const onSubmit = async (data: IFormData) => {
     await mutate(data.school.value, {
@@ -135,10 +129,12 @@ const SelectSchoolModal = () => {
                   isLoading={schoolsLoading}
                   variant={errors?.school ? 'destructive' : 'default'}
                   message={errors.school?.message ?? ''}
-                  isDisabled={schoolsLoading}
                   classNames={{
                     menuList: () => 'h-[200px]',
                   }}
+                  onBlur={() => setSearchValue('')}
+                  onInputChange={(val) => setSearchValue(val)}
+                  filterOption={filterOptions}
                 />
               )}
               name="school"
