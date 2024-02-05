@@ -15,7 +15,7 @@ export interface IFormValue {
   email?: string
   firstName: string
   lastName: string
-  dob: string
+  age: number
   gender: { value: string; label: string }
   level: { value: string; label: string }
   parentMobile: string

@@ -27,7 +27,7 @@ interface IFormValue {
   email?: string
   phoneNumber?: string
   name: string
-  website: string
+  website?: string
   state: { value: string; label: string }
   lga: { value: string; label: string }
   address: string

@@ -20,7 +20,6 @@ import filterObject from '@/utils/filterObject'
 import { API } from '@/utils/api'
 import { useStudent } from '@/hooks/queries/useStudents'
 import ContentLoader from '@/components/content-loader'
-import DatePicker from '@/components/ui/date-picker'
 import schoolLevels from '@/constants/school-levels'
 import { useEffect } from 'react'
 import { Avatar } from '@/components/ui/avatar'
@@ -57,7 +56,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
       setValue('firstName', data?.firstName)
       setValue('lastName', data?.lastName)
       setValue('email', data?.email)
-      setValue('dob', data?.dob)
+      setValue('age', data?.age)
       setValue('parentMobile', data?.parentMobile)
       setValue('parentMobileAlt', data?.parentMobileAlt)
       setValue('gender', { value: data?.gender, label: data?.gender })
@@ -140,18 +139,18 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                 <Controller
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
-                    <DatePicker
+                    <Input
                       onBlur={onBlur}
                       value={value}
                       onChange={onChange}
-                      label="Date of Birth"
+                      label="Age"
                       disabled
-                      placeholder="DD/MM/YYYY"
-                      message={errors.dob && errors.dob.message}
-                      variant={errors?.dob ? 'destructive' : 'default'}
+                      placeholder="Student age"
+                      message={errors.age && errors.age.message}
+                      variant={errors?.age ? 'destructive' : 'default'}
                     />
                   )}
-                  name="dob"
+                  name="age"
                 />
 
                 <Controller

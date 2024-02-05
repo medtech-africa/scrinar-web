@@ -12,7 +12,6 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import toast from 'react-hot-toast'
-import DatePicker from '@/components/ui/date-picker'
 import schoolLevels from '@/constants/school-levels'
 import { errorMessage } from '@/utils/errorMessage'
 import filterObject from '@/utils/filterObject'
@@ -79,7 +78,7 @@ export const AddNewStudentContent = () => {
       ...filteredData,
       gender: data.gender?.value,
       level: data.level?.value,
-      dob: new Date(data.dob).toISOString(),
+      // dob: new Date(data.dob).toISOString(),
       ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
       // age: calculateAge(data.dob),
     }
@@ -144,18 +143,17 @@ export const AddNewStudentContent = () => {
 
               <Controller
                 control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
-                  <DatePicker
-                    onBlur={onBlur}
-                    value={value}
-                    onChange={onChange}
-                    label="Date of Birth"
-                    placeholder="DD/MM/YYYY"
-                    message={errors.dob && errors.dob.message}
-                    variant={errors?.dob ? 'destructive' : 'default'}
+                render={({ field: { value, ...rest } }) => (
+                  <Input
+                    {...rest}
+                    value={value ?? ''}
+                    label="Age"
+                    placeholder="Student age"
+                    message={errors.age && errors.age.message}
+                    variant={errors?.age ? 'destructive' : 'default'}
                   />
                 )}
-                name="dob"
+                name="age"
               />
 
               <Controller
