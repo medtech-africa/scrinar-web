@@ -156,7 +156,52 @@ const RegisterNewStudent = () => {
         <div className="grid md:grid-cols-[2fr_1fr] gap-6 py-7 mt-2">
           <div className="w-full h-full order-last md:order-first">
             <PageCard title="Add Basic Information" bodyStyle="p-4">
-              <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
+              <Controller
+                control={control}
+                render={({ field: { onChange, ...field } }) => (
+                  <Select
+                    onChange={(val: any) => {
+                      onChange(val)
+                    }}
+                    placeholder="Select one"
+                    label="Select school"
+                    labelStyle="lg:text-base text-xs"
+                    {...field}
+                    options={schools}
+                    isLoading={schoolsLoading}
+                    variant={errors?.school ? 'destructive' : 'default'}
+                    message={errors.school?.message ?? ''}
+                    classNames={{
+                      menuList: () => 'h-[200px]',
+                    }}
+                    getOptionLabel={(option: any): any => (
+                      <div>
+                        <div className="text-base capitalize">
+                          {option?.label?.name}
+                        </div>
+                        <div className="text-xs text-grey-500">
+                          {option?.label?.address}
+                        </div>
+                      </div>
+                    )}
+                    onBlur={() => setSearchValue('')}
+                    onInputChange={(val) => setSearchValue(val)}
+                    filterOption={filterOptions}
+                    styles={{
+                      option: (provided, state) => ({
+                        ...provided,
+                        backgroundColor: state.isSelected ? '#FCE8E9' : 'white',
+                        color: state.isSelected ? '#E31B23' : 'black',
+                        '&:hover': {
+                          backgroundColor: '#FCE8E9',
+                        },
+                      }),
+                    }}
+                  />
+                )}
+                name="school"
+              />
+              <div className="grid md:grid-cols-2 grid-cols-1 gap-6 mt-4">
                 <Controller
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
@@ -213,6 +258,7 @@ const RegisterNewStudent = () => {
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
+                      option="(optional)"
                       placeholder="email@play4health.com"
                       label="Email"
                       labelStyle="lg:text-sm text-xs"
@@ -223,53 +269,7 @@ const RegisterNewStudent = () => {
                   )}
                   name="email"
                 />
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, ...field } }) => (
-                    <Select
-                      onChange={(val: any) => {
-                        onChange(val)
-                      }}
-                      placeholder="Select one"
-                      label="Select school"
-                      labelStyle="lg:text-sm text-xs"
-                      {...field}
-                      options={schools}
-                      isLoading={schoolsLoading}
-                      variant={errors?.school ? 'destructive' : 'default'}
-                      message={errors.school?.message ?? ''}
-                      classNames={{
-                        menuList: () => 'h-[200px]',
-                      }}
-                      getOptionLabel={(option: any): any => (
-                        <div>
-                          <div className="text-base capitalize">
-                            {option?.label?.name}
-                          </div>
-                          <div className="text-xs text-grey-500">
-                            {option?.label?.address}
-                          </div>
-                        </div>
-                      )}
-                      onBlur={() => setSearchValue('')}
-                      onInputChange={(val) => setSearchValue(val)}
-                      filterOption={filterOptions}
-                      styles={{
-                        option: (provided, state) => ({
-                          ...provided,
-                          backgroundColor: state.isSelected
-                            ? '#FCE8E9'
-                            : 'white',
-                          color: state.isSelected ? '#E31B23' : 'black',
-                          '&:hover': {
-                            backgroundColor: '#FCE8E9',
-                          },
-                        }),
-                      }}
-                    />
-                  )}
-                  name="school"
-                />
+
                 <Controller
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
@@ -295,6 +295,7 @@ const RegisterNewStudent = () => {
                     <Input
                       onChange={onChange}
                       onBlur={onBlur}
+                      option="(optional)"
                       value={value ?? ''}
                       placeholder="08112345678"
                       label="Parent Mobile Number 2"
@@ -364,6 +365,7 @@ const RegisterNewStudent = () => {
                     <Input
                       placeholder="••••••••••••"
                       label="Password"
+                      option="(optional)"
                       labelStyle="lg:text-sm text-xs"
                       onBlur={onBlur}
                       value={value ?? ''}
