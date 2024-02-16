@@ -144,7 +144,7 @@ const RegisterNewStudent = () => {
               weight="medium"
               className="flex justify-center"
             >
-              Create Student
+              Register Your Child
             </Text>
             <Text
               variant="text/sm"
