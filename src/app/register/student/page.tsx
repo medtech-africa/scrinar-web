@@ -110,7 +110,6 @@ const RegisterNewStudent = () => {
       schoolID: data?.school.value,
       ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
     }
-    console.log(dataToSend)
     try {
       await mutate(dataToSend, {
         onSuccess: () => {
