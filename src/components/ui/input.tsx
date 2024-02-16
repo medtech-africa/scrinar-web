@@ -25,10 +25,12 @@ export interface InputProps
     VariantProps<typeof inputVariants> {
   full?: boolean
   label?: string
+  option?: string
   message?: string
   leadingIcon?: React.ReactNode
   endingIcon?: React.ReactNode
   labelStyle?: string
+  optionStyle?: string
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -42,23 +44,35 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       endingIcon,
       label,
       labelStyle,
+      option,
+      optionStyle,
       ...props
     },
     ref
   ) => {
     return (
       <div>
-        {!!label && (
-          <label
-            htmlFor={props.name}
-            className={cn(
-              'text-grey-700 font-medium text-sm mb-[6px]',
-              labelStyle
-            )}
-          >
-            {label}
-          </label>
-        )}
+        <div className="flex flex-row gap-x-1 items-baseline">
+          {!!label && (
+            <label
+              htmlFor={props.name}
+              className={cn(
+                'text-grey-700 font-medium text-sm mb-[6px]',
+                labelStyle
+              )}
+            >
+              {label}
+            </label>
+          )}
+          {!!option && (
+            <label
+              htmlFor={props.name}
+              className={cn('text-xs text-grey-400', optionStyle)}
+            >
+              {option}
+            </label>
+          )}
+        </div>
         <div className="relative">
           <span className=" absolute flex items-center left-[14px] top-0 bottom-0 text-grey-900">
             {leadingIcon}
