@@ -20,7 +20,7 @@ export const API = {
   getStudents: (page?: number, level?: string, searchVal?: string) =>
     `${BASE_URL}/api/v1/students${page ? `?page=${page}` : ''}${
       level ? `${page ? '&' : '?'}level=${level}` : ''
-    }${searchVal ? `&search=${searchVal}` : ''}`,
+    }${searchVal ? `${page || level ? '&' : '?'}search=${searchVal}` : ''}`,
 
   //instructors
   instructors: `${BASE_URL}/api/v1/instructors`,
