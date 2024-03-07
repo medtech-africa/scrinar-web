@@ -15,11 +15,12 @@ export const API = {
     `${BASE_URL}/api/v1/auth/attach-to-school?school=${schoolId}`,
   //students
   students: `${BASE_URL}/api/v1/students`,
+  registerStudents: `${BASE_URL}/api/v1/students/createByPublic`,
   student: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
   getStudents: (page?: number, level?: string, searchVal?: string) =>
     `${BASE_URL}/api/v1/students${page ? `?page=${page}` : ''}${
       level ? `${page ? '&' : '?'}level=${level}` : ''
-    }${searchVal ? `&search=${searchVal}` : ''}`,
+    }${searchVal ? `${page || level ? '&' : '?'}search=${searchVal}` : ''}`,
 
   //instructors
   instructors: `${BASE_URL}/api/v1/instructors`,
