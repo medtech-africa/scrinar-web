@@ -247,7 +247,8 @@ export default function Students() {
                     {format(new Date(val.createdAt), 'PPP')}
                   </TableCell>
                   <TableCell className="relative">
-                    <div
+                    <button
+                      title="Icon picker"
                       onClick={() => handleMoreClick(val.id)}
                       className="p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
                       id="menu-button"
@@ -255,7 +256,7 @@ export default function Students() {
                       aria-haspopup="true"
                     >
                       <IconPicker icon="more" size="1.25rem" />
-                    </div>
+                    </button>
                     {selectedRow === val.id && !deleteModal && (
                       <DropDownMenu
                         menuItems={menuItems}
@@ -274,9 +275,10 @@ export default function Students() {
         <Pagination
           current={currentPage}
           setCurrent={setCurrentPage}
-          total={data?.meta?.total}
+          total={data?.total}
           onNext={handleNext}
           onPrev={handlePrev}
+          pageSize={data?.per_page}
         />
       )}
     </div>

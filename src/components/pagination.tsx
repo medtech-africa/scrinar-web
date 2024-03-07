@@ -29,6 +29,9 @@ const Pagination = ({
     siblingCount: 1,
     currentPage: current,
   })
+  console.log("pageRange", pageRange, {total,
+pageSize,
+current})
   return (
     <div className="flex gap-x-2 justify-end">
       <Button
