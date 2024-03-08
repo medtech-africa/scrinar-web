@@ -482,7 +482,9 @@ const ScreeningEdit = ({
       screeningData?.assessmentDate &&
         setValue(
           'time',
-          new Date(screeningData?.assessmentDate)?.toLocaleTimeString()
+          new Date(screeningData?.assessmentDate)
+            ?.toLocaleTimeString()
+            ?.split(' ')?.[0]
         )
       setValue('note', screeningData?.note)
       setValue('type', {
