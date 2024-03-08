@@ -14,7 +14,7 @@ import { Text } from './text'
 import { usePathname } from 'next/navigation'
 import { IconPicker } from './icon-picker'
 import { IconNames } from './icon-picker/icon-names'
-import restrictNonAdmin, { isTrainer } from '@/utils/checkPermission'
+import { isTrainer, isMasterInstructor } from '@/utils/checkPermission'
 import { useUser } from '@/context/user'
 
 interface NavLinkProps {
@@ -269,7 +269,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           },
                         }}
                       >
-                        {restrictNonAdmin(user?.roles) && (
+                        {!isMasterInstructor(user?.roles) && (
                           <NavLink
                             href={'/dashboard/user-profile/instructors'}
                             className={cn(

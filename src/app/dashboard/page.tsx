@@ -27,7 +27,7 @@ import { AddHealthDataRecordContent } from './health-data/add-record/add-health-
 import { useUser } from '@/context/user'
 import useDashboardStats from '@/hooks/queries/useDashboardStats'
 import ContentLoader from '@/components/content-loader'
-import restrictNonAdmin, { isMasterInstructor } from '@/utils/checkPermission'
+import { isMasterInstructor } from '@/utils/checkPermission'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 
 const dashboardStats = [
@@ -111,7 +111,7 @@ export default function Home() {
   const [openModal, setOpenModal] = useState(false)
   const user = useUser((state) => state.user)
   const selectedSchool = useUser((state) => state.selectedSchool)
-  const isMI = isMasterInstructor(user?.roles)
+  const isMI = isMasterInstructor(user?.user?.roles ?? user?.roles)
   const { isLoading, data, refetch } = useDashboardStats(
     isMI ? (selectedSchool ? true : false) : true
   )
@@ -143,9 +143,7 @@ export default function Home() {
                     ? 'green'
                     : 'iris'
               return (
-                ((stat?.admin &&
-                  restrictNonAdmin(user?.user?.roles ?? user?.roles)) ||
-                  !stat?.admin) && (
+                ((stat?.admin && !isMI) || !stat?.admin) && (
                   <DashboardCard className="w-ful relative" key={_}>
                     <DashboardCardHeader
                       title={data?.[stat.count] ?? '..'}
@@ -240,9 +238,7 @@ export default function Home() {
           <ActionBlock title="Quick Actions" className="mb-6">
             {actionData1.map(
               (act, _) =>
-                ((act?.admin &&
-                  restrictNonAdmin(user?.user?.roles ?? user?.roles)) ||
-                  !act?.admin) && (
+                ((act?.admin && !isMI) || !act?.admin) && (
                   <div key={_}>
                     <div
                       className="flex justify-between items-center cursor-pointer"
