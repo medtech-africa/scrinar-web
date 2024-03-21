@@ -18,6 +18,7 @@ export interface Student extends SelectVal {
     weight: string
     waist: string
     bloodPressure: string
+    pulse: string
     glucoseLevel: string
     cholesterol: TCholesterol
     dietaryDiversity: DietaryDiversity
