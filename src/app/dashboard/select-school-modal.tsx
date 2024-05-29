@@ -12,13 +12,29 @@ import { isMasterInstructor } from '@/utils/checkPermission'
 import { errorMessage } from '@/utils/errorMessage'
 import { useMutation } from '@tanstack/react-query'
 // import useStateLGA from '@/hooks/queries/useStateLGA'
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
 
 interface IFormData {
   school: { value: string; label: string }
+  state: { value: string; label: string }
 }
+
+const stateOptions = [
+  {
+    label: 'FCT Abuja',
+    value: 'abuja',
+  },
+  {
+    label: 'Oyo State',
+    value: 'oyo',
+  },
+  {
+    label: 'All',
+    value: '',
+  },
+]
 const SelectSchoolModal = () => {
   const {
     user,
@@ -36,9 +52,12 @@ const SelectSchoolModal = () => {
   } = useForm<IFormData>()
   const { authenticate } = useAuth()
   const [searchValue, setSearchValue] = useDebouncedState('')
+  const [state, setState] = useState(stateOptions[0])
 
-  const { data: schoolsData, isFetching: schoolsLoading } =
-    useSchools(searchValue)
+  const { data: schoolsData, isFetching: schoolsLoading } = useSchools(
+    searchValue,
+    state.value
+  )
 
   const { isPending: isLoading, mutate } = useMutation({
     mutationFn: (schoolId: string) =>
@@ -96,23 +115,22 @@ const SelectSchoolModal = () => {
           onSubmit={handleSubmit(onSubmit)}
         >
           <div className="grid grid-cols-1 h-full content-center gap-6">
-            {/* <Select
-            placeholder="Select State"
-            label="State"
-            onChange={(val) => {
-              setState(val)
-              resetField('school', {
-                defaultValue: {
-                  value: '',
-                  label: '',
-                },
-              })
-            }}
-            labelStyle="lg:text-sm text-xs"
-            className="capitalize"
-            isLoading={stateLoading}
-            options={stateOptions}
-          /> */}
+            <Select
+              onChange={(val: any) => {
+                setState(val)
+              }}
+              placeholder="Select State"
+              label="Select state"
+              labelStyle="lg:text-sm text-xs"
+              options={stateOptions}
+              variant={errors?.state ? 'destructive' : 'default'}
+              message={errors.state?.message ?? ''}
+              classNames={{
+                menuList: () => 'h-[200px]',
+              }}
+              // filterOption={filterOptions}
+              value={state}
+            />
 
             <Controller
               control={control}
