@@ -8,13 +8,13 @@ interface School {
   id: number
 }
 
-export const getSchools = (search = '') =>
-  baseAxios.get<School[]>(API.getSchools(search)).then((res) => res.data)
+export const getSchools = (search = '', state = '') =>
+  baseAxios.get<School[]>(API.getSchools(search, state)).then((res) => res.data)
 
-const useSchools = (search?: string) => {
+const useSchools = (search?: string, state?: string) => {
   return useQuery({
-    queryKey: ['schools', search],
-    queryFn: () => getSchools(search),
+    queryKey: ['schools', search, state],
+    queryFn: () => getSchools(search, state),
     placeholderData: keepPreviousData,
     refetchOnWindowFocus: false,
     refetchOnMount: false,

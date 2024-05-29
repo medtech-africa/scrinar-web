@@ -220,6 +220,7 @@ const register = yupResolver(
     phoneNumber: yup
       .string()
       .typeError('Please enter a number')
+      .trim()
       .matches(
         /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
         'Enter a valid phone number'

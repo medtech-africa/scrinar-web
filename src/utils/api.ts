@@ -45,7 +45,8 @@ export const API = {
   schoolRegister: `${BASE_URL}/api/v1/school`,
   schoolUpdate: `${BASE_URL}/api/v1/school/me`,
   schoolDashboard: `${BASE_URL}/api/v1/school/dashboard`,
-  getSchools: (search: string) => `${BASE_URL}/api/v1/school?search=${search}`,
+  getSchools: (search: string, state?: string) =>
+    `${BASE_URL}/api/v1/school?search=${search}${state ? `&state=${state}` : ''}`,
 
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,
