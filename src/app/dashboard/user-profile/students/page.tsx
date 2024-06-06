@@ -137,8 +137,8 @@ export default function Students() {
       baseAxios.delete(API.student(encodeURIComponent(selectedRow ?? ''))),
   })
 
-  const handleMoreClick = (rowIndex: string) => {
-    setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
+  const handleMoreClick = (rowId: string) => {
+    setSelectedRow(selectedRow === rowId ? null : rowId)
   }
 
   const menuItems: MenuItemProp[] = [

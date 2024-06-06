@@ -33,6 +33,7 @@ import toast from 'react-hot-toast'
 import DropDownMenuExport from './drop-down-export'
 import { TCholesterol } from '@/types/healthData.types'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
+import { useDebouncedState } from '@/hooks/useDebouncedState'
 
 const FilterData = () => {
   return (
@@ -66,10 +67,16 @@ const FilterData = () => {
 type FilterHeaderProps = {
   setOpenFilter: (value: boolean) => void
   openFilter: boolean
+  onSearchChange: (val: string) => void
+  searchVal?: string
+  loading?: boolean
 }
 const FilterHeader = ({
   setOpenFilter: _,
   openFilter: __,
+  onSearchChange,
+  searchVal,
+  loading,
 }: FilterHeaderProps) => {
   const [openExport, setOpenExport] = useState(false)
   return (
@@ -79,6 +86,10 @@ const FilterHeader = ({
         className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
         placeholder="Search by Name, Gender or Age.."
         full={false}
+        onChange={(e) => onSearchChange(e.target.value)}
+        endingIcon={
+          loading && searchVal && <IconPicker icon="loader2" size={20} />
+        }
       />
       <div className="flex gap-x-4 mt-2 md:mt-0">
         {/* @Todo:not time */}
@@ -120,7 +131,11 @@ export default function HealthData() {
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
   )
-  const { data, isLoading, refetch } = useHealthData(currentPage)
+  const [search, setSearch] = useDebouncedState('')
+  const { data, isLoading, refetch, isFetching } = useHealthData(
+    currentPage,
+    search
+  )
   useSchoolChangeRefresh(refetch)
   const healthData = data?.data
 
@@ -131,7 +146,6 @@ export default function HealthData() {
       action: () =>
         router.push(`/dashboard/health-data/view-record/${selectedRow ?? ''}`),
     },
-
     {
       title: 'Delete Data',
       icon: IconNames.trash,
@@ -209,7 +223,13 @@ export default function HealthData() {
         }
         isAvatar
       />
-      <FilterHeader setOpenFilter={setOpenFilter} openFilter={openFilter} />
+      <FilterHeader
+        setOpenFilter={setOpenFilter}
+        openFilter={openFilter}
+        onSearchChange={setSearch}
+        searchVal={search}
+        loading={isFetching}
+      />
       {openFilter && <FilterData />}
       <Delete
         open={deleteModal}
