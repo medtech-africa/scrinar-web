@@ -72,7 +72,6 @@ export default function EditRecord({ params }: { params: { id: string } }) {
       ...filteredData,
       gender: formData.gender?.value,
       level: data.level?.value,
-      dob: new Date(data.dob).toISOString(),
     }
     try {
       await mutate(dataToSend, {
@@ -93,8 +92,8 @@ export default function EditRecord({ params }: { params: { id: string } }) {
     <div className="relative">
       <ContentLoader loading={isLoading} />
       <PageHeader
-        title="Add New Student"
-        subtitle="Add Student: Create New Student Profile"
+        title="Edit Student"
+        subtitle="Edit Student: Modify Student Profile"
         navigation={navigationItems}
       />
       <form onSubmit={handleSubmit(onSubmit)}>
