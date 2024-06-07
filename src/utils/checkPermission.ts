@@ -3,7 +3,8 @@ const restrictNonAdmin = (roles: string[] = []) => {
   if (
     roles?.includes('school') ||
     roles?.includes('admin') ||
-    roles?.includes('play4health_admin')
+    roles?.includes('play4health_admin')||
+    roles?.includes('super_admin')
   ) {
     return true
   }
@@ -14,6 +15,7 @@ const restrictNonAdmin = (roles: string[] = []) => {
 export default restrictNonAdmin
 
 export const isMasterInstructor = (roles: string[] = []) =>
-  roles?.includes('play4health_admin')
+  roles?.includes('play4health_admin')||
+  roles?.includes('super_admin')
 export const isTrainer = (roles: string[] = []) =>
   roles?.includes('trainer')

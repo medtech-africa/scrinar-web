@@ -58,31 +58,31 @@ const generalData = [
     title: 'Dashboard',
     icon: 'grid7',
     href: '',
-    roles: ['school', 'instructor', 'play4health_admin'],
+    roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   },
   {
     title: 'Health Data',
     icon: 'health',
     href: 'health-data',
-    roles: ['school', 'instructor', 'play4health_admin'],
+    roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   },
   {
     title: 'Screening',
     icon: 'calendar',
     href: 'screening',
-    roles: ['school', 'instructor', 'play4health_admin'],
+    roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   },
   {
     title: 'Training Module',
     icon: 'book',
     href: 'training-module',
-    roles: ['school', 'instructor', 'play4health_admin', 'trainer'],
+    roles: ['school', 'instructor', 'play4health_admin', 'trainer', 'super_admin'],
   },
   {
     title: 'Trainers Data',
     icon: 'book',
     href: 'training-module/admin',
-    roles: ['play4health_admin', 'admin'],
+    roles: ['play4health_admin', 'admin', 'super_admin'],
   },
 ] as Datatype[]
 
