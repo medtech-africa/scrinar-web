@@ -5,18 +5,20 @@ import { useRef } from 'react'
 import { ExportAsCsv } from './export-csv'
 import { ExportAsExcel } from './export-excel'
 import { IconPicker } from '@/components/ui/icon-picker'
-import { useHealthRiskData } from '@/hooks/queries/useHealthData'
+import useHealthData from '@/hooks/queries/useHealthData'
 
 interface IProps {
   onClose?: () => void
   className?: string
 }
 
-const DropDownMenuExport = ({ onClose, className }: IProps) => {
+const DropDownMenuExportAll = ({ onClose, className }: IProps) => {
   const menuRef = useRef(null)
-  const { data, isLoading } = useHealthRiskData()
+
   useClickAway(menuRef, () => (onClose ? onClose() : null))
 
+  const { data, isLoading } = useHealthData(1, '', 1000)
+  console.log(data, '>>>data')
   return (
     <div
       ref={menuRef}
@@ -44,4 +46,4 @@ const DropDownMenuExport = ({ onClose, className }: IProps) => {
   )
 }
 
-export default DropDownMenuExport
+export default DropDownMenuExportAll
