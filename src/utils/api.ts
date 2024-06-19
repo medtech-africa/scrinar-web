@@ -1,7 +1,5 @@
 const BASE_URL =
-  'https://api-play4health.forcardio.app' ??
-  process.env.NEXT_PUBLIC_API_URL ??
-  'https://dev-play4health-api.onrender.com'
+  process.env.NEXT_PUBLIC_API_URL ?? 'https://dev-play4health-api.onrender.com'
 
 export const API = {
   //school
