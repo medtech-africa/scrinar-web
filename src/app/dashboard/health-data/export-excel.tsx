@@ -4,7 +4,13 @@ import ExcelJS from 'exceljs'
 import { excelHeaders } from './custom-header'
 import { flatten as flat } from 'flat'
 
-export const ExportAsExcel = ({ data }: { data: any }) => {
+export const ExportAsExcel = ({
+  data,
+  fileName = 'health-risk-data',
+}: {
+  data: any
+  fileName?: string
+}) => {
   const riskData = data ?? []
   const exportToExcel = async () => {
     const workbook = new ExcelJS.Workbook()
@@ -30,7 +36,7 @@ export const ExportAsExcel = ({ data }: { data: any }) => {
     // Create a link to trigger the download
     const a = document.createElement('a')
     a.href = url
-    a.download = 'health-risk-data.xlsx'
+    a.download = `${fileName}.xlsx`
     a.click()
   }
   return (
