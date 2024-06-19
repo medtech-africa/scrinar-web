@@ -48,6 +48,7 @@ const SelectSchoolModal = () => {
     control,
     handleSubmit,
     formState: { errors },
+    setValue,
     // resetField,
   } = useForm<IFormData>()
   const { authenticate } = useAuth()
@@ -118,6 +119,7 @@ const SelectSchoolModal = () => {
             <Select
               onChange={(val: any) => {
                 setState(val)
+                setValue('school', { value: '', label: '' })
               }}
               placeholder="Select State"
               label="Select state"

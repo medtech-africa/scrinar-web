@@ -34,6 +34,9 @@ import DropDownMenuExport from './drop-down-export'
 import { TCholesterol } from '@/types/healthData.types'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { useDebouncedState } from '@/hooks/useDebouncedState'
+import DropDownMenuExportAll from './drop-down-export-all'
+import { useUser } from '@/context/user'
+import { isMasterInstructor } from '@/utils/checkPermission'
 
 const FilterData = () => {
   return (
@@ -79,8 +82,11 @@ const FilterHeader = ({
   loading,
 }: FilterHeaderProps) => {
   const [openExport, setOpenExport] = useState(false)
+  const [openExportAll, setOpenExportAll] = useState(false)
+  const user = useUser((state) => state.user)
+
   return (
-    <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
+    <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between items-center mt-2 border-y border-grey-50 mb-2">
       <Input
         leadingIcon={<IconPicker icon="search" />}
         className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
@@ -91,7 +97,7 @@ const FilterHeader = ({
           loading && searchVal && <IconPicker icon="loader2" size={20} />
         }
       />
-      <div className="flex gap-x-4 mt-2 md:mt-0">
+      <div className="flex items-center gap-x-4 mt-2 md:mt-0">
         {/* @Todo:not time */}
         {/* <Button
           onClick={() => setOpenFilter(!openFilter)}
@@ -99,17 +105,37 @@ const FilterHeader = ({
           className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
           endingIcon={<IconPicker icon="arrowDown" />}
         />*/}
-        <div className="relative">
-          <Button
-            value="Export Health Risk"
-            className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
-            endingIcon={<IconPicker icon="export" />}
-            onClick={() => setOpenExport(true)}
-          />
-          {openExport && (
-            <DropDownMenuExport onClose={() => setOpenExport(false)} />
+
+        <div>
+          {isMasterInstructor(user?.roles) && (
+            <div className="relative mb-2">
+              <Button
+                value="Export All Health Data"
+                className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
+                endingIcon={<IconPicker icon="export" />}
+                onClick={() => setOpenExportAll(true)}
+              />
+              {openExportAll && (
+                <DropDownMenuExportAll
+                  onClose={() => setOpenExportAll(false)}
+                />
+              )}
+            </div>
           )}
+
+          <div className="relative">
+            <Button
+              value="Export Health Risk"
+              className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
+              endingIcon={<IconPicker icon="export" />}
+              onClick={() => setOpenExport(true)}
+            />
+            {openExport && (
+              <DropDownMenuExport onClose={() => setOpenExport(false)} />
+            )}
+          </div>
         </div>
+
         <Link href={`health-data/add-record`}>
           <Button
             value="Add New Record"
