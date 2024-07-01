@@ -16,10 +16,12 @@ import schoolLevels from '@/constants/school-levels'
 import { errorMessage } from '@/utils/errorMessage'
 import filterObject from '@/utils/filterObject'
 import useSelectImage from '@/hooks/useSelectImage'
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
 import uploadImage from '@/utils/uploadImage'
 import ConditionAvatar from '@/components/ui/condition-avatar'
 import { IDataToSend, IFormValue } from './page'
+import { AddHealthDataRecord } from './add-health-data-record-content'
+import { HealthDataPayload } from '@/types/healthData.types'
 
 const defaultValues = {
   level: { value: '', label: '' },
@@ -31,6 +33,8 @@ const defaultValues = {
   parentMobileAlt: '',
   password: '',
 }
+
+type HealthDataPayloadEx = Omit<HealthDataPayload, 'userId'>
 export const AddNewStudentContent = () => {
   const queryClient = useQueryClient()
   const {
@@ -42,11 +46,20 @@ export const AddNewStudentContent = () => {
       baseAxios.post(API.students, dataToSend),
   })
 
+  const { isPending, mutate: mutateHealthData } = useMutation({
+    mutationFn: (data: HealthDataPayload) =>
+      baseAxios.post(API.healthData, data),
+  })
+  const [showHealthData, setShowHealthData] = useState(false)
+  const [studentAddedId, setStudentAddedId] = useState('')
+  const [resetFields, setResetFields] = useState(false)
+
   const {
     control,
     reset,
     handleSubmit,
     formState: { errors },
+    watch,
   } = useForm<IFormValue>({
     resolver: validation.createPatient,
     defaultValues: { avatar: true },
@@ -67,43 +80,87 @@ export const AddNewStudentContent = () => {
     }
   }
 
-  const onSubmit = async (data: IFormValue) => {
-    const filteredData = filterObject(data)
-    let avatarUrlRes
-    if (selectedImg) {
-      setImageLoading(true)
-      avatarUrlRes = await uploadImage(selectedImg)
-    }
+  const handleHealthData = (userId = '', healthData?: HealthDataPayloadEx) => {
     const dataToSend = {
-      ...filteredData,
-      gender: data.gender?.value,
-      level: data.level?.value,
-      // dob: new Date(data.dob).toISOString(),
-      ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
-      // age: calculateAge(data.dob),
+      userId,
+      ...healthData,
     }
-    try {
-      await mutate(dataToSend, {
-        onSuccess: () => {
-          toast.success('Successfully added student')
-          reset(defaultValues)
-          setSelectedImg(null)
-          postReset()
-          queryClient.invalidateQueries('students' as any)
-          // toast.success('')
-        },
-        onError: (err) => {
-          // console.log(err, 'rr')
-          errorMessage(err)
-        },
-      })
-    } finally {
-      setImageLoading(false)
+    mutateHealthData(dataToSend, {
+      onSuccess: () => {
+        toast.success('Successfully added student and health data')
+        setResetFields(true)
+        reset(defaultValues)
+        setSelectedImg(null)
+        setStudentAddedId('')
+        postReset()
+        queryClient.invalidateQueries('students' as any)
+      },
+      onError: (err) => {
+        errorMessage(err)
+      },
+    })
+  }
+
+  const onSubmit = async (
+    data: IFormValue,
+    healthData?: HealthDataPayloadEx
+  ) => {
+    resetFields && setResetFields(false)
+
+    if (studentAddedId) {
+      handleHealthData(studentAddedId, healthData)
+    } else {
+      const filteredData = filterObject(data)
+      let avatarUrlRes
+      if (selectedImg) {
+        setImageLoading(true)
+        avatarUrlRes = await uploadImage(selectedImg)
+      }
+      const dataToSend = {
+        ...filteredData,
+        gender: data.gender?.value,
+        level: data.level?.value,
+        // dob: new Date(data.dob).toISOString(),
+        ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
+        // age: calculateAge(data.dob),
+      }
+      try {
+        await mutate(dataToSend, {
+          onSuccess: (res) => {
+            if (healthData) {
+              const studentId = res.data?.data?.id
+              handleHealthData(studentId, healthData)
+              setStudentAddedId(studentId)
+              return
+            }
+            toast.success('Successfully added student')
+            reset(defaultValues)
+            setSelectedImg(null)
+            setStudentAddedId('')
+            postReset()
+            queryClient.invalidateQueries('students' as any)
+            // toast.success('')
+          },
+          onError: (err) => {
+            // console.log(err, 'rr')
+            errorMessage(err)
+          },
+        })
+      } finally {
+        setImageLoading(false)
+      }
     }
   }
+
+  const handleStudentHealth = (healthData: HealthDataPayloadEx) => {
+    handleSubmit((data) => onSubmit(data, healthData))()
+  }
+
+  const studentDetails = { gender: watch('gender')?.value, age: watch('age') }
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="grid md:grid-cols-[2fr_1fr] gap-6 py-7 mt-2">
+    <form>
+      <div className="grid md:grid-cols-[2fr_1fr] gap-6 pt-7 mt-2">
         <div className="w-full h-full order-last md:order-first">
           <PageCard title="Add Basic Information" bodyStyle="p-4">
             <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
@@ -176,10 +233,9 @@ export const AddNewStudentContent = () => {
 
               <Controller
                 control={control}
-                render={({ field: { onChange, onBlur, value } }) => (
+                render={({ field: { value, ...rest } }) => (
                   <Input
-                    onChange={onChange}
-                    onBlur={onBlur}
+                    {...rest}
                     value={value ?? ''}
                     placeholder="08112345678"
                     label="Parent Mobile Number 1"
@@ -277,15 +333,32 @@ export const AddNewStudentContent = () => {
                 name="password"
               />
             </div>
-            <Button
-              variant={'primary'}
-              value="Save User"
-              type="submit"
-              leadingIcon={<IconPicker icon="saveAdd" />}
-              className="mt-6"
-              disabled={isLoading || imageLoading}
-              loading={isLoading || imageLoading}
-            />
+
+            <div className="mt-6 flex items-center">
+              <Checkbox
+                checked={showHealthData}
+                onCheckedChange={(val) => {
+                  setShowHealthData(Boolean(val))
+                }}
+              />
+              {/* <Checkbox  /> */}
+              <Text className="ml-2 text-base text-grey-700">
+                Add Health data
+              </Text>
+            </div>
+
+            {!showHealthData && (
+              <Button
+                variant={'primary'}
+                onClick={handleSubmit((data) => onSubmit(data))}
+                value="Save User"
+                type="submit"
+                leadingIcon={<IconPicker icon="saveAdd" />}
+                className="mt-6"
+                disabled={isLoading || imageLoading}
+                loading={isLoading || imageLoading}
+              />
+            )}
           </PageCard>
         </div>
         <div className="">
@@ -340,6 +413,14 @@ export const AddNewStudentContent = () => {
           </PageCard>
         </div>
       </div>
+      {showHealthData && (
+        <AddHealthDataRecord
+          addLoading={isLoading || imageLoading || isPending}
+          onSubmit={(healthData) => handleStudentHealth(healthData)}
+          resetFields={resetFields}
+          student={studentDetails}
+        />
+      )}
     </form>
   )
 }
