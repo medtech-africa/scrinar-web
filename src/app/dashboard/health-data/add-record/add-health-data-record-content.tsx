@@ -87,13 +87,13 @@ export const AddHealthDataRecordContent = () => {
     setBmi(Number(student?.latestHealthData?.bmi) ?? '')
     setDys(formattedDia ?? '')
     setSys(formattedSys ?? '')
-    setLdlc(student?.latestHealthData?.cholesterol.ldl ?? '')
-    setHdlc(student?.latestHealthData?.cholesterol.hdl ?? '')
-    setTg(student?.latestHealthData?.cholesterol.triglycerides ?? '')
+    setLdlc(student?.latestHealthData?.cholesterol?.ldl ?? '')
+    setHdlc(student?.latestHealthData?.cholesterol?.hdl ?? '')
+    setTg(student?.latestHealthData?.cholesterol?.triglycerides ?? '')
     setBloodSugar(student?.latestHealthData?.glucoseLevel ?? '')
     setPulse(student?.latestHealthData?.pulse ?? '')
     setTotalCholesterol(
-      student?.latestHealthData?.cholesterol.totalCholesterol ?? ''
+      student?.latestHealthData?.cholesterol?.totalCholesterol ?? ''
     )
     student?.latestHealthData?.dietaryDiversity &&
       setNutritionalData(student?.latestHealthData?.dietaryDiversity)
@@ -106,14 +106,14 @@ export const AddHealthDataRecordContent = () => {
     setNutritionalData,
     student?.latestHealthData?.bmi,
     student?.latestHealthData?.pulse,
-    student?.latestHealthData?.cholesterol.totalCholesterol,
+    student?.latestHealthData?.cholesterol?.totalCholesterol,
     student?.latestHealthData?.dietaryDiversity,
     student?.latestHealthData?.glucoseLevel,
-    student?.latestHealthData?.cholesterol.hdl,
+    student?.latestHealthData?.cholesterol?.hdl,
     student?.latestHealthData?.height,
-    student?.latestHealthData?.cholesterol.ldl,
+    student?.latestHealthData?.cholesterol?.ldl,
     student?.latestHealthData?.physicalActivity,
-    student?.latestHealthData?.cholesterol.triglycerides,
+    student?.latestHealthData?.cholesterol?.triglycerides,
     student?.latestHealthData?.waist,
     student?.latestHealthData?.weight,
   ])
