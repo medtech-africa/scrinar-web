@@ -95,10 +95,9 @@ export const AddHealthDataRecordContent = () => {
     setTotalCholesterol(
       student?.latestHealthData?.cholesterol?.totalCholesterol ?? ''
     )
-    student?.latestHealthData?.dietaryDiversity &&
-      setNutritionalData(student?.latestHealthData?.dietaryDiversity)
-    student?.latestHealthData?.physicalActivity &&
-      setExerciseData(student?.latestHealthData?.physicalActivity)
+
+    setNutritionalData(student?.latestHealthData?.dietaryDiversity ?? null)
+    setExerciseData(student?.latestHealthData?.physicalActivity ?? null)
   }, [
     formattedDia,
     formattedSys,
@@ -134,7 +133,6 @@ export const AddHealthDataRecordContent = () => {
       setBmi(0)
     }
   }, [height, weight])
-  // console.log(student?.latestHealthData?.bmi, student?.latestHealthData?.pulse)
   const handleSubmit = () => {
     if (!student)
       return toast.custom(
@@ -144,7 +142,16 @@ export const AddHealthDataRecordContent = () => {
           action1={() => toast.remove()}
         />
       )
-    if (!height && !weight && !waist && !sys && !dys && !bloodSugar) {
+    if (
+      !height &&
+      !weight &&
+      !waist &&
+      !sys &&
+      !dys &&
+      !bloodSugar &&
+      !nutritionalData &&
+      !exerciseData
+    ) {
       return toast.custom(
         <ToastField
           variant={'warning2'}

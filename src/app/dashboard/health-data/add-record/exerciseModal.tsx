@@ -16,20 +16,21 @@ import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import { useHealthValue } from '@/context/health-data-context'
 import { PhysicalActivity } from '@/types/healthData.types'
+import { ToastField } from '@/components/ui/toast'
 
 interface IProps {
   onClose: () => void
 }
 interface IFormData
   extends Omit<PhysicalActivity, 'schoolTransportQuestion' | 'sportQuestion'> {
-  schoolTransportQuestion: { value: string; label: string }
-  sportQuestion: { value: string; label: string }
+  schoolTransportQuestion?: { value?: string; label?: string }
+  sportQuestion?: { value?: string; label?: string }
   schoolTransportQuestionAlt?: string
 }
 export interface IExerciseValue
   extends Omit<IFormData, 'sportQuestion' | 'schoolTransportQuestion'> {
-  sportQuestion: string
-  schoolTransportQuestion: string | undefined
+  sportQuestion?: string
+  schoolTransportQuestion?: string | undefined
 }
 
 export const ExerciseModal = ({ onClose }: IProps) => {
@@ -68,6 +69,22 @@ export const ExerciseModal = ({ onClose }: IProps) => {
           ? data?.schoolTransportQuestionAlt
           : data?.schoolTransportQuestion?.value,
       sportQuestion: data?.sportQuestion?.value,
+    }
+
+    if (
+      !dataToSend?.schoolTransportQuestion &&
+      !dataToSend?.sportQuestion &&
+      !dataToSend?.hoursOnComputer &&
+      !dataToSend?.hoursOnSleep &&
+      !dataToSend?.hoursOnTv
+    ) {
+      return toast.custom(
+        <ToastField
+          variant={'warning2'}
+          label={'Please provide a value'}
+          action1={() => toast.remove()}
+        />
+      )
     }
     if (dataToSend) {
       setExerciseData(dataToSend)

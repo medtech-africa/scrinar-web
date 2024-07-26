@@ -34,14 +34,11 @@ const createPatient = yupResolver(
       .required('Please select a level')
       .typeError('Please select a level'),
     password: yup.string(),
-    parentMobile: yup
-      .string()
-      .required('Parent phone number is required')
-      .typeError('Please enter a number')
-      .matches(
-        /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
-        'Enter a valid phone number'
-      ),
+    parentMobile: yup.string().optional(),
+    // .matches(
+    //   /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
+    //   'Enter a valid phone number'
+    // ),
     parentMobileAlt: yup.string().optional(),
     avatar: yup.boolean(),
   })
@@ -92,14 +89,7 @@ const registerStudent = yupResolver(
       .required('Please select a school')
       .typeError('Please select a school'),
     password: yup.string(),
-    parentMobile: yup
-      .string()
-      .required('Parent phone number is required')
-      .typeError('Please enter a number')
-      .matches(
-        /^([0]{1}|\+?234)([7-9]{1})([0|1]{1})([\d]{1})([\d]{7})$/,
-        'Enter a valid phone number'
-      ),
+    parentMobile: yup.string().optional(),
     parentMobileAlt: yup.string().optional(),
     avatar: yup.boolean(),
   })
@@ -278,35 +268,28 @@ const exercise = yupResolver(
   yup.object().shape({
     schoolTransportQuestion: yup
       .object()
-      .shape({ label: yup.string().required(), value: yup.string().required() })
-      .required('Please fill this field')
-      .typeError('Please fill this field'),
+      .shape({ label: yup.string(), value: yup.string() })
+      .optional(),
     sportQuestion: yup
       .object()
-      .shape({ label: yup.string().required(), value: yup.string().required() })
-      .required('Please fill this field')
-      .typeError('Please fill this field'),
+      .shape({ label: yup.string(), value: yup.string() })
+      .optional(),
     hoursOnSleep: yup
       .number()
-      .typeError('Please fill this field')
-      .required('Please fill this field')
       .min(0, 'Number must be at least 0')
-      .max(27, 'Number must not exceed 27'),
+      .max(27, 'Number must not exceed 27')
+      .optional(),
     hoursOnTv: yup
       .number()
-      .required('Please fill this field')
-      .typeError('Please fill this field')
       .min(0, 'Number must be at least 0')
-      .max(27, 'Number must not exceed 27'),
+      .max(27, 'Number must not exceed 27')
+      .optional(),
     hoursOnComputer: yup
       .number()
-      .required('Please fill this field')
-      .typeError('Please fill this field')
       .min(0, 'Number must be at least 0')
-      .max(27, 'Number must not exceed 27'),
-    schoolTransportQuestionAlt: yup
-      .string()
-      .typeError('Please fill this field'),
+      .max(27, 'Number must not exceed 27')
+      .optional(),
+    schoolTransportQuestionAlt: yup.string(),
   })
 )
 const nutritional = yupResolver(
@@ -314,24 +297,27 @@ const nutritional = yupResolver(
     foodAmount: yup
       .object()
       .shape({
-        label: yup.string().required(),
-        value: yup.string().required(),
+        label: yup.string(),
+        value: yup.string(),
       })
-      .required('Food amount is required'),
-    mealsPerDay: yup.number().required('Number of meals is required'),
+      .optional(),
+    mealsPerDay: yup.number(),
     dietary: yup.string(),
-    fruitsTimes: yup.object().shape({
-      vegetable: yup.number().required('Food amount is required'),
-      meat: yup.number().required('Food amount is required'),
-      fruits: yup.number().required('Food amount is required'),
-      egg: yup.number().required('Food amount is required'),
-      carbohydrates: yup.number().required('Food amount is required'),
-      sweets: yup.number().required('Food amount is required'),
-      pastries: yup.number().required('Food amount is required'),
-      sugar: yup.number().required('Food amount is required'),
-      friedFood: yup.number().required('Food amount is required'),
-      fish: yup.number().required('Food amount is required'),
-    }),
+    fruitsTimes: yup
+      .object()
+      .shape({
+        vegetable: yup.number(),
+        meat: yup.number(),
+        fruits: yup.number(),
+        egg: yup.number(),
+        carbohydrates: yup.number(),
+        sweets: yup.number(),
+        pastries: yup.number(),
+        sugar: yup.number(),
+        friedFood: yup.number(),
+        fish: yup.number(),
+      })
+      .optional(),
   })
 )
 

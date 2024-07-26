@@ -18,7 +18,7 @@ export interface IFormValue {
   age: number
   gender: { value: string; label: string }
   level: { value: string; label: string }
-  parentMobile: string
+  parentMobile?: string
   parentMobileAlt?: string
   password?: string
   avatar?: boolean

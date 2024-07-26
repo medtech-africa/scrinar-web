@@ -14,20 +14,22 @@ import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import { useHealthValue } from '@/context/health-data-context'
 import { FruitsTimes } from '@/types/healthData.types'
+import { ToastField } from '@/components/ui/toast'
 interface IProps {
   onClose: () => void
 }
 
 interface IFormData {
-  foodAmount: { value: string; label: string }
-  mealsPerDay: number
-  fruitsTimes: FruitsTimes
+  foodAmount?: { value?: string; label?: string }
+  mealsPerDay?: number
+  fruitsTimes?: FruitsTimes
   dietary?: string
 }
+
 export interface INutritionalValue
   extends Omit<IFormData, 'foodAmount' | 'dietary'> {
-  foodAmount: string
-  dietary: string[]
+  foodAmount?: string
+  dietary?: string[]
 }
 export const NutritionalModal = ({ onClose }: IProps) => {
   const [dietary, setDietary] = useState('')
@@ -72,6 +74,20 @@ export const NutritionalModal = ({ onClose }: IProps) => {
       ...filteredData,
       dietary: dietaries,
       foodAmount: data?.foodAmount?.label,
+    }
+
+    if (
+      !dataToSend?.dietary?.length &&
+      !Object.keys(dataToSend?.fruitsTimes ?? {})?.length &&
+      !dataToSend?.mealsPerDay
+    ) {
+      return toast.custom(
+        <ToastField
+          variant={'warning2'}
+          label={'Please provide a value'}
+          action1={() => toast.remove()}
+        />
+      )
     }
     if (dataToSend) {
       setNutritionalData(dataToSend)
