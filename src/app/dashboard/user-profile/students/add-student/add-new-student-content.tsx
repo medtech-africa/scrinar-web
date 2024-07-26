@@ -22,6 +22,7 @@ import ConditionAvatar from '@/components/ui/condition-avatar'
 import { IDataToSend, IFormValue } from './page'
 import { AddHealthDataRecord } from './add-health-data-record-content'
 import { HealthDataPayload } from '@/types/healthData.types'
+import { useHealthValue } from '@/context/health-data-context'
 
 const defaultValues = {
   level: { value: '', label: '' },
@@ -80,6 +81,7 @@ export const AddNewStudentContent = () => {
     }
   }
 
+  const { setExerciseData, setNutritionalData } = useHealthValue()
   const handleHealthData = (userId = '', healthData?: HealthDataPayloadEx) => {
     const dataToSend = {
       userId,
@@ -92,6 +94,8 @@ export const AddNewStudentContent = () => {
         reset(defaultValues)
         setSelectedImg(null)
         setStudentAddedId('')
+        setExerciseData(null)
+        setNutritionalData(null)
         postReset()
         queryClient.invalidateQueries('students' as any)
       },

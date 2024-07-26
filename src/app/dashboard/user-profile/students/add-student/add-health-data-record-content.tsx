@@ -80,7 +80,16 @@ export const AddHealthDataRecord = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
-    if (!height && !weight && !waist && !sys && !dys && !bloodSugar) {
+    if (
+      !height &&
+      !weight &&
+      !waist &&
+      !sys &&
+      !dys &&
+      !bloodSugar &&
+      !nutritionalData &&
+      !exerciseData
+    ) {
       return toast.custom(
         <ToastField
           variant={'warning2'}
@@ -113,7 +122,8 @@ export const AddHealthDataRecord = ({
   }
 
   useEffect(() => {
-    if (resetFields) {
+    let mounted = true
+    if (resetFields || mounted) {
       setHeight('')
       setWeight('')
       setWaist('')
@@ -127,6 +137,7 @@ export const AddHealthDataRecord = ({
       setTg('')
       setNutritionalData(null)
       setExerciseData(null)
+      mounted = false
     }
   }, [resetFields])
 
