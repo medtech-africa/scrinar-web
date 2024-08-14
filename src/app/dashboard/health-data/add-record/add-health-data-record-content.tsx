@@ -56,6 +56,7 @@ export const AddHealthDataRecordContent = () => {
   const [ldlc, setLdlc] = useState('')
   const [hdlc, setHdlc] = useState('')
   const [tg, setTg] = useState('')
+  const [pulse, setPulse] = useState('')
 
   const [sys, setSys] = useState('')
   const [dys, setDys] = useState('')
@@ -86,31 +87,32 @@ export const AddHealthDataRecordContent = () => {
     setBmi(Number(student?.latestHealthData?.bmi) ?? '')
     setDys(formattedDia ?? '')
     setSys(formattedSys ?? '')
-    setLdlc(student?.latestHealthData?.cholesterol.ldl ?? '')
-    setHdlc(student?.latestHealthData?.cholesterol.hdl ?? '')
-    setTg(student?.latestHealthData?.cholesterol.triglycerides ?? '')
+    setLdlc(student?.latestHealthData?.cholesterol?.ldl ?? '')
+    setHdlc(student?.latestHealthData?.cholesterol?.hdl ?? '')
+    setTg(student?.latestHealthData?.cholesterol?.triglycerides ?? '')
     setBloodSugar(student?.latestHealthData?.glucoseLevel ?? '')
+    setPulse(student?.latestHealthData?.pulse ?? '')
     setTotalCholesterol(
-      student?.latestHealthData?.cholesterol.totalCholesterol ?? ''
+      student?.latestHealthData?.cholesterol?.totalCholesterol ?? ''
     )
-    student?.latestHealthData?.dietaryDiversity &&
-      setNutritionalData(student?.latestHealthData?.dietaryDiversity)
-    student?.latestHealthData?.physicalActivity &&
-      setExerciseData(student?.latestHealthData?.physicalActivity)
+
+    setNutritionalData(student?.latestHealthData?.dietaryDiversity ?? null)
+    setExerciseData(student?.latestHealthData?.physicalActivity ?? null)
   }, [
     formattedDia,
     formattedSys,
     setExerciseData,
     setNutritionalData,
     student?.latestHealthData?.bmi,
-    student?.latestHealthData?.cholesterol.totalCholesterol,
+    student?.latestHealthData?.pulse,
+    student?.latestHealthData?.cholesterol?.totalCholesterol,
     student?.latestHealthData?.dietaryDiversity,
     student?.latestHealthData?.glucoseLevel,
-    student?.latestHealthData?.cholesterol.hdl,
+    student?.latestHealthData?.cholesterol?.hdl,
     student?.latestHealthData?.height,
-    student?.latestHealthData?.cholesterol.ldl,
+    student?.latestHealthData?.cholesterol?.ldl,
     student?.latestHealthData?.physicalActivity,
-    student?.latestHealthData?.cholesterol.triglycerides,
+    student?.latestHealthData?.cholesterol?.triglycerides,
     student?.latestHealthData?.waist,
     student?.latestHealthData?.weight,
   ])
@@ -140,7 +142,16 @@ export const AddHealthDataRecordContent = () => {
           action1={() => toast.remove()}
         />
       )
-    if (!height && !weight && !waist && !sys && !dys && !bloodSugar) {
+    if (
+      !height &&
+      !weight &&
+      !waist &&
+      !sys &&
+      !dys &&
+      !bloodSugar &&
+      !nutritionalData &&
+      !exerciseData
+    ) {
       return toast.custom(
         <ToastField
           variant={'warning2'}
@@ -156,7 +167,7 @@ export const AddHealthDataRecordContent = () => {
       ...(height && { height }),
       ...(weight && { weight }),
       ...(waist && { waist }),
-      ...(sys && dys && { bloodPressure: `${sys}/${dys}` }),
+      ...(sys && dys && { bloodPressure: `${sys}/${dys}`, pulse: pulse }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
       ...(totalCholesterol && {
@@ -184,6 +195,7 @@ export const AddHealthDataRecordContent = () => {
         setLdlc('')
         setHdlc('')
         setTg('')
+        setPulse('')
         setLevel(null)
         setNutritionalData(null)
         setExerciseData(null)
@@ -382,6 +394,19 @@ export const AddHealthDataRecordContent = () => {
                   className="ml-2 mt-6"
                 />
               )}
+            </div>
+            <div>
+              <div className="flex mt-4">
+                <Input
+                  placeholder="00"
+                  label="Pulse"
+                  labelStyle="lg:text-sm text-xs"
+                  value={pulse}
+                  onChange={(e) => setPulse(e.target.value)}
+                  variant={variantValidityCheck(pulse)}
+                  message={messageCheck(pulse)}
+                />
+              </div>
             </div>
           </PageCard>
 

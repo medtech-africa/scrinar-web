@@ -276,6 +276,7 @@ export default function HealthData() {
               <TableHead className="bg-grey-200"></TableHead>
               <TableHead></TableHead>
               <TableHead></TableHead>
+              <TableHead></TableHead>
               <TableHead className="bg-grey-200"></TableHead>
               <TableHead className="bg-grey-200 absolute pt-3 ">
                 Cholesterol(mg/dL)
@@ -293,6 +294,7 @@ export default function HealthData() {
               <TableHead className="w-3">BMI</TableHead>
               <TableHead>WC(cm)</TableHead>
               <TableHead>BP(mmHg)</TableHead>
+              <TableHead>Pulse(bpm)</TableHead>
               <TableHead>Blood Sugar(mg/dL)</TableHead>
               <TableHead>Total Cholesterol</TableHead>
               <TableHead>LDL</TableHead>
@@ -327,6 +329,7 @@ export default function HealthData() {
                   <TableCell>{val?.bmi}</TableCell>
                   <TableCell>{val?.waist}</TableCell>
                   <TableCell>{val?.bloodPressure}</TableCell>
+                  <TableCell>{val?.pulse}</TableCell>
                   <TableCell>{val?.glucoseLevel}</TableCell>
                   <TableCell>{val?.cholesterol?.totalCholesterol}</TableCell>
                   <TableCell>{val?.cholesterol?.ldl}</TableCell>
@@ -381,6 +384,7 @@ type DataType = {
   weight?: number
   waist?: number
   bloodPressure?: string
+  pulse?: string
   cholesterol?: TCholesterol
   glucoseLevel?: number
   dietaryDiversityScore?: string

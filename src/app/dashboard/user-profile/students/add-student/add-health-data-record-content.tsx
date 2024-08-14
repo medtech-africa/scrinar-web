@@ -55,6 +55,7 @@ export const AddHealthDataRecord = ({
   const [ldlc, setLdlc] = useState('')
   const [hdlc, setHdlc] = useState('')
   const [tg, setTg] = useState('')
+  const [pulse, setPulse] = useState('')
 
   const [sys, setSys] = useState('')
   const [dys, setDys] = useState('')
@@ -80,7 +81,17 @@ export const AddHealthDataRecord = ({
   const handleSubmit = async (e: any) => {
     e.preventDefault()
 
-    if (!height && !weight && !waist && !sys && !dys && !bloodSugar) {
+    if (
+      !height &&
+      !weight &&
+      !waist &&
+      !pulse &&
+      !sys &&
+      !dys &&
+      !bloodSugar &&
+      !nutritionalData &&
+      !exerciseData
+    ) {
       return toast.custom(
         <ToastField
           variant={'warning2'}
@@ -96,6 +107,7 @@ export const AddHealthDataRecord = ({
       ...(weight && { weight }),
       ...(waist && { waist }),
       ...(sys && dys && { bloodPressure: `${sys}/${dys}` }),
+      ...(pulse && { pulse }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
       ...(bloodSugar && { glucoseLevel: bloodSugar }),
       ...(totalCholesterol && {
@@ -113,7 +125,8 @@ export const AddHealthDataRecord = ({
   }
 
   useEffect(() => {
-    if (resetFields) {
+    let mounted = true
+    if (resetFields || mounted) {
       setHeight('')
       setWeight('')
       setWaist('')
@@ -125,8 +138,10 @@ export const AddHealthDataRecord = ({
       setLdlc('')
       setHdlc('')
       setTg('')
+      setPulse('')
       setNutritionalData(null)
       setExerciseData(null)
+      mounted = false
     }
   }, [resetFields])
 
@@ -248,6 +263,19 @@ export const AddHealthDataRecord = ({
                   className="ml-2 mt-6"
                 />
               )}
+            </div>
+            <div>
+              <div className="flex mt-4">
+                <Input
+                  placeholder="00"
+                  label="Pulse"
+                  labelStyle="lg:text-sm text-xs"
+                  value={pulse}
+                  onChange={(e) => setPulse(e.target.value)}
+                  variant={variantValidityCheck(pulse)}
+                  message={messageCheck(pulse)}
+                />
+              </div>
             </div>
           </PageCard>
 
