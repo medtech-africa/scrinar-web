@@ -12,6 +12,7 @@ import RectSelect, {
 } from 'react-select'
 import RectSelectASync, { AsyncProps } from 'react-select/async'
 import colors from '@/constants/colors'
+import CreatableSelect from 'react-select/creatable'
 
 const inputVariants = cva(
   'py-[10px] px-[14px] !rounded-lg border !border-grey-300 !bg-white !placeholder:text-grey-500 !text-grey-900',
@@ -96,6 +97,7 @@ interface CommonProps extends VariantProps<typeof inputVariants> {
   leadingIcon?: React.ReactNode
   labelStyle?: string
   customOption?: boolean
+  isCreatable?: boolean
 }
 
 interface AllAsyncProps
@@ -121,11 +123,17 @@ const Select = React.forwardRef<typeof RectSelect, SelectProps>(
       labelStyle,
       customOption,
       isAsync,
+      isCreatable,
       ...props
     },
     ref
   ) => {
-    const Comp = isAsync ? RectSelectASync : RectSelect
+    const Comp = isAsync
+      ? RectSelectASync
+      : isCreatable // Conditionally render CreatableSelect if isCreatable is true
+        ? CreatableSelect
+        : RectSelect
+
     return (
       <div>
         {!!label && (

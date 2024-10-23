@@ -34,6 +34,7 @@ import { ExerciseModal } from './exerciseModal'
 import { useHealthValue } from '@/context/health-data-context'
 import { Student } from '@/types/student.types'
 import { HealthDataPayload, SelectVal } from '@/types/healthData.types'
+import { Survey } from './survey'
 
 export const AddHealthDataRecordContent = () => {
   const [level, setLevel] = useState<SelectVal | null>()
@@ -559,6 +560,26 @@ export const AddHealthDataRecordContent = () => {
             )}
           </div>
         </PageCard>
+        <PageCard title="Survey" bodyStyle="p-4">
+          <div className="flex gap-3 items-center">
+            <Label>Survey</Label>
+            {/* <BadgeField variant="error" value="Poor" />*/}
+            <Text
+              variant="text/sm"
+              className="text-primary cursor-pointer underline"
+              as="span"
+              onClick={() => {
+                setModalType('Survey')
+                setOpenModal(true)
+              }}
+            >
+              Start Questionnaire
+            </Text>
+            {exerciseData && (
+              <BadgeField variant="success" value="Changes Saved" />
+            )}
+          </div>
+        </PageCard>
       </div>
       <Button
         variant={'primary'}
@@ -579,6 +600,9 @@ export const AddHealthDataRecordContent = () => {
         )}
         {modalType === 'Exercise' && (
           <ExerciseModal onClose={() => setOpenModal(false)} />
+        )}
+        {modalType === 'Survey' && (
+          <Survey onClose={() => setOpenModal(false)} />
         )}
       </Modal>
       <form />
