@@ -29,6 +29,7 @@ import useDashboardStats from '@/hooks/queries/useDashboardStats'
 import ContentLoader from '@/components/content-loader'
 import { isMasterInstructor } from '@/utils/checkPermission'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
+import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-content'
 
 const dashboardStats = [
   {
@@ -55,6 +56,17 @@ const dashboardStats = [
     admin: true,
   },
   {
+    title: 'Parents',
+    icon: 'profile2User' as IconNames,
+    count: 'totalParents',
+    avatars: [
+      'https://i.pravatar.cc/300',
+      'https://i.pravatar.cc/100',
+      'https://i.pravatar.cc/50',
+    ],
+    slug: '/user-profile/parents',
+  },
+  {
     title: 'Health Data',
     icon: 'health' as IconNames,
     count: 'totalHealthData',
@@ -73,6 +85,12 @@ const actionData1 = [
     subtitle: 'Add Student Profile',
     icon: 'profile2User' as IconNames,
     type: 'student',
+  },
+  {
+    title: 'Create New Parent Profile',
+    subtitle: 'Add Parent Profile',
+    icon: 'profile2User' as IconNames,
+    type: 'parent',
   },
   {
     title: 'Enter Student Health Data',
@@ -338,6 +356,7 @@ export default function Home() {
         title={`Add new ${modalType}`}
       >
         {modalType === 'student' && <AddNewStudentContent />}
+        {modalType === 'parent' && <AddNewParentContent />}
         {modalType === 'instructor' && <AddRecordContent />}
         {modalType === 'health-data' && <AddHealthDataRecordContent />}
       </Modal>

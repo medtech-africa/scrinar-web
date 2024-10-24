@@ -76,7 +76,13 @@ const generalData = [
     title: 'Training Module',
     icon: 'book',
     href: 'training-module',
-    roles: ['school', 'instructor', 'play4health_admin', 'trainer', 'super_admin'],
+    roles: [
+      'school',
+      'instructor',
+      'play4health_admin',
+      'trainer',
+      'super_admin',
+    ],
   },
   {
     title: 'Trainers Data',
@@ -302,6 +308,22 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                               Students
                             </span>
                             <span className="hidden md:block lg:hidden">S</span>
+                          </Text>
+                        </NavLink>
+
+                        <NavLink
+                          href="/dashboard/user-profile/parents"
+                          className={cn(
+                            'pl-11',
+                            pathname.includes('/parents') && 'bg-grey-100'
+                          )}
+                        >
+                          <DotIcon />
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              Parents
+                            </span>
+                            <span className="hidden md:block lg:hidden">P</span>
                           </Text>
                         </NavLink>
                       </motion.div>
