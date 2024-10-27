@@ -76,7 +76,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                       min={0}
                       max={7}
                       label="In a typical week, on how many days do you do vigorous-intensity activities as part of your work?"
-                      labelStyle="lg:text-sm text-xs"
+                      labelStyle="lg:text-base text-sm"
                       variant={
                         errors?.physicalActivity?.work?.vigorous?.daysPerWeek
                           ? 'destructive'
@@ -102,7 +102,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                           min={0}
                           max={24}
                           label="Hours"
-                          labelStyle="lg:text-sm text-xs"
+                          labelStyle="lg:text-base text-sm"
                           variant={
                             errors?.physicalActivity?.work?.vigorous
                               ?.hoursPerDay
@@ -157,7 +157,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                       min={0}
                       max={7}
                       label="In a typical week, on how many days do you do moderate-intensity activities as part of your work?"
-                      labelStyle="lg:text-sm text-xs"
+                      labelStyle="lg:text-base text-sm"
                       variant={
                         errors?.physicalActivity?.work?.moderate?.daysPerWeek
                           ? 'destructive'
@@ -183,7 +183,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                           min={0}
                           max={24}
                           label="Hours"
-                          labelStyle="lg:text-sm text-xs"
+                          labelStyle="lg:text-base text-sm"
                           variant={
                             errors?.physicalActivity?.work?.moderate
                               ?.hoursPerDay
@@ -247,7 +247,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                     min={0}
                     max={7}
                     label="In a typical week, on how many days do you walk or bicycle to get to and from places?"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     variant={
                       errors?.physicalActivity?.travel?.daysPerWeek
                         ? 'destructive'
@@ -273,7 +273,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                         min={0}
                         max={24}
                         label="Hours"
-                        labelStyle="lg:text-sm text-xs"
+                        labelStyle="lg:text-base text-sm"
                         variant={
                           errors?.physicalActivity?.travel?.hoursPerDay
                             ? 'destructive'
@@ -331,7 +331,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                       min={0}
                       max={7}
                       label="In a typical week, on how many days do you do vigorous-intensity sports, fitness or recreational activities?"
-                      labelStyle="lg:text-sm text-xs"
+                      labelStyle="lg:text-base text-sm"
                       variant={
                         errors?.physicalActivity?.recreation?.vigorous
                           ?.daysPerWeek
@@ -358,7 +358,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                           min={0}
                           max={24}
                           label="Hours"
-                          labelStyle="lg:text-sm text-xs"
+                          labelStyle="lg:text-base text-sm"
                           variant={
                             errors?.physicalActivity?.recreation?.vigorous
                               ?.hoursPerDay
@@ -414,7 +414,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                       min={0}
                       max={7}
                       label="In a typical week, on how many days do you do moderate-intensity sports, fitness or recreational activities?"
-                      labelStyle="lg:text-sm text-xs"
+                      labelStyle="lg:text-base text-sm"
                       variant={
                         errors?.physicalActivity?.recreation?.moderate
                           ?.daysPerWeek
@@ -441,7 +441,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                           min={0}
                           max={24}
                           label="Hours"
-                          labelStyle="lg:text-sm text-xs"
+                          labelStyle="lg:text-base text-sm"
                           variant={
                             errors?.physicalActivity?.recreation?.moderate
                               ?.hoursPerDay
@@ -485,7 +485,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
                   min={0}
                   max={24}
                   label="Hours per day"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   variant={
                     errors?.physicalActivity?.sedentary?.hoursPerDay
                       ? 'destructive'

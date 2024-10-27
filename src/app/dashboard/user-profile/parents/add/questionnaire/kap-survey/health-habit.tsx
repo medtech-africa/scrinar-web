@@ -85,7 +85,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                     {...field}
                     type="number"
                     label="How old were you when you first started smoking?"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     variant={
                       errors?.smoking?.startAge ? 'destructive' : 'default'
                     }
@@ -107,7 +107,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                         {...field}
                         type="number"
                         label="Manufactured cigarettes"
-                        labelStyle="lg:text-sm text-xs"
+                        labelStyle="lg:text-base text-sm"
                         variant={
                           errors?.smoking?.consumption?.manufactured
                             ? 'destructive'
@@ -125,7 +125,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                         {...field}
                         type="number"
                         label="Hand-rolled cigarettes"
-                        labelStyle="lg:text-sm text-xs"
+                        labelStyle="lg:text-base text-sm"
                         variant={
                           errors?.smoking?.consumption?.handRolled
                             ? 'destructive'
@@ -143,7 +143,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                         {...field}
                         type="number"
                         label="Pipes full of tobacco"
-                        labelStyle="lg:text-sm text-xs"
+                        labelStyle="lg:text-base text-sm"
                         variant={
                           errors?.smoking?.consumption?.pipes
                             ? 'destructive'
@@ -161,7 +161,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                         {...field}
                         type="number"
                         label="Number of Shisha sessions"
-                        labelStyle="lg:text-sm text-xs"
+                        labelStyle="lg:text-base text-sm"
                         variant={
                           errors?.smoking?.consumption?.shisha
                             ? 'destructive'
@@ -315,7 +315,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                   <Select
                     placeholder="Select frequency"
                     label="During the past 12 months, how frequently have you had at least one standard alcoholic drink? (If you only had a few sips, your answer will be “never”)"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     {...rest}
                     onChange={(val) => onChange(val)}
                     options={alcoholFrequencyOptions}
@@ -355,7 +355,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                     {...field}
                     type="number"
                     label="During the past 30 days, how many times have you had at least one standard alcoholic drink? A standard drink is one glass of beer, wine, or a shot of local spirits, all having about the same amount of alcohol If you only had a few sips, your answer will be “never”"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     variant={
                       errors?.alcohol?.monthlyOccasions
                         ? 'destructive'
@@ -373,7 +373,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                     {...field}
                     type="number"
                     label="During the past 30 days, when you drank alcohol, how many standard drinks on average did you have in one sitting?"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     variant={
                       errors?.alcohol?.averageDrinks ? 'destructive' : 'default'
                     }
@@ -389,7 +389,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                     {...field}
                     type="number"
                     label="During the past 30 days, what was the largest number of standard drinks you had on a single occasion, counting all types of alcoholic drinks together?"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     variant={
                       errors?.alcohol?.maxDrinks ? 'destructive' : 'default'
                     }
@@ -405,7 +405,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                     {...field}
                     type="number"
                     label="During the past 30 days, how many times did you have six or more standard drinks in a single drinking occasion?"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     variant={
                       errors?.alcohol?.sixPlusOccasions
                         ? 'destructive'
@@ -431,7 +431,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                           {...field}
                           type="number"
                           label={day.charAt(0).toUpperCase() + day.slice(1)}
-                          labelStyle="lg:text-sm text-xs"
+                          labelStyle="lg:text-base text-sm"
                           variant={
                             errors?.alcohol?.weeklyConsumption?.[day]
                               ? 'destructive'
@@ -453,7 +453,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                   name="alcohol.homebrewed.consumed"
                   render={({ field: { value, onChange } }) => (
                     <div className="space-y-2">
-                      <Text className="lg:text-sm text-xs">
+                      <Text className="lg:text-base text-sm">
                         During the past 7 days, did you consume any homebrewed
                         alcohol, ogogoro, palm wine, any alcohol not intended
                         for drinking e.g. alcohol based medicines? (USE
@@ -477,7 +477,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                           {...field}
                           type="number"
                           label="Homebrewed spirits (e.g., ogogoro)"
-                          labelStyle="lg:text-sm text-xs"
+                          labelStyle="lg:text-base text-sm"
                           variant={
                             errors?.alcohol?.homebrewed?.spirits
                               ? 'destructive'
@@ -495,7 +495,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                           {...field}
                           type="number"
                           label="Homebrewed beer or wine (e.g., palm wine)"
-                          labelStyle="lg:text-sm text-xs"
+                          labelStyle="lg:text-base text-sm"
                           variant={
                             errors?.alcohol?.homebrewed?.beerWine
                               ? 'destructive'
@@ -513,7 +513,7 @@ export const HealthHabitSection = ({ control, errors, watch }: Props) => {
                           {...field}
                           type="number"
                           label="Alcohol not intended for drinking, e.g. alcohol-based medicines, perfumes, after shaves)"
-                          labelStyle="lg:text-sm text-xs"
+                          labelStyle="lg:text-base text-sm"
                           variant={
                             errors?.alcohol?.homebrewed?.beerWine
                               ? 'destructive'

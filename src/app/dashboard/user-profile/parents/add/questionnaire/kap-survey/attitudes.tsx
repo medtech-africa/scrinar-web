@@ -76,6 +76,12 @@ const smokingDrinkingViewOptions = [
   { value: 'unknown', label: "I don't know" },
 ]
 
+const genderExperimentationOptions = [
+  { value: 'yes', label: 'Yes, boys are more likely to experiment' },
+  { value: 'no', label: 'No, it is equally unacceptable for both' },
+  { value: 'not-sure', label: 'Not sure' },
+]
+
 const mentalHealthImportanceOptions = [
   { value: 'very', label: 'Very important' },
   { value: 'somewhat', label: 'Somewhat important' },
@@ -104,7 +110,7 @@ export const AttitudesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select an option"
                 label="Do you think it's important to eat a balanced diet every day?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={balancedDietImportanceOptions}
@@ -128,7 +134,7 @@ export const AttitudesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select an option"
                 label="Do you think giving your child healthy food everyday is difficult for you?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={healthyFoodDifficultyOptions}
@@ -152,7 +158,7 @@ export const AttitudesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select an option"
                 label="What do you think is the ideal body size for boys?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={bodySizeOptions}
@@ -176,7 +182,7 @@ export const AttitudesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select an option"
                 label="What do you think is an ideal body size for girls?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={bodySizeOptions}
@@ -205,7 +211,7 @@ export const AttitudesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select an option"
                 label="Is it important for both boys and girls to be physically active?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={genderImportanceOptions}
@@ -295,7 +301,7 @@ export const AttitudesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select an option"
                 label="Do you think that girls in your community have more or less time for physical activities outside of house chores compared to boys?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={timeComparisonOptions}
@@ -324,7 +330,7 @@ export const AttitudesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select an option"
                 label="What do you think about smoking and drinking alcohol?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={smokingDrinkingViewOptions}
@@ -335,6 +341,30 @@ export const AttitudesSection = ({ control, errors }: Props) => {
                 }
                 message={
                   errors?.riskyBehaviorAttitudes?.smokingDrinkingView &&
+                  'Please select an option'
+                }
+              />
+            )}
+          />
+
+          <Controller
+            control={control}
+            name="riskyBehaviorAttitudes.genderExperimentation"
+            render={({ field: { onChange, ...rest } }) => (
+              <Select
+                placeholder="Select an option"
+                label="Do you think it is more acceptable for boys to experiment with smoking and alcohol than girls?"
+                labelStyle="lg:text-base text-sm"
+                {...rest}
+                onChange={(val) => onChange(val)}
+                options={genderExperimentationOptions}
+                variant={
+                  errors?.riskyBehaviorAttitudes?.genderExperimentation
+                    ? 'destructive'
+                    : 'default'
+                }
+                message={
+                  errors?.riskyBehaviorAttitudes?.genderExperimentation &&
                   'Please select an option'
                 }
               />
@@ -364,7 +394,7 @@ export const AttitudesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select an option"
                 label="How important do you think it is to take care of your children's mental health?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={mentalHealthImportanceOptions}

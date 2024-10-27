@@ -45,7 +45,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
                 <Select
                   placeholder="Select an option"
                   label="What do you understand by balanced diet?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={balancedDietOptions}
@@ -59,36 +59,26 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
               )}
             />
 
-            <div className="space-y-2">
-              <Text className="lg:text-sm text-xs">
-                Why should we avoid giving children too much sugar?
-              </Text>
-              <div className="grid grid-cols-1 gap-2">
-                {sugarEffectsOptions.map((option) => (
-                  <Controller
-                    key={option.value}
-                    control={control}
-                    name="nutrition.sugarEffects"
-                    render={({ field }) => (
-                      <div className="flex items-center space-x-2">
-                        <Checkbox
-                          checked={field.value?.includes(option.value)}
-                          onCheckedChange={(checked) => {
-                            const newValue = checked
-                              ? [...(field.value || []), option.value]
-                              : field.value?.filter(
-                                  (value: any) => value !== option.value
-                                )
-                            field.onChange(newValue)
-                          }}
-                        />
-                        <Text className="text-sm">{option.label}</Text>
-                      </div>
-                    )}
-                  />
-                ))}
-              </div>
-            </div>
+            <Controller
+              control={control}
+              name="nutrition.sugarEffects"
+              render={({ field: { onChange, ...rest } }) => (
+                <Select
+                  placeholder="Select an option"
+                  label="Why should we avoid giving children too much sugar??"
+                  labelStyle="lg:text-base text-sm"
+                  {...rest}
+                  onChange={(val) => onChange(val)}
+                  options={sugarEffectsOptions}
+                  variant={
+                    errors?.nutrition?.balancedDiet ? 'destructive' : 'default'
+                  }
+                  message={
+                    errors?.nutrition?.balancedDiet && 'Please select an option'
+                  }
+                />
+              )}
+            />
 
             <Controller
               control={control}
@@ -97,7 +87,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
                 <Select
                   placeholder="Select an option"
                   label="What are the dangers of eating too much salt and fat?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={saltFatRisksOptions}
@@ -112,7 +102,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
             />
 
             <div className="space-y-2">
-              <Text className="lg:text-sm text-xs">
+              <Text className="lg:text-base text-sm">
                 What foods do you think are important for boys to eat?
               </Text>
               <div className="grid grid-cols-1 gap-2">
@@ -143,7 +133,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
             </div>
 
             <div className="space-y-2">
-              <Text className="lg:text-sm text-xs">
+              <Text className="lg:text-base text-sm">
                 What foods do you think are important for girls to eat?
               </Text>
               <div className="grid grid-cols-1 gap-2">
@@ -187,7 +177,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
                 <Select
                   placeholder="Select an option"
                   label="Why is it important for children to be physically active?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={physicalActivityImportanceOptions}
@@ -211,7 +201,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
                 <Select
                   placeholder="Select an option"
                   label="How much physical activity do you think your child should engage in daily?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={activityDurationOptions}
@@ -235,7 +225,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
                 <Select
                   placeholder="Select an option"
                   label="How much physical activity do you think you should engage in daily?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={activityDurationOptions}
@@ -253,7 +243,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
             />
 
             <div className="space-y-2">
-              <Text className="lg:text-sm text-xs">
+              <Text className="lg:text-base text-sm">
                 What types of physical activities are suitable for children?
               </Text>
               <div className="grid grid-cols-1 gap-2">
@@ -338,7 +328,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
                 <Select
                   placeholder="Select an option"
                   label="What can happen if children are exposed to smoking at home?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={secondhandSmokingOptions}
@@ -363,7 +353,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
                 <Select
                   placeholder="Select an option"
                   label="Why are regular health check-ups important for your child?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={checkupImportanceOptions}
@@ -500,7 +490,7 @@ export const KnowledgeSection = ({ control, errors, watch }: Props) => {
                   <Input
                     {...field}
                     label="Please specify other signs"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     placeholder="Enter other signs of stress"
                     variant={
                       errors?.riskyBehavior?.otherStressSigns

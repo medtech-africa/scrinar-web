@@ -60,7 +60,7 @@ export const DietSection = ({ control, errors }: Props) => {
                     min={0}
                     max={7}
                     label="In a typical week, on how many days do you eat fruit?"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     placeholder="Enter number of days (0-7)"
                     variant={
                       errors?.diet?.fruits?.daysPerWeek
@@ -84,7 +84,7 @@ export const DietSection = ({ control, errors }: Props) => {
                     type="number"
                     min={0}
                     label="How many servings of fruit do you eat on one of those days?"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     placeholder="Enter number of servings"
                     helperText="Think of one day you can recall easily. Refer to the showcard for serving sizes."
                     variant={
@@ -114,7 +114,7 @@ export const DietSection = ({ control, errors }: Props) => {
                     min={0}
                     max={7}
                     label="In a typical week, on how many days do you eat vegetables?"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     placeholder="Enter number of days (0-7)"
                     variant={
                       errors?.diet?.vegetables?.daysPerWeek
@@ -138,7 +138,7 @@ export const DietSection = ({ control, errors }: Props) => {
                     type="number"
                     min={0}
                     label="How many servings of vegetables do you eat on one of those days?"
-                    labelStyle="lg:text-sm text-xs"
+                    labelStyle="lg:text-base text-sm"
                     placeholder="Enter number of servings"
                     helperText="Think of one day you can recall easily. Refer to the showcard for serving sizes."
                     variant={
@@ -184,7 +184,7 @@ export const DietSection = ({ control, errors }: Props) => {
                 <Select
                   placeholder="Select frequency"
                   label="How often do you add salt or a salty sauce such as soy sauce to your food right before you eat it or as you are eating it?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={frequencyOptions}
@@ -205,7 +205,7 @@ export const DietSection = ({ control, errors }: Props) => {
                 <Select
                   placeholder="Select frequency"
                   label="How often is salt, seasoning cubes/powder or a salty sauce added in cooking or preparing foods in your household?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={frequencyOptions}
@@ -226,7 +226,7 @@ export const DietSection = ({ control, errors }: Props) => {
                 <Select
                   placeholder="Select frequency"
                   label="How often do you eat processed food high in salt? E.g., indomie, hot dog, suya, snacks like pringles, salty crackers biscuits"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={frequencyOptions}
@@ -250,7 +250,7 @@ export const DietSection = ({ control, errors }: Props) => {
                 <Select
                   placeholder="Select perception"
                   label="How much salt or salty sauce do you think you consume?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   {...rest}
                   onChange={(val) => onChange(val)}
                   options={saltPerceptionOptions}

@@ -171,6 +171,7 @@ const stressSignsOptions = [
   { value: 'excitement', label: 'Excitement' },
   { value: 'anger-sadness', label: 'Anger or sadness' },
   { value: 'relaxation', label: 'Relaxation' },
+  { value: 'other', label: 'Other' },
 ]
 
 export {

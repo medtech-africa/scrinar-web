@@ -2,11 +2,17 @@
 export type ParentFormData = {
   // Demographics
   yearsInCommunity: 'less1' | '1-5' | '6-10' | 'more10'
-  ethnicity: string[]
+  ethnicity: {
+    label: string
+    value: string
+  }
   otherEthnicity?: string
   languagesSpoken: string[]
   otherLanguage?: string
-  religion: 'muslim' | 'christian' | 'traditionalist' | 'other'
+  religion: {
+    label: string
+    value: 'muslim' | 'christian' | 'traditionalist' | 'other'
+  }
   otherReligion?: string
   education: 'none' | 'primary' | 'secondary' | 'tertiary'
   workStatus: 'employed' | 'self-employed' | 'unemployed' | 'retired'
@@ -17,36 +23,66 @@ export type ParentFormData = {
   }
   householdIncome: 'less100k' | '100k-500k' | '500k-1m' | 'above1m'
   chronicHealth: {
-    hasCondition: boolean
+    hasCondition: {
+      label: string
+      value: boolean
+    }
     condition?: string
   }
   healthStatus: 'very-good' | 'good' | 'fair' | 'poor'
   noOfChildren: number
   children: {
     age: number
-    gender: 'male' | 'female'
+    gender: {
+      label: string
+      value: 'male' | 'female'
+    }
     inSchool: boolean
   }[]
   isPregnant?: boolean
 
   // Knowledge
   nutrition: {
-    balancedDiet: string
-    sugarEffects: string[]
-    saltFatRisks: string[]
+    balancedDiet: {
+      label: string
+      value: string
+    }
+    sugarEffects: {
+      label: string
+      value: string
+    }
+    saltFatRisks: {
+      label: string
+      value: string
+    }
     boysFood: string[]
     girlsFood: string[]
   }
   generalPhysicalActivity: {
-    importance: string
-    childDailyActivity: string
-    adultDailyActivity: string
+    importance: {
+      label: string
+      value: string
+    }
+    childDailyActivity: {
+      label: string
+      value: string
+    }
+    adultDailyActivity: {
+      label: string
+      value: string
+    }
     suitableActivities: string[]
   }
   riskyBehavior: {
     smokingRisks: string[]
-    secondhandSmoking: string
-    checkupImportance: string
+    secondhandSmoking: {
+      label: string
+      value: string
+    }
+    checkupImportance: {
+      label: string
+      value: string
+    }
     stressFactors: string[]
     longTermStress: string[]
     stressSigns: string[]
@@ -55,37 +91,79 @@ export type ParentFormData = {
 
   // Attitudes
   nutritionAttitudes: {
-    balancedDietImportance: string
-    healthyFoodDifficulty: string
-    idealBoysSize: string
-    idealGirlsSize: string
+    balancedDietImportance: {
+      label: string
+      value: string
+    }
+    healthyFoodDifficulty: {
+      label: string
+      value: string
+    }
+    idealBoysSize: {
+      label: string
+      value: string
+    }
+    idealGirlsSize: {
+      label: string
+      value: string
+    }
   }
   physicalActivityAttitudes: {
-    genderImportance: string
+    genderImportance: {
+      label: string
+      value: string
+    }
     boysMoreActive: boolean
     girlsBarriers: string[]
-    boysSuitableActivities: string[]
-    girlsSuitableActivities: string[]
+    boysSuitableActivities: string
+    girlsSuitableActivities: string
     mixedActivities: boolean
-    timeComparison: string
+    timeComparison: {
+      label: string
+      value: string
+    }
   }
   riskyBehaviorAttitudes: {
-    smokingDrinkingView: string
-    genderExperimentation: string
+    smokingDrinkingView: {
+      label: string
+      value: string
+    }
+    genderExperimentation: {
+      label: string
+      value: string
+    }
     childrenStress: boolean
-    mentalHealthImportance: string
+    mentalHealthImportance: {
+      label: string
+      value: string
+    }
     genderHealthResistance: boolean
   }
 
   // Practices
   nutritionPractices: {
-    fruitsVegetables: string
-    snacks: string
-    sugaryBeverages: string
+    fruitsVegetables: {
+      label: string
+      value: string
+    }
+    snacks: {
+      label: string
+      value: string
+    }
+    sugaryBeverages: {
+      label: string
+      value: string
+    }
   }
   physicalActivityPractices: {
-    frequency: string
-    duration: string
+    frequency: {
+      label: string
+      value: string
+    }
+    duration: {
+      label: string
+      value: string
+    }
     activities: string[]
     choreFrequency: string
     choreTypes: string[]
@@ -100,9 +178,14 @@ export type ParentFormData = {
     }
   }
   riskyBehaviorPractices: {
-    checkups: string
+    checkups: {
+      label: string
+      value: string
+    }
     copingMethods: string[]
+    copingMethodsOther: string
     stressors: string[]
+    stressorsOther: string
   }
 
   // Health History
@@ -164,7 +247,10 @@ export type ParentFormData = {
     everConsumed: boolean
     last12Months: boolean
     stoppedHealth?: boolean
-    frequency: string
+    frequency: {
+      label: string
+      value: string
+    }
     last30Days: boolean
     monthlyOccasions?: number
     averageDrinks?: number

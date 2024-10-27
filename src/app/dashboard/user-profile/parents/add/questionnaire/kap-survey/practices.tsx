@@ -30,6 +30,14 @@ const activityTypes = [
   { value: 'dancing', label: 'Dancing' },
 ]
 
+const choreFrequencyOptions = [
+  { value: 'daily', label: ' Every day' },
+  { value: 'several-week', label: 'Several times a week' },
+  { value: 'once-week', label: 'Once a week' },
+  { value: 'less-once-week', label: 'Less than once a week' },
+  { value: 'never', label: 'Never' },
+]
+
 const choreTypes = [
   { value: 'water', label: 'Fetching water' },
   { value: 'cooking', label: 'Cooking and preparing meals' },
@@ -48,6 +56,7 @@ const copingMethodsOptions = [
   { value: 'sports', label: 'Play sports or run around' },
   { value: 'music', label: 'Listen to his/her favorite music' },
   { value: 'alone', label: 'Spend some time alone' },
+  { value: 'other', label: 'Other (please write it)' },
 ]
 
 const stressorOptions = [
@@ -57,6 +66,7 @@ const stressorOptions = [
   { value: 'chores', label: 'Chores or helping at home' },
   { value: 'time', label: 'Not having enough free time' },
   { value: 'health', label: 'Health problems' },
+  { value: 'other', label: 'Other (please write it)' },
 ]
 
 interface Props {
@@ -65,7 +75,7 @@ interface Props {
   watch: UseFormWatch<ParentFormData>
 }
 
-export const PracticesSection = ({ control, errors }: Props) => {
+export const PracticesSection = ({ control, errors, watch }: Props) => {
   return (
     <div className="space-y-6">
       <h3 className="sr-only">Practices</h3>
@@ -80,7 +90,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select frequency"
                 label="How often do you give your child fruits and vegetables?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={frequencyOptions}
@@ -104,7 +114,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select frequency"
                 label="How often do you give your child snacks like buns, doughnut, sausage, biscuits, etc?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={frequencyOptions}
@@ -126,7 +136,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select frequency"
                 label="How often do you give your child sugary beverages or eat sugary snacks?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={frequencyOptions}
@@ -155,7 +165,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select frequency"
                 label="How often does your child engage in physical activity? (Playing, house chores, running errands)"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={frequencyOptions}
@@ -179,7 +189,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select duration"
                 label="How long does he/she usually engage in it for?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={durationOptions}
@@ -199,6 +209,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
           <div className="space-y-2">
             <Text className="lg:text-sm text-xs font-medium">
               What types of physical activity and games does he/she enjoy?
+              (select all that apply)
             </Text>
             <Controller
               control={control}
@@ -227,9 +238,35 @@ export const PracticesSection = ({ control, errors }: Props) => {
             />
           </div>
 
+          <Controller
+            control={control}
+            name="physicalActivityPractices.choreFrequency"
+            render={({ field: { onChange, ...rest } }) => (
+              <Select
+                placeholder="Select an option"
+                label="How often does he/she participate in house chores that require physical effort and make him/her sweat?"
+                labelStyle="lg:text-base text-sm"
+                {...rest}
+                onChange={(val) => onChange(val)}
+                options={choreFrequencyOptions}
+                variant={
+                  errors?.physicalActivityPractices?.choreFrequency
+                    ? 'destructive'
+                    : 'default'
+                }
+                message={
+                  errors?.physicalActivityPractices?.choreFrequency &&
+                  'Please select an option'
+                }
+              />
+            )}
+          />
+
           <div className="space-y-2">
             <Text className="lg:text-sm text-xs font-medium">
-              What types of house chores does he/she regularly perform?
+              What types of house chores does he/she regularly perform that
+              involve physical activity and make him/her sweat? (Select all that
+              apply)
             </Text>
             <Controller
               control={control}
@@ -267,7 +304,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
                   {...field}
                   type="number"
                   label="Average hours spent with mobile games, computer/internet daily"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   variant={
                     errors?.physicalActivityPractices?.screenTime?.mobile
                       ? 'destructive'
@@ -285,7 +322,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
                   {...field}
                   type="number"
                   label="Average hours spent watching TV/Playing video games daily"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   variant={
                     errors?.physicalActivityPractices?.screenTime?.tv
                       ? 'destructive'
@@ -305,7 +342,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
                   {...field}
                   type="time"
                   label="When does he/she go to bed at night?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   variant={
                     errors?.physicalActivityPractices?.sleep?.bedtime
                       ? 'destructive'
@@ -323,7 +360,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
                   {...field}
                   type="time"
                   label="When does he/she wake up in the morning?"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   variant={
                     errors?.physicalActivityPractices?.sleep?.wakeTime
                       ? 'destructive'
@@ -346,7 +383,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
               <Select
                 placeholder="Select frequency"
                 label="How often do you take your child to the doctor for health check-ups?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 {...rest}
                 onChange={(val) => onChange(val)}
                 options={[
@@ -377,7 +414,7 @@ export const PracticesSection = ({ control, errors }: Props) => {
           <div className="space-y-2">
             <Text className="lg:text-sm text-xs font-medium">
               When your child is worried or upset, what helps him/her feel
-              better?
+              better? (Choose all that apply)
             </Text>
             <Controller
               control={control}
@@ -404,11 +441,33 @@ export const PracticesSection = ({ control, errors }: Props) => {
                 </div>
               )}
             />
+
+            {watch('riskyBehaviorPractices.copingMethods')?.includes(
+              'other'
+            ) && (
+              <Controller
+                control={control}
+                render={({ field: { value, ...field } }) => (
+                  <Input
+                    {...field}
+                    value={value ?? ''}
+                    label="Specify other"
+                    labelStyle="lg:text-base text-sm"
+                    variant={
+                      errors?.riskyBehaviorPractices?.copingMethodsOther
+                        ? 'destructive'
+                        : 'default'
+                    }
+                  />
+                )}
+                name="riskyBehaviorPractices.copingMethodsOther"
+              />
+            )}
           </div>
 
           <div className="space-y-2">
             <Text className="lg:text-sm text-xs font-medium">
-              What things make your child feel stressed?
+              What things make your child feel stressed? (Choose all that apply)
             </Text>
             <Controller
               control={control}
@@ -435,6 +494,26 @@ export const PracticesSection = ({ control, errors }: Props) => {
                 </div>
               )}
             />
+
+            {watch('riskyBehaviorPractices.stressors')?.includes('other') && (
+              <Controller
+                control={control}
+                render={({ field: { value, ...field } }) => (
+                  <Input
+                    {...field}
+                    value={value ?? ''}
+                    label="Specify other"
+                    labelStyle="lg:text-base text-sm"
+                    variant={
+                      errors?.riskyBehaviorPractices?.stressorsOther
+                        ? 'destructive'
+                        : 'default'
+                    }
+                  />
+                )}
+                name="riskyBehaviorPractices.stressorsOther"
+              />
+            )}
           </div>
         </div>
       </PageCard>

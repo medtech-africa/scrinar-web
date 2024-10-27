@@ -44,7 +44,7 @@ export const DemographicsSection = ({
             <Select
               placeholder="Select an option"
               label="How many years have you lived in this community?"
-              labelStyle="lg:text-sm text-xs"
+              labelStyle="lg:text-base text-sm"
               onBlur={onBlur}
               value={value}
               onChange={(val) => {
@@ -64,7 +64,7 @@ export const DemographicsSection = ({
               <Select
                 placeholder="Select an option"
                 label="Ethnicity"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 onBlur={onBlur}
                 value={value}
                 onChange={(val) => {
@@ -77,7 +77,7 @@ export const DemographicsSection = ({
             )}
             name="ethnicity"
           />
-          {watch('ethnicity')?.includes('other') && (
+          {watch('ethnicity')?.value?.includes('other') && (
             <Controller
               control={control}
               render={({ field: { value, ...field } }) => (
@@ -86,7 +86,7 @@ export const DemographicsSection = ({
                   value={value ?? ''}
                   label="Specify other ethnicity"
                   placeholder="Enter other ethnicity"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   variant={errors?.otherEthnicity ? 'destructive' : 'default'}
                 />
               )}
@@ -96,23 +96,33 @@ export const DemographicsSection = ({
         </div>
 
         <div className="space-y-2">
+          <Text className="lg:text-sm text-xs font-medium">
+            Language(s) spoken at home
+          </Text>
           <Controller
             control={control}
-            render={({ field: { onBlur, onChange, value } }) => (
-              <Select
-                placeholder="Select an option"
-                label="Language(s) spoken at home"
-                labelStyle="lg:text-sm text-xs"
-                onBlur={onBlur}
-                value={value}
-                onChange={(val) => {
-                  onChange(val)
-                }}
-                options={languages}
-                variant={errors?.languagesSpoken ? 'destructive' : 'default'}
-              />
+            render={({ field: { onChange, value } }) => (
+              <div className="grid grid-cols-1 gap-2">
+                {languages.map((option) => (
+                  <div
+                    key={option.value}
+                    className="flex items-center space-x-2"
+                  >
+                    <Checkbox
+                      checked={value?.includes(option.value)}
+                      onCheckedChange={(checked) => {
+                        const newValue = checked
+                          ? [...(value || []), option.value]
+                          : value?.filter((v) => v !== option.value)
+                        onChange(newValue)
+                      }}
+                    />
+                    <Text className="text-sm">{option.label}</Text>
+                  </div>
+                ))}
+              </div>
             )}
-            name="religion"
+            name="languagesSpoken"
           />
           {watch('languagesSpoken')?.includes('other') && (
             <Controller
@@ -123,7 +133,7 @@ export const DemographicsSection = ({
                   value={value ?? ''}
                   label="Specify other ethnicity"
                   placeholder="Enter other ethnicity"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   variant={errors?.otherLanguage ? 'destructive' : 'default'}
                 />
               )}
@@ -139,7 +149,7 @@ export const DemographicsSection = ({
               <Select
                 placeholder="Select an option"
                 label="Religion"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 onBlur={onBlur}
                 value={value}
                 onChange={(val) => {
@@ -152,7 +162,7 @@ export const DemographicsSection = ({
             )}
             name="religion"
           />
-          {watch('religion')?.includes('other') && (
+          {watch('religion')?.value?.includes('other') && (
             <Controller
               control={control}
               render={({ field: { value, ...field } }) => (
@@ -161,45 +171,7 @@ export const DemographicsSection = ({
                   value={value ?? ''}
                   label="Specify other ethnicity"
                   placeholder="Enter other ethnicity"
-                  labelStyle="lg:text-sm text-xs"
-                  variant={errors?.otherReligion ? 'destructive' : 'default'}
-                />
-              )}
-              name="otherReligion"
-            />
-          )}
-        </div>
-
-        <div className="space-y-2">
-          <Controller
-            control={control}
-            render={({ field: { onBlur, onChange, value } }) => (
-              <Select
-                placeholder="Select an option"
-                label="Religion"
-                labelStyle="lg:text-sm text-xs"
-                onBlur={onBlur}
-                value={value}
-                onChange={(val) => {
-                  onChange(val)
-                }}
-                options={religions}
-                variant={errors?.religion ? 'destructive' : 'default'}
-                message={errors.religion && 'Please select an option'}
-              />
-            )}
-            name="religion"
-          />
-          {watch('religion')?.includes('other') && (
-            <Controller
-              control={control}
-              render={({ field: { value, ...field } }) => (
-                <Input
-                  {...field}
-                  value={value ?? ''}
-                  label="Specify other ethnicity"
-                  placeholder="Enter other ethnicity"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   variant={errors?.otherReligion ? 'destructive' : 'default'}
                 />
               )}
@@ -214,7 +186,7 @@ export const DemographicsSection = ({
             <Select
               placeholder="Select an option"
               label="Highest level of education:"
-              labelStyle="lg:text-sm text-xs"
+              labelStyle="lg:text-base text-sm"
               onBlur={onBlur}
               value={value}
               onChange={(val) => {
@@ -234,7 +206,7 @@ export const DemographicsSection = ({
             <Select
               placeholder="Select an option"
               label="Work status"
-              labelStyle="lg:text-sm text-xs"
+              labelStyle="lg:text-base text-sm"
               onBlur={onBlur}
               value={value}
               onChange={(val) => {
@@ -255,7 +227,7 @@ export const DemographicsSection = ({
               {...field}
               value={value ?? ''}
               label="Occupation"
-              labelStyle="lg:text-sm text-xs"
+              labelStyle="lg:text-base text-sm"
               variant={errors?.occupation ? 'destructive' : 'default'}
             />
           )}
@@ -266,14 +238,14 @@ export const DemographicsSection = ({
           title="Number of people living in your household"
           bodyStyle="p-4"
         >
-          <div className="flex">
+          <div className="flex gap-4">
             <Controller
               control={control}
               render={({ field: { ...field } }) => (
                 <Input
                   {...field}
                   label="Number of children"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   type="number"
                   variant={
                     errors?.householdMembers?.children
@@ -295,7 +267,7 @@ export const DemographicsSection = ({
                 <Input
                   {...field}
                   label="Number of adult (older than 18 years)"
-                  labelStyle="lg:text-sm text-xs"
+                  labelStyle="lg:text-base text-sm"
                   type="number"
                   variant={
                     errors?.householdMembers?.adults ? 'destructive' : 'default'
@@ -317,7 +289,7 @@ export const DemographicsSection = ({
             <Select
               placeholder="Select an option"
               label="Average total household income in the last one  year"
-              labelStyle="lg:text-sm text-xs"
+              labelStyle="lg:text-base text-sm"
               {...rest}
               onChange={(val) => {
                 onChange(val)
@@ -337,7 +309,7 @@ export const DemographicsSection = ({
               <Select
                 placeholder="Select an option"
                 label="Do you or any family member have a chronic health condition?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 onBlur={onBlur}
                 value={value}
                 onChange={(val) => {
@@ -357,16 +329,15 @@ export const DemographicsSection = ({
             )}
             name="chronicHealth.hasCondition"
           />
-          {watch('chronicHealth.hasCondition') && (
+          {watch('chronicHealth.hasCondition').value && (
             <Controller
               control={control}
               render={({ field: { value, ...field } }) => (
                 <Input
                   {...field}
                   value={value ?? ''}
-                  label="Specify other ethnicity"
-                  placeholder="Enter other ethnicity"
-                  labelStyle="lg:text-sm text-xs"
+                  label="Please specify"
+                  labelStyle="lg:text-base text-sm"
                   variant={
                     errors?.chronicHealth?.condition ? 'destructive' : 'default'
                   }
@@ -377,14 +348,14 @@ export const DemographicsSection = ({
           )}
         </div>
 
-        <div>
+        <div className="col-span-2">
           <Controller
             control={control}
             render={({ field: { ...field } }) => (
               <Input
                 {...field}
                 label="How many children do you have?"
-                labelStyle="lg:text-sm text-xs"
+                labelStyle="lg:text-base text-sm"
                 type="number"
                 variant={errors?.noOfChildren ? 'destructive' : 'default'}
                 message={errors?.noOfChildren && errors.noOfChildren.message}
@@ -392,19 +363,20 @@ export const DemographicsSection = ({
             )}
             name="noOfChildren"
           />
-          <PageCard title="Children's Details" bodyStyle="p-4">
+          <PageCard title="Children's Details" bodyStyle="p-4 mt-2">
             {fields.map((field, index) => (
               <div
                 key={field.id}
-                className="flex space-x-4 items-start p-4 border rounded-lg"
+                className="flex space-x-4 items-center mb-2 p-4 border rounded-lg"
               >
+                <Text className="ml-2 text-grey-500">Child {index + 1}</Text>
                 <Controller
                   control={control}
                   render={({ field: { ...field } }) => (
                     <Input
                       {...field}
                       label="Age"
-                      labelStyle="lg:text-sm text-xs"
+                      labelStyle="lg:text-base text-sm"
                       type="number"
                     />
                   )}
@@ -417,7 +389,7 @@ export const DemographicsSection = ({
                     <Select
                       placeholder="Select an option"
                       label="Gender"
-                      labelStyle="lg:text-sm text-xs"
+                      labelStyle="lg:text-base text-sm"
                       {...rest}
                       onChange={(val) => {
                         onChange(val)

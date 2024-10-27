@@ -53,7 +53,11 @@ const Questionnaire = ({
     let length = noOfChildren - fields.length
     if (length > 0) {
       Array.from({ length }, () =>
-        append({ age: 0, gender: 'male', inSchool: false })
+        append({
+          age: 0,
+          gender: { label: 'Male', value: 'male' },
+          inSchool: false,
+        })
       )
     } else if (length < 0) {
       length *= -1
