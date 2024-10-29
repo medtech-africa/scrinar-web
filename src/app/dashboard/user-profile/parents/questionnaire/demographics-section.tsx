@@ -39,7 +39,7 @@ export const DemographicsSection = ({
 }: Props) => {
   return (
     <PageCard title="Section A: Demographics" bodyStyle="p-4">
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="flex flex-col lg:grid  lg:grid-cols-2 gap-4">
         <Controller
           control={control}
           render={({ field: { onBlur, onChange, value } }) => (
