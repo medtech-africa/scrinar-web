@@ -23,7 +23,7 @@ export const PhysicalActivitySection = ({ control, errors, watch }: Props) => {
     <div className="space-y-6">
       <h3 className="sr-only">Physical Activity</h3>
 
-      <Text className="text-sm text-gray-500">
+      <Text className="text-base text-gray-800">
         Next I am going to ask you about the time you spend doing different
         types of physical activity in a typical week. Please answer these
         questions even if you do not consider yourself to be a physically active

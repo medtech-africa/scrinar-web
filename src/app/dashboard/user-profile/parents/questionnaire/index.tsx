@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useEffect, useMemo, useRef } from 'react'
 
 import * as Tabs from '@radix-ui/react-tabs'
 import { useFieldArray, useForm } from 'react-hook-form'
@@ -109,8 +109,7 @@ const useFormWithAutoSave = ({
               ...changedData,
             }
           },
-          onError: (error) => {
-            console.error('Save failed:', error)
+          onError: () => {
             // Optionally handle error (e.g., show toast)
           },
         }
@@ -121,7 +120,7 @@ const useFormWithAutoSave = ({
   // Watch for changes
   useEffect(() => {
     const subscription = form.watch((formData, { name }) => {
-      if (!name || !formData) return
+      if (!name || !formData || name === 'noOfChildren') return
 
       // Get only the changed fields
       const changedFields = getChangedFields(previousValues.current, formData)
@@ -143,9 +142,11 @@ const useFormWithAutoSave = ({
 const ParentQuestionnaire = ({
   parentId,
   gender,
+  defaultValue = {},
 }: {
   parentId: string
   gender: string
+  defaultValue?: { [x: string]: any }
 }) => {
   const { isPending, mutate: mutateQuestionnaire } = useMutation({
     mutationFn: (data: { id: string; data: any }) =>
@@ -160,8 +161,8 @@ const ParentQuestionnaire = ({
   } = useFormWithAutoSave({
     parentId,
     mutateQuestionnaire,
-    debounceMs: 1000, // Adjust as needed
-    defaultValues: {},
+    debounceMs: 2000, // Adjust as needed
+    defaultValues: defaultValue,
   })
 
   const { fields, append, remove } = useFieldArray({
@@ -171,22 +172,33 @@ const ParentQuestionnaire = ({
 
   const noOfChildren = watch('noOfChildren')
 
+  const debouncedUpdate = useMemo(
+    () =>
+      _.debounce((length) => {
+        if (length > 0) {
+          Array.from({ length }, () =>
+            append({
+              age: 0,
+              gender: { label: 'Male', value: 'male' },
+              inSchool: false,
+            })
+          )
+        } else if (length < 0) {
+          length *= -1
+          Array.from({ length }, () => remove(noOfChildren - 1))
+        }
+      }, 1000), // 800ms delay
+    [append, remove, noOfChildren]
+  )
+
   useEffect(() => {
-    let length = noOfChildren - fields.length
-    if (length > 0) {
-      Array.from({ length }, () =>
-        append({
-          age: 0,
-          gender: { label: 'Male', value: 'male' },
-          inSchool: false,
-        })
-      )
-    } else if (length < 0) {
-      length *= -1
-      Array.from({ length }, () => remove(noOfChildren - 1))
+    const length = noOfChildren - fields.length
+    debouncedUpdate(length)
+
+    return () => {
+      debouncedUpdate.cancel()
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [noOfChildren, fields])
+  }, [noOfChildren, fields.length, debouncedUpdate])
 
   const onSubmit = (data: any) => {
     const questionnaire = cleanFormData(data)

@@ -365,7 +365,7 @@ export const DemographicsSection = ({
             )}
             name="noOfChildren"
           />
-          <PageCard title="Children's Details" bodyStyle="p-4 mt-2">
+          <PageCard title="Children's Details" bodyStyle="p-4 mt-4">
             {fields.map((field, index) => (
               <div
                 key={field.id}

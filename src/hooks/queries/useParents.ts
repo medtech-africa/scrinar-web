@@ -18,10 +18,18 @@ const useParents = (page?: number, level?: string, searchVal?: string) => {
 const useParent = (id: string) => {
   return useQuery({
     queryKey: ['singleParent', id],
-    queryFn: () => baseAxios.get(API.parent(id)).then((res) => res.data),
+    queryFn: () => baseAxios.get(API.parent(id)).then((res) => res.data?.data),
   })
 }
 
-export { useParent }
+const useParentQuestionnaire = (id: string) => {
+  return useQuery({
+    queryKey: ['parentQuestionnaire', id],
+    queryFn: () =>
+      baseAxios.get(API.parentQuestionnaire(id)).then((res) => res.data?.data),
+  })
+}
+
+export { useParent, useParentQuestionnaire }
 
 export default useParents

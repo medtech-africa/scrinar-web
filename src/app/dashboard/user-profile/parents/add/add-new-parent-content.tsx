@@ -19,7 +19,7 @@ import { useEffect, useRef, useState } from 'react'
 import uploadImage from '@/utils/uploadImage'
 import ConditionAvatar from '@/components/ui/condition-avatar'
 import { IDataToSend, IFormValue } from './page'
-import { ParentQuestionnaire } from './questionnaire'
+import { ParentQuestionnaire } from '../questionnaire'
 
 const defaultValues = {
   gender: { value: '', label: '' },

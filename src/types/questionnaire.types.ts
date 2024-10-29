@@ -1,7 +1,10 @@
 // Define the complete form types
 export type ParentFormData = {
   // Demographics
-  yearsInCommunity: 'less1' | '1-5' | '6-10' | 'more10'
+  yearsInCommunity: {
+    label: string
+    value: 'less1' | '1-5' | '6-10' | 'more10'
+  }
   ethnicity: {
     label: string
     value: string
@@ -43,15 +46,15 @@ export type ParentFormData = {
 
   // Knowledge
   nutrition: {
-    balancedDiet: {
+    balancedDiet?: {
       label: string
       value: string
     }
-    sugarEffects: {
+    sugarEffects?: {
       label: string
       value: string
     }
-    saltFatRisks: {
+    saltFatRisks?: {
       label: string
       value: string
     }
@@ -59,15 +62,15 @@ export type ParentFormData = {
     girlsFood: string[]
   }
   generalPhysicalActivity: {
-    importance: {
+    importance?: {
       label: string
       value: string
     }
-    childDailyActivity: {
+    childDailyActivity?: {
       label: string
       value: string
     }
-    adultDailyActivity: {
+    adultDailyActivity?: {
       label: string
       value: string
     }
@@ -75,11 +78,11 @@ export type ParentFormData = {
   }
   riskyBehavior: {
     smokingRisks: string[]
-    secondhandSmoking: {
+    secondhandSmoking?: {
       label: string
       value: string
     }
-    checkupImportance: {
+    checkupImportance?: {
       label: string
       value: string
     }
@@ -91,25 +94,25 @@ export type ParentFormData = {
 
   // Attitudes
   nutritionAttitudes: {
-    balancedDietImportance: {
+    balancedDietImportance?: {
       label: string
       value: string
     }
-    healthyFoodDifficulty: {
+    healthyFoodDifficulty?: {
       label: string
       value: string
     }
-    idealBoysSize: {
+    idealBoysSize?: {
       label: string
       value: string
     }
-    idealGirlsSize: {
+    idealGirlsSize?: {
       label: string
       value: string
     }
   }
   physicalActivityAttitudes: {
-    genderImportance: {
+    genderImportance?: {
       label: string
       value: string
     }
@@ -118,7 +121,7 @@ export type ParentFormData = {
     boysSuitableActivities: string
     girlsSuitableActivities: string
     mixedActivities: boolean
-    timeComparison: {
+    timeComparison?: {
       label: string
       value: string
     }
@@ -142,30 +145,30 @@ export type ParentFormData = {
 
   // Practices
   nutritionPractices: {
-    fruitsVegetables: {
+    fruitsVegetables?: {
       label: string
       value: string
     }
-    snacks: {
+    snacks?: {
       label: string
       value: string
     }
-    sugaryBeverages: {
+    sugaryBeverages?: {
       label: string
       value: string
     }
   }
   physicalActivityPractices: {
-    frequency: {
+    frequency?: {
       label: string
       value: string
     }
-    duration: {
+    duration?: {
       label: string
       value: string
     }
     activities: string[]
-    choreFrequency: string
+    choreFrequency?: string
     choreTypes: string[]
     nonChoreActivity: string
     screenTime: {
@@ -178,7 +181,7 @@ export type ParentFormData = {
     }
   }
   riskyBehaviorPractices: {
-    checkups: {
+    checkups?: {
       label: string
       value: string
     }
