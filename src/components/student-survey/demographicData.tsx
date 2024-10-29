@@ -1,401 +1,265 @@
-import React from 'react'
-import { Control, Controller, FieldErrors } from 'react-hook-form'
+import React, { useEffect } from 'react'
 import { Select } from '../ui/select'
 import { Input } from '../ui/input'
-import { IStudentsSurveyData } from '@/types/studentsSurvey.types'
 import { PageCard } from '../ui/page-card'
+import { useCustomRegister } from '@/hooks/useCustomRegister'
+import { genderOptions } from '@/constants/selectOptions'
+import {
+  YesorNoOptions,
+  YesorNoOptionsOther,
+  classLevelOptions,
+  distanceToSchoolOptions,
+  ethnicityOptions,
+  healthStatusOptions,
+  livingSituationOptions,
+  religionOptions,
+  siblingPositionOptions,
+  yearsAtSchoolOptions,
+} from '@/types/studentsSurvey.types'
 
 const DemographicData = ({
-  control,
-  errors,
-  ethnicitySpecify,
-  setEthnicitySpecify,
-  religionSpecify,
-  setReligionSpecify,
-  healthProblemSpecify,
-  setHealthProblemSpecify,
+  studentId,
+  studentSurvey,
 }: {
-  control: Control<IStudentsSurveyData>
-  errors: FieldErrors<IStudentsSurveyData>
-  ethnicitySpecify: string
-  setEthnicitySpecify: (value: string) => void
-  religionSpecify: string
-  setReligionSpecify: (value: string) => void
-  healthProblemSpecify: string
-  setHealthProblemSpecify: (value: string) => void
+  studentId: string
+  studentSurvey: any
 }) => {
+  const { customRegister, setValue, watch } = useCustomRegister(studentId)
+  useEffect(() => {
+    setValue('gender', studentSurvey?.gender)
+    setValue('age', studentSurvey?.age)
+    setValue('ethnicity', studentSurvey?.ethnicity)
+    setValue('ethnicityOther', studentSurvey?.ethnicityOther)
+    setValue('religion', studentSurvey?.religion)
+    setValue('religionOther', studentSurvey?.religionOther)
+    setValue('classLevel', studentSurvey?.classLevel)
+    setValue('distanceToSchool', studentSurvey?.distanceToSchool)
+    setValue('fatherOccupation', studentSurvey?.fatherOccupation)
+    setValue('healthStatus', studentSurvey?.healthStatus)
+    setValue('healthStatusOther', studentSurvey?.healthStatusOther)
+    setValue('livingSituation', studentSurvey?.livingSituation)
+    setValue('livingSituationOther', studentSurvey?.livingSituationOther)
+    setValue('siblingPosition', studentSurvey?.siblingPosition)
+    setValue('yearsAtSchool', studentSurvey?.yearsAtSchool)
+  }, [
+    setValue,
+    studentSurvey?.age,
+    studentSurvey?.classLevel,
+    studentSurvey?.distanceToSchool,
+    studentSurvey?.ethnicity,
+    studentSurvey?.ethnicityOther,
+    studentSurvey?.fatherOccupation,
+    studentSurvey?.gender,
+    studentSurvey?.healthStatus,
+    studentSurvey?.healthStatusOther,
+    studentSurvey?.livingSituation,
+    studentSurvey?.livingSituationOther,
+    studentSurvey?.religion,
+    studentSurvey?.religionOther,
+    studentSurvey?.siblingPosition,
+    studentSurvey?.yearsAtSchool,
+  ])
+
   return (
     <PageCard title="Demographic Data" bodyStyle="p-4">
       {/* Section A: Demographics */}
       <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
-        <Controller
-          control={control}
-          name="gender"
-          render={({ field: { value, ...field } }) => (
-            <Select
-              {...field}
-              value={value.value}
-              label="Gender"
-              options={[
-                { value: 'Male', label: 'Male' },
-                { value: 'Female', label: 'Female' },
-              ]}
-              message={errors.gender?.message}
-              variant={errors.gender ? 'destructive' : 'default'}
-            />
-          )}
+        <Select
+          {...customRegister('gender')}
+          label="Gender"
+          value={{ value: watch('gender'), label: watch('gender') }}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('gender', value)
+          }}
+          options={genderOptions}
         />
-        <Controller
-          control={control}
-          name="age"
-          render={({ field }) => (
-            <Input
-              {...field}
-              label="Age"
-              type="number"
-              message={errors.age?.message}
-              variant={errors.age ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Input {...customRegister('age')} label="Age" type="number" />
+
+        <Select
+          {...customRegister('ethnicity')}
+          label="Ethnicity"
+          value={{ value: watch('ethnicity'), label: watch('ethnicity') }}
+          options={ethnicityOptions}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('ethnicity', value)
+          }}
         />
-        {/* Add other demographic fields from Section A */}
-        <Controller
-          control={control}
-          name="ethnicity"
-          render={({ field: { value, ...field } }) => (
-            <Select
-              {...field}
-              label="Ethnicity"
-              value={value?.value}
-              options={[
-                { value: 'Hausa', label: 'Hausa' },
-                { value: 'Igbo', label: 'Igbo' },
-                { value: 'Yoruba', label: 'Yoruba' },
-                { value: 'Tiv', label: 'Tiv' },
-                { value: 'Gbayi', label: 'Gbayi' },
-                { value: 'Fulani', label: 'Fulani' },
-                { value: 'Other', label: 'Other' },
-              ]}
-              onChange={(val: unknown) => {
-                const selectedValue = val as {
-                  value: string
-                  label: string
-                }
-                setEthnicitySpecify(
-                  selectedValue.value === 'Other' ? 'Other' : ''
-                )
-              }}
-              message={errors.ethnicity?.message}
-              variant={errors.ethnicity ? 'destructive' : 'default'}
-            />
-          )}
-        />
-        {ethnicitySpecify === 'Other' && (
-          <Controller
-            control={control}
-            name="ethnicityOther"
-            render={({ field }) => (
-              <Input
-                {...field}
-                label="Specify Ethnicity"
-                message={errors.ethnicityOther?.message}
-                variant={errors.ethnicityOther ? 'destructive' : 'default'}
-              />
-            )}
-          />
-        )}
-        <Controller
-          control={control}
-          name="religion"
-          render={({ field: { onChange, value, ...field } }) => (
-            <Select
-              {...field}
-              label="Religion"
-              value={value?.value}
-              options={[
-                { value: 'Muslim', label: 'Muslim' },
-                { value: 'Christian', label: 'Christian' },
-                { value: 'Traditionalist', label: 'Traditionalist' },
-                { value: 'Other', label: 'Other' },
-              ]}
-              onChange={(val: unknown) => {
-                onChange(val)
-                const selectedValue = val as {
-                  value: string
-                  label: string
-                }
-                setReligionSpecify(
-                  selectedValue.value === 'Other' ? 'Other' : ''
-                )
-              }}
-              message={errors.religion?.message}
-              variant={errors.religion ? 'destructive' : 'default'}
-            />
-          )}
-        />
-        {religionSpecify === 'Other' && (
-          <Controller
-            control={control}
-            name="religionOther"
-            render={({ field }) => (
-              <Input
-                {...field}
-                label="Specify Religion"
-                message={errors.religionOther?.message}
-                variant={errors.religionOther ? 'destructive' : 'default'}
-              />
-            )}
+
+        {watch('ethnicity') === 'Other' && (
+          <Input
+            {...customRegister('ethnicityOther')}
+            label="Specify Ethnicity"
           />
         )}
 
-        {/* Class Level */}
-        <Controller
-          control={control}
-          name="classLevel"
-          render={({ field: { value, ...field } }) => (
-            <Select
-              {...field}
-              label="Class Level"
-              value={value?.value}
-              options={[
-                { value: 'JSS 1', label: 'JSS 1' },
-                { value: 'JSS 2', label: 'JSS 2' },
-                { value: 'JSS 3', label: 'JSS 3' },
-              ]}
-              message={errors.classLevel?.message}
-              variant={errors.classLevel ? 'destructive' : 'default'}
-            />
-          )}
+        <Select
+          {...customRegister('religion')}
+          label="Religion"
+          value={{ value: watch('religion'), label: watch('religion') }}
+          options={religionOptions}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('religion', value)
+          }}
+        />
+
+        {watch('religion') === 'Other' && (
+          <Input
+            {...customRegister('religionOther')}
+            label="Specify Religion"
+          />
+        )}
+
+        <Select
+          {...customRegister('classLevel')}
+          label="Class Level"
+          value={{ value: watch('classLevel'), label: watch('classLevel') }}
+          options={classLevelOptions}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('classLevel', value)
+          }}
         />
 
         {/* Distance to School */}
-        <Controller
-          control={control}
-          name="distanceToSchool"
-          render={({ field: { value, ...field } }) => (
-            <Select
-              {...field}
-              value={value?.value}
-              label="How far is your home from school?"
-              options={[
-                { value: 'Very close', label: 'Very close' },
-                { value: 'Close', label: 'Close' },
-                { value: 'Far', label: 'Far' },
-              ]}
-              message={errors.distanceToSchool?.message}
-              variant={errors.distanceToSchool ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Select
+          {...customRegister('distanceToSchool')}
+          value={{
+            value: watch('distanceToSchool'),
+            label: watch('distanceToSchool'),
+          }}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('distanceToSchool', value)
+          }}
+          label="How far is your home from school?"
+          options={distanceToSchoolOptions}
         />
 
         {/* Years at School */}
-        <Controller
-          control={control}
-          name="yearsAtSchool"
-          render={({ field: { value, ...field } }) => (
-            <Select
-              {...field}
-              value={value?.value}
-              label="How long have you been attending this school?"
-              options={[
-                { value: 'Less than 1 year', label: 'Less than 1 year' },
-                { value: '1-2 years', label: '1-2 years' },
-                { value: '3 years', label: '3 years' },
-                { value: 'More than 3 years', label: 'More than 3 years' },
-              ]}
-              message={errors.yearsAtSchool?.message}
-              variant={errors.yearsAtSchool ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Select
+          {...customRegister('yearsAtSchool')}
+          value={{
+            value: watch('yearsAtSchool'),
+            label: watch('yearsAtSchool'),
+          }}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('yearsAtSchool', value)
+          }}
+          label="How long have you been attending this school?"
+          options={yearsAtSchoolOptions}
         />
 
         {/* Community Name */}
-        <Controller
-          control={control}
-          name="communityName"
-          render={({ field }) => (
-            <Input
-              {...field}
-              label="Name of Community"
-              message={errors.communityName?.message}
-              variant={errors.communityName ? 'destructive' : 'default'}
-            />
-          )}
-        />
+
+        <Input {...customRegister('communityName')} label="Name of Community" />
 
         {/* Number of Children */}
-        <Controller
-          control={control}
-          name="numberOfChildren"
-          render={({ field }) => (
-            <Input
-              {...field}
-              label="Number of Children in Family"
-              type="number"
-              message={errors.numberOfChildren?.message}
-              variant={errors.numberOfChildren ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Input
+          {...customRegister('numberOfChildren')}
+          label="Number of Children in Family"
+          type="number"
         />
 
         {/* Sibling Position */}
-        <Controller
-          control={control}
-          name="siblingPosition"
-          render={({ field: { value, ...field } }) => (
-            <Select
-              {...field}
-              value={value?.value}
-              label="Your Sibling Position"
-              options={[
-                { value: 'First', label: 'First' },
-                { value: 'Second', label: 'Second' },
-                { value: 'Third', label: 'Third' },
-                { value: 'Fourth', label: 'Fourth' },
-                { value: 'Greater than 4', label: 'Greater than 4' },
-              ]}
-              message={errors.siblingPosition?.message}
-              variant={errors.siblingPosition ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Select
+          {...customRegister('siblingPosition')}
+          label="Your Sibling Position"
+          value={{
+            value: watch('siblingPosition'),
+            label: watch('siblingPosition'),
+          }}
+          options={siblingPositionOptions}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('siblingPosition', value)
+          }}
         />
 
         {/* Father’s Occupation */}
-        <Controller
-          control={control}
-          name="fatherOccupation"
-          render={({ field }) => (
-            <Input
-              {...field}
-              label="Father's Occupation"
-              message={errors.fatherOccupation?.message}
-              variant={errors.fatherOccupation ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Input
+          label="Father's Occupation"
+          {...customRegister('fatherOccupation')}
         />
 
         {/* Mother’s Occupation */}
-        <Controller
-          control={control}
-          name="motherOccupation"
-          render={({ field }) => (
-            <Input
-              {...field}
-              label="Mother's Occupation"
-              message={errors.motherOccupation?.message}
-              variant={errors.motherOccupation ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Input
+          {...customRegister('motherOccupation')}
+          label="Mother's Occupation"
         />
 
         {/* Living Situation */}
-        <Controller
-          control={control}
-          name="livingSituation"
-          render={({ field: { value, ...field } }) => (
-            <Select
-              {...field}
-              value={value?.value}
-              label="Who do you live with most of the time?"
-              options={[
-                { value: 'Both parents', label: 'Both parents' },
-                {
-                  value: 'One parent (Mother)',
-                  label: 'One parent (Mother)',
-                },
-                {
-                  value: 'One parent (Father)',
-                  label: 'One parent (Father)',
-                },
-                { value: 'Other relatives', label: 'Other relatives' },
-                { value: 'Non-relatives', label: 'Non-relatives' },
-              ]}
-              message={errors.livingSituation?.message}
-              variant={errors.livingSituation ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Select
+          {...customRegister('livingSituation')}
+          value={{
+            value: watch('livingSituation'),
+            label: watch('livingSituation'),
+          }}
+          label="Who do you live with most of the time?"
+          options={livingSituationOptions}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('livingSituation', value)
+          }}
         />
 
         {/* Health Problems */}
-        <Controller
-          control={control}
-          name="healthProblems"
-          render={({ field: { onChange, value, ...field } }) => (
-            <Select
-              {...field}
-              value={value?.value}
-              label="Do you have any health problems that you see a doctor for regularly?"
-              options={[
-                { value: 'Yes', label: 'Yes' },
-                {
-                  value: 'No',
-                  label: 'No',
-                },
-              ]}
-              onChange={(val: any) => {
-                onChange(val)
-                setHealthProblemSpecify(val.value === 'Yes' ? 'Yes' : '')
-              }}
-              message={errors.healthProblems?.message}
-              variant={errors.healthProblems ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Select
+          {...customRegister('healthProblems')}
+          value={{
+            value: watch('healthProblems'),
+            label: watch('healthProblems'),
+          }}
+          label="Do you have any health problems that you see a doctor for regularly?"
+          options={YesorNoOptions}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('healthProblems', value)
+          }}
         />
 
-        {healthProblemSpecify === 'Yes' && (
-          <Controller
-            control={control}
-            name="healthProblemsOther"
-            render={({ field }) => (
-              <Input
-                {...field}
-                label="Specify if Yes (Health Problems)"
-                placeholder="Specify if Yes"
-                message={errors.healthProblemsOther?.message}
-                variant={errors.healthProblemsOther ? 'destructive' : 'default'}
-              />
-            )}
+        {watch('healthProblems') === 'Yes, I have' && (
+          <Input
+            {...customRegister('healthProblemsOther')}
+            label="Specify if Yes (Health Problems)"
+            placeholder="Specify if Yes"
           />
         )}
 
         {/* Health Status */}
-        <Controller
-          control={control}
-          name="healthStatus"
-          render={({ field: { value, ...field } }) => (
-            <Select
-              {...field}
-              value={value?.value}
-              label="How do you feel your health is compared to your mates?"
-              options={[
-                { value: 'Very good', label: 'Very good' },
-                { value: 'Good', label: 'Good' },
-                { value: 'Okay', label: 'Okay' },
-                { value: 'Not so good', label: 'Not so good' },
-              ]}
-              message={errors.healthStatus?.message}
-              variant={errors.healthStatus ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Select
+          {...customRegister('healthStatus')}
+          value={{ value: watch('healthStatus'), label: watch('healthStatus') }}
+          label="How do you feel your health is compared to your mates?"
+          options={healthStatusOptions}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('healthStatus', value)
+          }}
         />
-        <Controller
-          control={control}
-          name="hpvVaccine"
-          render={({ field }) => (
-            <Select
-              {...field}
-              label="*For girls only: Have you had the HPV vaccine?"
-              options={[
-                { value: 'Yes', label: 'Yes' },
-                {
-                  value: 'No',
-                  label: 'No',
-                },
-              ]}
-              message={errors.hpvVaccine?.message}
-              variant={errors.hpvVaccine ? 'destructive' : 'default'}
-            />
-          )}
+
+        <Select
+          {...customRegister('hpvVaccine')}
+          value={{ value: watch('hpvVaccine'), label: watch('hpvVaccine') }}
+          label="*For girls only: Have you had the HPV vaccine?"
+          options={YesorNoOptionsOther}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('hpvVaccine', value)
+          }}
         />
       </div>
     </PageCard>

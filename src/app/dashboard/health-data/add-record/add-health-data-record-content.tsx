@@ -117,7 +117,6 @@ export const AddHealthDataRecordContent = () => {
     student?.latestHealthData?.waist,
     student?.latestHealthData?.weight,
   ])
-
   const variantValidityCheck = (val: string) =>
     val && !isValidNumber(val) ? 'destructive' : 'default'
   const messageCheck = (val: string) =>
@@ -569,8 +568,9 @@ export const AddHealthDataRecordContent = () => {
               className="text-primary cursor-pointer underline"
               as="span"
               onClick={() => {
-                setModalType('Survey')
-                setOpenModal(true)
+                student?.id
+                  ? (setModalType('Survey'), setOpenModal(true))
+                  : toast.error('Please select a student')
               }}
             >
               Start Questionnaire
@@ -602,7 +602,10 @@ export const AddHealthDataRecordContent = () => {
           <ExerciseModal onClose={() => setOpenModal(false)} />
         )}
         {modalType === 'Survey' && (
-          <Survey onClose={() => setOpenModal(false)} />
+          <Survey
+            onClose={() => setOpenModal(false)}
+            studentId={student?.id ?? ''}
+          />
         )}
       </Modal>
       <form />

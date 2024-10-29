@@ -342,9 +342,11 @@ const survey = yupResolver(
     healthCheckupsImportance: selectOption.required(
       'Please select why health check-ups are important'
     ),
-    smokingDrinkingEffects: selectOption.required(
-      'Please select an option for the effects of smoking and drinking'
-    ),
+    smokingDrinkingEffects: yup
+      .string()
+      .required(
+        'Please select an option for the effects of smoking and drinking'
+      ),
     feelingsOfstress: selectOption.required(
       'Please select the effects of long-term stress'
     ),
@@ -352,8 +354,8 @@ const survey = yupResolver(
     stressSigns: selectOption.required(
       'Please select which feelings can be a sign of stress'
     ),
-    balancedDiet: yup.string().required('Balanced diet is required'),
-    physicalActivity: yup.string().required('Physical activity is required'),
+    balancedDiet: selectOption.required('Balanced diet is required'),
+    physicalActivity: selectOption.required('Physical activity is required'),
     stressEffects: yup.string().required('Stress effect is required'),
     bodySizeBoys: yup.string().required('Body size for boys is required'),
     bodySizeGirls: yup.string().required('Body size for girls is required'),
@@ -390,39 +392,41 @@ const survey = yupResolver(
       .string()
       .required('Please specify the signs of stress'),
 
-    dietConsequence: yup
-      .string()
-      .required('Please select a consequence of not eating a balanced diet'),
+    dietConsequence: selectOption.required(
+      'Please select a consequence of not eating a balanced diet'
+    ),
 
     carbExamples: yup
-      .string()
+      .array()
+      .min(1, 'Please provide at least one example of carbohydrates')
       .required('Please provide examples of carbohydrates'),
 
     proteinExamples: yup
-      .string()
+      .array()
+      .min(1, 'Please provide at least one example of proteins')
       .required('Please provide examples of proteins'),
 
     fatExamples: yup
-      .string()
+      .array()
+      .min(1, 'Please provide at least one example of fats and oils')
       .required('Please provide examples of fats and oils'),
 
     vitaminExamples: yup
-      .string()
+      .array()
+      .min(1, 'Please provide at least one example of vitamins and minerals')
       .required('Please provide examples of vitamins and minerals'),
 
-    sweetsEffect: yup
-      .string()
-      .required('Please select why eating too many sweets is bad'),
+    sweetsEffect: selectOption.required(
+      'Please select why eating too many sweets is bad'
+    ),
 
-    saltyFoodEffect: yup
-      .string()
-      .required(
-        'Please select what happens if you eat too much salty or oily food'
-      ),
+    saltyFoodEffect: selectOption.required(
+      'Please select what happens if you eat too much salty or oily food'
+    ),
 
-    activityBenefits: yup
-      .string()
-      .required('Please select the benefits of regular physical activity'),
+    activityBenefits: selectOption.required(
+      'Please select the benefits of regular physical activity'
+    ),
 
     exerciseActivities: yup
       .array()
@@ -459,8 +463,11 @@ const survey = yupResolver(
       'Please select the importance of regular physical activity'
     ),
     barriersToPhysicalActivity: yup
-      .string()
-      .required('Please select the barriers to regular physical activity'),
+      .array()
+      .min(1, 'Please select at least one barrier to regular physical activity')
+      .required(
+        'Please select at least one barrier to regular physical activity'
+      ),
     importanceOfPhysicalActivity: selectOption.required(
       'Please select the importance of regular physical activity'
     ),

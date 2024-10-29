@@ -1,0 +1,47 @@
+import { useFormContext } from 'react-hook-form'
+import { useMutateStudentsSurvey } from './queries/useStudentSurvey'
+
+export const useCustomRegister = (studentId: string) => {
+  const { register, setValue, watch } = useFormContext()
+  const { mutate } = useMutateStudentsSurvey(studentId)
+
+  // customRegister no longer uses useCallback
+  const customRegister = (name: string, options: any = {}) => {
+    const { onBlur: originalBlur, ...rest } = register(name, options)
+
+    const handleBlur = () => {
+      const currentValue = watch(name)
+
+      if (currentValue === 'Other' || currentValue === 'Yes, I have') {
+        return
+      }
+      const newName = (value: string): string | number =>
+        value.toLowerCase().includes('other')
+          ? value.replace(/other/gi, '').trim()
+          : value
+
+      const key = newName(name)
+      const data = { [key]: currentValue?.toLowerCase() }
+      if (currentValue) {
+        mutate(data, {
+          onSuccess: (res) => {
+            console.log('success', res?.data)
+          },
+          onError: (err) => {
+            console.log(err)
+          },
+        })
+      }
+    }
+
+    return {
+      ...rest,
+      onBlur: (e: any) => {
+        if (originalBlur) originalBlur(e)
+        handleBlur()
+      },
+    }
+  }
+
+  return { customRegister, setValue, watch }
+}
