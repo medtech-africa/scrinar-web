@@ -12,14 +12,13 @@ const navigationItems = [
 ]
 
 export interface IFormValue {
+  id?: string
   email?: string
   firstName: string
   lastName: string
   familyCode?: string
-  age: number
   mobile?: string
   gender: { value: string; label: string }
-  password?: string
   avatar?: boolean
 }
 

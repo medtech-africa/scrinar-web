@@ -28,12 +28,14 @@ interface Props {
   errors: FieldErrors<ParentFormData>
   watch: UseFormWatch<ParentFormData>
   fields: FieldArrayWithId<ParentFormData, 'children', 'id'>[]
+  gender: string
 }
 export const DemographicsSection = ({
   control,
   errors,
   watch,
   fields,
+  gender,
 }: Props) => {
   return (
     <PageCard title="Section A: Demographics" bodyStyle="p-4">
@@ -329,7 +331,7 @@ export const DemographicsSection = ({
             )}
             name="chronicHealth.hasCondition"
           />
-          {watch('chronicHealth.hasCondition').value && (
+          {watch('chronicHealth.hasCondition')?.value && (
             <Controller
               control={control}
               render={({ field: { value, ...field } }) => (
@@ -418,6 +420,24 @@ export const DemographicsSection = ({
             ))}
           </PageCard>
         </div>
+
+        {gender === 'female' && (
+          <Controller
+            control={control}
+            name="isPregnant"
+            render={({ field: { value, onChange } }) => (
+              <div className="space-y-2">
+                <Text className="lg:text-sm text-xs font-medium">
+                  Are you currently pregnant?
+                </Text>
+                <div className="flex items-center space-x-2">
+                  <Checkbox checked={value} onCheckedChange={onChange} />
+                  <Text className="text-sm">Yes</Text>
+                </div>
+              </div>
+            )}
+          />
+        )}
       </div>
     </PageCard>
   )

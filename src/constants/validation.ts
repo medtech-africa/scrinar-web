@@ -358,16 +358,11 @@ const createParent = yupResolver(
       .required('Please enter last name')
       .typeError('Please enter last name')
       .lowercase(),
-    age: yup
-      .number()
-      .required('Please enter age')
-      .typeError('Please enter a valid age'),
     gender: yup
       .object()
       .shape({ label: yup.string().required(), value: yup.string().required() })
       .required('Please select a gender')
       .typeError('Please select a gender'),
-    password: yup.string(),
     mobile: yup.string().optional(),
     familyCode: yup.string().optional(),
     avatar: yup.boolean(),

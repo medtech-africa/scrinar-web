@@ -3,7 +3,9 @@ import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 
 const getParents = (page?: number, level = '', searchVal = '') =>
-  baseAxios.get(API.getParents(page, level, searchVal)).then((res) => res.data)
+  baseAxios
+    .get(API.getParents(page, level, searchVal))
+    .then((res) => res.data?.data)
 
 const useParents = (page?: number, level?: string, searchVal?: string) => {
   return useQuery({

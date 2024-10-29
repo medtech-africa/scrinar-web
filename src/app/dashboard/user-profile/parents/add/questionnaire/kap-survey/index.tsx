@@ -55,7 +55,7 @@ const KAPSurvey = ({ control, errors, watch }: Props) => {
         <Tabs.Content value="attitudes">
           <AttitudesSection watch={watch} control={control} errors={errors} />
         </Tabs.Content>
-        <Tabs.Content value="Practices">
+        <Tabs.Content value="practices">
           <PracticesSection watch={watch} control={control} errors={errors} />
         </Tabs.Content>
         <Tabs.Content value="health-habits">

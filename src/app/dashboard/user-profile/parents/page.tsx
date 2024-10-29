@@ -80,7 +80,7 @@ const FilterHeader = ({
       <Input
         leadingIcon={<IconPicker icon="search" />}
         className="rounded-[49px] bg-grey-100 text-sm  md:w-[17.25rem] w-[15rem]"
-        placeholder="Search by Name, Level or Gender...."
+        placeholder="Search by Name or Family Code...."
         full={false}
         onChange={(e) => onSearchChange(e.target.value)}
         endingIcon={
@@ -181,8 +181,8 @@ export default function Parents() {
   return (
     <div>
       <PageHeader
-        title="Students"
-        subtitle="Manage Students profiles, Add, View and Delete Profile."
+        title="Parents"
+        subtitle="Manage Parents profiles, Add, View and Delete Profile."
         avatar="avatar"
       />
       <FilterHeader
@@ -205,9 +205,9 @@ export default function Parents() {
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Name</TableHead>
-              <TableHead>Level</TableHead>
               <TableHead>Gender</TableHead>
-              <TableHead>Age</TableHead>
+              <TableHead>Family Code</TableHead>
+              <TableHead>Mobile No</TableHead>
               <TableHead>Date Added</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
@@ -235,12 +235,11 @@ export default function Parents() {
                       <div>{val.lastName}</div>
                     </div>
                   </TableCell>
-
-                  <TableCell className="capitalize">
-                    {val.level ?? '-'}
-                  </TableCell>
                   <TableCell className="capitalize">{val.gender}</TableCell>
-                  <TableCell>{val.age}</TableCell>
+                  <TableCell className="capitalize">
+                    {val.familyCode ?? '-'}
+                  </TableCell>
+                  <TableCell className="capitalize">{val.mobile}</TableCell>
                   <TableCell>
                     {format(new Date(val.createdAt), 'PPP')}
                   </TableCell>
@@ -287,8 +286,8 @@ type DataType = {
   avatarUrl?: string
   firstName: string
   lastName: string
-  level: string
+  familyCode: string
   gender: string
-  age?: string
   createdAt: string
+  mobile: string
 }

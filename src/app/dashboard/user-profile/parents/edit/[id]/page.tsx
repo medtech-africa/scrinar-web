@@ -28,12 +28,8 @@ const navigationItems = [
   { label: 'Parents', icon: IconNames.arrowRight },
   { label: 'Edit Parent' },
 ]
-interface IDataToSend
-  extends Omit<IFormValue, 'level' | 'gender' | 'avatar' | 'dob'> {
-  level?: string
+interface IDataToSend extends Omit<IFormValue, 'level' | 'gender' | 'avatar'> {
   gender?: string
-  dob?: string
-  // age: number
 }
 export default function EditRecord({ params }: { params: { id: string } }) {
   const { data, isLoading, refetch } = useParent(params.id)
@@ -55,8 +51,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
       setValue('firstName', data?.firstName)
       setValue('lastName', data?.lastName)
       setValue('email', data?.email)
-      setValue('age', data?.age)
-      setValue('mobile', data?.parentMobile)
+      setValue('mobile', data?.mobile)
       setValue('familyCode', data?.familyCode)
       setValue('gender', { value: data?.gender, label: data?.gender })
       setValue('avatar', !!data?.avatarUrl)
@@ -74,7 +69,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
     try {
       await mutate(dataToSend, {
         onSuccess: () => {
-          toast.success('Successfully updated student')
+          toast.success('Successfully updated parent')
           refetch()
         },
         onError: (err) => {
@@ -90,8 +85,8 @@ export default function EditRecord({ params }: { params: { id: string } }) {
     <div className="relative">
       <ContentLoader loading={isLoading} />
       <PageHeader
-        title="Edit Student"
-        subtitle="Edit Student: Modify Student Profile"
+        title="Edit Parent"
+        subtitle="Edit Parent: Modify Parent Profile"
         navigation={navigationItems}
       />
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -137,28 +132,11 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                   control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
-                      onBlur={onBlur}
-                      value={value}
-                      onChange={onChange}
-                      label="Age"
-                      disabled
-                      placeholder="Student age"
-                      message={errors.age && errors.age.message}
-                      variant={errors?.age ? 'destructive' : 'default'}
-                    />
-                  )}
-                  name="age"
-                />
-
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }) => (
-                    <Input
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
                       placeholder="ayans124"
-                      label="Last Name"
+                      label="Family code"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.familyCode ? 'destructive' : 'default'}
                       message={errors.familyCode && errors.familyCode.message}
@@ -228,23 +206,6 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                     />
                   )}
                   name="gender"
-                />
-
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }: any) => (
-                    <Input
-                      placeholder="••••••••••••"
-                      label="Password"
-                      labelStyle="lg:text-sm text-xs"
-                      onBlur={onBlur}
-                      value={value ?? ''}
-                      type="password"
-                      onChange={(val: any) => onChange(val)}
-                      message="By default, the first name is user’s Password"
-                    />
-                  )}
-                  name="password"
                 />
               </div>
               <Button

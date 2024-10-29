@@ -15,13 +15,11 @@ import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import filterObject from '@/utils/filterObject'
 import useSelectImage from '@/hooks/useSelectImage'
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import uploadImage from '@/utils/uploadImage'
 import ConditionAvatar from '@/components/ui/condition-avatar'
 import { IDataToSend, IFormValue } from './page'
-import { HealthDataPayload } from '@/types/healthData.types'
-import { useHealthValue } from '@/context/health-data-context'
-import Questionnaire from './questionnaire'
+import { ParentQuestionnaire } from './questionnaire'
 
 const defaultValues = {
   gender: { value: '', label: '' },
@@ -30,10 +28,8 @@ const defaultValues = {
   lastName: '',
   mobile: '',
   familyCode: '',
-  password: '',
 }
 
-type HealthDataPayloadEx = Omit<HealthDataPayload, 'userId'>
 export const AddNewParentContent = () => {
   const queryClient = useQueryClient()
   const {
@@ -41,17 +37,14 @@ export const AddNewParentContent = () => {
     mutate,
     reset: postReset,
   } = useMutation({
-    mutationFn: (dataToSend: IDataToSend) =>
-      baseAxios.post(API.students, dataToSend),
+    mutationFn: ({ id, ...dataToSend }: IDataToSend) =>
+      id
+        ? baseAxios.patch(API.parent(id), dataToSend)
+        : baseAxios.post(API.parents, dataToSend),
   })
 
-  const { isPending, mutate: mutateQuestionnaire } = useMutation({
-    mutationFn: (data: HealthDataPayload) =>
-      baseAxios.post(API.healthData, data),
-  })
   const [showQuestionnaire, setShowQuestionnaire] = useState(false)
-  const [studentAddedId, setStudentAddedId] = useState('')
-  const [resetFields, setResetFields] = useState(false)
+  const [parentAddedId, setParentAddedId] = useState('')
 
   const {
     control,
@@ -79,87 +72,53 @@ export const AddNewParentContent = () => {
     }
   }
 
-  const { setExerciseData, setNutritionalData } = useHealthValue()
-  const handleHealthData = (
-    userId = '',
-    questionnaire?: HealthDataPayloadEx
-  ) => {
+  const onSubmit = async (data: IFormValue, questionnaire = false) => {
+    const filteredData = filterObject(data)
+    let avatarUrlRes
+    if (selectedImg) {
+      setImageLoading(true)
+      avatarUrlRes = await uploadImage(selectedImg)
+    }
     const dataToSend = {
-      userId,
-      ...questionnaire,
+      ...filteredData,
+      gender: data.gender?.value,
+      ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
+      ...(parentAddedId && { id: parentAddedId }),
     }
-    mutateQuestionnaire(dataToSend, {
-      onSuccess: () => {
-        toast.success('Successfully added parent and questionnaire')
-        setResetFields(true)
-        reset(defaultValues)
-        setSelectedImg(null)
-        setStudentAddedId('')
-        setExerciseData(null)
-        setNutritionalData(null)
-        postReset()
-        queryClient.invalidateQueries('parents' as any)
-      },
-      onError: (err) => {
-        errorMessage(err)
-      },
-    })
-  }
 
-  const onSubmit = async (
-    data: IFormValue,
-    questionnaire?: HealthDataPayloadEx
-  ) => {
-    resetFields && setResetFields(false)
-
-    if (studentAddedId) {
-      handleHealthData(studentAddedId, questionnaire)
-    } else {
-      const filteredData = filterObject(data)
-      let avatarUrlRes
-      if (selectedImg) {
-        setImageLoading(true)
-        avatarUrlRes = await uploadImage(selectedImg)
-      }
-      const dataToSend = {
-        ...filteredData,
-        gender: data.gender?.value,
-        // dob: new Date(data.dob).toISOString(),
-        ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
-        // age: calculateAge(data.dob),
-      }
-      try {
-        await mutate(dataToSend, {
-          onSuccess: (res) => {
-            if (questionnaire) {
-              const studentId = res.data?.data?.id
-              handleHealthData(studentId, questionnaire)
-              setStudentAddedId(studentId)
-              return
-            }
-            toast.success('Successfully added student')
-            reset(defaultValues)
+    try {
+      await mutate(dataToSend, {
+        onSuccess: (res) => {
+          if (questionnaire) {
+            const parentId = res.data?.data?.id
+            setParentAddedId(parentId)
+          } else if (!questionnaire) {
             setSelectedImg(null)
-            setStudentAddedId('')
+            reset(defaultValues)
             postReset()
-            queryClient.invalidateQueries('students' as any)
-            // toast.success('')
-          },
-          onError: (err) => {
-            errorMessage(err)
-          },
-        })
-      } finally {
-        setImageLoading(false)
-      }
+          }
+
+          toast.success(
+            `Successfully added student${questionnaire ? ', you can continue with the questionnaire' : ''}`
+          )
+          queryClient.invalidateQueries('students' as any)
+        },
+        onError: (err) => {
+          errorMessage(err)
+        },
+      })
+    } finally {
+      setImageLoading(false)
     }
   }
 
-  const handleParentQuestionnaire = (questionnaire: HealthDataPayloadEx) => {
-    handleSubmit((data) => onSubmit(data, questionnaire))()
-  }
+  useEffect(() => {
+    if (parentAddedId) {
+      setShowQuestionnaire(true)
+    }
+  }, [parentAddedId])
 
-  const parentDetails = { gender: watch('gender')?.value, age: watch('age') }
+  const gender = watch('gender')?.value
 
   return (
     <>
@@ -204,28 +163,13 @@ export const AddNewParentContent = () => {
 
                 <Controller
                   control={control}
-                  render={({ field: { value, ...rest } }) => (
-                    <Input
-                      {...rest}
-                      value={value ?? ''}
-                      label="Age"
-                      placeholder="Parent age"
-                      message={errors.age && errors.age.message}
-                      variant={errors?.age ? 'destructive' : 'default'}
-                    />
-                  )}
-                  name="age"
-                />
-
-                <Controller
-                  control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
                       placeholder="ayans124"
-                      label="Last Name"
+                      label="Family code"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.familyCode ? 'destructive' : 'default'}
                       message={errors.familyCode && errors.familyCode.message}
@@ -294,36 +238,31 @@ export const AddNewParentContent = () => {
                   )}
                   name="gender"
                 />
-
-                <Controller
-                  control={control}
-                  render={({ field: { onChange, onBlur, value } }: any) => (
-                    <Input
-                      placeholder="••••••••••••"
-                      label="Password"
-                      labelStyle="lg:text-sm text-xs"
-                      onBlur={onBlur}
-                      value={value ?? ''}
-                      type="password"
-                      onChange={(val: any) => onChange(val)}
-                      message="By default, the first name is user’s Password"
-                    />
-                  )}
-                  name="password"
-                />
               </div>
 
               <div className="mt-6 flex items-center">
                 <Checkbox
                   checked={showQuestionnaire}
                   onCheckedChange={(val) => {
-                    setShowQuestionnaire(Boolean(val))
+                    if (Boolean(val) && !parentAddedId) {
+                      handleSubmit((data) => onSubmit(data, true))() // create a parent
+                    } else {
+                      setShowQuestionnaire(Boolean(val))
+                    }
                   }}
                 />
                 {/* <Checkbox  /> */}
-                <Text className="ml-2 text-base text-grey-700">
-                  Add Questionnaire
-                </Text>
+                <div className="flex gap-2">
+                  <Text className="ml-2 text-base text-grey-700">
+                    Add Questionnaire
+                  </Text>
+                  {(isLoading || imageLoading) && (
+                    <>
+                      <IconPicker icon="loader2" size="1rem" className="mr-2" />
+                      Please wait
+                    </>
+                  )}
+                </div>
               </div>
 
               {!showQuestionnaire && (
@@ -396,12 +335,7 @@ export const AddNewParentContent = () => {
         </div>
       </form>
       {showQuestionnaire && (
-        <Questionnaire
-          addLoading={isLoading || imageLoading || isPending}
-          onSubmit={(questionnaire) => handleParentQuestionnaire(questionnaire)}
-          resetFields={resetFields}
-          parent={parentDetails}
-        />
+        <ParentQuestionnaire gender={gender} parentId={parentAddedId} />
       )}
     </>
   )

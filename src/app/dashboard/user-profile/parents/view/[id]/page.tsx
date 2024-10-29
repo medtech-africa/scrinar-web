@@ -5,24 +5,24 @@ import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
-import { useStudent } from '@/hooks/queries/useStudents'
 import ContentLoader from '@/components/content-loader'
 import { Avatar } from '@/components/ui/avatar'
+import { useParent } from '@/hooks/queries/useParents'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
-  { label: 'Students', icon: IconNames.arrowRight },
+  { label: 'Parents', icon: IconNames.arrowRight },
   { label: 'View' },
 ]
 export default function ViewRecord({ params }: { params: { id: string } }) {
-  const { data, isLoading } = useStudent(params.id)
+  const { data, isLoading } = useParent(params.id)
 
   return (
     <div className="relative">
       <ContentLoader loading={isLoading} />
       <PageHeader
         title="View"
-        subtitle="View details about student."
+        subtitle="View details about parent."
         navigation={navigationItems}
       />
       <div className="grid md:grid-cols-[2fr_1fr] gap-6 py-7 mt-2">
@@ -51,50 +51,27 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
                   labelStyle="lg:text-sm text-xs"
                 />
               )}
+
               <Input
-                defaultValue={
-                  data?.dob && new Date(data?.dob)?.toLocaleDateString()
-                }
+                defaultValue={data?.familyCode}
                 disabled
-                leadingIcon={
-                  <IconPicker icon="calendar" className="text-grey-500" />
-                }
-                label="Date of Birth"
-                labelStyle="lg:text-sm text-xs"
-              />
-              <Input
-                defaultValue={data?.age && `${data?.age} Years`}
-                disabled
-                label="Age"
+                label="Family Code"
                 labelStyle="lg:text-sm text-xs"
               />
 
               <Input
                 labelStyle="lg:text-sm text-xs"
-                defaultValue={data?.parentMobile ?? '-'}
+                defaultValue={data?.mobile ?? '-'}
                 disabled
-                label="Parent Mobile Number 1"
+                label="Mobile Number"
               />
-              <Input
-                labelStyle="lg:text-sm text-xs"
-                defaultValue={data?.parentMobileAlt ?? '-'}
-                disabled
-                label="Parent Mobile Number 2"
-              />
+
               <Input
                 defaultValue={data?.gender}
                 className="capitalize"
                 disabled
                 label="Gender"
                 labelStyle="lg:text-sm text-xs"
-              />
-
-              <Input
-                labelStyle="lg:text-sm text-xs"
-                defaultValue={data?.level}
-                className="capitalize"
-                disabled
-                label="Class"
               />
             </div>
           </PageCard>
