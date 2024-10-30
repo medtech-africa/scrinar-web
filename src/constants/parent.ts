@@ -48,8 +48,8 @@ const workStatuses = [
 ]
 
 const householdIncomeRange = [
-  { label: 'Less than ₦100,000', value: 'less100' },
-  { label: '₦100,000-₦500,000', value: '100k-499k' },
+  { label: 'Less than ₦100,000', value: 'less100k' },
+  { label: '₦100,000-₦500,000', value: '100k-500k' },
   { label: '₦500,001-₦1,000,000', value: '500k-1m' },
   { label: 'Above ₦1,000,000', value: 'above1m' },
 ]

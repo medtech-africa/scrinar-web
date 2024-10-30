@@ -133,8 +133,8 @@ export const DemographicsSection = ({
                 <Input
                   {...field}
                   value={value ?? ''}
-                  label="Specify other ethnicity"
-                  placeholder="Enter other ethnicity"
+                  label="Specify other language"
+                  placeholder="Enter other language"
                   labelStyle="lg:text-base text-sm"
                   variant={errors?.otherLanguage ? 'destructive' : 'default'}
                 />
@@ -171,8 +171,8 @@ export const DemographicsSection = ({
                 <Input
                   {...field}
                   value={value ?? ''}
-                  label="Specify other ethnicity"
-                  placeholder="Enter other ethnicity"
+                  label="Specify other religion"
+                  placeholder="Enter other religion"
                   labelStyle="lg:text-base text-sm"
                   variant={errors?.otherReligion ? 'destructive' : 'default'}
                 />
@@ -430,9 +430,21 @@ export const DemographicsSection = ({
                 <Text className="lg:text-sm text-xs font-medium">
                   Are you currently pregnant?
                 </Text>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={value} onCheckedChange={onChange} />
-                  <Text className="text-sm">Yes</Text>
+                <div className="flex space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value}
+                      onCheckedChange={() => onChange(true)}
+                    />
+                    <Text className="text-sm">Yes</Text>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value === false}
+                      onCheckedChange={() => onChange(false)}
+                    />
+                    <Text className="text-sm">No</Text>
+                  </div>
                 </div>
               </div>
             )}

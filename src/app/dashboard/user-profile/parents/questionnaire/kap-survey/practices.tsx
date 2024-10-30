@@ -451,7 +451,7 @@ export const PracticesSection = ({ control, errors, watch }: Props) => {
                   <Input
                     {...field}
                     value={value ?? ''}
-                    label="Specify other"
+                    label="Specify other coping method"
                     labelStyle="lg:text-base text-sm"
                     variant={
                       errors?.riskyBehaviorPractices?.copingMethodsOther

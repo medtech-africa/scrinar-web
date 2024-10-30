@@ -237,9 +237,21 @@ export const AttitudesSection = ({ control, errors }: Props) => {
                   Do you believe boys should be more physically active than
                   girls?
                 </Text>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={value} onCheckedChange={onChange} />
-                  <Text className="text-sm">Yes</Text>
+                <div className="flex space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value}
+                      onCheckedChange={() => onChange(true)}
+                    />
+                    <Text className="text-sm">Yes</Text>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value === false}
+                      onCheckedChange={() => onChange(false)}
+                    />
+                    <Text className="text-sm">No</Text>
+                  </div>
                 </div>
               </div>
             )}
@@ -286,9 +298,21 @@ export const AttitudesSection = ({ control, errors }: Props) => {
                   Should boys and girls do the same types of sports and
                   activities?
                 </Text>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={value} onCheckedChange={onChange} />
-                  <Text className="text-sm">Yes</Text>
+                <div className="flex space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value}
+                      onCheckedChange={() => onChange(true)}
+                    />
+                    <Text className="text-sm">Yes</Text>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value === false}
+                      onCheckedChange={() => onChange(false)}
+                    />
+                    <Text className="text-sm">No</Text>
+                  </div>
                 </div>
               </div>
             )}
@@ -379,9 +403,21 @@ export const AttitudesSection = ({ control, errors }: Props) => {
                 <Text className="lg:text-sm text-xs font-medium">
                   Do you think children can be stressed?
                 </Text>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={value} onCheckedChange={onChange} />
-                  <Text className="text-sm">Yes</Text>
+                <div className="flex space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value}
+                      onCheckedChange={() => onChange(true)}
+                    />
+                    <Text className="text-sm">Yes</Text>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value === false}
+                      onCheckedChange={() => onChange(false)}
+                    />
+                    <Text className="text-sm">No</Text>
+                  </div>
                 </div>
               </div>
             )}
@@ -419,9 +455,21 @@ export const AttitudesSection = ({ control, errors }: Props) => {
                 <Text className="lg:text-sm text-xs font-medium">
                   Do you believe boys are more resistant to sickness than girls?
                 </Text>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={value} onCheckedChange={onChange} />
-                  <Text className="text-sm">Yes</Text>
+                <div className="flex space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value}
+                      onCheckedChange={() => onChange(true)}
+                    />
+                    <Text className="text-sm">Yes</Text>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value === false}
+                      onCheckedChange={() => onChange(false)}
+                    />
+                    <Text className="text-sm">No</Text>
+                  </div>
                 </div>
               </div>
             )}

@@ -202,6 +202,7 @@ const ParentQuestionnaire = ({
 
   const onSubmit = (data: any) => {
     const questionnaire = cleanFormData(data)
+    console.log(questionnaire)
     const dataToSend = {
       id: parentId,
       data: questionnaire,

@@ -28,9 +28,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                   Have you ever had your blood pressure measured by a doctor or
                   other health worker?
                 </Text>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={value} onCheckedChange={onChange} />
-                  <Text className="text-sm">Yes</Text>
+                <div className="flex space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value}
+                      onCheckedChange={() => onChange(true)}
+                    />
+                    <Text className="text-sm">Yes</Text>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value === false}
+                      onCheckedChange={() => onChange(false)}
+                    />
+                    <Text className="text-sm">No</Text>
+                  </div>
                 </div>
               </div>
             )}
@@ -65,12 +77,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                         <Text className="lg:text-sm text-xs font-medium">
                           Were you first told in the past 12 months?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -86,12 +107,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           (medication) for raised blood pressure prescribed by a
                           doctor or other health worker?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -106,12 +136,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           Have you ever seen a traditional healer for raised
                           blood pressure or hypertension?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -126,12 +165,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           Are you currently taking any herbal or traditional
                           remedy for your raised blood pressure?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -155,9 +203,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                   Have you ever had your blood sugar measured by a doctor or
                   other health worker?
                 </Text>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={value} onCheckedChange={onChange} />
-                  <Text className="text-sm">Yes</Text>
+                <div className="flex space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value}
+                      onCheckedChange={() => onChange(true)}
+                    />
+                    <Text className="text-sm">Yes</Text>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value === false}
+                      onCheckedChange={() => onChange(false)}
+                    />
+                    <Text className="text-sm">No</Text>
+                  </div>
                 </div>
               </div>
             )}
@@ -192,12 +252,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                         <Text className="lg:text-sm text-xs font-medium">
                           Were you first told in the past 12 months?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -213,12 +282,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           (medication) for diabetes prescribed by a doctor or
                           other health worker?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -233,12 +311,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           Are you currently taking insulin for diabetes
                           prescribed by a doctor or other health worker?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -253,12 +340,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           Have you ever seen a traditional healer for diabetes
                           or raised blood sugar?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -273,12 +369,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           Are you currently taking any herbal or traditional
                           remedy for your diabetes?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -302,9 +407,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                   Have you ever had your cholesterol (fat levels in your blood)
                   measured by a doctor or other health worker?
                 </Text>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={value} onCheckedChange={onChange} />
-                  <Text className="text-sm">Yes</Text>
+                <div className="flex space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value}
+                      onCheckedChange={() => onChange(true)}
+                    />
+                    <Text className="text-sm">Yes</Text>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value === false}
+                      onCheckedChange={() => onChange(false)}
+                    />
+                    <Text className="text-sm">No</Text>
+                  </div>
                 </div>
               </div>
             )}
@@ -339,12 +456,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                         <Text className="lg:text-sm text-xs font-medium">
                           Were you first told in the past 12 months?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -360,12 +486,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           treatment (medication) for raised total cholesterol
                           prescribed by a doctor or other health worker?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -380,12 +515,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           Have you ever seen a traditional healer for raised
                           cholesterol?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -400,12 +544,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                           Are you currently taking any herbal or traditional
                           remedy for your raised cholesterol?
                         </Text>
-                        <div className="flex items-center space-x-2">
-                          <Checkbox
-                            checked={value}
-                            onCheckedChange={onChange}
-                          />
-                          <Text className="text-sm">Yes</Text>
+                        <div className="flex space-x-3">
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value}
+                              onCheckedChange={() => onChange(true)}
+                            />
+                            <Text className="text-sm">Yes</Text>
+                          </div>
+                          <div className="flex items-center space-x-2">
+                            <Checkbox
+                              checked={value === false}
+                              onCheckedChange={() => onChange(false)}
+                            />
+                            <Text className="text-sm">No</Text>
+                          </div>
                         </div>
                       </div>
                     )}
@@ -430,9 +583,21 @@ export const HealthHistorySection = ({ control, watch }: Props) => {
                   disease (angina) or a stroke (cerebrovascular accident or
                   incident)?
                 </Text>
-                <div className="flex items-center space-x-2">
-                  <Checkbox checked={value} onCheckedChange={onChange} />
-                  <Text className="text-sm">Yes</Text>
+                <div className="flex space-x-3">
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value}
+                      onCheckedChange={() => onChange(true)}
+                    />
+                    <Text className="text-sm">Yes</Text>
+                  </div>
+                  <div className="flex items-center space-x-2">
+                    <Checkbox
+                      checked={value === false}
+                      onCheckedChange={() => onChange(false)}
+                    />
+                    <Text className="text-sm">No</Text>
+                  </div>
                 </div>
               </div>
             )}

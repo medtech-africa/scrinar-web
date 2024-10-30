@@ -1,3 +1,14 @@
+export interface Parent {
+  id: string
+  firstName?: string
+  lastName?: string
+  avatarUrl?: string
+  fullname?: string
+  gender: string
+  email?: string
+  mobile?: string
+}
+
 // Define the complete form types
 export type ParentFormData = {
   // Demographics
