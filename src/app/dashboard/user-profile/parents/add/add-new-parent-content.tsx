@@ -15,7 +15,7 @@ import toast from 'react-hot-toast'
 import { errorMessage } from '@/utils/errorMessage'
 import filterObject from '@/utils/filterObject'
 import useSelectImage from '@/hooks/useSelectImage'
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 import uploadImage from '@/utils/uploadImage'
 import ConditionAvatar from '@/components/ui/condition-avatar'
 import { IDataToSend, IFormValue } from './page'
@@ -91,7 +91,9 @@ export const AddNewParentContent = () => {
         onSuccess: (res) => {
           if (questionnaire) {
             const parentId = res.data?.data?.id
+            baseAxios.get(API.parentQuestionnaire(parentId))
             setParentAddedId(parentId)
+            setShowQuestionnaire(true)
           } else if (!questionnaire) {
             setSelectedImg(null)
             reset(defaultValues)
@@ -99,7 +101,7 @@ export const AddNewParentContent = () => {
           }
 
           toast.success(
-            `Successfully added student${questionnaire ? ', you can continue with the questionnaire' : ''}`
+            `Successfully saved parent${questionnaire ? ', you can continue with the questionnaire' : ''}`
           )
           queryClient.invalidateQueries('students' as any)
         },
@@ -111,12 +113,6 @@ export const AddNewParentContent = () => {
       setImageLoading(false)
     }
   }
-
-  useEffect(() => {
-    if (parentAddedId) {
-      setShowQuestionnaire(true)
-    }
-  }, [parentAddedId])
 
   const gender = watch('gender')?.value
 
@@ -244,7 +240,7 @@ export const AddNewParentContent = () => {
                 <Checkbox
                   checked={showQuestionnaire}
                   onCheckedChange={(val) => {
-                    if (Boolean(val) && !parentAddedId) {
+                    if (Boolean(val)) {
                       handleSubmit((data) => onSubmit(data, true))() // create a parent
                     } else {
                       setShowQuestionnaire(Boolean(val))
