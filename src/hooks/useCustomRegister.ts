@@ -21,16 +21,9 @@ export const useCustomRegister = (studentId: string) => {
           : value
 
       const key = newName(name)
-      const data = { [key]: currentValue?.toLowerCase() }
+      const data = { [key]: currentValue }
       if (currentValue) {
-        mutate(data, {
-          onSuccess: (res) => {
-            console.log('success', res?.data)
-          },
-          onError: (err) => {
-            console.log(err)
-          },
-        })
+        mutate(data)
       }
     }
 

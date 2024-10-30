@@ -2,10 +2,20 @@ import { Input } from '@/components/ui/input'
 import { PageCard } from '@/components/ui/page-card'
 import { Select } from '@/components/ui/select'
 import { useCustomRegister } from '@/hooks/useCustomRegister'
+import {
+  copingMechanismsOptions,
+  doctorVisitsFrequencyOptions,
+  everyDayOrFewTimesAWeekOptions,
+  houseChoresTypesOptions,
+  lessThanOneHourOptions,
+  outsidePhysicalActivitiesFrequencyOptions,
+  runningAndSportsOptions,
+  stressFactorsOptions,
+} from '@/types/studentsSurvey.types'
 import React from 'react'
 
 const PhysicalActivity = ({ studentId }: { studentId: string }) => {
-  const { customRegister, setValue } = useCustomRegister(studentId)
+  const { customRegister, setValue, watch } = useCustomRegister(studentId)
 
   return (
     <PageCard title="Physical Activity" bodyStyle="p-4">
@@ -13,12 +23,11 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('fruitsVegetables')}
           label="How often do you eat fruits and vegetables?"
-          options={[
-            { value: 'Every day', label: 'Every day' },
-            { value: 'A few times a week', label: 'A few times a week' },
-            { value: 'Rarely', label: 'Rarely' },
-            { value: 'Never', label: 'Never' },
-          ]}
+          options={everyDayOrFewTimesAWeekOptions}
+          value={{
+            value: watch('fruitsVegetables'),
+            label: watch('fruitsVegetables'),
+          }}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('fruitsVegetables', value)
@@ -29,12 +38,11 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('snacksConsumption')}
           label="How often do you consume snacks like buns, doughnut, etc.?"
-          options={[
-            { value: 'Every day', label: 'Every day' },
-            { value: 'A few times a week', label: 'A few times a week' },
-            { value: 'Rarely', label: 'Rarely' },
-            { value: 'Never', label: 'Never' },
-          ]}
+          value={{
+            value: watch('snacksConsumption'),
+            label: watch('snacksConsumption'),
+          }}
+          options={everyDayOrFewTimesAWeekOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('snacksConsumption', value)
@@ -45,12 +53,11 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('sugaryBeverages')}
           label="How often do you drink sugary beverages or eat sugary snacks?"
-          options={[
-            { value: 'Every day', label: 'Every day' },
-            { value: 'A few times a week', label: 'A few times a week' },
-            { value: 'Rarely', label: 'Rarely' },
-            { value: 'Never', label: 'Never' },
-          ]}
+          value={{
+            value: watch('sugaryBeverages'),
+            label: watch('sugaryBeverages'),
+          }}
+          options={everyDayOrFewTimesAWeekOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('sugaryBeverages', value)
@@ -61,12 +68,11 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('physicalActivityDuration')}
           label="How long do you usually engage in physical activity?"
-          options={[
-            { value: 'Less than 30 minutes', label: 'Less than 30 minutes' },
-            { value: '30 minutes to 1 hour', label: '30 minutes to 1 hour' },
-            { value: 'More than 1 hour', label: 'More than 1 hour' },
-            { value: 'Not applicable', label: 'Not applicable' },
-          ]}
+          value={{
+            value: watch('physicalActivityDuration'),
+            label: watch('physicalActivityDuration'),
+          }}
+          options={lessThanOneHourOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('physicalActivityDuration', value)
@@ -78,13 +84,10 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('physicalActivityTypes')}
           label="What types of physical activity and games do you enjoy?"
           isMulti
-          options={[
-            { value: 'Running', label: 'Running' },
-            { value: 'Playing sports', label: 'Playing sports' },
-            { value: 'Skipping', label: 'Skipping' },
-            { value: 'Dancing', label: 'Dancing' },
-            { value: 'Other', label: 'Other' },
-          ]}
+          value={watch('physicalActivityTypes')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
+          options={runningAndSportsOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('physicalActivityTypes', value)
@@ -95,13 +98,11 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('houseChoresFrequency')}
           label="How often do you participate in house chores that require physical effort?"
-          options={[
-            { value: 'Every day', label: 'Every day' },
-            { value: 'Several times a week', label: 'Several times a week' },
-            { value: 'Once a week', label: 'Once a week' },
-            { value: 'Less than once a week', label: 'Less than once a week' },
-            { value: 'Never', label: 'Never' },
-          ]}
+          value={{
+            value: watch('houseChoresFrequency'),
+            label: watch('houseChoresFrequency'),
+          }}
+          options={everyDayOrFewTimesAWeekOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('houseChoresFrequency', value)
@@ -113,18 +114,10 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('houseChoresTypes')}
           label="What types of house chores do you regularly perform that involve physical activity?"
           isMulti
-          options={[
-            { value: 'Fetching water', label: 'Fetching water' },
-            { value: 'Cooking', label: 'Cooking and preparing meals' },
-            { value: 'Cleaning', label: 'Cleaning the house' },
-            { value: 'Gardening', label: 'Gardening or farming' },
-            { value: 'Carrying heavy items', label: 'Carrying heavy items' },
-            {
-              value: 'Caring for siblings',
-              label: 'Caring for younger siblings',
-            },
-            { value: 'Other', label: 'Other' },
-          ]}
+          value={watch('houseChoresTypes')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
+          options={houseChoresTypesOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('houseChoresTypes', value)
@@ -135,13 +128,11 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('outsidePhysicalActivitiesFrequency')}
           label="How often do you perform physical activities outside of house chores?"
-          options={[
-            { value: 'Every day', label: 'Every day' },
-            { value: 'Several times a week', label: 'Several times a week' },
-            { value: 'Once a week', label: 'Once a week' },
-            { value: 'Less than once a week', label: 'Less than once a week' },
-            { value: 'Never', label: 'Never' },
-          ]}
+          options={outsidePhysicalActivitiesFrequencyOptions}
+          value={{
+            value: watch('outsidePhysicalActivitiesFrequency'),
+            label: watch('outsidePhysicalActivitiesFrequency'),
+          }}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('outsidePhysicalActivitiesFrequency', value)
@@ -182,18 +173,11 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('doctorVisitsFrequency')}
           label="How often do you visit the doctor for health check-ups?"
-          options={[
-            {
-              value: 'Regularly (e.g., once a year)',
-              label: 'Regularly (e.g., once a year)',
-            },
-            {
-              value: 'Occasionally (e.g., when sick)',
-              label: 'Occasionally (e.g., when sick)',
-            },
-            { value: 'Rarely', label: 'Rarely' },
-            { value: 'Never', label: 'Never' },
-          ]}
+          options={doctorVisitsFrequencyOptions}
+          value={{
+            value: watch('doctorVisitsFrequency'),
+            label: watch('doctorVisitsFrequency'),
+          }}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('doctorVisitsFrequency', value)
@@ -205,26 +189,10 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('copingMechanisms')}
           label="When you feel worried or upset, what helps you feel better?"
           isMulti
-          options={[
-            {
-              value: 'Talk to a family member or friend',
-              label: 'Talk to a family member or friend',
-            },
-            {
-              value: 'Do something I enjoy, like drawing or playing games',
-              label: 'Do something I enjoy, like drawing or playing games',
-            },
-            {
-              value: 'Play sports or run around',
-              label: 'Play sports or run around',
-            },
-            {
-              value: 'Listen to my favorite music',
-              label: 'Listen to my favorite music',
-            },
-            { value: 'Spend some time alone', label: 'Spend some time alone' },
-            { value: 'Other', label: 'Other' },
-          ]}
+          value={watch('copingMechanisms')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
+          options={copingMechanismsOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('copingMechanisms', value)
@@ -236,14 +204,10 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('stressFactors')}
           label="What things make you feel stressed?"
           isMulti
-          options={[
-            { value: 'Schoolwork', label: 'Schoolwork or tests' },
-            { value: 'Home problems', label: 'Home problems' },
-            { value: 'Family issues', label: 'Family issues' },
-            { value: 'Friendship issues', label: 'Friendship issues' },
-            { value: 'Health concerns', label: 'Health concerns' },
-            { value: 'Other', label: 'Other' },
-          ]}
+          value={watch('stressFactors')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
+          options={stressFactorsOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('stressFactors', value)

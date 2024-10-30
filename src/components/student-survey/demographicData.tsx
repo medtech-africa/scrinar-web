@@ -16,6 +16,7 @@ import {
   siblingPositionOptions,
   yearsAtSchoolOptions,
 } from '@/types/studentsSurvey.types'
+import { checkIfValueExists } from '@/utils/checkIfValueExist'
 
 const DemographicData = ({
   studentId,
@@ -25,40 +26,43 @@ const DemographicData = ({
   studentSurvey: any
 }) => {
   const { customRegister, setValue, watch } = useCustomRegister(studentId)
+  console.log(studentSurvey?.ethnicity)
   useEffect(() => {
     setValue('gender', studentSurvey?.gender)
     setValue('age', studentSurvey?.age)
-    setValue('ethnicity', studentSurvey?.ethnicity)
+    setValue(
+      'ethnicity',
+      checkIfValueExists(
+        ethnicityOptions,
+        studentSurvey?.ethnicity,
+        'ethnicity',
+        setValue
+      )
+    )
     setValue('ethnicityOther', studentSurvey?.ethnicityOther)
-    setValue('religion', studentSurvey?.religion)
+    setValue(
+      'religion',
+      checkIfValueExists(
+        religionOptions,
+        studentSurvey?.religion,
+        'religion',
+        setValue
+      )
+    )
     setValue('religionOther', studentSurvey?.religionOther)
     setValue('classLevel', studentSurvey?.classLevel)
     setValue('distanceToSchool', studentSurvey?.distanceToSchool)
     setValue('fatherOccupation', studentSurvey?.fatherOccupation)
+    setValue('motherOccupation', studentSurvey?.motherOccupation)
     setValue('healthStatus', studentSurvey?.healthStatus)
-    setValue('healthStatusOther', studentSurvey?.healthStatusOther)
+    setValue('communityName', studentSurvey?.communityName)
+    setValue('numberOfChildren', studentSurvey?.numberOfChildren)
+    setValue('healthProblems', studentSurvey?.healthProblems)
     setValue('livingSituation', studentSurvey?.livingSituation)
-    setValue('livingSituationOther', studentSurvey?.livingSituationOther)
     setValue('siblingPosition', studentSurvey?.siblingPosition)
     setValue('yearsAtSchool', studentSurvey?.yearsAtSchool)
-  }, [
-    setValue,
-    studentSurvey?.age,
-    studentSurvey?.classLevel,
-    studentSurvey?.distanceToSchool,
-    studentSurvey?.ethnicity,
-    studentSurvey?.ethnicityOther,
-    studentSurvey?.fatherOccupation,
-    studentSurvey?.gender,
-    studentSurvey?.healthStatus,
-    studentSurvey?.healthStatusOther,
-    studentSurvey?.livingSituation,
-    studentSurvey?.livingSituationOther,
-    studentSurvey?.religion,
-    studentSurvey?.religionOther,
-    studentSurvey?.siblingPosition,
-    studentSurvey?.yearsAtSchool,
-  ])
+    setValue('hpvVaccine', studentSurvey?.hpvVaccine)
+  }, [])
 
   return (
     <PageCard title="Demographic Data" bodyStyle="p-4">
@@ -76,42 +80,55 @@ const DemographicData = ({
         />
 
         <Input {...customRegister('age')} label="Age" type="number" />
-
-        <Select
-          {...customRegister('ethnicity')}
-          label="Ethnicity"
-          value={{ value: watch('ethnicity'), label: watch('ethnicity') }}
-          options={ethnicityOptions}
-          onChange={(selectedOption: any) => {
-            const value = selectedOption.value
-            setValue('ethnicity', value)
-          }}
-        />
-
-        {watch('ethnicity') === 'Other' && (
-          <Input
-            {...customRegister('ethnicityOther')}
-            label="Specify Ethnicity"
+        <PageCard
+          title="Ethnicity (If Other, Please Specify)"
+          bodyStyle="flex flex-col pb-4 px-4 gap-1"
+        >
+          <Select
+            {...customRegister('ethnicity')}
+            label="Ethnicity"
+            value={{ value: watch('ethnicity'), label: watch('ethnicity') }}
+            options={ethnicityOptions}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue('ethnicity', value)
+              setValue('ethnicityOther', '')
+            }}
           />
-        )}
 
-        <Select
-          {...customRegister('religion')}
-          label="Religion"
-          value={{ value: watch('religion'), label: watch('religion') }}
-          options={religionOptions}
-          onChange={(selectedOption: any) => {
-            const value = selectedOption.value
-            setValue('religion', value)
-          }}
-        />
+          {watch('ethnicity') === 'Other' && (
+            <Input
+              {...customRegister('ethnicityOther')}
+              label="Specify Ethnicity"
+              value={watch('ethnicityOther') || studentSurvey?.ethnicity}
+            />
+          )}
+        </PageCard>
 
-        {watch('religion') === 'Other' && (
-          <Input
-            {...customRegister('religionOther')}
-            label="Specify Religion"
+        <PageCard
+          title="Religion (If Other, Please Specify)"
+          bodyStyle="flex flex-col pb-4 px-4 gap-1"
+        >
+          <Select
+            {...customRegister('religion')}
+            label="Religion"
+            value={{ value: watch('religion'), label: watch('religion') }}
+            options={religionOptions}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue('religion', value)
+              setValue('religionOther', '')
+            }}
           />
-        )}
+
+          {watch('religion') === 'Other' && (
+            <Input
+              {...customRegister('religionOther')}
+              label="Specify Religion"
+              value={watch('religionOther') || studentSurvey?.religion}
+            />
+          )}
+        </PageCard>
 
         <Select
           {...customRegister('classLevel')}
@@ -215,28 +232,36 @@ const DemographicData = ({
         />
 
         {/* Health Problems */}
-
-        <Select
-          {...customRegister('healthProblems')}
-          value={{
-            value: watch('healthProblems'),
-            label: watch('healthProblems'),
-          }}
-          label="Do you have any health problems that you see a doctor for regularly?"
-          options={YesorNoOptions}
-          onChange={(selectedOption: any) => {
-            const value = selectedOption.value
-            setValue('healthProblems', value)
-          }}
-        />
-
-        {watch('healthProblems') === 'Yes, I have' && (
-          <Input
-            {...customRegister('healthProblemsOther')}
-            label="Specify if Yes (Health Problems)"
-            placeholder="Specify if Yes"
+        <PageCard
+          title="Health Problems (If Other, Please Specify)"
+          bodyStyle="flex flex-col pb-4 px-4 gap-1"
+        >
+          <Select
+            {...customRegister('healthProblems')}
+            value={{
+              value: watch('healthProblems'),
+              label: watch('healthProblems'),
+            }}
+            label="Do you have any health problems that you see a doctor for regularly?"
+            options={YesorNoOptions}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue('healthProblems', value)
+              setValue('healthProblemsOther', '')
+            }}
           />
-        )}
+
+          {watch('healthProblems') === 'Yes, I have' && (
+            <Input
+              {...customRegister('healthProblemsOther')}
+              label="Specify if Yes (Health Problems)"
+              placeholder="Specify if Yes"
+              value={
+                watch('healthProblemsOther') || studentSurvey?.healthProblems
+              }
+            />
+          )}
+        </PageCard>
 
         {/* Health Status */}
 

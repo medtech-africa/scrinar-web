@@ -2,8 +2,14 @@ import React from 'react'
 import { PageCard } from '@/components/ui/page-card'
 import { Select } from '@/components/ui/select'
 import { useCustomRegister } from '@/hooks/useCustomRegister'
+import {
+  alcoholRisksOptions,
+  importanceOfMentalHealthOptions,
+  smokingRisksOptions,
+  thoughtsOnSubstancesOptions,
+} from '@/types/studentsSurvey.types'
 const RiskyBehavior = ({ studentId }: { studentId: string }) => {
-  const { customRegister, setValue } = useCustomRegister(studentId)
+  const { customRegister, setValue, watch } = useCustomRegister(studentId)
 
   return (
     <PageCard title="Risky Behaviour and Stress" bodyStyle="p-4">
@@ -13,15 +19,10 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
           {...customRegister('smokingRisks')}
           label="What are some risks associated with smoking? (Select all that apply)"
           isMulti
-          options={[
-            { value: 'It can make you sick', label: 'It can make you sick' },
-            { value: 'It can help you relax', label: 'It can help you relax' },
-            {
-              value: 'It makes you more social',
-              label: 'It makes you more social',
-            },
-            { value: 'Other', label: 'Other (please specify)' },
-          ]}
+          value={watch('smokingRisks')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
+          options={smokingRisksOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('smokingRisks', value)
@@ -33,21 +34,10 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
           {...customRegister('alcoholRisks')}
           label="What are some risks associated with drinking alcohol? (Select all that apply)"
           isMulti
-          options={[
-            {
-              value: 'It can make you feel sick and dizzy',
-              label: 'It can make you feel sick and dizzy',
-            },
-            {
-              value: 'It makes you feel good',
-              label: 'It makes you feel good',
-            },
-            {
-              value: 'It helps you fit in with friends',
-              label: 'It helps you fit in with friends',
-            },
-            { value: 'Other', label: 'Other (please specify)' },
-          ]}
+          value={watch('alcoholRisks')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
+          options={alcoholRisksOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('alcoholRisks', value)
@@ -58,18 +48,11 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('thoughtsOnSubstances')}
           label="What do you think about smoking and drinking alcohol?"
-          options={[
-            {
-              value: 'They are harmful and should be avoided',
-              label: 'They are harmful and should be avoided',
-            },
-            {
-              value: 'They are harmful and should be avoided',
-              label: 'They are harmful and should be avoided',
-            },
-            { value: 'They are not harmful', label: 'They are not harmful' },
-            { value: "I don't know", label: 'I don’t know' },
-          ]}
+          options={thoughtsOnSubstancesOptions}
+          value={{
+            value: watch('thoughtsOnSubstances'),
+            label: watch('thoughtsOnSubstances'),
+          }}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('thoughtsOnSubstances', value)
@@ -80,12 +63,11 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('importanceOfMentalHealth')}
           label="How important do you think it is to take care of your mental health?"
-          options={[
-            { value: 'Very important', label: 'Very important' },
-            { value: 'Somewhat important', label: 'Somewhat important' },
-            { value: 'Not very important', label: 'Not very important' },
-            { value: 'Not important at all', label: 'Not important at all' },
-          ]}
+          options={importanceOfMentalHealthOptions}
+          value={{
+            value: watch('importanceOfMentalHealth'),
+            label: watch('importanceOfMentalHealth'),
+          }}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('importanceOfMentalHealth', value)

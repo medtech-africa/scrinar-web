@@ -1,7 +1,6 @@
 import { useForm, FormProvider } from 'react-hook-form'
 // import { ToastField } from '@/components/ui/toast'
 // import toast from 'react-hot-toast'
-import { IStudentsSurveyData } from '@/types/studentsSurvey.types'
 import DemographicData from '@/components/student-survey/demographicData'
 
 import * as Tabs from '@radix-ui/react-tabs'
@@ -9,7 +8,13 @@ import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { IconPicker } from '@/components/ui/icon-picker'
 import KAPSurvey from '@/components/student-survey/kapSurvey'
-import { useStudentsSurvey } from '@/hooks/queries/useStudentSurvey'
+import {
+  useMutateStudentsPostSurvey,
+  useStudentsSurvey,
+} from '@/hooks/queries/useStudentSurvey'
+import { cleanObject } from '@/utils/checkIfValueExist'
+import { errorMessage } from '@/utils/errorMessage'
+import toast from 'react-hot-toast'
 
 // const SelectedOption = {
 //   value: '',
@@ -26,7 +31,7 @@ export const Survey = ({
   onClose: () => void
   studentId: string
 }) => {
-  const methods = useForm<IStudentsSurveyData>({
+  const methods = useForm({
     // resolver: validation.survey,
   })
   const {
@@ -34,29 +39,19 @@ export const Survey = ({
     isLoading: isStudentSurveyLoading,
     refetch,
   } = useStudentsSurvey(studentId)
-  const onSubmit = (data: IStudentsSurveyData) => {
-    console.log(data)
-    // if (
-    //   !data.gender ||
-    //   !data.age ||
-    //   !data.birthday ||
-    //   !data.ethnicity ||
-    //   !data.religion ||
-    //   !data.classLevel ||
-    //   !data.distanceToSchool ||
-    //   !data.yearsAtSchool
-    // ) {
-    //   return toast.custom(
-    //     <ToastField
-    //       variant="warning2"
-    //       label="Please fill all the required fields"
-    //       action1={() => toast.remove()}
-    //     />
-    //   )
-    // }
+  const { mutate } = useMutateStudentsPostSurvey(studentId)
+  const onSubmit = (data: any) => {
+    console.log(cleanObject(data))
 
-    // toast.success('Form successfully submitted!')
-    // onClose()
+    mutate(cleanObject(data), {
+      onSuccess: () => {
+        refetch()
+        toast.success('Survey saved successfully')
+      },
+      onError: (err) => {
+        errorMessage(err)
+      },
+    })
   }
 
   return (

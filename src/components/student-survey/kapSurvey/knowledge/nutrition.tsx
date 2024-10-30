@@ -3,14 +3,20 @@ import { PageCard } from '@/components/ui/page-card'
 import { Select } from '@/components/ui/select'
 import { Input } from '@/components/ui/input'
 import { useCustomRegister } from '@/hooks/useCustomRegister'
+import {
+  activityBenefitsOptions,
+  balancedDietOptions,
+  dietConsequenceOptions,
+  exerciseActivitiesOptions,
+  fatExamplesOptions,
+  physicalActivityOptions,
+  proteinExamplesOptions,
+  saltyFoodEffectOptions,
+  sweetsEffectOptions,
+  vitaminExamplesOptions,
+} from '@/types/studentsSurvey.types'
 
-const Nutrition = ({
-  studentId,
-  // studentSurvey,
-}: {
-  studentId: string
-  // studentSurvey: any
-}) => {
+const Nutrition = ({ studentId }: { studentId: string }) => {
   const { customRegister, setValue, watch } = useCustomRegister(studentId)
 
   return (
@@ -19,56 +25,49 @@ const Nutrition = ({
         <Select
           {...customRegister('balancedDiet')}
           label="What is a balanced diet?"
-          options={[
-            {
-              value: 'Only fruits and vegetables',
-              label: 'Only fruits and vegetables',
-            },
-            {
-              value: 'All food groups',
-              label: 'All food groups',
-            },
-            { value: 'I don’t know', label: 'I don’t know' },
-          ]}
+          value={{
+            value: watch('balancedDiet'),
+            label: watch('balancedDiet'),
+          }}
+          options={balancedDietOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('balancedDiet', value)
           }}
         />
-
-        <Select
-          {...customRegister('dietConsequence')}
-          label="What can happen if you don’t eat a balanced diet?"
-          options={[
-            {
-              value: 'I can become sick more often',
-              label: 'I can become sick more often',
-            },
-            {
-              value: 'I will have more energy',
-              label: 'I will have more energy',
-            },
-            { value: 'I will become taller', label: 'I will become taller' },
-            { value: 'I don’t know', label: 'I don’t know' },
-            { value: 'Other', label: 'Other' },
-          ]}
-          onChange={(selectedOption: any) => {
-            const value = selectedOption.value
-            setValue('dietConsequence', value)
-          }}
-        />
-
-        {watch('dietConsequence') === 'Other' && (
-          <Input
-            {...customRegister('dietConsequenceOther')}
-            label="Specify if Others (Diet Consequence)"
-            placeholder="Specify if Others"
+        <PageCard
+          title="Diet Consequence (If Other, Please Specify)"
+          bodyStyle="flex flex-col pb-4 px-4 gap-1"
+        >
+          <Select
+            {...customRegister('dietConsequence')}
+            label="What can happen if you don’t eat a balanced diet?"
+            value={{
+              value: watch('dietConsequence'),
+              label: watch('dietConsequence'),
+            }}
+            options={dietConsequenceOptions}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue('dietConsequence', value)
+            }}
           />
-        )}
+
+          {watch('dietConsequence') === 'Other' && (
+            <Input
+              {...customRegister('dietConsequenceOther')}
+              label="Specify if Others (Diet Consequence)"
+              placeholder="Specify if Others"
+            />
+          )}
+        </PageCard>
 
         <Select
           {...customRegister('carbExamples')}
           isCreatable
+          value={watch('carbExamples')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
           isMulti
           label="*Examples of Carbohydrates"
           options={[{ value: 'Rice', label: 'Rice' }]}
@@ -82,16 +81,13 @@ const Nutrition = ({
         <Select
           {...customRegister('proteinExamples')}
           isCreatable
+          value={watch('proteinExamples')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
           isMulti
           label="Examples of Proteins"
           placeholder="E.g., meat, eggs"
-          options={[
-            { value: 'Meat', label: 'Meat' },
-            { value: 'Eggs', label: 'Eggs' },
-            { value: 'Fish', label: 'Fish' },
-            { value: 'Dairy', label: 'Dairy' },
-            { value: 'Vegetables', label: 'Vegetables' },
-          ]}
+          options={proteinExamplesOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('proteinExamples', value)
@@ -102,14 +98,12 @@ const Nutrition = ({
           {...customRegister('fatExamples')}
           isCreatable
           isMulti
+          value={watch('fatExamples')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
           label="Examples of Fats and Oils"
           placeholder="E.g., butter, oil"
-          options={[
-            { value: 'Butter', label: 'Butter' },
-            { value: 'Margarine', label: 'Margarine' },
-            { value: 'Olive Oil', label: 'Olive Oil' },
-            { value: 'Vegetable Oil', label: 'Vegetable Oil' },
-          ]}
+          options={fatExamplesOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('fatExamples', value)
@@ -119,147 +113,117 @@ const Nutrition = ({
         <Select
           {...customRegister('vitaminExamples')}
           isCreatable
+          value={watch('vitaminExamples')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
           isMulti
           label="Examples of Vitamins and Minerals"
           placeholder="E.g., fruits, vegetables"
-          options={[
-            { value: 'Vitamin A', label: 'Vitamin A (e.g., Carrots)' },
-            { value: 'Vitamin C', label: 'Vitamin C (e.g., Oranges)' },
-            { value: 'Vitamin D', label: 'Vitamin D (e.g., Fish Oil)' },
-            { value: 'Vitamin E', label: 'Vitamin E (e.g., Nuts)' },
-            { value: 'Vitamin K', label: 'Vitamin K (e.g., Leafy Greens)' },
-          ]}
+          options={vitaminExamplesOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('vitaminExamples', value)
           }}
         />
-
-        <Select
-          {...customRegister('sweetsEffect')}
-          label="Why is it bad to eat too many sweets?"
-          options={[
-            {
-              value: 'Tooth decay and weight gain',
-              label: 'Tooth decay and weight gain',
-            },
-            {
-              value: 'It makes you grow taller',
-              label: 'It makes you grow taller',
-            },
-            {
-              value: 'It gives you more energy for school',
-              label: 'It gives you more energy for school',
-            },
-            { value: 'I don’t know', label: 'I don’t know' },
-            { value: 'Other', label: 'Other' },
-          ]}
-          onChange={(selectedOption: any) => {
-            const value = selectedOption.value
-            setValue('sweetsEffect', value)
-          }}
-        />
-        {watch('sweetsEffect') === 'Other' && (
-          <Input
-            {...customRegister('sweetsEffectOther')}
-            label="Specify if Others (Sweets Effect)"
-            placeholder="Specify if Others"
-          />
-        )}
-
-        <Select
-          {...customRegister('saltyFoodEffect')}
-          label="What happens if you eat too much salty or oily food?"
-          options={[
-            {
-              value: 'It can make your heart unhealthy',
-              label: 'It can make your heart unhealthy',
-            },
-            {
-              value: 'It helps you run faster',
-              label: 'It helps you run faster',
-            },
-            {
-              value: 'It gives you stronger bones',
-              label: 'It gives you stronger bones',
-            },
-            { value: 'I don’t know', label: 'I don’t know' },
-            { value: 'Other', label: 'Other' },
-          ]}
-          onChange={(selectedOption: any) => {
-            const value = selectedOption.value
-            setValue('saltyFoodEffect', value)
-          }}
-        />
-        {watch('saltyFoodEffect') === 'Other' && (
-          <Input
-            {...customRegister('saltyFoodEffectOther')}
-            label="Specify if Others (Salty Food Effect)"
-            placeholder="Specify if Others"
+        <PageCard
+          title="Sweets Effect (If Other, Please Specify)"
+          bodyStyle="flex flex-col pb-4 px-4 gap-1"
+        >
+          <Select
+            {...customRegister('sweetsEffect')}
+            label="Why is it bad to eat too many sweets?"
+            value={{
+              value: watch('sweetsEffect'),
+              label: watch('sweetsEffect'),
+            }}
+            options={sweetsEffectOptions}
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
-              setValue('saltyFoodEffectOther', value)
+              setValue('sweetsEffect', value)
             }}
           />
-        )}
+          {watch('sweetsEffect') === 'Other' && (
+            <Input
+              {...customRegister('sweetsEffectOther')}
+              label="Specify if Others (Sweets Effect)"
+              placeholder="Specify if Others"
+            />
+          )}
+        </PageCard>
+        <PageCard
+          title="Activity Benefits (If Other, Please Specify)"
+          bodyStyle="flex flex-col pb-4 px-4 gap-1"
+        >
+          <Select
+            {...customRegister('saltyFoodEffect')}
+            label="What happens if you eat too much salty or oily food?"
+            value={{
+              value: watch('saltyFoodEffect'),
+              label: watch('saltyFoodEffect'),
+            }}
+            options={saltyFoodEffectOptions}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue('saltyFoodEffect', value)
+            }}
+          />
+          {watch('saltyFoodEffect') === 'Other' && (
+            <Input
+              {...customRegister('saltyFoodEffectOther')}
+              label="Specify if Others (Salty Food Effect)"
+              placeholder="Specify if Others"
+            />
+          )}
+        </PageCard>
 
         <Select
           {...customRegister('physicalActivity')}
           label="How much physical activity should you do daily?"
-          options={[
-            { value: '30 minutes', label: '30 minutes' },
-            { value: '1 hour', label: '1 hour' },
-            { value: '2 hours', label: '2 hours' },
-            { value: 'I don’t know', label: 'I don’t know' },
-          ]}
+          value={{
+            value: watch('physicalActivity'),
+            label: watch('physicalActivity'),
+          }}
+          options={physicalActivityOptions}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
             setValue('physicalActivity', value)
           }}
         />
-
-        <Select
-          {...customRegister('activityBenefits')}
-          label="What are the benefits of physical activity?"
-          options={[
-            {
-              value: 'Better health and stronger muscles',
-              label: 'Better health and stronger muscles',
-            },
-            { value: 'It makes you tired', label: 'It makes you tired' },
-            {
-              value: 'It doesn’t have any benefit',
-              label: 'It doesn’t have any benefit',
-            },
-            { value: 'I don’t know', label: 'I don’t know' },
-            { value: 'Other', label: 'Other' },
-          ]}
-          onChange={(selectedOption: any) => {
-            const value = selectedOption.value
-            setValue('activityBenefits', value)
-          }}
-        />
-        {watch('activityBenefits') === 'Other' && (
-          <Input
-            {...customRegister('activityBenefitsOther')}
-            label="Specify if Others (Activity Benefits)"
-            placeholder="Specify if Others"
+        <PageCard
+          title="Activity Benefits (If Other, Please Specify)"
+          bodyStyle="flex flex-col pb-4 px-4 gap-1"
+        >
+          <Select
+            {...customRegister('activityBenefits')}
+            label="What are the benefits of physical activity?"
+            value={{
+              value: watch('activityBenefits'),
+              label: watch('activityBenefits'),
+            }}
+            options={activityBenefitsOptions}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue('activityBenefits', value)
+            }}
           />
-        )}
+          {watch('activityBenefits') === 'Other' && (
+            <Input
+              {...customRegister('activityBenefitsOther')}
+              label="Specify if Others (Activity Benefits)"
+              placeholder="Specify if Others"
+            />
+          )}
+        </PageCard>
 
         <Select
           {...customRegister('exerciseActivities')}
           isCreatable
           label="What types of activities are good for exercise?"
           isMulti
-          options={[
-            {
-              value: 'Running and playing sports',
-              label: 'Running and playing sports',
-            },
-            { value: 'Walking', label: 'Walking' },
-            { value: 'Swimming', label: 'Swimming' },
-          ]}
+          value={watch('exerciseActivities')?.map((option: any) => {
+            return { value: option, label: option }
+          })}
+          options={exerciseActivitiesOptions}
           placeholder="E.g., running, swimming"
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)

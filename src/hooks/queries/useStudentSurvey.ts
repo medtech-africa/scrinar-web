@@ -21,4 +21,14 @@ const useMutateStudentsSurvey = (id: string) => {
     mutationKey: ['mutate_students_survey', id],
   })
 }
-export { useMutateStudentsSurvey, useStudentsSurvey }
+const useMutateStudentsPostSurvey = (id: string) => {
+  return useMutation<AxiosResponse, AxiosError['response'], any>({
+    mutationFn: (val: any) => baseAxios.post(API.studentSurvey(id), val),
+    mutationKey: ['mutate_students_survey_post', id],
+  })
+}
+export {
+  useMutateStudentsSurvey,
+  useStudentsSurvey,
+  useMutateStudentsPostSurvey,
+}

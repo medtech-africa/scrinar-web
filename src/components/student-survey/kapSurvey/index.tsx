@@ -5,6 +5,7 @@ import Knowledge from './knowledge'
 import Attitude from './attitude'
 import Practice from './practice'
 import Dietary from '../dietary'
+import { useStudentsSurvey } from '@/hooks/queries/useStudentSurvey'
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
   'data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:font-bold data-[state=active]:text-grey-900'
@@ -16,6 +17,7 @@ const KAPSurvey = ({
   studentId: string
   studentSurvey: any
 }) => {
+  const { refetch } = useStudentsSurvey(studentId)
   // useEffect(() => {
   //   setValue
   // })
@@ -36,16 +38,16 @@ const KAPSurvey = ({
         </Tabs.Trigger>
       </Tabs.List>
 
-      <Tabs.Content value="knowledge">
+      <Tabs.Content value="knowledge" onClick={() => refetch()}>
         <Knowledge studentId={studentId} studentSurvey={studentSurvey} />
       </Tabs.Content>
-      <Tabs.Content value="attitude">
-        <Attitude studentId={studentId} />
+      <Tabs.Content value="attitude" onClick={() => refetch()}>
+        <Attitude studentId={studentId} studentSurvey={studentSurvey} />
       </Tabs.Content>
-      <Tabs.Content value="practice">
-        <Practice studentId={studentId} />
+      <Tabs.Content value="practice" onClick={() => refetch()}>
+        <Practice studentId={studentId} studentSurvey={studentSurvey} />
       </Tabs.Content>
-      <Tabs.Content value="dietary">
+      <Tabs.Content value="dietary" onClick={() => refetch()}>
         <Dietary />
       </Tabs.Content>
     </Tabs.Root>
