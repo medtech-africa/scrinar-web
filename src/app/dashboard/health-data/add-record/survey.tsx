@@ -15,11 +15,6 @@ import {
 import { cleanObject } from '@/utils/checkIfValueExist'
 import { errorMessage } from '@/utils/errorMessage'
 import toast from 'react-hot-toast'
-
-// const SelectedOption = {
-//   value: '',
-//   label: '',
-// }
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
   'data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:font-bold data-[state=active]:text-grey-900'
@@ -41,8 +36,6 @@ export const Survey = ({
   } = useStudentsSurvey(studentId)
   const { mutate } = useMutateStudentsPostSurvey(studentId)
   const onSubmit = (data: any) => {
-    console.log(cleanObject(data))
-
     mutate(cleanObject(data), {
       onSuccess: () => {
         refetch()

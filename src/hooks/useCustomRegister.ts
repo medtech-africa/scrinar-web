@@ -5,7 +5,6 @@ export const useCustomRegister = (studentId: string) => {
   const { register, setValue, watch } = useFormContext()
   const { mutate } = useMutateStudentsSurvey(studentId)
 
-  // customRegister no longer uses useCallback
   const customRegister = (name: string, options: any = {}) => {
     const { onBlur: originalBlur, ...rest } = register(name, options)
 

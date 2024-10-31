@@ -18,9 +18,6 @@ const KAPSurvey = ({
   studentSurvey: any
 }) => {
   const { refetch } = useStudentsSurvey(studentId)
-  // useEffect(() => {
-  //   setValue
-  // })
   return (
     <Tabs.Root className="TabsRoot" defaultValue="knowledge">
       <Tabs.List className="mb-4" aria-label="Student Questionnaire">

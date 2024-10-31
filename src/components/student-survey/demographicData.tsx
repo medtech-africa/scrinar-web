@@ -26,7 +26,6 @@ const DemographicData = ({
   studentSurvey: any
 }) => {
   const { customRegister, setValue, watch } = useCustomRegister(studentId)
-  console.log(studentSurvey?.ethnicity)
   useEffect(() => {
     setValue('gender', studentSurvey?.gender)
     setValue('age', studentSurvey?.age)
