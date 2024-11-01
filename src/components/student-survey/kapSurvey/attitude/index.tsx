@@ -72,7 +72,26 @@ const Attitude = ({
       'importanceOfMentalHealth',
       studentSurvey?.importanceOfMentalHealth
     )
-  }, [])
+  }, [
+    studentSurvey?.balancedDietImportance,
+    studentSurvey?.eatingHealthyFoods,
+    studentSurvey?.snackPreference,
+    studentSurvey?.idealBodySizeBoys,
+    studentSurvey?.idealBodySizeGirls,
+    studentSurvey?.regularPhysicalActivity,
+    studentSurvey?.barriersToPhysicalActivity,
+    studentSurvey?.importanceOfPhysicalActivity,
+    studentSurvey?.suitableActivitiesBoys,
+    studentSurvey?.suitableActivitiesGirls,
+    studentSurvey?.sameTypesOfSportsAndActivities,
+    studentSurvey?.timeForPhysicalActivities,
+    studentSurvey?.moreOpportunitiesOutsideHouseChores,
+    studentSurvey?.smokingRisks,
+    studentSurvey?.alcoholRisks,
+    studentSurvey?.thoughtsOnSubstances,
+    studentSurvey?.importanceOfMentalHealth,
+    setValue,
+  ])
   return (
     <div className="flex flex-col gap-2">
       <Nutrition studentId={studentId} studentSurvey={studentSurvey} />

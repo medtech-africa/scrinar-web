@@ -38,7 +38,6 @@ const DemographicData = ({
         setValue
       )
     )
-    setValue('ethnicityOther', studentSurvey?.ethnicityOther)
     setValue(
       'religion',
       checkIfValueExists(
@@ -48,7 +47,6 @@ const DemographicData = ({
         setValue
       )
     )
-    setValue('religionOther', studentSurvey?.religionOther)
     setValue('classLevel', studentSurvey?.classLevel)
     setValue('distanceToSchool', studentSurvey?.distanceToSchool)
     setValue('fatherOccupation', studentSurvey?.fatherOccupation)
@@ -61,7 +59,25 @@ const DemographicData = ({
     setValue('siblingPosition', studentSurvey?.siblingPosition)
     setValue('yearsAtSchool', studentSurvey?.yearsAtSchool)
     setValue('hpvVaccine', studentSurvey?.hpvVaccine)
-  }, [])
+  }, [
+    studentSurvey?.age,
+    studentSurvey?.classLevel,
+    studentSurvey?.communityName,
+    studentSurvey?.distanceToSchool,
+    studentSurvey?.ethnicity,
+    studentSurvey?.fatherOccupation,
+    studentSurvey?.gender,
+    studentSurvey?.healthProblems,
+    studentSurvey?.healthStatus,
+    studentSurvey?.livingSituation,
+    studentSurvey?.motherOccupation,
+    studentSurvey?.numberOfChildren,
+    studentSurvey?.religion,
+    studentSurvey?.siblingPosition,
+    studentSurvey?.yearsAtSchool,
+    studentSurvey?.hpvVaccine,
+    setValue,
+  ])
 
   return (
     <PageCard title="Demographic Data" bodyStyle="p-4">
@@ -246,7 +262,6 @@ const DemographicData = ({
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('healthProblems', value)
-              setValue('healthProblemsOther', '')
             }}
           />
 
@@ -256,7 +271,8 @@ const DemographicData = ({
               label="Specify if Yes (Health Problems)"
               placeholder="Specify if Yes"
               value={
-                watch('healthProblemsOther') || studentSurvey?.healthProblems
+                watch('healthProblemsOther') ||
+                studentSurvey?.healthProblemsOther
               }
             />
           )}

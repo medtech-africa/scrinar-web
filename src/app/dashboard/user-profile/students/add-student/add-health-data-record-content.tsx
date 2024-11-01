@@ -447,7 +447,11 @@ export const AddHealthDataRecord = ({
               variant="text/sm"
               className="text-primary cursor-pointer underline"
               as="span"
-              onClick={(e) => handleSubmit(e, true)}
+              onClick={(e) =>
+                studentAddedId
+                  ? (setModalType('Survey'), setOpenModal(true))
+                  : handleSubmit(e, true)
+              }
             >
               Start Survey
             </Text>

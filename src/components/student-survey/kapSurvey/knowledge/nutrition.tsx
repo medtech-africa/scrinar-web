@@ -16,7 +16,13 @@ import {
   vitaminExamplesOptions,
 } from '@/types/studentsSurvey.types'
 
-const Nutrition = ({ studentId }: { studentId: string }) => {
+const Nutrition = ({
+  studentId,
+  studentSurvey,
+}: {
+  studentId: string
+  studentSurvey?: any
+}) => {
   const { customRegister, setValue, watch } = useCustomRegister(studentId)
 
   return (
@@ -50,6 +56,7 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('dietConsequence', value)
+              setValue('dietConsequenceOther', '')
             }}
           />
 
@@ -57,6 +64,10 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
             <Input
               {...customRegister('dietConsequenceOther')}
               label="Specify if Others (Diet Consequence)"
+              value={
+                watch('dietConsequenceOther') ||
+                studentSurvey?.dietConsequenceOther
+              }
               placeholder="Specify if Others"
             />
           )}
@@ -144,6 +155,7 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('sweetsEffect', value)
+              setValue('sweetsEffectOther', '')
             }}
           />
           {watch('sweetsEffect') === 'Other' && (
@@ -151,11 +163,14 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
               {...customRegister('sweetsEffectOther')}
               label="Specify if Others (Sweets Effect)"
               placeholder="Specify if Others"
+              value={
+                watch('sweetsEffectOther') || studentSurvey?.sweetsEffectOther
+              }
             />
           )}
         </PageCard>
         <PageCard
-          title="Activity Benefits (If Other, Please Specify)"
+          title="Salty Food Effect (If Other, Please Specify)"
           bodyStyle="flex flex-col pb-4 px-4 gap-1"
         >
           <Select
@@ -169,6 +184,7 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('saltyFoodEffect', value)
+              setValue('saltyFoodEffectOther', '')
             }}
           />
           {watch('saltyFoodEffect') === 'Other' && (
@@ -176,6 +192,10 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
               {...customRegister('saltyFoodEffectOther')}
               label="Specify if Others (Salty Food Effect)"
               placeholder="Specify if Others"
+              value={
+                watch('saltyFoodEffectOther') ||
+                studentSurvey?.saltyFoodEffectOther
+              }
             />
           )}
         </PageCard>
@@ -208,6 +228,7 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('activityBenefits', value)
+              setValue('activityBenefitsOther', '')
             }}
           />
           {watch('activityBenefits') === 'Other' && (
@@ -215,6 +236,10 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
               {...customRegister('activityBenefitsOther')}
               label="Specify if Others (Activity Benefits)"
               placeholder="Specify if Others"
+              value={
+                watch('activityBenefitsOther') ||
+                studentSurvey?.activityBenefitsOther
+              }
             />
           )}
         </PageCard>

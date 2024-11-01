@@ -7,7 +7,7 @@ import { Select } from '../ui/select'
 const Dietary = ({ studentSurvey }: { studentSurvey: any }) => {
   const { register, setValue, watch } = useFormContext()
   useEffect(() => {
-    studentSurvey.forEach((meal: any, index: number) => {
+    studentSurvey?.meals.forEach((meal: any, index: number) => {
       setValue(`meals[${index}].time`, meal.time || '')
       setValue(`meals[${index}].type`, meal.type || '')
       setValue(`meals[${index}].foodName`, meal.foodName || '')
@@ -48,7 +48,8 @@ const Dietary = ({ studentSurvey }: { studentSurvey: any }) => {
                     { value: 'Snack', label: 'Snack' },
                   ]}
                   onChange={(selectedOption: any) => {
-                    setValue(`meals[${index}].type`, selectedOption.value)
+                    const value = selectedOption.value
+                    setValue(`meals[${index}].type`, value)
                   }}
                 />
               </div>

@@ -33,6 +33,7 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('smokingDrinkingEffects', value)
+              setValue('smokingDrinkingEffectsOther', '')
             }}
           />
           {watch('smokingDrinkingEffects') === 'Other' && (
@@ -60,6 +61,7 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('healthCheckupsImportance', value)
+              setValue('healthCheckupsImportanceOther', '')
             }}
           />
           {watch('healthCheckupsImportance') === 'Other' && (
@@ -103,6 +105,7 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('feelingsOfstress', value)
+              setValue('feelingsOfstressOther', '')
             }}
           />
           {watch('feelingsOfstress') === 'Other' && (
@@ -130,6 +133,7 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('stressSigns', value)
+              setValue('stressSignsOther', '')
             }}
           />
           {watch('stressSigns') === 'Other' && (

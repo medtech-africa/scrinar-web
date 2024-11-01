@@ -5,10 +5,13 @@ import RiskyBehavior from './riskyBehavior'
 import { useCustomRegister } from '@/hooks/useCustomRegister'
 import { checkIfValueExists } from '@/utils/checkIfValueExist'
 import {
+  activityBenefitsOptions,
+  dietConsequenceOptions,
   feelingsOfstressOptions,
   healthCheckupsImportanceOptions,
   smokingDrinkingEffectsOptions,
   stressSignsOptions,
+  sweetsEffectOptions,
 } from '@/types/studentsSurvey.types'
 
 const Knowledge = ({
@@ -22,15 +25,39 @@ const Knowledge = ({
 
   React.useEffect(() => {
     setValue('balancedDiet', studentSurvey?.balancedDiet)
-    setValue('dietConsequence', studentSurvey?.dietConsequence)
+    setValue(
+      'dietConsequence',
+      checkIfValueExists(
+        dietConsequenceOptions,
+        studentSurvey?.dietConsequence,
+        'dietConsequence',
+        setValue
+      )
+    )
     setValue('carbExamples', studentSurvey?.carbExamples)
     setValue('proteinExamples', studentSurvey?.proteinExamples)
     setValue('fatExamples', studentSurvey?.fatExamples)
     setValue('vitaminExamples', studentSurvey?.vitaminExamples)
-    setValue('sweetsEffect', studentSurvey?.sweetsEffect)
+    setValue(
+      'sweetsEffect',
+      checkIfValueExists(
+        sweetsEffectOptions,
+        studentSurvey?.sweetsEffect,
+        'sweetsEffect',
+        setValue
+      )
+    )
     setValue('saltyFoodEffect', studentSurvey?.saltyFoodEffect)
     setValue('physicalActivity', studentSurvey?.physicalActivity)
-    setValue('activityBenefits', studentSurvey?.activityBenefits)
+    setValue(
+      'activityBenefits',
+      checkIfValueExists(
+        activityBenefitsOptions,
+        studentSurvey?.activityBenefits,
+        'activityBenefits',
+        setValue
+      )
+    )
     setValue('exerciseActivities', studentSurvey?.exerciseActivities)
     //PhysicalActivity
     setValue('fruitsVegetables', studentSurvey?.fruitsVegetables)
@@ -130,7 +157,7 @@ const Knowledge = ({
   ])
   return (
     <div className="flex flex-col gap-2">
-      <Nutrition studentId={studentId} />
+      <Nutrition studentId={studentId} studentSurvey={studentSurvey} />
 
       <PhysicalActivity studentId={studentId} />
 

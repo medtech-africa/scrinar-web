@@ -84,6 +84,7 @@ const Nutrition = ({
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('idealBodySizeBoys', value)
+              setValue('idealBodySizeBoysOther', '')
             }}
           />
           {watch('idealBodySizeBoys') === 'Other' && (
@@ -115,6 +116,7 @@ const Nutrition = ({
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
               setValue('idealBodySizeGirls', value)
+              setValue('idealBodySizeGirlsOther', '')
             }}
           />
           {watch('idealBodySizeGirls') === 'Other' && (

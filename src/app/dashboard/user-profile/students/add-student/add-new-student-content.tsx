@@ -43,8 +43,10 @@ export const AddNewStudentContent = () => {
     mutate,
     reset: postReset,
   } = useMutation({
-    mutationFn: (dataToSend: IDataToSend) =>
-      baseAxios.post(API.students, dataToSend),
+    mutationFn: ({ id, ...dataToSend }: IDataToSend) =>
+      id
+        ? baseAxios.patch(API.student(id), dataToSend)
+        : baseAxios.post(API.students, dataToSend),
   })
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
@@ -84,13 +86,18 @@ export const AddNewStudentContent = () => {
   }
 
   const { setExerciseData, setNutritionalData } = useHealthValue()
-  const handleHealthData = (userId = '', healthData?: HealthDataPayloadEx) => {
+  const handleHealthData = (
+    userId = '',
+    healthData?: HealthDataPayloadEx,
+    showSurveys = false
+  ) => {
     const dataToSend = {
       userId,
       ...healthData,
     }
     mutateHealthData(dataToSend, {
       onSuccess: () => {
+        if (showSurveys) return
         toast.success('Successfully added student and health data')
         setResetFields(true)
         reset(defaultValues)
@@ -140,7 +147,7 @@ export const AddNewStudentContent = () => {
               setStudentAddedId(studentId)
               return
             } else if (showSurveys) {
-              handleHealthData(studentId, healthData)
+              handleHealthData(studentId, healthData, true)
               setStudentAddedId(studentId)
               setModalType('Survey'), setOpenModal(true)
             } else {
@@ -168,7 +175,6 @@ export const AddNewStudentContent = () => {
     healthData: HealthDataPayloadEx,
     showSurveys?: boolean
   ) => {
-    // console.log(showSurveys, 'showSurveys')
     handleSubmit((data) => onSubmit(data, healthData, showSurveys))()
   }
 
