@@ -84,6 +84,7 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('physicalActivityTypes')}
           label="What types of physical activity and games do you enjoy?"
           isMulti
+          isClearable={false}
           value={watch('physicalActivityTypes')?.map((option: any) => {
             return { value: option, label: option }
           })}
@@ -114,6 +115,7 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('houseChoresTypes')}
           label="What types of house chores do you regularly perform that involve physical activity?"
           isMulti
+          isClearable={false}
           value={watch('houseChoresTypes')?.map((option: any) => {
             return { value: option, label: option }
           })}
@@ -189,6 +191,7 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('copingMechanisms')}
           label="When you feel worried or upset, what helps you feel better?"
           isMulti
+          isClearable={false}
           value={watch('copingMechanisms')?.map((option: any) => {
             return { value: option, label: option }
           })}
@@ -204,6 +207,7 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('stressFactors')}
           label="What things make you feel stressed?"
           isMulti
+          isClearable={false}
           value={watch('stressFactors')?.map((option: any) => {
             return { value: option, label: option }
           })}

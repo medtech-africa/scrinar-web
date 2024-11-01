@@ -51,6 +51,7 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('favoriteActivities')}
           label="What types of physical activity and games do you enjoy? (Select all that apply)"
           isMulti
+          isClearable={false}
           value={watch('favoriteActivities')?.map((option: any) => {
             return { value: option, label: option }
           })}
@@ -81,6 +82,7 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('physicalChores')}
           label="What types of house chores do you regularly perform that involve physical activity and make you sweat? (Select all that apply)"
           isMulti
+          isClearable={false}
           value={watch('physicalChores')?.map((option: any) => {
             return { value: option, label: option }
           })}

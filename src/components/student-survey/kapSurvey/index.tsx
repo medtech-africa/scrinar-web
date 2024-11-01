@@ -45,7 +45,7 @@ const KAPSurvey = ({
         <Practice studentId={studentId} studentSurvey={studentSurvey} />
       </Tabs.Content>
       <Tabs.Content value="dietary" onClick={() => refetch()}>
-        <Dietary />
+        <Dietary studentSurvey={studentSurvey} />
       </Tabs.Content>
     </Tabs.Root>
   )

@@ -76,6 +76,7 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
           {...customRegister('stressCauses')}
           label="Which of the following can cause stress?"
           isMulti
+          isClearable={false}
           value={watch('stressCauses')?.map((option: any) => {
             return { value: option, label: option }
           })}

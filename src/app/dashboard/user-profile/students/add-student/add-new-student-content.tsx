@@ -46,6 +46,8 @@ export const AddNewStudentContent = () => {
     mutationFn: (dataToSend: IDataToSend) =>
       baseAxios.post(API.students, dataToSend),
   })
+  const [modalType, setModalType] = useState('')
+  const [openModal, setOpenModal] = useState(false)
 
   const { isPending, mutate: mutateHealthData } = useMutation({
     mutationFn: (data: HealthDataPayload) =>
@@ -107,7 +109,8 @@ export const AddNewStudentContent = () => {
 
   const onSubmit = async (
     data: IFormValue,
-    healthData?: HealthDataPayloadEx
+    healthData?: HealthDataPayloadEx,
+    showSurveys = false
   ) => {
     resetFields && setResetFields(false)
 
@@ -131,18 +134,23 @@ export const AddNewStudentContent = () => {
       try {
         await mutate(dataToSend, {
           onSuccess: (res) => {
-            if (healthData) {
-              const studentId = res.data?.data?.id
+            const studentId = res.data?.data?.id
+            if (healthData && !showSurveys) {
               handleHealthData(studentId, healthData)
               setStudentAddedId(studentId)
               return
+            } else if (showSurveys) {
+              handleHealthData(studentId, healthData)
+              setStudentAddedId(studentId)
+              setModalType('Survey'), setOpenModal(true)
+            } else {
+              toast.success('Successfully added student')
+              reset(defaultValues)
+              setSelectedImg(null)
+              setStudentAddedId('')
+              postReset()
+              queryClient.invalidateQueries('students' as any)
             }
-            toast.success('Successfully added student')
-            reset(defaultValues)
-            setSelectedImg(null)
-            setStudentAddedId('')
-            postReset()
-            queryClient.invalidateQueries('students' as any)
             // toast.success('')
           },
           onError: (err) => {
@@ -156,8 +164,12 @@ export const AddNewStudentContent = () => {
     }
   }
 
-  const handleStudentHealth = (healthData: HealthDataPayloadEx) => {
-    handleSubmit((data) => onSubmit(data, healthData))()
+  const handleStudentHealth = (
+    healthData: HealthDataPayloadEx,
+    showSurveys?: boolean
+  ) => {
+    // console.log(showSurveys, 'showSurveys')
+    handleSubmit((data) => onSubmit(data, healthData, showSurveys))()
   }
 
   const studentDetails = { gender: watch('gender')?.value, age: watch('age') }
@@ -420,9 +432,16 @@ export const AddNewStudentContent = () => {
       {showHealthData && (
         <AddHealthDataRecord
           addLoading={isLoading || imageLoading || isPending}
-          onSubmit={(healthData) => handleStudentHealth(healthData)}
+          onSubmit={(healthData, showSurveys) =>
+            handleStudentHealth(healthData, showSurveys)
+          }
           resetFields={resetFields}
           student={studentDetails}
+          studentAddedId={studentAddedId}
+          modalType={modalType}
+          setModalType={setModalType}
+          openModal={openModal}
+          setOpenModal={setOpenModal}
         />
       )}
     </form>

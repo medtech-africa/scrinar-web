@@ -65,6 +65,7 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('carbExamples')}
           isCreatable
+          isClearable={false}
           value={watch('carbExamples')?.map((option: any) => {
             return { value: option, label: option }
           })}
@@ -81,6 +82,7 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('proteinExamples')}
           isCreatable
+          isClearable={false}
           value={watch('proteinExamples')?.map((option: any) => {
             return { value: option, label: option }
           })}
@@ -97,6 +99,7 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('fatExamples')}
           isCreatable
+          isClearable={false}
           isMulti
           value={watch('fatExamples')?.map((option: any) => {
             return { value: option, label: option }
@@ -113,6 +116,7 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('vitaminExamples')}
           isCreatable
+          isClearable={false}
           value={watch('vitaminExamples')?.map((option: any) => {
             return { value: option, label: option }
           })}
@@ -218,6 +222,7 @@ const Nutrition = ({ studentId }: { studentId: string }) => {
         <Select
           {...customRegister('exerciseActivities')}
           isCreatable
+          isClearable={false}
           label="What types of activities are good for exercise?"
           isMulti
           value={watch('exerciseActivities')?.map((option: any) => {

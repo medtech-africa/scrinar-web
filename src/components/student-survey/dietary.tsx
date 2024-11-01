@@ -1,11 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { PageCard } from '../ui/page-card'
 import { Input } from '../ui/input'
 import { useFormContext } from 'react-hook-form'
 import { Select } from '../ui/select'
 
-const Dietary = () => {
-  const { register, setValue } = useFormContext()
+const Dietary = ({ studentSurvey }: { studentSurvey: any }) => {
+  const { register, setValue, watch } = useFormContext()
+  useEffect(() => {
+    studentSurvey.forEach((meal: any, index: number) => {
+      setValue(`meals[${index}].time`, meal.time || '')
+      setValue(`meals[${index}].type`, meal.type || '')
+      setValue(`meals[${index}].foodName`, meal.foodName || '')
+      setValue(`meals[${index}].ingredients`, meal.ingredients || '')
+    })
+  }, [])
 
   return (
     <PageCard title="24 Hour Recall for Dietary Diversity" bodyStyle="p-4">
@@ -17,7 +25,7 @@ const Dietary = () => {
 
         {/* Input for meals */}
         <div className="flex flex-col space-y-4">
-          {['breakfast', 'lunch', 'dinner', 'snack'].map((meal, index) => (
+          {Array.from({ length: 5 }).map((_, index) => (
             <div key={index} className="border p-4 rounded-md shadow-md">
               <h4 className="font-medium mb-2">Meal {index + 1}</h4>
               <div className="flex gap-4">
@@ -29,6 +37,10 @@ const Dietary = () => {
                 <Select
                   {...register(`meals[${index}].type`)}
                   label="Type (Breakfast/Lunch/Dinner/Snack)"
+                  value={{
+                    value: watch(`meals[${index}].type`),
+                    label: watch(`meals[${index}].type`),
+                  }}
                   options={[
                     { value: 'Breakfast', label: 'Breakfast' },
                     { value: 'Lunch', label: 'Lunch' },
@@ -36,8 +48,7 @@ const Dietary = () => {
                     { value: 'Snack', label: 'Snack' },
                   ]}
                   onChange={(selectedOption: any) => {
-                    const value = selectedOption.value
-                    setValue(`meals[${index}].type`, value)
+                    setValue(`meals[${index}].type`, selectedOption.value)
                   }}
                 />
               </div>

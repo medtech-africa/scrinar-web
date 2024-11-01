@@ -36,6 +36,7 @@ const PhysicalActivity = ({ studentId }: { studentId: string }) => {
           {...customRegister('barriersToPhysicalActivity')}
           label="What do you think can prevent children from being physically active? (Select all that apply)"
           isMulti
+          isClearable={false}
           isCreatable
           value={watch('barriersToPhysicalActivity')?.map((option: any) => {
             return { value: option, label: option }

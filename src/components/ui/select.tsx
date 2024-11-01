@@ -130,7 +130,7 @@ const Select = React.forwardRef<typeof RectSelect, SelectProps>(
   ) => {
     const Comp = isAsync
       ? RectSelectASync
-      : isCreatable // Conditionally render CreatableSelect if isCreatable is true
+      : isCreatable
         ? CreatableSelect
         : RectSelect
 

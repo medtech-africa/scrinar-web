@@ -573,11 +573,10 @@ export const AddHealthDataRecordContent = () => {
                   : toast.error('Please select a student')
               }}
             >
-              Start Questionnaire
+              Start Survey
             </Text>
-            {exerciseData && (
-              <BadgeField variant="success" value="Changes Saved" />
-            )}
+
+            <BadgeField variant="success" value="Saves Automatically" />
           </div>
         </PageCard>
       </div>

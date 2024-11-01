@@ -34,6 +34,7 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
           {...customRegister('makesFeelBetter')}
           label="When you feel worried or upset, what helps you feel better? (Choose all that you do)"
           isMulti
+          isClearable={false}
           value={watch('makesFeelBetter')?.map((option: any) => {
             return { value: option, label: option }
           })}
@@ -49,6 +50,7 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
           {...customRegister('stressors')}
           label="What things make you feel stressed? (Choose all that apply)"
           isMulti
+          isClearable={false}
           value={watch('stressors')?.map((option: any) => {
             return { value: option, label: option }
           })}

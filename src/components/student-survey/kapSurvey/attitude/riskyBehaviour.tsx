@@ -19,6 +19,7 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
           {...customRegister('smokingRisks')}
           label="What are some risks associated with smoking? (Select all that apply)"
           isMulti
+          isClearable={false}
           value={watch('smokingRisks')?.map((option: any) => {
             return { value: option, label: option }
           })}
@@ -34,6 +35,7 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
           {...customRegister('alcoholRisks')}
           label="What are some risks associated with drinking alcohol? (Select all that apply)"
           isMulti
+          isClearable={false}
           value={watch('alcoholRisks')?.map((option: any) => {
             return { value: option, label: option }
           })}
