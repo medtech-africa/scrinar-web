@@ -345,6 +345,30 @@ const createScreening = yupResolver(
   })
 )
 
+const createParent = yupResolver(
+  yup.object().shape({
+    email: yup.string().optional().email(),
+    firstName: yup
+      .string()
+      .required('Please enter first name')
+      .typeError('Please enter first name')
+      .lowercase(),
+    lastName: yup
+      .string()
+      .required('Please enter last name')
+      .typeError('Please enter last name')
+      .lowercase(),
+    gender: yup
+      .object()
+      .shape({ label: yup.string().required(), value: yup.string().required() })
+      .required('Please select a gender')
+      .typeError('Please select a gender'),
+    mobile: yup.string().optional(),
+    familyCode: yup.string().optional(),
+    avatar: yup.boolean(),
+  })
+)
+
 const validation = {
   createPatient,
   createInstructor,
@@ -356,6 +380,7 @@ const validation = {
   exercise,
   createScreening,
   registerStudent,
+  createParent,
 }
 
 export default validation

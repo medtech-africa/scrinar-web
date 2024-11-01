@@ -29,6 +29,8 @@ import useDashboardStats from '@/hooks/queries/useDashboardStats'
 import ContentLoader from '@/components/content-loader'
 import { isMasterInstructor } from '@/utils/checkPermission'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
+import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-content'
+import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add-questionnaire'
 
 const dashboardStats = [
   {
@@ -55,6 +57,17 @@ const dashboardStats = [
     admin: true,
   },
   {
+    title: 'Parents',
+    icon: 'profile2User' as IconNames,
+    count: 'totalParents',
+    avatars: [
+      'https://i.pravatar.cc/300',
+      'https://i.pravatar.cc/100',
+      'https://i.pravatar.cc/50',
+    ],
+    slug: '/user-profile/parents',
+  },
+  {
     title: 'Health Data',
     icon: 'health' as IconNames,
     count: 'totalHealthData',
@@ -79,6 +92,18 @@ const actionData1 = [
     subtitle: 'Add student health progress',
     icon: 'health' as IconNames,
     type: 'health-data',
+  },
+  {
+    title: 'Create New Parent Profile',
+    subtitle: 'Add Parent Profile',
+    icon: 'profile2User' as IconNames,
+    type: 'parent',
+  },
+  {
+    title: 'Enter Parent Questionnaire',
+    subtitle: 'Add/update parent questionnaire',
+    icon: 'bookmark' as IconNames,
+    type: 'parent questionnaire',
   },
   {
     title: 'Create New Instructor Profile',
@@ -338,8 +363,10 @@ export default function Home() {
         title={`Add new ${modalType}`}
       >
         {modalType === 'student' && <AddNewStudentContent />}
+        {modalType === 'parent' && <AddNewParentContent />}
         {modalType === 'instructor' && <AddRecordContent />}
         {modalType === 'health-data' && <AddHealthDataRecordContent />}
+        {modalType === 'parent questionnaire' && <AddParentQuestionnaire />}
       </Modal>
       <ContentLoader loading={isLoading} />
     </div>

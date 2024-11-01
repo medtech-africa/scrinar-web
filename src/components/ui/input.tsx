@@ -31,6 +31,7 @@ export interface InputProps
   endingIcon?: React.ReactNode
   labelStyle?: string
   optionStyle?: string
+  helperText?: string
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -46,6 +47,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       labelStyle,
       option,
       optionStyle,
+      helperText,
       ...props
     },
     ref
@@ -62,6 +64,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               )}
             >
               {label}
+              {helperText && <span className="block">{helperText}</span>}
             </label>
           )}
           {!!option && (
