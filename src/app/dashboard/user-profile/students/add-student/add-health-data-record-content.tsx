@@ -26,6 +26,7 @@ import { useHealthValue } from '@/context/health-data-context'
 import { HealthDataPayload } from '@/types/healthData.types'
 import { NutritionalModal } from '@/app/dashboard/health-data/add-record/nutritionalModal'
 import { ExerciseModal } from '@/app/dashboard/health-data/add-record/exerciseModal'
+import { Survey } from '@/app/dashboard/health-data/add-record/survey'
 
 type HealthDataPayloadEx = Omit<HealthDataPayload, 'userId'>
 export const AddHealthDataRecord = ({
@@ -33,17 +34,25 @@ export const AddHealthDataRecord = ({
   addLoading = false,
   resetFields = false,
   student,
+  studentAddedId,
+  modalType,
+  openModal,
+  setModalType,
+  setOpenModal,
 }: {
-  onSubmit: (healthData: HealthDataPayloadEx) => void
+  onSubmit: (healthData: HealthDataPayloadEx, showSurveys?: boolean) => void
   addLoading: boolean
   resetFields: boolean
   student: {
     gender: string
     age: number
   }
+  studentAddedId: string
+  modalType: string
+  openModal: boolean
+  setOpenModal: (value: boolean) => void
+  setModalType: (value: string) => void
 }) => {
-  const [modalType, setModalType] = useState('')
-  const [openModal, setOpenModal] = useState(false)
   const { exerciseData, nutritionalData, setExerciseData, setNutritionalData } =
     useHealthValue()
 
@@ -78,7 +87,7 @@ export const AddHealthDataRecord = ({
       setBmi(0)
     }
   }, [height, weight])
-  const handleSubmit = async (e: any) => {
+  const handleSubmit = async (e: any, showSurveys = false) => {
     e.preventDefault()
 
     if (
@@ -121,7 +130,8 @@ export const AddHealthDataRecord = ({
       dietaryDiversity: nutritionalData,
       physicalActivity: exerciseData,
     }
-    onSubmit(dataToSend as HealthDataPayloadEx)
+
+    onSubmit(dataToSend as HealthDataPayloadEx, showSurveys)
   }
 
   useEffect(() => {
@@ -144,6 +154,7 @@ export const AddHealthDataRecord = ({
       mounted = false
     }
   }, [resetFields])
+  console.log(studentAddedId, 'studentAddedId')
 
   return (
     <div className="w-full h-full">
@@ -428,6 +439,26 @@ export const AddHealthDataRecord = ({
             )}
           </div>
         </PageCard>
+        <PageCard title="Survey" bodyStyle="p-4">
+          <div className="flex gap-3 items-center">
+            <Label>Survey</Label>
+            {/* <BadgeField variant="error" value="Poor" />*/}
+            <Text
+              variant="text/sm"
+              className="text-primary cursor-pointer underline"
+              as="span"
+              onClick={(e) =>
+                studentAddedId
+                  ? (setModalType('Survey'), setOpenModal(true))
+                  : handleSubmit(e, true)
+              }
+            >
+              Start Survey
+            </Text>
+
+            <BadgeField variant="success" value="Saves Automatically" />
+          </div>
+        </PageCard>
       </div>
       <Button
         variant={'primary'}
@@ -449,6 +480,12 @@ export const AddHealthDataRecord = ({
         )}
         {modalType === 'Exercise' && (
           <ExerciseModal onClose={() => setOpenModal(false)} />
+        )}
+        {modalType === 'Survey' && (
+          <Survey
+            onClose={() => setOpenModal(false)}
+            studentId={studentAddedId ?? ''}
+          />
         )}
       </Modal>
     </div>

@@ -34,6 +34,7 @@ import { ExerciseModal } from './exerciseModal'
 import { useHealthValue } from '@/context/health-data-context'
 import { Student } from '@/types/student.types'
 import { HealthDataPayload, SelectVal } from '@/types/healthData.types'
+import { Survey } from './survey'
 
 export const AddHealthDataRecordContent = () => {
   const [level, setLevel] = useState<SelectVal | null>()
@@ -116,7 +117,6 @@ export const AddHealthDataRecordContent = () => {
     student?.latestHealthData?.waist,
     student?.latestHealthData?.weight,
   ])
-
   const variantValidityCheck = (val: string) =>
     val && !isValidNumber(val) ? 'destructive' : 'default'
   const messageCheck = (val: string) =>
@@ -559,6 +559,26 @@ export const AddHealthDataRecordContent = () => {
             )}
           </div>
         </PageCard>
+        <PageCard title="Survey" bodyStyle="p-4">
+          <div className="flex gap-3 items-center">
+            <Label>Survey</Label>
+            {/* <BadgeField variant="error" value="Poor" />*/}
+            <Text
+              variant="text/sm"
+              className="text-primary cursor-pointer underline"
+              as="span"
+              onClick={() => {
+                student?.id
+                  ? (setModalType('Survey'), setOpenModal(true))
+                  : toast.error('Please select a student')
+              }}
+            >
+              Start Survey
+            </Text>
+
+            <BadgeField variant="success" value="Saves Automatically" />
+          </div>
+        </PageCard>
       </div>
       <Button
         variant={'primary'}
@@ -579,6 +599,12 @@ export const AddHealthDataRecordContent = () => {
         )}
         {modalType === 'Exercise' && (
           <ExerciseModal onClose={() => setOpenModal(false)} />
+        )}
+        {modalType === 'Survey' && (
+          <Survey
+            onClose={() => setOpenModal(false)}
+            studentId={student?.id ?? ''}
+          />
         )}
       </Modal>
       <form />
