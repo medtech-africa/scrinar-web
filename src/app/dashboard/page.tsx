@@ -31,6 +31,9 @@ import { isMasterInstructor } from '@/utils/checkPermission'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-content'
 import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add-questionnaire'
+import * as Tabs from '@radix-ui/react-tabs'
+import Interview from './fdaInterview/interview'
+import Fda from './fdaInterview/fda'
 
 const dashboardStats = [
   {
@@ -131,6 +134,10 @@ const _actionData2 = [
     status: 'other',
   },
 ]
+const triggerClassName = cn(
+  'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
+  'data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:font-bold data-[state=active]:text-grey-900'
+)
 export default function Home() {
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
@@ -257,6 +264,33 @@ export default function Home() {
               <DashboardProgressPattern className="absolute right-0 left-0 hidden md:block" />
               <DashboardProgress progress={40} />
             </div>
+          </div>
+
+          <div className="">
+            <Tabs.Root className="mt-10" defaultValue="interview">
+              <Tabs.List className="mb-4" aria-label="">
+                <Tabs.Trigger
+                  className={triggerClassName}
+                  value="interview"
+                  onClick={() => refetch()}
+                >
+                  Interviews
+                </Tabs.Trigger>
+                <Tabs.Trigger
+                  className={triggerClassName}
+                  value="fda"
+                  onClick={() => refetch()}
+                >
+                  FDA Interview
+                </Tabs.Trigger>
+              </Tabs.List>
+              <Tabs.Content value="interview">
+                <Interview />
+              </Tabs.Content>
+              <Tabs.Content value="fda">
+                <Fda />
+              </Tabs.Content>
+            </Tabs.Root>
           </div>
         </section>
         <section>
