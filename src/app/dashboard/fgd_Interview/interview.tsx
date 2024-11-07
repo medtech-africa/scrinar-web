@@ -1,4 +1,4 @@
-'use client'
+// 'use client'
 import React, { useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { IconPicker } from '@/components/ui/icon-picker'
@@ -20,7 +20,7 @@ import AudioModal from './InterviewModalContent/audioModal'
 import TranscriptModal from './InterviewModalContent/transcriptModal'
 import FgdGuideModal from './InterviewModalContent/fgdGuideModal'
 import toast from 'react-hot-toast'
-import { useAudioRecorder } from '@/hooks/useAudioRecorder'
+import dynamic from 'next/dynamic'
 
 const interviews = [
   {
@@ -35,6 +35,24 @@ const interviews = [
   },
 ]
 const Interview = () => {
+  const CustomMediaRecorder = dynamic(
+    () => import('@/components/customMediaRecorder'),
+    {
+      ssr: false,
+      loading: () => (
+        <div className="justify-items-center">
+          <p className="text-grey-500">Record Audio</p>
+
+          <div className="bg-primary inline-flex flex-row p-4 rounded-full text-white items-center">
+            <div role="button" tabIndex={0}>
+              <IconPicker icon="play" size={24} />
+            </div>
+          </div>
+        </div>
+      ),
+    }
+  )
+
   const [openModal, setOpenModal] = React.useState(false)
   const [selectedOption, setSelectedOption] = React.useState<string | null>(
     null
@@ -78,7 +96,7 @@ const Interview = () => {
       document.removeEventListener('mousedown', handleClickOutside)
     }
   }, [open])
-  const { isRecording, toggleRecording, audioUrl } = useAudioRecorder()
+  // const { isRecording, toggleRecording, audioUrl } = useAudioRecorder()
 
   const isLoading = false
   const handleMoreClick = (rowIndex: any) => {
@@ -98,23 +116,18 @@ const Interview = () => {
       },
     },
   ]
-  const handleSave = async (fromAudio = false) => {
-    if (!audioUrl && fromAudio) {
-      console.error('No audio blob available')
-      toast.error('No audio recorded. Please record audio before saving.')
-      return
-    }
+  const handleSave = async (audioUrl?: any) => {
+    console.log(audioUrl, 'audioUrl')
     const formData = new FormData()
 
-    if (audioUrl && fromAudio && audioUrl.startsWith('blob:')) {
-      const response = await fetch(audioUrl)
-      const audioBlob = await response.blob()
-      formData.append('audio', audioBlob, 'audio.wav')
-      // console.log(formData, 'formData')
+    if (audioUrl) {
+      formData.append('audio', audioUrl, 'audio.wav')
+      console.log(formData, 'formData')
+    } else if (uploadedFile && fileName && !audioUrl) {
+      console.log('File name:', fileName)
+      console.log('Uploaded file:', uploadedFile)
     } else {
-      console.error('audioUrl is not a valid Blob URL')
-      toast.error('Invalid audio data')
-      return
+      toast.error('Please select a file and enter a file name.')
     }
     //  try {
     //    const response = await fetch('/upload-audio-endpoint', {
@@ -133,52 +146,15 @@ const Interview = () => {
     //    console.error('Error uploading audio:', error)
     //    toast.error('Error uploading audio')
     //  }
-
-    // Handle file and file name check when audio URL is not involved
-    if (uploadedFile && fileName && !fromAudio) {
-      console.log('File name:', fileName)
-      console.log('Uploaded file:', uploadedFile)
-    } else if (!fromAudio) {
-      toast.error('Please select a file and enter a file name.')
-    }
   }
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 justify-items-center xl:justify-normal">
-        <div className="flex flex-col">
-          <div className="flex flex-col">
-            <p className="text-grey-500">Record Audio</p>
-            <div
-              className={cn(
-                'bg-blue-500 inline-flex flex-row p-4 rounded-full text-white focus:outline-none items-center xl:self-start',
-                audioUrl ? 'w-full gap-x-3' : 'w-fit '
-              )}
-            >
-              <div
-                role="button"
-                tabIndex={0}
-                onKeyUp={toggleRecording}
-                onClick={toggleRecording}
-              >
-                {isRecording ? (
-                  <IconPicker icon="pause" size={24} />
-                ) : (
-                  <IconPicker icon="play" size={24} />
-                )}
-              </div>
-              <div className="">
-                {audioUrl && <audio src={audioUrl} controls className="" />}
-              </div>
-              {audioUrl && (
-                <div onClick={() => handleSave(true)}>
-                  <IconPicker icon="saveAdd" size={24} color="red" />
-                </div>
-              )}
-            </div>
-          </div>
+      <div className="flex xl:flex-row xl:justify-between xl:gap-0 flex-col justify-center items-center gap-y-6">
+        <div className="">
+          <CustomMediaRecorder onSave={handleSave} />
         </div>
-        <div className="flex relative w-fit xl:self-end">
+        <div className="flex relative w-fit">
           <motion.button
             className={cn(
               'flex h-fit items-center justify-between bg-primary text-white py-3 px-4 rounded-lg'

@@ -15,7 +15,7 @@ const AudioModal = ({
   fileName: string
   setFileName: React.Dispatch<React.SetStateAction<string>>
   setUploadedFile: React.Dispatch<React.SetStateAction<File | null>>
-  handleSave: () => void
+  handleSave: (audioBlob: Blob | null) => void
 }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -53,7 +53,7 @@ const AudioModal = ({
       />
 
       {/* Save button */}
-      <Button onClick={handleSave}>Save Audio</Button>
+      <Button onClick={() => handleSave(null)}>Save Audio</Button>
     </div>
   )
 }
