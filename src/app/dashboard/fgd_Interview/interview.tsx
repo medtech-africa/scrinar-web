@@ -35,22 +35,22 @@ const interviews = [
   },
 ]
 const Interview = () => {
-  const CustomMediaRecorder = dynamic(
-    () => import('@/components/customMediaRecorder'),
-    {
-      ssr: false,
-      loading: () => (
-        <div className="justify-items-center">
-          <p className="text-grey-500">Record Audio</p>
-
-          <div className="bg-primary inline-flex flex-row p-4 rounded-full text-white items-center">
-            <div role="button" tabIndex={0}>
-              <IconPicker icon="play" size={24} />
+  const CustomMediaRecorder = React.useMemo(
+    () =>
+      dynamic(() => import('@/components/customMediaRecorder'), {
+        ssr: false,
+        loading: () => (
+          <div className="justify-items-center">
+            <p className="text-grey-500">Record Audio</p>
+            <div className="bg-primary inline-flex flex-row p-4 rounded-full text-white items-center">
+              <div role="button" tabIndex={0}>
+                <IconPicker icon="play" size={24} />
+              </div>
             </div>
           </div>
-        </div>
-      ),
-    }
+        ),
+      }),
+    []
   )
 
   const [openModal, setOpenModal] = React.useState(false)
