@@ -32,8 +32,8 @@ import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-content'
 import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add-questionnaire'
 import * as Tabs from '@radix-ui/react-tabs'
-import Interview from './fdaInterview/interview'
-import Fda from './fdaInterview/fda'
+import Interview from './fgd_Interview/interview'
+import Fda from './fgd_Interview/fda'
 
 const dashboardStats = [
   {

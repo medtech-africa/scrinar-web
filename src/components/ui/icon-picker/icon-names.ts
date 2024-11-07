@@ -59,6 +59,8 @@ export enum Icons {
   login = 'login',
   eyeClose = 'eyeClose',
   eyeOpen = 'eyeOpen',
+  pause = 'pause',
+  playAudio = 'playAudio',
 }
 
 export { Icons as IconNames }
