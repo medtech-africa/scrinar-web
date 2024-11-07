@@ -60,12 +60,12 @@ const generalData = [
     href: '',
     roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   },
-  {
-    title: 'Health Data',
-    icon: 'health',
-    href: 'health-data',
-    roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
-  },
+  // {
+  //   title: 'Health Data',
+  //   icon: 'health',
+  //   href: 'health-data',
+  //   roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
+  // },
   {
     title: 'Screening',
     icon: 'calendar',
@@ -114,7 +114,9 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
   const pathname = usePathname()
   const user = useUser((state) => state.user)
 
-  const [open, toggleOpen] = useState(false)
+  const [isHealthDataOpen, setHealthDataOpen] = useState(false)
+  const [isUserProfileOpen, setUserProfileOpen] = useState(false)
+
   const sidebarRef = useRef(null)
   const windowSize = useWindowSize()
   const isLargeScreen = windowSize.width >= 768
@@ -128,7 +130,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
 
   useEffect(() => {
     const isRoute = new RegExp(/^\/patients|^\/staff/)
-    if (isRoute.test(pathname)) toggleOpen(true)
+    if (isRoute.test(pathname)) setUserProfileOpen(true)
     if (!isLargeScreen) {
       sideToggleOpen(true)
     }
@@ -214,6 +216,133 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                     </NavLink>
                   </div>
                 ))}
+                <motion.div
+                  key="family-health-data"
+                  // animate={{ height: open ? 'auto' : '40px' }}
+                  layout
+                  transition={{ layout: { duration: 0.5, type: 'spring' } }}
+                >
+                  <motion.button
+                    className={cn(
+                      'flex items-center justify-between text-grey-600 py-3 px-4 rounded-lg hover:opacity-80 w-full',
+                      pathname.includes('health-data') &&
+                        'bg-primary text-white'
+                    )}
+                    onClick={() => setHealthDataOpen(!isHealthDataOpen)}
+                    layout="position"
+                  >
+                    <div className="flex gap-2">
+                      <IconPicker icon="profile2User" size="1.5rem" />
+                      <Text
+                        className="block md:hidden lg:block"
+                        variant="text/md"
+                      >
+                        Health Data
+                      </Text>
+                    </div>
+                    <motion.div
+                      key="arrow"
+                      animate={{ rotate: isHealthDataOpen ? 0 : -90 }}
+                      transition={{
+                        type: 'spring',
+                        stiffness: 500,
+                        damping: 50,
+                      }}
+                    >
+                      <IconPicker icon="arrowDown" />
+                    </motion.div>
+                  </motion.button>
+
+                  <AnimatePresence initial={false}>
+                    {isHealthDataOpen && (
+                      <motion.div
+                        key="content"
+                        initial="collapsed"
+                        animate="open"
+                        exit="collapsed"
+                        className="mt-2"
+                        variants={{
+                          open: {
+                            opacity: 1,
+                            height: 'auto',
+                          },
+                          collapsed: {
+                            opacity: 0,
+                            height: 0,
+                          },
+                        }}
+                      >
+                        <NavLink
+                          href="/dashboard/family-health-data/household"
+                          className={cn(
+                            'pl-11',
+                            pathname.includes(
+                              '/family-health-data/household'
+                            ) && 'bg-grey-100'
+                          )}
+                        >
+                          <DotIcon />
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              Households
+                            </span>
+                            <span className="hidden md:block lg:hidden">H</span>
+                          </Text>
+                        </NavLink>
+
+                        <NavLink
+                          href="/dashboard/family-health-data/students"
+                          className={cn(
+                            'pl-11',
+                            pathname.includes('/family-health-data/students') &&
+                              'bg-grey-100'
+                          )}
+                        >
+                          <DotIcon />
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              Students
+                            </span>
+                            <span className="hidden md:block lg:hidden">S</span>
+                          </Text>
+                        </NavLink>
+
+                        <NavLink
+                          href="/dashboard/family-health-data/fathers"
+                          className={cn(
+                            'pl-11',
+                            pathname.includes('/family-health-data/fathers') &&
+                              'bg-grey-100'
+                          )}
+                        >
+                          <DotIcon />
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              Fathers
+                            </span>
+                            <span className="hidden md:block lg:hidden">F</span>
+                          </Text>
+                        </NavLink>
+                        <NavLink
+                          href="/dashboard/family-health-data/mothers"
+                          className={cn(
+                            'pl-11',
+                            pathname.includes('/family-health-data/mothers') &&
+                              'bg-grey-100'
+                          )}
+                        >
+                          <DotIcon />
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              Mothers
+                            </span>
+                            <span className="hidden md:block lg:hidden">M</span>
+                          </Text>
+                        </NavLink>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
 
                 <motion.div
                   key="user"
@@ -231,7 +360,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           'opacity-95': !pathname.includes('/user-profile'),
                         }
                       )}
-                      onClick={() => toggleOpen(!open)}
+                      onClick={() => setUserProfileOpen(!isUserProfileOpen)}
                       layout="position"
                     >
                       <div className="flex gap-2">
@@ -245,7 +374,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                       </div>
                       <motion.div
                         key="arrow"
-                        animate={{ rotate: open ? 0 : -90 }}
+                        animate={{ rotate: isUserProfileOpen ? 0 : -90 }}
                         transition={{
                           type: 'spring',
                           stiffness: 500,
@@ -257,7 +386,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                     </motion.button>
                   )}
                   <AnimatePresence initial={false}>
-                    {open && (
+                    {isUserProfileOpen && (
                       <motion.div
                         key="content"
                         initial="collapsed"
@@ -280,7 +409,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                             href={'/dashboard/user-profile/instructors'}
                             className={cn(
                               'pl-11',
-                              pathname.includes('/instructors') && 'bg-grey-100'
+                              pathname.includes('/user-profile/instructors') &&
+                                'bg-grey-100'
                             )}
                           >
                             <DotIcon />
@@ -299,7 +429,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           href="/dashboard/user-profile/students"
                           className={cn(
                             'pl-11',
-                            pathname.includes('/students') && 'bg-grey-100'
+                            pathname.includes('/user-profile/students') &&
+                              'bg-grey-100'
                           )}
                         >
                           <DotIcon />
@@ -315,7 +446,8 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           href="/dashboard/user-profile/parents"
                           className={cn(
                             'pl-11',
-                            pathname.includes('/parents') && 'bg-grey-100'
+                            pathname.includes('/user-profile/parents') &&
+                              'bg-grey-100'
                           )}
                         >
                           <DotIcon />
