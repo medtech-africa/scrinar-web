@@ -21,10 +21,10 @@ const TranscriptModal = ({
     fileInputRef.current?.click()
   }
 
-  const hasFile = fileInputRef.current?.files?.[0].name
+  const hasFile = fileInputRef.current?.files?.[0]?.name
 
   return (
-    <div className="flex flex-col mt-10 gap-y-6 justify-center items-center">
+    <div className="grid mt-10 gap-y-6 justify-center items-start">
       <input
         type="file"
         ref={fileInputRef}
@@ -34,9 +34,13 @@ const TranscriptModal = ({
         title="transcript upload"
       />
 
-      <div className="">
+      <div className="w-full">
         <p>File:</p>
-        <Button onClick={handleClick} variant={'secondary'}>
+        <Button
+          onClick={handleClick}
+          variant={'tertiary'}
+          className="border w-full"
+        >
           <IconPicker icon="documentText" className={cn`mr-2`} />
           {hasFile
             ? 'Click to change Transcript'
@@ -56,12 +60,12 @@ const TranscriptModal = ({
         value={fileName}
         onChange={(e) => setFileName(e.target.value)}
         labelStyle="lg:text-sm text-xs"
-        className=""
+        className="w-full"
       />
 
       {/* Save button */}
-      <Button type="submit" loading={isLoading}>
-        Save Audio
+      <Button type="submit" loading={isLoading} className="w-full">
+        Save Transcript
       </Button>
     </div>
   )

@@ -67,6 +67,7 @@ export const InterviewUploadButton = () => {
     setSelectedOption(option)
     setModalType(option)
     setOpenModal(true)
+    toggleOpen(false)
   }
 
   useEffect(() => {
@@ -132,13 +133,13 @@ export const InterviewUploadButton = () => {
       <div className="flex relative w-fit">
         <motion.button
           className={cn(
-            'flex h-fit items-center justify-between bg-primary text-white py-3 px-4 rounded-lg'
+            'flex h-fit items-center justify-between bg-primary text-white py-2 px-4 rounded-lg'
           )}
           onClick={() => toggleOpen(!open)}
           layout="position"
         >
-          <div className="flex gap-2">
-            <IconPicker icon="profile2User" size="1.5rem" />
+          <div className="flex gap-2 items-center">
+            <IconPicker icon="profile2User" size="1rem" />
             <Text className="block md:hidden lg:block" variant="text/md">
               Upload
             </Text>
@@ -164,7 +165,7 @@ export const InterviewUploadButton = () => {
               initial="collapsed"
               animate="open"
               exit="collapsed"
-              className="mt-2 w-fit bg-white rounded-lg p-4 shadow-lg absolute top-0 right-[130px] whitespace-nowrap"
+              className="mt-2 w-fit bg-white rounded-lg p-4 shadow-lg absolute top-0 right-[130px] whitespace-nowrap z-[999]"
               variants={{
                 open: {
                   opacity: 1,
