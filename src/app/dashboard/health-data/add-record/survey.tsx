@@ -18,6 +18,7 @@ import toast from 'react-hot-toast'
 import { RiskyBehaviourStress } from '@/components/student-survey/risky-behavior-stress/RiskyBehaviourStress'
 import { HealthServicesHealthMaintenance } from '@/components/student-survey/risky-behavior-stress/HealthServicesHealthMaintenance'
 import { useStudent } from '@/hooks/queries/useStudents'
+import { HealthAndHygiene } from '@/components/student-survey/risky-behavior-stress/HealthAndHygiene'
 
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
@@ -185,7 +186,7 @@ export const SurveyForm = ({
             />
           </Tabs.Content>
           <Tabs.Content value="health-hygiene">
-            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+            <HealthAndHygiene studentId={studentId} />
           </Tabs.Content>
           <Tabs.Content value="ncd-risks-family">
             <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />

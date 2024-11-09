@@ -17,7 +17,7 @@ export const HealthServicesHealthMaintenance = ({
 
   return (
     <PageCard title="Nutrition" bodyStyle="px-4">
-      <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
+      <div className="grid md:grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] grid-cols-1 gap-6">
         {/* Balanced diet importance */}
 
         <Select
