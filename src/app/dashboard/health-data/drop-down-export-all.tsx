@@ -17,7 +17,7 @@ const DropDownMenuExportAll = ({ onClose, className }: IProps) => {
 
   useClickAway(menuRef, () => (onClose ? onClose() : null))
 
-  const { data, isLoading } = useHealthData(1, '', 1000)
+  const { data, isLoading } = useHealthData(1, '', '', 1000)
 
   const formattedData = useMemo(
     () =>

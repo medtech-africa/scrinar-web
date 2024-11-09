@@ -215,7 +215,7 @@ export const AddHealthDataRecordContent = () => {
 
   return (
     <div className="w-full h-full">
-      <PageCard title="Student Bio Data" bodyStyle="p-4">
+      <PageCard title="Bio Data" bodyStyle="p-4">
         <div className="flex items-end">
           <div className="flex items-center">
             {student ? (
@@ -236,7 +236,7 @@ export const AddHealthDataRecordContent = () => {
               variant="text/md"
               weight="medium"
             >
-              Student Avatar
+              Avatar
             </Text>
           </div>
         </div>
@@ -268,13 +268,13 @@ export const AddHealthDataRecordContent = () => {
           {student && (
             <>
               <Input
-                label="Student Age"
+                label="Age"
                 disabled
                 defaultValue={student?.age}
                 labelStyle="lg:text-sm text-xs"
               />
               <Input
-                label="Student Gender"
+                label="Gender"
                 disabled
                 defaultValue={student?.gender}
                 labelStyle="lg:text-sm text-xs"

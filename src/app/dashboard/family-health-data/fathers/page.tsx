@@ -1,7 +1,8 @@
 import React from 'react'
+import PageContent from '../page-content'
 
 const Fathers = () => {
-  return <div>Fathers</div>
+  return <PageContent type="fathers" />
 }
 
 export default Fathers

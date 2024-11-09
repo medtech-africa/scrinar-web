@@ -1,16 +1,22 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
-
-const getHealthData = (pageNumber = 1, searchVal = '', limit = 10) =>
+const getHealthData = (page = 1, searchVal = '', limit = 10, type = '') =>
   baseAxios
-    .get(API.getHealthData(pageNumber, searchVal, limit))
+    .get(API.getHealthData, {
+      params: { page, limit, type, search: searchVal },
+    })
     .then((res) => res.data)
 
-const useHealthData = (pageNumber = 1, searchVal?: string, limit = 10) => {
+const useHealthData = (
+  pageNumber = 1,
+  searchVal?: string,
+  type = '',
+  limit = 10
+) => {
   return useQuery({
-    queryKey: ['health-data', pageNumber, searchVal, limit],
-    queryFn: () => getHealthData(pageNumber, searchVal, limit),
+    queryKey: ['health-data', pageNumber, searchVal, type, limit],
+    queryFn: () => getHealthData(pageNumber, searchVal, limit, type),
     placeholderData: keepPreviousData,
   })
 }

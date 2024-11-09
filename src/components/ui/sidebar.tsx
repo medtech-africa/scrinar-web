@@ -273,6 +273,22 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                         }}
                       >
                         <NavLink
+                          href="/dashboard/family-health-data/all"
+                          className={cn(
+                            'pl-11',
+                            pathname.includes('/family-health-data/all') &&
+                              'bg-grey-100'
+                          )}
+                        >
+                          <DotIcon />
+                          <Text variant="text/md">
+                            <span className="block md:hidden lg:block">
+                              All
+                            </span>
+                            <span className="hidden md:block lg:hidden">H</span>
+                          </Text>
+                        </NavLink>
+                        <NavLink
                           href="/dashboard/family-health-data/household"
                           className={cn(
                             'pl-11',

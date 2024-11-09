@@ -1,7 +1,8 @@
 import React from 'react'
+import PageContent from '../page-content'
 
 const Households = () => {
-  return <div>Households</div>
+  return <PageContent type="household" />
 }
 
 export default Households
