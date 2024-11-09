@@ -6,7 +6,7 @@ import { IconPicker } from '@/components/ui/icon-picker'
 import { Input } from '@/components/ui/input'
 import { Text } from '@/components/ui/text'
 import { Select } from '@/components/ui/select'
-import schoolLevels from '@/constants/school-levels'
+import { useSchoolLevels } from '@/constants/school-levels'
 import { Label } from '@/components/ui/label'
 import useStudents from '@/hooks/queries/useStudents'
 import { useEffect, useMemo, useState } from 'react'
@@ -63,6 +63,8 @@ export const AddHealthDataRecordContent = () => {
   const [dys, setDys] = useState('')
 
   const [bloodSugar, setBloodSugar] = useState('')
+
+  const schoolLevels = useSchoolLevels()
 
   const { isPending: isLoading, mutate } = useMutation({
     mutationFn: (data: HealthDataPayload) =>

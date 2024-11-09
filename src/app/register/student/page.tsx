@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import toast from 'react-hot-toast'
-import schoolLevels from '@/constants/school-levels'
+import { useSchoolLevels } from '@/constants/school-levels'
 import { errorMessage } from '@/utils/errorMessage'
 import filterObject from '@/utils/filterObject'
 import useSelectImage from '@/hooks/useSelectImage'
@@ -88,6 +88,8 @@ const RegisterNewStudent = () => {
     setImageLoading,
     imageLoading,
   } = useSelectImage()
+
+  const schoolLevels = useSchoolLevels()
 
   const handleFileSelect = () => {
     if (inputFile.current) {

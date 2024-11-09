@@ -12,7 +12,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import toast from 'react-hot-toast'
-import schoolLevels from '@/constants/school-levels'
+import { useSchoolLevels } from '@/constants/school-levels'
 import { errorMessage } from '@/utils/errorMessage'
 import filterObject from '@/utils/filterObject'
 import useSelectImage from '@/hooks/useSelectImage'
@@ -50,6 +50,8 @@ export const AddNewStudentContent = () => {
   })
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
+
+  const schoolLevels = useSchoolLevels()
 
   const { isPending, mutate: mutateHealthData } = useMutation({
     mutationFn: (data: HealthDataPayload) =>
@@ -402,6 +404,7 @@ export const AddNewStudentContent = () => {
                 ref={inputFile}
                 className="hidden"
                 accept="image/*"
+                title="profile picture"
               />
               <Text
                 variant="text/sm"

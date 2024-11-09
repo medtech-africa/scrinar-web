@@ -20,7 +20,7 @@ import filterObject from '@/utils/filterObject'
 import { API } from '@/utils/api'
 import { useStudent } from '@/hooks/queries/useStudents'
 import ContentLoader from '@/components/content-loader'
-import schoolLevels from '@/constants/school-levels'
+import { useSchoolLevels } from '@/constants/school-levels'
 import { useEffect } from 'react'
 import { Avatar } from '@/components/ui/avatar'
 
@@ -42,6 +42,8 @@ export default function EditRecord({ params }: { params: { id: string } }) {
     mutationFn: (dataToSend: IDataToSend) =>
       baseAxios.patch(API.student(params.id), dataToSend),
   })
+
+  const schoolLevels = useSchoolLevels()
 
   const {
     control,

@@ -29,6 +29,7 @@ export interface ISchool {
   roles: string[]
   school?: { name: string }
   fullName: string
+  template: 'play4health'|'jica'
 }
 export interface IUser {
   email: string
@@ -62,6 +63,7 @@ interface IUserState {
   setOpenSchoolModal: (val: boolean) => void
   selectedSchool: string
   setSelectedSchool: (val: string) => void
+  template: 'play4health'|'jica'
 }
 
 const useUser = create<IUserState>((set, get) => ({
@@ -73,7 +75,7 @@ const useUser = create<IUserState>((set, get) => ({
   },
   updateUser: (val: any) => {
     const user = { ...get().user, ...val }
-    set({ user })
+    set({ user, template: user?.template })
   },
   loadUser: (userData) => {
     const token = getCookie('token')
@@ -91,11 +93,15 @@ const useUser = create<IUserState>((set, get) => ({
     } else {
       set({ loading: false, user: null })
     }
+    if (userData) {
+      set({template: userData.template})
+    }
   },
   openSchoolModal: false,
   setOpenSchoolModal: (val: boolean) => set({ openSchoolModal: val }),
   selectedSchool: '',
   setSelectedSchool: (val: string) => set({ selectedSchool: val }),
+  template: 'play4health',
 }))
 
 export { useUser }

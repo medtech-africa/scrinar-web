@@ -1,3 +1,5 @@
+import { useUser } from "@/context/user"
+
 const schoolLevels = [
   {
     label: 'Nursery 1',
@@ -60,5 +62,15 @@ const schoolLevels = [
     value: 'ss 3',
   },
 ]
+
+export const useSchoolLevels = () => {
+  const template = useUser(state => state.template);
+
+  if (template === 'jica') {
+    return schoolLevels.filter(level => !level.value.startsWith('jss'))
+  }
+
+  return schoolLevels
+}
 
 export default schoolLevels
