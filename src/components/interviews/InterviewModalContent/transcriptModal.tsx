@@ -8,26 +8,20 @@ const TranscriptModal = ({
   fileInputRef,
   fileName,
   setFileName,
-  setUploadedFile,
-  handleSave,
+  handleFileChange,
+  isLoading = false,
 }: {
   fileInputRef: React.RefObject<HTMLInputElement>
   fileName: string
   setFileName: React.Dispatch<React.SetStateAction<string>>
-  setUploadedFile: React.Dispatch<React.SetStateAction<File | null>>
-  handleSave: () => void
+  handleFileChange: React.ChangeEventHandler<HTMLInputElement>
+  isLoading?: boolean
 }) => {
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.files && event.target.files[0]) {
-      const selectedFile = event.target.files[0]
-      setUploadedFile(selectedFile)
-      setFileName(selectedFile.name)
-    }
-  }
-
   const handleClick = () => {
     fileInputRef.current?.click()
   }
+
+  const hasFile = fileInputRef.current?.files?.[0].name
 
   return (
     <div className="flex flex-col mt-10 gap-y-6 justify-center items-center">
@@ -36,13 +30,26 @@ const TranscriptModal = ({
         ref={fileInputRef}
         onChange={handleFileChange}
         accept=".pdf,.doc,.docx,.xls,.xlsx"
-        style={{ display: 'none' }}
+        className="hidden"
+        title="transcript upload"
       />
 
-      <Button onClick={handleClick} variant={'secondary'}>
-        <IconPicker icon="documentText" className={cn`mr-2`} />
-        Upload Transcript
-      </Button>
+      <div className="">
+        <p>File:</p>
+        <Button onClick={handleClick} variant={'secondary'}>
+          <IconPicker icon="documentText" className={cn`mr-2`} />
+          {hasFile
+            ? 'Click to change Transcript'
+            : 'Click to upload Transcript'}
+        </Button>
+        <div className="">
+          {hasFile && (
+            <p className="text-sm text-gray-600 mt-2">
+              Selected file: {fileInputRef.current?.files?.[0].name}
+            </p>
+          )}
+        </div>
+      </div>
 
       <Input
         label="File Name"
@@ -53,7 +60,9 @@ const TranscriptModal = ({
       />
 
       {/* Save button */}
-      <Button onClick={handleSave}>Save Audio</Button>
+      <Button type="submit" loading={isLoading}>
+        Save Audio
+      </Button>
     </div>
   )
 }

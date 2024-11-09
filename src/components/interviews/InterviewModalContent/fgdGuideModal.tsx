@@ -4,18 +4,18 @@ import { Input } from '@/components/ui/input'
 import { cn } from '@/lib/utils'
 import React from 'react'
 
-const AudioModal = ({
+const FgdGuideModal = ({
   fileInputRef,
   fileName,
   setFileName,
   setUploadedFile,
-  handleSave,
+  isLoading = false,
 }: {
   fileInputRef: React.RefObject<HTMLInputElement>
   fileName: string
   setFileName: React.Dispatch<React.SetStateAction<string>>
   setUploadedFile: React.Dispatch<React.SetStateAction<File | null>>
-  handleSave: (audioBlob: Blob | null) => void
+  isLoading?: boolean
 }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
@@ -30,16 +30,17 @@ const AudioModal = ({
   }
 
   return (
-    <div className="flex flex-col mt-10 gap-y-6 justify-center items-center">
+    <div className="flex flex-col gap-y-6">
       <input
         type="file"
         ref={fileInputRef}
         onChange={handleFileChange}
-        accept="audio/*"
-        style={{ display: 'none' }}
+        accept=".pdf,.doc,.docx,.xls,.xlsx"
+        className="hidden"
+        title="FGD guide"
       />
 
-      <Button onClick={handleClick} variant={'secondary'}>
+      <Button onClick={handleClick} variant={'secondary'} type="button">
         <IconPicker icon="documentText" className={cn`mr-2`} />
         Upload Audio
       </Button>
@@ -53,9 +54,11 @@ const AudioModal = ({
       />
 
       {/* Save button */}
-      <Button onClick={() => handleSave(null)}>Save Audio</Button>
+      <Button loading={isLoading} type="submit">
+        Save Audio
+      </Button>
     </div>
   )
 }
 
-export default AudioModal
+export default FgdGuideModal
