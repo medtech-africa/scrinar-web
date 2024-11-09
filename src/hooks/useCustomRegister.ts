@@ -2,7 +2,7 @@ import { useFormContext } from 'react-hook-form'
 import { useMutateStudentsSurvey } from './queries/useStudentSurvey'
 
 export const useCustomRegister = (studentId: string) => {
-  const { register, setValue, watch } = useFormContext()
+  const { register, setValue, watch, control } = useFormContext()
   const { mutate } = useMutateStudentsSurvey(studentId)
 
   const customRegister = (name: string, options: any = {}) => {
@@ -35,5 +35,5 @@ export const useCustomRegister = (studentId: string) => {
     }
   }
 
-  return { customRegister, setValue, watch }
+  return { customRegister, setValue, watch, control }
 }

@@ -13,10 +13,32 @@ const useStudents = (page?: number, level?: string, searchVal?: string) => {
   })
 }
 
+type Student = {
+  userId: string
+  firstName: string
+  lastName: string
+  dob: string
+  age: number
+  gender: string
+  avatarUrl: string
+  parentMobile: string
+  parentMobileAlt: string
+  level: string
+  email?: string
+  lga: string
+  state: string
+  user: string
+  school: string
+  createdAt: string
+  updatedAt: string
+  fullName: string
+  id: string
+}
+
 const useStudent = (id: string) => {
   return useQuery({
     queryKey: ['singleStudent', id],
-    queryFn: () => baseAxios.get(API.student(id)).then((res) => res.data),
+    queryFn: () => baseAxios.get(API.student(id)).then((res) => res.data as Student),
   })
 }
 

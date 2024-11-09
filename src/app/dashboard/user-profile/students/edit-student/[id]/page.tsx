@@ -71,7 +71,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
     const dataToSend = {
       ...filteredData,
       gender: formData.gender?.value,
-      level: data.level?.value,
+      level: data?.level,
     }
     try {
       await mutate(dataToSend, {

@@ -5,10 +5,11 @@ import { Text } from './text'
 export interface PageCardProps extends React.HTMLAttributes<HTMLDivElement> {
   title?: string
   bodyStyle?: string
+  textContainerClassName?: string
 }
 
 const PageCard = React.forwardRef<HTMLDivElement, PageCardProps>(
-  ({ className, title, bodyStyle, ...props }, ref) => (
+  ({ className, title, bodyStyle, textContainerClassName, ...props }, ref) => (
     <div
       ref={ref}
       className={cn(
@@ -16,7 +17,7 @@ const PageCard = React.forwardRef<HTMLDivElement, PageCardProps>(
         className
       )}
     >
-      <div className="bg-grey-50 mb-6">
+      <div className={cn('bg-grey-50 mb-6', textContainerClassName)}>
         <Text
           variant="text/sm"
           weight="medium"

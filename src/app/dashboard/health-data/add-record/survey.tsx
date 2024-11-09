@@ -15,10 +15,15 @@ import {
 import { cleanObject } from '@/utils/checkIfValueExist'
 import { errorMessage } from '@/utils/errorMessage'
 import toast from 'react-hot-toast'
+import { RiskyBehaviourStress } from '@/components/student-survey/risky-behavior-stress/RiskyBehaviourStress'
+import { HealthServicesHealthMaintenance } from '@/components/student-survey/risky-behavior-stress/HealthServicesHealthMaintenance'
+import { useStudent } from '@/hooks/queries/useStudents'
+
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
   'data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:font-bold data-[state=active]:text-grey-900'
 )
+
 export const Survey = ({
   // onClose,
   studentId,
@@ -26,77 +31,180 @@ export const Survey = ({
   onClose: () => void
   studentId: string
 }) => {
+  const { data: studentSurvey, isLoading: isStudentSurveyLoading } =
+    useStudentsSurvey(studentId)
+
+  if (isStudentSurveyLoading) {
+    return <div>Loading</div>
+  }
+
+  return <SurveyForm studentSurvey={studentSurvey} studentId={studentId} />
+}
+
+export const SurveyForm = ({
+  studentSurvey,
+  studentId,
+}: {
+  studentId: string
+  studentSurvey: any
+}) => {
   const methods = useForm({
-    // resolver: validation.survey,
+    defaultValues: studentSurvey,
   })
-  const {
-    data: studentSurvey,
-    isLoading: isStudentSurveyLoading,
-    refetch,
-  } = useStudentsSurvey(studentId)
+
+  const { refetch } = useStudentsSurvey(studentId)
+  const { data } = useStudent(studentId)
+
   const { mutate } = useMutateStudentsPostSurvey(studentId)
+
   const onSubmit = (data: any) => {
     mutate(cleanObject(data), {
       onSuccess: () => {
         refetch()
         toast.success('Survey saved successfully')
       },
-      onError: (err) => {
-        errorMessage(err)
-      },
+      onError: errorMessage,
     })
   }
 
   return (
     <FormProvider {...methods}>
       <form onSubmit={methods.handleSubmit(onSubmit)}>
-        {isStudentSurveyLoading ? (
-          <div>Loading</div>
-        ) : (
-          <>
-            <Tabs.Root className="mt-10" defaultValue="demographics">
-              <Tabs.List className="mb-4" aria-label="Student Questionnaire">
-                <Tabs.Trigger
-                  className={triggerClassName}
-                  value="demographics"
-                  onClick={() => refetch()}
-                >
-                  Demographics
-                </Tabs.Trigger>
-                <Tabs.Trigger
-                  className={triggerClassName}
-                  value="kap-survey"
-                  onClick={() => refetch()}
-                >
-                  KAP Survey
-                </Tabs.Trigger>
-              </Tabs.List>
-              <Tabs.Content value="demographics">
-                <DemographicData
-                  studentId={studentId}
-                  studentSurvey={studentSurvey}
-                />
-              </Tabs.Content>
-              <Tabs.Content value="kap-survey">
-                <KAPSurvey
-                  studentId={studentId}
-                  studentSurvey={studentSurvey}
-                />
-              </Tabs.Content>
-            </Tabs.Root>
-            <div className="grid gap-6 py-7 mt-2">
-              <div>
-                <Button
-                  variant={'primary'}
-                  value="Save"
-                  type="submit"
-                  leadingIcon={<IconPicker icon="saveAdd" />}
-                  className="mt-6"
-                />
-              </div>
-            </div>
-          </>
-        )}
+        <Tabs.Root className="mt-10" defaultValue="demographics">
+          <Tabs.List className="mb-4" aria-label="Student Questionnaire">
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="demographics"
+              onClick={() => refetch()}
+            >
+              Demographics
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="kap-survey"
+              onClick={() => refetch()}
+            >
+              KAP Survey
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="ncd-knowledge"
+              onClick={() => refetch()}
+            >
+              NCD Knowledge
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="nutrition"
+              onClick={() => refetch()}
+            >
+              Nutrition
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="physical-activity"
+              onClick={() => refetch()}
+            >
+              Physical activity
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="ideal-body"
+              onClick={() => refetch()}
+            >
+              Ideal body
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="risky-behavior-stress"
+              onClick={() => refetch()}
+            >
+              Risky Behavior / Stress
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="health-sanitation-maintenance"
+              onClick={() => refetch()}
+            >
+              Health serv. & maintenance
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="health-hygiene"
+              onClick={() => refetch()}
+            >
+              Health & Hygiene
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="ncd-risks-family"
+              onClick={() => refetch()}
+            >
+              NCD Risks in honest Family
+            </Tabs.Trigger>
+            <Tabs.Trigger
+              className={triggerClassName}
+              value="gender-household-roles"
+              onClick={() => refetch()}
+            >
+              Gender & Household Roles
+            </Tabs.Trigger>
+          </Tabs.List>
+
+          <Tabs.Content value="demographics">
+            <DemographicData
+              studentId={studentId}
+              studentSurvey={studentSurvey}
+            />
+          </Tabs.Content>
+          <Tabs.Content value="kap-survey">
+            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+          </Tabs.Content>
+          <Tabs.Content value="ncd-knowledge">
+            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+          </Tabs.Content>
+          <Tabs.Content value="nutrition">
+            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+          </Tabs.Content>
+          <Tabs.Content value="physical-activity">
+            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+          </Tabs.Content>
+          <Tabs.Content value="ideal-body">
+            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+          </Tabs.Content>
+          <Tabs.Content value="risky-behavior-stress">
+            <RiskyBehaviourStress
+              studentId={studentId}
+              studentSurvey={studentSurvey}
+            />
+          </Tabs.Content>
+          <Tabs.Content value="health-sanitation-maintenance">
+            <HealthServicesHealthMaintenance
+              studentId={studentId}
+              isFemale={data?.gender === 'female'}
+            />
+          </Tabs.Content>
+          <Tabs.Content value="health-hygiene">
+            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+          </Tabs.Content>
+          <Tabs.Content value="ncd-risks-family">
+            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+          </Tabs.Content>
+          <Tabs.Content value="gender-household-roles">
+            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+          </Tabs.Content>
+        </Tabs.Root>
+        <div className="grid gap-6 py-7 mt-2">
+          <div>
+            <Button
+              variant={'primary'}
+              value="Save"
+              type="submit"
+              leadingIcon={<IconPicker icon="saveAdd" />}
+              className="mt-6"
+            />
+          </div>
+        </div>
       </form>
     </FormProvider>
   )

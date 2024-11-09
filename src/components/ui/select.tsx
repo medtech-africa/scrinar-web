@@ -193,6 +193,12 @@ const Select = React.forwardRef<typeof RectSelect, SelectProps>(
           />
         </div>
 
+        {!message && isCreatable && (
+          <Text className={cn('text-grey-500 mt-1 ml-3')} variant="text/sm">
+            You can create a new option by typing
+          </Text>
+        )}
+
         {!!message && (
           <Text
             className={cn(
