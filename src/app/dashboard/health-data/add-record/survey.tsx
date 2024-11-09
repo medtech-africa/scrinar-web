@@ -82,13 +82,6 @@ export const SurveyForm = ({
             </Tabs.Trigger>
             <Tabs.Trigger
               className={triggerClassName}
-              value="kap-survey"
-              onClick={() => refetch()}
-            >
-              KAP Survey
-            </Tabs.Trigger>
-            <Tabs.Trigger
-              className={triggerClassName}
               value="ncd-knowledge"
               onClick={() => refetch()}
             >
@@ -157,9 +150,6 @@ export const SurveyForm = ({
               studentId={studentId}
               studentSurvey={studentSurvey}
             />
-          </Tabs.Content>
-          <Tabs.Content value="kap-survey">
-            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
           </Tabs.Content>
           <Tabs.Content value="ncd-knowledge">
             <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />

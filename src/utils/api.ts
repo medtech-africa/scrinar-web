@@ -50,6 +50,8 @@ export const API = {
 
   //  school
   schoolRegister: `${BASE_URL}/api/v1/school`,
+  schoolUpload: `${BASE_URL}/api/v1/school/resources`,
+  schoolResources: `${BASE_URL}/api/v1/school/resources`,
   schoolUpdate: `${BASE_URL}/api/v1/school/me`,
   schoolDashboard: `${BASE_URL}/api/v1/school/dashboard`,
   getSchools: (search: string, state?: string) =>

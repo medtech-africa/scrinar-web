@@ -108,6 +108,7 @@ const RegisterNewStudent = () => {
       gender: data.gender?.value,
       level: data.level?.value,
       schoolID: data?.school.value,
+      school: data?.school.value,
       ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
     }
     try {

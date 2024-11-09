@@ -37,7 +37,7 @@ export const AddNewParentContent = () => {
     mutate,
     reset: postReset,
   } = useMutation({
-    mutationFn: ({ id, ...dataToSend }: IDataToSend) =>
+    mutationFn: ({ id, ...dataToSend }: Omit<IDataToSend, 'level'>) =>
       id
         ? baseAxios.patch(API.parent(id), dataToSend)
         : baseAxios.post(API.parents, dataToSend),

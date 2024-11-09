@@ -21,4 +21,29 @@ const useSchools = (search?: string, state?: string) => {
   })
 }
 
+export const useSchoolResources = () => {
+  return useQuery({
+    queryKey: ['school-resources'],
+    queryFn: () => baseAxios.get<{data:SchoolResource[]}>(API.schoolResources).then((res) => res.data?.data),
+  })
+}
+
 export default useSchools
+
+type SchoolResource = {
+  fileURL: string
+  fileName: string
+  type: string
+  fileType: string
+  lga: string
+  state: string
+  uploadedBy: UploadedBy
+  user: string
+  createdAt: string
+  updatedAt: string
+  id: string
+}
+
+export interface UploadedBy {
+  name: string
+}
