@@ -118,7 +118,9 @@ const FilterHeader = ({
             )}
           </div>
         </div>
-        <Link href={`health-data/add-record?type=${type}`}>
+        <Link
+          href={`/dashboard/health-data/add-record?type=${type === 'all' ? 'student' : type}`}
+        >
           <Button
             value="Add New Record"
             variant="primary"
@@ -137,6 +139,7 @@ export default function FamilyHealthDataLayout({
   children: React.ReactNode
 }) {
   const pathname = usePathname()
+  const type = pathname.split('/')[3]
   const [openFilter, setOpenFilter] = useState(false)
 
   const [search, setSearch] = useDebouncedState('')
@@ -187,7 +190,11 @@ export default function FamilyHealthDataLayout({
         onSearchChange={setSearch}
         searchVal={search}
         // loading={isFetching}
-        type={pathname.split('/')[3]}
+        type={
+          type === 'students' || type === 'household'
+            ? 'student'
+            : type?.replace('s', '')
+        }
       />
       {openFilter && <FilterData />}
 
