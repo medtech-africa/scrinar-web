@@ -35,9 +35,12 @@ import { useHealthValue } from '@/context/health-data-context'
 import { Student } from '@/types/student.types'
 import { HealthDataPayload, SelectVal } from '@/types/healthData.types'
 import { Survey } from './survey'
+import { useSearchParams } from 'next/navigation'
 
 export const AddHealthDataRecordContent = () => {
   const [level, setLevel] = useState<SelectVal | null>()
+  const params = useSearchParams()
+  const type = params.get('type') || 'student'
 
   const { data: studentsData, isFetching: studentsLoading } = useStudents(
     0,
@@ -138,7 +141,7 @@ export const AddHealthDataRecordContent = () => {
       return toast.custom(
         <ToastField
           variant={'warning2'}
-          label={'Please select a student'}
+          label={`Please select a ${type}`}
           action1={() => toast.remove()}
         />
       )
@@ -209,7 +212,7 @@ export const AddHealthDataRecordContent = () => {
 
   useEffect(() => {
     if (height && weight && !student) {
-      toast.error('Please select a student')
+      toast.error(`Please select a ${student}`)
     }
   }, [height, weight, student])
 
@@ -241,26 +244,28 @@ export const AddHealthDataRecordContent = () => {
           </div>
         </div>
         <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
-          <Select
-            label="Class"
-            full
-            labelStyle="lg:text-sm text-xs"
-            placeholder="Select Class"
-            options={schoolLevels}
-            onChange={(val) => {
-              setLevel(val as SelectVal)
-              setStudent(null)
-            }}
-            value={level}
-          />
+          {type === 'student' && (
+            <Select
+              label="Class"
+              full
+              labelStyle="lg:text-sm text-xs"
+              placeholder="Select Class"
+              options={schoolLevels}
+              onChange={(val) => {
+                setLevel(val as SelectVal)
+                setStudent(null)
+              }}
+              value={level}
+            />
+          )}
 
           <Select
-            label="Student"
+            label={type}
             full
             labelStyle="lg:text-sm text-xs"
-            placeholder="Select Student"
+            placeholder={`Select ${type}`}
             isLoading={studentsLoading}
-            isDisabled={!level || studentsLoading}
+            isDisabled={(!level && type === 'student') || studentsLoading}
             options={students}
             onChange={(val) => setStudent(val as Student)}
             value={student}
@@ -570,7 +575,7 @@ export const AddHealthDataRecordContent = () => {
               onClick={() => {
                 student?.id
                   ? (setModalType('Survey'), setOpenModal(true))
-                  : toast.error('Please select a student')
+                  : toast.error(`Please select a ${type}`)
               }}
             >
               Start Survey
