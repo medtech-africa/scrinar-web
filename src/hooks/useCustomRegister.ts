@@ -19,9 +19,16 @@ export const useCustomRegister = (studentId: string) => {
         value.toLowerCase().includes('other')
           ? value.replace(/other/gi, '').trim()
           : value
+      
+      
 
       const key = newName(name)
-      const data = { [key]: currentValue }
+      let data = { [key]: currentValue }
+      if (typeof key === 'string' && key.split('.').length === 2) {
+        const [newKey, nestedKey] = key.split('.')
+        data = { [newKey]: { [nestedKey]: currentValue } }
+      }
+      
       if (currentValue) {
         mutate(data)
       }

@@ -166,7 +166,7 @@ export const AddNewParentContent = () => {
                       onBlur={onBlur}
                       value={value ?? ''}
                       placeholder="ayans124"
-                      label="Family code"
+                      label="HouseHold code"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.familyCode ? 'destructive' : 'default'}
                       message={errors.familyCode && errors.familyCode.message}
@@ -333,6 +333,7 @@ export const AddNewParentContent = () => {
                   ref={inputFile}
                   className="hidden"
                   accept="image/*"
+                  title="profile picture"
                 />
                 <Text
                   variant="text/sm"

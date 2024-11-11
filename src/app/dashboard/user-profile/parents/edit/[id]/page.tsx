@@ -146,7 +146,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                       onBlur={onBlur}
                       value={value ?? ''}
                       placeholder="ayans124"
-                      label="Family code"
+                      label="HouseHold code"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.familyCode ? 'destructive' : 'default'}
                       message={errors.familyCode && errors.familyCode.message}
