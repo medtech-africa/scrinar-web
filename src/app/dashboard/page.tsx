@@ -48,18 +48,6 @@ const dashboardStats = [
     slug: '/user-profile/students',
   },
   {
-    title: 'Instructors',
-    icon: 'teacher' as IconNames,
-    count: 'totalInstructors',
-    avatars: [
-      'https://i.pravatar.cc/100',
-      'https://i.pravatar.cc/200',
-      'https://i.pravatar.cc/60',
-    ],
-    slug: '/user-profile/instructors',
-    admin: true,
-  },
-  {
     title: 'Parents',
     icon: 'profile2User' as IconNames,
     count: 'totalParents',
@@ -175,67 +163,65 @@ export default function Home() {
                     ? 'green'
                     : 'iris'
               return (
-                ((stat?.admin && !isMI) || !stat?.admin) && (
-                  <DashboardCard className="w-ful relative" key={_}>
-                    <DashboardCardHeader
-                      title={data?.[stat.count] ?? '..'}
-                      subtitle={stat.title}
-                      icon={
-                        <DashboardCardIcon
-                          className={cn(`bg-${statColor}-50`)}
-                          style={{ borderColor: colors[statColor][100] }}
-                        >
-                          <IconPicker
-                            icon={stat.icon}
-                            size="1.5rem"
-                            className={cn(`text-${statColor}-900`)}
-                          />
-                        </DashboardCardIcon>
-                      }
-                    />
-                    <DashboardCardDivider />
-                    <DashboardCardFooter>
-                      <div className="justify-start items-start flex">
-                        <DashboardCardAvatar
-                          src="https://i.pravatar.cc/100"
-                          background="bg-rose-100"
-                          border="border-rose-200"
-                        />
-                        <DashboardCardAvatar
-                          className="-ml-1.2"
-                          src="https://i.pravatar.cc/200"
-                          background="bg-violet-100"
-                          border="border-violet-200"
-                        />
-                        <DashboardCardAvatar
-                          className="-ml-1.2"
-                          src="https://i.pravatar.cc/60"
-                          background="bg-emerald-50"
-                          border="border-emerald-100"
-                        />
-
-                        <DashboardCardAvatar
-                          className="-ml-1.2"
-                          background="bg-emerald-50"
-                          border="border-emerald-100"
-                        >
-                          <div className="left-[13px] top-[10px] absolute text-slate-800 text-[10px] font-bold leading-[10px]">
-                            +
-                          </div>
-                        </DashboardCardAvatar>
-                      </div>
-                      <div className="w-4 h-4 relative">
+                <DashboardCard className="w-ful relative" key={_}>
+                  <DashboardCardHeader
+                    title={data?.[stat.count] ?? '..'}
+                    subtitle={stat.title}
+                    icon={
+                      <DashboardCardIcon
+                        className={cn(`bg-${statColor}-50`)}
+                        style={{ borderColor: colors[statColor][100] }}
+                      >
                         <IconPicker
-                          icon="arrowOutward"
-                          className="text-grey-900"
+                          icon={stat.icon}
+                          size="1.5rem"
+                          className={cn(`text-${statColor}-900`)}
                         />
-                      </div>
-                    </DashboardCardFooter>
-                    <Link href={`/dashboard${stat.slug}`}>
-                      <span className="absolute inset-0" />
-                    </Link>
-                  </DashboardCard>
-                )
+                      </DashboardCardIcon>
+                    }
+                  />
+                  <DashboardCardDivider />
+                  <DashboardCardFooter>
+                    <div className="justify-start items-start flex">
+                      <DashboardCardAvatar
+                        src="https://i.pravatar.cc/100"
+                        background="bg-rose-100"
+                        border="border-rose-200"
+                      />
+                      <DashboardCardAvatar
+                        className="-ml-1.2"
+                        src="https://i.pravatar.cc/200"
+                        background="bg-violet-100"
+                        border="border-violet-200"
+                      />
+                      <DashboardCardAvatar
+                        className="-ml-1.2"
+                        src="https://i.pravatar.cc/60"
+                        background="bg-emerald-50"
+                        border="border-emerald-100"
+                      />
+
+                      <DashboardCardAvatar
+                        className="-ml-1.2"
+                        background="bg-emerald-50"
+                        border="border-emerald-100"
+                      >
+                        <div className="left-[13px] top-[10px] absolute text-slate-800 text-[10px] font-bold leading-[10px]">
+                          +
+                        </div>
+                      </DashboardCardAvatar>
+                    </div>
+                    <div className="w-4 h-4 relative">
+                      <IconPicker
+                        icon="arrowOutward"
+                        className="text-grey-900"
+                      />
+                    </div>
+                  </DashboardCardFooter>
+                  <Link href={`/dashboard${stat.slug}`}>
+                    <span className="absolute inset-0" />
+                  </Link>
+                </DashboardCard>
               )
             })}
           </div>

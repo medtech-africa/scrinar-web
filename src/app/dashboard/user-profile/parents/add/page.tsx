@@ -20,6 +20,8 @@ export interface IFormValue {
   mobile?: string
   gender: { value: string; label: string }
   avatar?: boolean
+  age?: number
+  isGuardian?: boolean
 }
 
 export interface IDataToSend

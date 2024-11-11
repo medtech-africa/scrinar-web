@@ -631,6 +631,7 @@ const createParent = yupResolver(
     mobile: yup.string().optional(),
     familyCode: yup.string().optional(),
     avatar: yup.boolean(),
+    isGuardian: yup.boolean(),
   })
 )
 
