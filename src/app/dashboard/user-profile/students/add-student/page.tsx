@@ -23,6 +23,7 @@ export interface IFormValue {
   parentMobileAlt?: string
   password?: string
   avatar?: boolean
+  familyCode?: string
 }
 
 export interface IDataToSend

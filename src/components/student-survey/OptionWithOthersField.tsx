@@ -9,6 +9,7 @@ type OptionsWithOtherFieldProps = {
     otherId?: string
   }
   otherValue?: string
+  othersIndex?: number
 }
 export const OptionsWithOthersField = ({
   studentId = '',
@@ -16,10 +17,13 @@ export const OptionsWithOthersField = ({
   options = [],
   form,
   otherValue = 'Other',
+  othersIndex,
 }: OptionsWithOtherFieldProps) => {
   const { customRegister, watch } = useCustomRegister(studentId)
 
-  const lastItem = options[options.length - 1] || otherValue
+  const indexOfOthersOption = othersIndex || options.length - 1
+
+  const lastItem = options[indexOfOthersOption] || otherValue
 
   const otherFieldID = form.id + 'Other'
   const currentValue = watch(form.id)
@@ -46,7 +50,7 @@ export const OptionsWithOthersField = ({
                 type="radio"
                 id={id}
                 value={option}
-                {...customRegister(form.id)}
+                {...customRegister(form.id, { exclude: lastItem })}
                 defaultChecked={
                   option === lastItem &&
                   currentValue &&

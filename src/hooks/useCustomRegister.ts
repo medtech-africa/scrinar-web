@@ -6,12 +6,13 @@ export const useCustomRegister = (studentId: string) => {
   const { mutate } = useMutateStudentsSurvey(studentId)
 
   const customRegister = (name: string, options: any = {}) => {
-    const { onBlur: originalBlur, ...rest } = register(name, options)
+    const {exclude, ...restOptions} = options
+    const { onBlur: originalBlur, ...rest } = register(name, restOptions)
 
     const handleBlur = () => {
       const currentValue = watch(name)
-
-      if (currentValue === 'Other' || currentValue === 'Yes, I have') {
+      
+      if (currentValue === 'Other' || currentValue === 'Yes, I have' || currentValue === exclude) {
         return
       }
       const newName = (value: string): string | number =>

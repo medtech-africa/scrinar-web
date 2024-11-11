@@ -42,6 +42,7 @@ const createPatient = yupResolver(
     //   'Enter a valid phone number'
     // ),
     parentMobileAlt: yup.string().optional(),
+    familyCode: yup.string().optional(),
     avatar: yup.boolean(),
   })
 )

@@ -33,6 +33,7 @@ const defaultValues = {
   parentMobile: '',
   parentMobileAlt: '',
   password: '',
+  familyCode: '',
 }
 
 type HealthDataPayloadEx = Omit<HealthDataPayload, 'userId'>
@@ -355,6 +356,22 @@ export const AddNewStudentContent = () => {
                   />
                 )}
                 name="password"
+              />
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value ?? ''}
+                    placeholder=""
+                    label="House hold code"
+                    labelStyle="lg:text-sm text-xs"
+                    variant={errors?.familyCode ? 'destructive' : 'default'}
+                    message={errors.familyCode && errors.familyCode.message}
+                  />
+                )}
+                name="familyCode"
               />
             </div>
 
