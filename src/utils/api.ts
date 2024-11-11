@@ -25,8 +25,17 @@ export const API = {
     `${BASE_URL}/api/v1/students${page ? `?page=${page}` : ''}${
       level ? `${page ? '&' : '?'}level=${level}` : ''
     }${searchVal ? `${page || level ? '&' : '?'}search=${searchVal}` : ''}`,
-  getParents: (page?: number, searchVal?: string) =>
-    `${BASE_URL}/api/v1/parents${page ? `?page=${page}` : ''}${searchVal ? `${page ? '&' : '?'}search=${searchVal}` : ''}`,
+  getParents: (page?: number, searchVal = '', gender = '') => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: gender ? '1000' : '15',
+      search: searchVal,
+      gender,
+    })
+
+    const queryString = params.toString()
+    return `${BASE_URL}/api/v1/parents${queryString ? `?${queryString}` : ''}`
+  },
 
   //instructors
   instructors: `${BASE_URL}/api/v1/instructors`,

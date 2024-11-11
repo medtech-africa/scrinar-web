@@ -186,8 +186,7 @@ export const InterviewUploadButton = () => {
                 onClick={() => handleOptionClick(ModalType.audio)}
               >
                 <Text variant="text/md">
-                  <span className="block md:hidden lg:block">Upload Audio</span>
-                  <span className="hidden md:block lg:hidden">U</span>
+                  <span className="block">Upload Audio</span>
                 </Text>
               </div>
 
@@ -199,8 +198,7 @@ export const InterviewUploadButton = () => {
                 onClick={() => handleOptionClick(ModalType.transcript)}
               >
                 <Text variant="text/md">
-                  <span className="block md:hidden lg:block">Transcript</span>
-                  <span className="hidden md:block lg:hidden">T</span>
+                  <span className="block">Transcript</span>
                 </Text>
               </div>
               <div
@@ -211,8 +209,7 @@ export const InterviewUploadButton = () => {
                 onClick={() => handleOptionClick(ModalType.fgdGuide)}
               >
                 <Text variant="text/md">
-                  <span className="block md:hidden lg:block">FGD Guide</span>
-                  <span className="hidden md:block lg:hidden">F</span>
+                  <span className="block">FGD Guide</span>
                 </Text>
               </div>
             </motion.div>

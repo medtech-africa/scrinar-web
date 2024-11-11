@@ -28,6 +28,7 @@ const defaultValues = {
   lastName: '',
   mobile: '',
   familyCode: '',
+  isGuardian: false,
 }
 
 export const AddNewParentContent = () => {
@@ -176,6 +177,21 @@ export const AddNewParentContent = () => {
 
                 <Controller
                   control={control}
+                  render={({ field: { value, ...rest } }) => (
+                    <Input
+                      {...rest}
+                      value={value ?? ''}
+                      label="Age"
+                      placeholder="Parent age"
+                      message={errors.age && errors.age.message}
+                      variant={errors?.age ? 'destructive' : 'default'}
+                    />
+                  )}
+                  name="age"
+                />
+
+                <Controller
+                  control={control}
                   render={({ field: { onChange, onBlur, value } }) => (
                     <Input
                       onChange={onChange}
@@ -234,6 +250,27 @@ export const AddNewParentContent = () => {
                   )}
                   name="gender"
                 />
+              </div>
+
+              <div className="mt-6 flex items-center">
+                <Controller
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Checkbox
+                      onBlur={onBlur}
+                      checked={Boolean(value)}
+                      onCheckedChange={(val) => {
+                        onChange(val)
+                        setSelectedImg(null)
+                      }}
+                    />
+                  )}
+                  name="isGuardian"
+                />
+
+                <Text className="ml-2 text-base text-grey-700">
+                  Is Guardian?
+                </Text>
               </div>
 
               <div className="mt-6 flex items-center">

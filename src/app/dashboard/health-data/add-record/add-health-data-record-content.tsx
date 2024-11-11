@@ -8,7 +8,6 @@ import { Text } from '@/components/ui/text'
 import { Select } from '@/components/ui/select'
 import { useSchoolLevels } from '@/constants/school-levels'
 import { Label } from '@/components/ui/label'
-import useStudents from '@/hooks/queries/useStudents'
 import { useEffect, useMemo, useState } from 'react'
 import { Avatar } from '@/components/ui/avatar'
 import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
@@ -36,16 +35,26 @@ import { Student } from '@/types/student.types'
 import { HealthDataPayload, SelectVal } from '@/types/healthData.types'
 import { Survey } from './survey'
 import { useSearchParams } from 'next/navigation'
+import useUserProfiles from '@/hooks/queries/useUserProfiles'
+import { ParentQuestionnaire } from '../../user-profile/parents/questionnaire'
+
+const getProfileType = (type: string) =>
+  type === 'mother' ? 'female' : type === 'father' ? 'male' : 'student'
 
 export const AddHealthDataRecordContent = () => {
   const [level, setLevel] = useState<SelectVal | null>()
   const params = useSearchParams()
   const type = params.get('type') || 'student'
+  const [userType, setUserType] = useState({ label: '', value: '' })
 
-  const { data: studentsData, isFetching: studentsLoading } = useStudents(
+  const profileType = getProfileType(userType?.value)
+
+  const { data: usersData, isFetching: usersLoading } = useUserProfiles(
     0,
-    level?.value
+    level?.value,
+    profileType
   )
+
   const [student, setStudent] = useState<Student | null>()
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
@@ -76,12 +85,15 @@ export const AddHealthDataRecordContent = () => {
 
   const students = useMemo(
     () =>
-      studentsData?.data?.map((st: Omit<Student, 'value' | 'label'>) => ({
+      (userType.value === 'student'
+        ? usersData?.data
+        : usersData?.data?.data
+      )?.map((st: Omit<Student, 'value' | 'label'>) => ({
         label: `${st?.firstName} ${st?.lastName}`,
         value: st?.id,
         ...st,
       })) ?? [],
-    [studentsData]
+    [usersData, userType]
   )
   const formattedDia = student?.latestHealthData?.bloodPressure?.split('/')[0]
   const formattedSys = student?.latestHealthData?.bloodPressure?.split('/')[1]
@@ -122,6 +134,8 @@ export const AddHealthDataRecordContent = () => {
     student?.latestHealthData?.waist,
     student?.latestHealthData?.weight,
   ])
+
+  useEffect(() => setUserType({ label: type, value: type }), [type])
   const variantValidityCheck = (val: string) =>
     val && !isValidNumber(val) ? 'destructive' : 'default'
   const messageCheck = (val: string) =>
@@ -143,7 +157,7 @@ export const AddHealthDataRecordContent = () => {
       return toast.custom(
         <ToastField
           variant={'warning2'}
-          label={`Please select a ${type}`}
+          label={`Please select a ${userType}`}
           action1={() => toast.remove()}
         />
       )
@@ -221,6 +235,25 @@ export const AddHealthDataRecordContent = () => {
   return (
     <div className="w-full h-full">
       <PageCard title="Bio Data" bodyStyle="p-4">
+        <div className="grid md:grid-cols-2 grid-cols-1 gap-6 mb-4">
+          <Select
+            label="Select user type"
+            full
+            labelStyle="lg:text-sm text-xs"
+            placeholder="Select type"
+            options={['mother', 'father', 'student'].map((val) => ({
+              label: val,
+              value: val,
+            }))}
+            onChange={(val) => {
+              setUserType(val as SelectVal)
+              setStudent(null)
+            }}
+            className="capitalize"
+            value={userType}
+          />
+        </div>
+
         <div className="flex items-end">
           <div className="flex items-center">
             {student ? (
@@ -246,7 +279,7 @@ export const AddHealthDataRecordContent = () => {
           </div>
         </div>
         <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
-          {type === 'student' && (
+          {userType.value === 'student' && (
             <Select
               label="Class"
               full
@@ -262,12 +295,14 @@ export const AddHealthDataRecordContent = () => {
           )}
 
           <Select
-            label={type}
+            label={userType.label}
             full
             labelStyle="lg:text-sm text-xs"
-            placeholder={`Select ${type}`}
-            isLoading={studentsLoading}
-            isDisabled={(!level && type === 'student') || studentsLoading}
+            placeholder={`Select ${userType.label}`}
+            isLoading={usersLoading}
+            isDisabled={
+              (!level && userType.value === 'student') || usersLoading
+            }
             options={students}
             onChange={(val) => setStudent(val as Student)}
             value={student}
@@ -577,7 +612,7 @@ export const AddHealthDataRecordContent = () => {
               onClick={() => {
                 student?.id
                   ? (setModalType('Survey'), setOpenModal(true))
-                  : toast.error(`Please select a ${type}`)
+                  : toast.error(`Please select a ${userType.label}`)
               }}
             >
               Start Survey
@@ -607,12 +642,20 @@ export const AddHealthDataRecordContent = () => {
         {modalType === 'Exercise' && (
           <ExerciseModal onClose={() => setOpenModal(false)} />
         )}
-        {modalType === 'Survey' && (
-          <Survey
-            onClose={() => setOpenModal(false)}
-            studentId={student?.id ?? ''}
-          />
-        )}
+        {modalType === 'Survey' &&
+          (userType.value === 'student' ? (
+            <Survey
+              onClose={() => setOpenModal(false)}
+              studentId={student?.id ?? ''}
+            />
+          ) : (
+            <div className="mt-8">
+              <ParentQuestionnaire
+                gender={student?.gender ?? ''}
+                parentId={student?.id ?? ''}
+              />
+            </div>
+          ))}
       </Modal>
       <form />
     </div>

@@ -14,7 +14,7 @@ import { Text } from './text'
 import { usePathname } from 'next/navigation'
 import { IconPicker } from './icon-picker'
 import { IconNames } from './icon-picker/icon-names'
-import { isTrainer, isMasterInstructor } from '@/utils/checkPermission'
+import { isTrainer } from '@/utils/checkPermission'
 import { useUser } from '@/context/user'
 
 interface NavLinkProps {
@@ -66,24 +66,24 @@ const generalData = [
   //   href: 'health-data',
   //   roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   // },
-  {
-    title: 'Screening',
-    icon: 'calendar',
-    href: 'screening',
-    roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
-  },
-  {
-    title: 'Training Module',
-    icon: 'book',
-    href: 'training-module',
-    roles: [
-      'school',
-      'instructor',
-      'play4health_admin',
-      'trainer',
-      'super_admin',
-    ],
-  },
+  // {
+  //   title: 'Screening',
+  //   icon: 'calendar',
+  //   href: 'screening',
+  //   roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
+  // },
+  // {
+  //   title: 'Training Module',
+  //   icon: 'book',
+  //   href: 'training-module',
+  //   roles: [
+  //     'school',
+  //     'instructor',
+  //     'play4health_admin',
+  //     'trainer',
+  //     'super_admin',
+  //   ],
+  // },
   {
     title: 'Trainers Data',
     icon: 'book',
@@ -420,7 +420,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           },
                         }}
                       >
-                        {!isMasterInstructor(user?.roles) && (
+                        {/* {!isMasterInstructor(user?.roles) && (
                           <NavLink
                             href={'/dashboard/user-profile/instructors'}
                             className={cn(
@@ -439,7 +439,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                               </span>
                             </Text>
                           </NavLink>
-                        )}
+                        )} */}
 
                         <NavLink
                           href="/dashboard/user-profile/students"
