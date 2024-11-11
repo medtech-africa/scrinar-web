@@ -6,7 +6,6 @@ import {
   feelingsOfstressOptions,
   healthCheckupsImportanceOptions,
   smokingDrinkingEffectsOptions,
-  stressCausesOptions,
   stressSignsOptions,
 } from '@/types/studentsSurvey.types'
 import React from 'react'
@@ -72,22 +71,6 @@ const RiskyBehavior = ({ studentId }: { studentId: string }) => {
             />
           )}
         </PageCard>
-
-        {/* Causes of stress */}
-        <Select
-          {...customRegister('stressCauses')}
-          label="Which of the following can cause stress?"
-          isMulti
-          isClearable={false}
-          value={watch('stressCauses')?.map((option: any) => {
-            return { value: option, label: option }
-          })}
-          options={stressCausesOptions}
-          onChange={(selectedOptions: any) => {
-            const values = selectedOptions.map((option: any) => option.value)
-            setValue('stressCauses', values)
-          }}
-        />
 
         {/* Long-term stress effects */}
         <PageCard

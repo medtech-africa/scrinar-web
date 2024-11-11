@@ -19,6 +19,7 @@ import { RiskyBehaviourStress } from '@/components/student-survey/risky-behavior
 import { HealthServicesHealthMaintenance } from '@/components/student-survey/risky-behavior-stress/HealthServicesHealthMaintenance'
 import { useStudent } from '@/hooks/queries/useStudents'
 import { HealthAndHygiene } from '@/components/student-survey/risky-behavior-stress/HealthAndHygiene'
+import { NonCommunicableDiseaseQuestions } from '@/components/student-survey/risky-behavior-stress/NCD'
 
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
@@ -152,7 +153,7 @@ export const SurveyForm = ({
             />
           </Tabs.Content>
           <Tabs.Content value="ncd-knowledge">
-            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
+            <NonCommunicableDiseaseQuestions studentId={studentId} />
           </Tabs.Content>
           <Tabs.Content value="nutrition">
             <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />

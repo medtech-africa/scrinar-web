@@ -67,7 +67,7 @@ export const useSchoolLevels = () => {
   const template = useUser(state => state.template);
 
   if (template === 'jica') {
-    return schoolLevels.filter(level => !level.value.startsWith('jss'))
+    return schoolLevels.filter(level => level.value.startsWith('jss'))
   }
 
   return schoolLevels
