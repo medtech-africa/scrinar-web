@@ -6,12 +6,7 @@ import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 import { Controller, useFormContext } from 'react-hook-form'
 
 export const NonCommunicableDiseaseQuestions = () => {
-  const {
-    register: customRegister,
-    setValue,
-    watch,
-    control,
-  } = useFormContext()
+  const { register, setValue, watch, control } = useFormContext()
 
   return (
     <PageCard title="NCD" bodyStyle="px-4">
@@ -19,7 +14,7 @@ export const NonCommunicableDiseaseQuestions = () => {
         {/* Balanced diet importance */}
         <Controller
           control={control}
-          name="nutrition.doYouKnowNCD"
+          name="ncd.doYouKnowNCD"
           render={({ field: { onChange, ...rest } }) => (
             <Select
               label="Do you know what the term ‘Non-Communicable diseases’ means? (select all that you agree with)"
@@ -34,9 +29,7 @@ export const NonCommunicableDiseaseQuestions = () => {
               isMulti
               isCreatable
               {...rest}
-              value={convertStringsToOptionArray(
-                watch('nutrition.doYouKnowNCD')
-              )}
+              value={convertStringsToOptionArray(watch('ncd.doYouKnowNCD'))}
               onChange={(selectedOption: any) => {
                 const value = selectedOption?.map(
                   (option: { value: string }) => option.value
@@ -48,7 +41,7 @@ export const NonCommunicableDiseaseQuestions = () => {
         />
 
         <Select
-          {...customRegister('nutrition.ageGroupAtRiskOfNcd')}
+          {...register('ncd.ageGroupAtRiskOfNcd')}
           label="In your opinion, which age group is most at risk for developing non-communicable diseases (NCDs) such as diabetes, heart disease, or hypertension?"
           options={convertStringsToOptionArray([
             'Children (0-12 years)',
@@ -59,12 +52,12 @@ export const NonCommunicableDiseaseQuestions = () => {
             'All age groups are equally at risk',
           ])}
           value={{
-            value: watch('ageGroupAtRiskOfNcd'),
-            label: watch('ageGroupAtRiskOfNcd'),
+            value: watch('ncd.ageGroupAtRiskOfNcd'),
+            label: watch('ncd.ageGroupAtRiskOfNcd'),
           }}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
-            setValue('ageGroupAtRiskOfNcd', value)
+            setValue('ncd.ageGroupAtRiskOfNcd', value)
           }}
         />
 
@@ -78,7 +71,7 @@ export const NonCommunicableDiseaseQuestions = () => {
             'Other (please specify)',
           ]}
           form={{
-            id: 'nutrition.doYouKnowHighBloodPressure',
+            id: 'ncd.doYouKnowHighBloodPressure',
           }}
         />
 
@@ -92,7 +85,7 @@ export const NonCommunicableDiseaseQuestions = () => {
             'Other (please specify)',
           ]}
           form={{
-            id: 'nutrition.doYouKnowDiabetes',
+            id: 'ncd.doYouKnowDiabetes',
           }}
         />
         <OptionsWithOthersField
@@ -105,7 +98,7 @@ export const NonCommunicableDiseaseQuestions = () => {
             'Other (please specify)',
           ]}
           form={{
-            id: 'nutrition.doYouKnowObesity',
+            id: 'ncd.doYouKnowObesity',
           }}
         />
         <OptionsWithOthersField
@@ -119,7 +112,7 @@ export const NonCommunicableDiseaseQuestions = () => {
             'Other (please specify)',
           ]}
           form={{
-            id: 'nutrition.howPreventGettingNcd',
+            id: 'ncd.howPreventGettingNcd',
           }}
         />
         <OptionsWithOthersField
@@ -131,13 +124,13 @@ export const NonCommunicableDiseaseQuestions = () => {
             'Other family member',
           ]}
           form={{
-            id: 'nutrition.anyFamilyMemberWithNcd',
+            id: 'ncd.anyFamilyMemberWithNcd',
           }}
         />
 
         {/* <Controller
           control={control}
-          name="nutrition.balancedDiet"
+          name="ncd.balancedDiet"
           render={({ field: { onChange, ...rest } }) => (
             <Select
               placeholder="Select an option"
