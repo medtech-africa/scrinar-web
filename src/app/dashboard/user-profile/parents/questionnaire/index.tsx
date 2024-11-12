@@ -21,6 +21,7 @@ import {
   NonCommunicableDiseaseQuestions,
   ParentNutritionSurvey,
   ParentSurveyHealthAndHygiene,
+  ParentSurveyHealthServicesHealthMaintenance,
   ParentSurveyIdealBody,
   ParentSurveyPhysicalActivity,
   ParentSurveyRiskyBehaviourStress,
@@ -303,7 +304,9 @@ const ParentQuestionnaire = ({
               <ParentSurveyRiskyBehaviourStress />
             </Tabs.Content>
             <Tabs.Content value="health-sanitation-maintenance">
-              <KAPSurvey control={control} watch={watch} errors={errors} />
+              <ParentSurveyHealthServicesHealthMaintenance
+                isFemale={gender === 'female'}
+              />
             </Tabs.Content>
             <Tabs.Content value="health-hygiene">
               <ParentSurveyHealthAndHygiene />

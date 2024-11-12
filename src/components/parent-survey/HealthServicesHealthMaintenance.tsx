@@ -1,19 +1,17 @@
 import { PageCard } from '@/components/ui/page-card'
 import { Select } from '@/components/ui/select'
 import React from 'react'
-import { useCustomRegister } from '@/hooks/useCustomRegister'
 import { doctorVisitFrequencyOptions } from '@/types/studentsSurvey.types'
 import { OptionsWithOthersField } from './OptionWithOthersField'
 import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
+import { useFormContext } from 'react-hook-form'
 
-export const HealthServicesHealthMaintenance = ({
-  studentId,
+export const ParentSurveyHealthServicesHealthMaintenance = ({
   isFemale = false,
 }: {
-  studentId: string
   isFemale?: boolean
 }) => {
-  const { customRegister, setValue, watch } = useCustomRegister(studentId)
+  const { register, setValue, watch } = useFormContext()
 
   return (
     <PageCard title="Nutrition" bodyStyle="px-4">
@@ -21,16 +19,16 @@ export const HealthServicesHealthMaintenance = ({
         {/* Balanced diet importance */}
 
         <Select
-          {...customRegister('doctorVisitFrequency')}
+          {...register('healthMaintenance.doctorVisitFrequency')}
           label="How often do you visit the doctor for health check-ups?"
           options={doctorVisitFrequencyOptions}
           value={{
-            value: watch('doctorVisitFrequency'),
-            label: watch('doctorVisitFrequency'),
+            value: watch('healthMaintenance.doctorVisitFrequency'),
+            label: watch('healthMaintenance.doctorVisitFrequency'),
           }}
           onChange={(selectedOption: any) => {
             const value = selectedOption.value
-            setValue('doctorVisitFrequency', value)
+            setValue('healthMaintenance.doctorVisitFrequency', value)
           }}
         />
 
@@ -42,10 +40,9 @@ export const HealthServicesHealthMaintenance = ({
             'I don’t know',
             'Other',
           ]}
-          studentId={studentId}
           form={{
-            id: 'benefitsOfRegularHealthCheckups',
-            otherId: 'benefitsOfRegularHealthCheckups',
+            id: 'healthMaintenance.benefitsOfRegularHealthCheckups',
+            otherId: 'healthMaintenance.benefitsOfRegularHealthCheckups',
           }}
           label="What do you think are the benefits of regular health check-ups? "
         />
@@ -61,9 +58,8 @@ export const HealthServicesHealthMaintenance = ({
             'No, I don’t have someone to talk to about this',
             'Other (please specify)',
           ]}
-          studentId={studentId}
           form={{
-            id: 'someoneToTalkToAboutHealth',
+            id: 'healthMaintenance.someoneToTalkToAboutHealth',
           }}
           label="Do you have someone you can talk to about your body and health? If so, who is that person?"
         />
@@ -76,7 +72,7 @@ export const HealthServicesHealthMaintenance = ({
               textContainerClassName="mb-2"
             >
               <Select
-                {...customRegister('ideaOfHpvVaccine')}
+                {...register('healthMaintenance.ideaOfHpvVaccine')}
                 label="Do you know what the HPV vaccine is?"
                 options={convertStringsToOptionArray([
                   'Yes, I know',
@@ -84,12 +80,12 @@ export const HealthServicesHealthMaintenance = ({
                   'No, I don’t know',
                 ])}
                 value={{
-                  value: watch('ideaOfHpvVaccine'),
-                  label: watch('ideaOfHpvVaccine'),
+                  value: watch('healthMaintenance.ideaOfHpvVaccine'),
+                  label: watch('healthMaintenance.ideaOfHpvVaccine'),
                 }}
                 onChange={(selectedOption: any) => {
                   const value = selectedOption.value
-                  setValue('ideaOfHpvVaccine', value)
+                  setValue('healthMaintenance.ideaOfHpvVaccine', value)
                 }}
               />
 
@@ -106,16 +102,15 @@ export const HealthServicesHealthMaintenance = ({
                   'Newspapers or magazines',
                   'Other (please specify)',
                 ]}
-                studentId={studentId}
                 form={{
-                  id: 'ideaOfHpvVaccineSource',
+                  id: 'healthMaintenance.ideaOfHpvVaccineSource',
                 }}
                 label="If  yes, how did you learn about it?"
               />
             </PageCard>
 
             <Select
-              {...customRegister('hadHpvVaccine')}
+              {...register('healthMaintenance.hadHpvVaccine')}
               label="Have you had the HPV vaccine?"
               options={convertStringsToOptionArray([
                 'Yes',
@@ -123,16 +118,18 @@ export const HealthServicesHealthMaintenance = ({
                 'I don’t know',
               ])}
               value={{
-                value: watch('hadHpvVaccine'),
-                label: watch('hadHpvVaccine'),
+                value: watch('healthMaintenance.hadHpvVaccine'),
+                label: watch('healthMaintenance.hadHpvVaccine'),
               }}
               onChange={(selectedOption: any) => {
                 const value = selectedOption.value
-                setValue('hadHpvVaccine', value)
+                setValue('healthMaintenance.hadHpvVaccine', value)
               }}
             />
             <Select
-              {...customRegister('willingToReceiveHpvVaccineIfNotReceived')}
+              {...register(
+                'healthMaintenance.willingToReceiveHpvVaccineIfNotReceived'
+              )}
               label="If you have not received the vaccine, would you be willing to receive it?"
               options={convertStringsToOptionArray([
                 'Yes',
@@ -140,16 +137,25 @@ export const HealthServicesHealthMaintenance = ({
                 "I'm not sure",
               ])}
               value={{
-                value: watch('willingToReceiveHpvVaccineIfNotReceived'),
-                label: watch('willingToReceiveHpvVaccineIfNotReceived'),
+                value: watch(
+                  'healthMaintenance.willingToReceiveHpvVaccineIfNotReceived'
+                ),
+                label: watch(
+                  'healthMaintenance.willingToReceiveHpvVaccineIfNotReceived'
+                ),
               }}
               onChange={(selectedOption: any) => {
                 const value = selectedOption.value
-                setValue('willingToReceiveHpvVaccineIfNotReceived', value)
+                setValue(
+                  'healthMaintenance.willingToReceiveHpvVaccineIfNotReceived',
+                  value
+                )
               }}
             />
             <Select
-              {...customRegister('willingToReceiveHpvVaccineIfOffered')}
+              {...register(
+                'healthMaintenance.willingToReceiveHpvVaccineIfOffered'
+              )}
               label="Are you willing to receive the HPV vaccine if it is offered to you?"
               options={convertStringsToOptionArray([
                 'Yes, I would like to receive the vaccine.',
@@ -157,16 +163,23 @@ export const HealthServicesHealthMaintenance = ({
                 'I’m not sure.',
               ])}
               value={{
-                value: watch('willingToReceiveHpvVaccineIfOffered'),
-                label: watch('willingToReceiveHpvVaccineIfOffered'),
+                value: watch(
+                  'healthMaintenance.willingToReceiveHpvVaccineIfOffered'
+                ),
+                label: watch(
+                  'healthMaintenance.willingToReceiveHpvVaccineIfOffered'
+                ),
               }}
               onChange={(selectedOption: any) => {
                 const value = selectedOption.value
-                setValue('willingToReceiveHpvVaccineIfOffered', value)
+                setValue(
+                  'healthMaintenance.willingToReceiveHpvVaccineIfOffered',
+                  value
+                )
               }}
             />
             <Select
-              {...customRegister('reasonForHpvVaccineUncertainty')}
+              {...register('healthMaintenance.reasonForHpvVaccineUncertainty')}
               label="If you’re not sure, can you tell us why? (Choose all that apply)"
               options={convertStringsToOptionArray([
                 'I need to ask permission from my parents or guardians.',
@@ -177,19 +190,18 @@ export const HealthServicesHealthMaintenance = ({
               isMulti
               isCreatable
               value={convertStringsToOptionArray(
-                watch('reasonForHpvVaccineUncertainty')
+                watch('healthMaintenance.reasonForHpvVaccineUncertainty')
               )}
               onChange={(selectedOption: any) => {
                 const value = selectedOption?.map(
                   (option: { value: string }) => option.value
                 )
-                setValue('reasonForHpvVaccineUncertainty', value)
+                setValue(
+                  'healthMaintenance.reasonForHpvVaccineUncertainty',
+                  value
+                )
               }}
             />
-            {/*  */}
-            {/*  */}
-            {/*  */}
-            {/*  */}
           </>
         )}
       </div>

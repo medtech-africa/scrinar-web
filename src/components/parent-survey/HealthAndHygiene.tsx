@@ -9,7 +9,7 @@ export const ParentSurveyHealthAndHygiene = () => {
   const { register, setValue, watch } = useFormContext()
 
   return (
-    <PageCard title="Physical" bodyStyle="px-4">
+    <PageCard title="Health and Hygiene" bodyStyle="px-4">
       <div className="grid md:flex grid-cols-1 gap-6 parent [&>*]:w-[calc(50%-1.5rem)] flex-wrap">
         {/* <div className="grid md:grid-cols-2 grid-cols-1 gap-6"> */}
         <Select
@@ -75,7 +75,7 @@ export const ParentSurveyHealthAndHygiene = () => {
             'Others (specify)',
           ]}
           form={{
-            id: 'toiletFacility',
+            id: 'healthHygiene.toiletFacility',
           }}
           label="What kind of toilet facility do you and your family members usually use at home?"
         />
