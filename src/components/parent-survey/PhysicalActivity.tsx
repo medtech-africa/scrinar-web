@@ -1,21 +1,23 @@
 import { PageCard } from '@/components/ui/page-card'
 import { Select } from '@/components/ui/select'
 import React from 'react'
-import { useCustomRegister } from '@/hooks/useCustomRegister'
 import { OptionsWithOthersField } from './OptionWithOthersField'
 import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 import { Input } from '@/components/ui/input'
 import { TextArea } from '@/components/ui/textarea'
+import { useFormContext } from 'react-hook-form'
 
-export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
-  const { customRegister, setValue, watch } = useCustomRegister(studentId)
+export const ParentSurveyPhysicalActivity = () => {
+  const { register: customRegister, setValue, watch } = useFormContext()
 
   return (
     <div className="space-y-4">
       <PageCard title="Importance of physical activity" bodyStyle="px-4">
         <div className="grid md:grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] grid-cols-1 gap-6">
           <Select
-            {...customRegister('amountOfPhysicalActivityDaily')}
+            {...customRegister(
+              'physicalActivity.amountOfPhysicalActivityDaily'
+            )}
             label="How much physical activity should a person do everyday to be healthy?"
             options={convertStringsToOptionArray([
               '30 minutes a day',
@@ -24,12 +26,12 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
               'I don’t know',
             ])}
             value={{
-              value: watch('amountOfPhysicalActivityDaily'),
-              label: watch('amountOfPhysicalActivityDaily'),
+              value: watch('physicalActivity.amountOfPhysicalActivityDaily'),
+              label: watch('physicalActivity.amountOfPhysicalActivityDaily'),
             }}
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
-              setValue('amountOfPhysicalActivityDaily', value)
+              setValue('physicalActivity.amountOfPhysicalActivityDaily', value)
             }}
           />
 
@@ -42,14 +44,13 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
               'Not sure',
               'Other (please specify)',
             ]}
-            studentId={studentId}
             form={{
-              id: 'longTermEffectOfPerformingPhysicalActivityRegularly',
+              id: 'physicalActivity.longTermEffectOfPerformingPhysicalActivityRegularly',
             }}
           />
 
           <Select
-            {...customRegister('goodFormsOfExercise')}
+            {...customRegister('physicalActivity.goodFormsOfExercise')}
             label="What kinds of activities are good forms of exercise? (select all you think are correct)"
             options={convertStringsToOptionArray([
               'Running and playing sports',
@@ -59,12 +60,14 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
             ])}
             isMulti
             isCreatable
-            value={convertStringsToOptionArray(watch('goodFormsOfExercise'))}
+            value={convertStringsToOptionArray(
+              watch('physicalActivity.goodFormsOfExercise')
+            )}
             onChange={(selectedOption: any) => {
               const value = selectedOption?.map(
                 (option: { value: string }) => option.value
               )
-              setValue('goodFormsOfExercise', value)
+              setValue('physicalActivity.goodFormsOfExercise', value)
             }}
           />
         </div>
@@ -72,7 +75,7 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
       <PageCard title="Adolescent Physical Activity patterns" bodyStyle="px-4">
         <div className="grid md:grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] grid-cols-1 gap-6">
           <Select
-            {...customRegister('amountOfSportsParticipation')}
+            {...customRegister('physicalActivity.amountOfSportsParticipation')}
             label="In a typical week, how many times do you participate in  sports at school?"
             options={convertStringsToOptionArray([
               'Everyday',
@@ -83,16 +86,18 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
               'Not at all',
             ])}
             value={{
-              value: watch('amountOfSportsParticipation'),
-              label: watch('amountOfSportsParticipation'),
+              value: watch('physicalActivity.amountOfSportsParticipation'),
+              label: watch('physicalActivity.amountOfSportsParticipation'),
             }}
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
-              setValue('amountOfSportsParticipation', value)
+              setValue('physicalActivity.amountOfSportsParticipation', value)
             }}
           />
           <Select
-            {...customRegister('amountOfPhysicalActivityEngagement')}
+            {...customRegister(
+              'physicalActivity.amountOfPhysicalActivityEngagement'
+            )}
             label="On one of those days, how long do you usually engage in it for?"
             options={convertStringsToOptionArray([
               'Everyday',
@@ -103,16 +108,25 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
               'Not at all',
             ])}
             value={{
-              value: watch('amountOfPhysicalActivityEngagement'),
-              label: watch('amountOfPhysicalActivityEngagement'),
+              value: watch(
+                'physicalActivity.amountOfPhysicalActivityEngagement'
+              ),
+              label: watch(
+                'physicalActivity.amountOfPhysicalActivityEngagement'
+              ),
             }}
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
-              setValue('amountOfPhysicalActivityEngagement', value)
+              setValue(
+                'physicalActivity.amountOfPhysicalActivityEngagement',
+                value
+              )
             }}
           />
           <Select
-            {...customRegister('amountOfPhysicalActivityHouseChore')}
+            {...customRegister(
+              'physicalActivity.amountOfPhysicalActivityHouseChore'
+            )}
             label="How often do you participate in house chores that require physical effort and make you sweat?"
             options={convertStringsToOptionArray([
               'Everyday',
@@ -123,12 +137,19 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
               'Not at all',
             ])}
             value={{
-              value: watch('amountOfPhysicalActivityHouseChore'),
-              label: watch('amountOfPhysicalActivityHouseChore'),
+              value: watch(
+                'physicalActivity.amountOfPhysicalActivityHouseChore'
+              ),
+              label: watch(
+                'physicalActivity.amountOfPhysicalActivityHouseChore'
+              ),
             }}
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
-              setValue('amountOfPhysicalActivityHouseChore', value)
+              setValue(
+                'physicalActivity.amountOfPhysicalActivityHouseChore',
+                value
+              )
             }}
           />
 
@@ -141,14 +162,14 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
               'Not sure',
               'Other (please specify)',
             ]}
-            studentId={studentId}
+            
             form={{
               id: 'longTermEffectOfPerformingPhysicalActivityRegularly',
             }}
           /> */}
 
           <Select
-            {...customRegister('typesOfHouseChoresRegularly')}
+            {...customRegister('physicalActivity.typesOfHouseChoresRegularly')}
             label="What types of house chores do you regularly do at home? (Select all that apply)"
             options={convertStringsToOptionArray([
               'Fetching water',
@@ -164,35 +185,37 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
             isMulti
             isCreatable
             value={convertStringsToOptionArray(
-              watch('typesOfHouseChoresRegularly')
+              watch('physicalActivity.typesOfHouseChoresRegularly')
             )}
             onChange={(selectedOption: any) => {
               const value = selectedOption?.map(
                 (option: { value: string }) => option.value
               )
-              setValue('typesOfHouseChoresRegularly', value)
+              setValue('physicalActivity.typesOfHouseChoresRegularly', value)
             }}
           />
 
           <Input
             {...customRegister(
-              'averageHoursOnMobileGamesComputerInternetDaily'
+              'physicalActivity.averageHoursOnMobileGamesComputerInternetDaily'
             )}
             label="Average hours spent with mobile games, computer/internet daily"
             endingIcon={'hrs'}
           />
           <Input
-            {...customRegister('averageHoursOnTelevisionDaily')}
+            {...customRegister(
+              'physicalActivity.averageHoursOnTelevisionDaily'
+            )}
             label="Average hours spent watching TV/Playing video games daily"
             endingIcon={'hrs'}
           />
           <Input
-            {...customRegister('timeYouSleep')}
+            {...customRegister('physicalActivity.timeYouSleep')}
             label="What time do you go to bed at night?"
             endingIcon={'PM'}
           />
           <Input
-            {...customRegister('timeYouWake')}
+            {...customRegister('physicalActivity.timeYouWake')}
             label="What time do you wake up in the morning?"
             endingIcon={'AM'}
           />
@@ -209,14 +232,15 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
               'I don’t know',
               'Other (please specify)',
             ]}
-            studentId={studentId}
             form={{
-              id: 'shouldBoysGirlsDoSameSports',
+              id: 'physicalActivity.shouldBoysGirlsDoSameSports',
             }}
           />
 
           <Select
-            {...customRegister('challengesFromBeingPhysicallyActive')}
+            {...customRegister(
+              'physicalActivity.challengesFromBeingPhysicallyActive'
+            )}
             label="What are some challenges that you think prevent children your age (Refer to adolescents when asking adults) from being physically active? (Select all that apply)"
             options={convertStringsToOptionArray([
               'Lack of time due to schoolwork or other responsibilities like house chores, etc',
@@ -229,17 +253,22 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
             isMulti
             isCreatable
             value={convertStringsToOptionArray(
-              watch('challengesFromBeingPhysicallyActive')
+              watch('physicalActivity.challengesFromBeingPhysicallyActive')
             )}
             onChange={(selectedOption: any) => {
               const value = selectedOption?.map(
                 (option: { value: string }) => option.value
               )
-              setValue('challengesFromBeingPhysicallyActive', value)
+              setValue(
+                'physicalActivity.challengesFromBeingPhysicallyActive',
+                value
+              )
             }}
           />
           <Select
-            {...customRegister('importanceOfBeingPhysicallyActive')}
+            {...customRegister(
+              'physicalActivity.importanceOfBeingPhysicallyActive'
+            )}
             label="Is it important for both boys and girls to be physically active? (Select all that apply)"
             options={convertStringsToOptionArray([
               "Yes, it's important for both boys and girls",
@@ -250,24 +279,27 @@ export const PhysicalActivity = ({ studentId }: { studentId: string }) => {
             isMulti
             isCreatable
             value={convertStringsToOptionArray(
-              watch('importanceOfBeingPhysicallyActive')
+              watch('physicalActivity.importanceOfBeingPhysicallyActive')
             )}
             onChange={(selectedOption: any) => {
               const value = selectedOption?.map(
                 (option: { value: string }) => option.value
               )
-              setValue('importanceOfBeingPhysicallyActive', value)
+              setValue(
+                'physicalActivity.importanceOfBeingPhysicallyActive',
+                value
+              )
             }}
           />
 
           <TextArea
             rows={4}
-            {...customRegister('suitableActivitiesForBoys')}
+            {...customRegister('physicalActivity.suitableActivitiesForBoys')}
             label="Which types of physical activities do you think are most suitable for boys? (List all that you can think of)"
           />
           <TextArea
             rows={4}
-            {...customRegister('suitableActivitiesForGirls')}
+            {...customRegister('physicalActivity.suitableActivitiesForGirls')}
             label="Which types of physical activities do you think are most suitable for girls? (List all that you can think of)"
           />
         </div>
