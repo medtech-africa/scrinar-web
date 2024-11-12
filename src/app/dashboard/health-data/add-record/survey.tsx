@@ -15,14 +15,14 @@ import {
 import { cleanObject } from '@/utils/checkIfValueExist'
 import { errorMessage } from '@/utils/errorMessage'
 import toast from 'react-hot-toast'
-import { RiskyBehaviourStress } from '@/components/student-survey/risky-behavior-stress/RiskyBehaviourStress'
-import { HealthServicesHealthMaintenance } from '@/components/student-survey/risky-behavior-stress/HealthServicesHealthMaintenance'
+import { RiskyBehaviourStress } from '@/components/student-survey/RiskyBehaviourStress'
+import { HealthServicesHealthMaintenance } from '@/components/student-survey/HealthServicesHealthMaintenance'
 import { useStudent } from '@/hooks/queries/useStudents'
-import { HealthAndHygiene } from '@/components/student-survey/risky-behavior-stress/HealthAndHygiene'
-import { NonCommunicableDiseaseQuestions } from '@/components/student-survey/risky-behavior-stress/NCD'
-import { PhysicalActivity } from '@/components/student-survey/risky-behavior-stress/PhysicalActivity'
-import { IdealBody } from '@/components/student-survey/risky-behavior-stress/IdealBody'
-import { StudentNutritionSurvey } from '@/components/student-survey/risky-behavior-stress/Nutrition'
+import { HealthAndHygiene } from '@/components/student-survey/HealthAndHygiene'
+import { NonCommunicableDiseaseQuestions } from '@/components/student-survey/NCD'
+import { PhysicalActivity } from '@/components/student-survey/PhysicalActivity'
+import { IdealBody } from '@/components/student-survey/IdealBody'
+import { StudentNutritionSurvey } from '@/components/student-survey/Nutrition'
 
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',

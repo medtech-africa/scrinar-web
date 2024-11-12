@@ -3,7 +3,7 @@ import { Select } from '@/components/ui/select'
 import React from 'react'
 import { useCustomRegister } from '@/hooks/useCustomRegister'
 import { doctorVisitFrequencyOptions } from '@/types/studentsSurvey.types'
-import { OptionsWithOthersField } from '../OptionWithOthersField'
+import { OptionsWithOthersField } from './OptionWithOthersField'
 import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 
 export const HealthServicesHealthMaintenance = ({

@@ -2,7 +2,7 @@ import { PageCard } from '@/components/ui/page-card'
 import { Select } from '@/components/ui/select'
 import React from 'react'
 import { useCustomRegister } from '@/hooks/useCustomRegister'
-import { OptionsWithOthersField } from '../OptionWithOthersField'
+import { OptionsWithOthersField } from './OptionWithOthersField'
 import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 import { Input } from '@/components/ui/input'
 
