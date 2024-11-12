@@ -22,9 +22,9 @@ function dotToNested(obj: Record<string, string>) {
   return result;
 }
 
-export const useCustomRegister = (studentId: string) => {
+export const useCustomRegister = (studentId?: string) => {
   const { register, setValue, watch, control } = useFormContext()
-  const { mutate } = useMutateStudentsSurvey(studentId)
+  const { mutate } = useMutateStudentsSurvey(studentId ?? '')
 
   const customRegister = (name: string, options: any = {}) => {
     const {exclude, ...restOptions} = options
@@ -58,10 +58,12 @@ export const useCustomRegister = (studentId: string) => {
       ...rest,
       onBlur: (e: any) => {
         if (originalBlur) originalBlur(e)
-        handleBlur()
+        if(studentId) handleBlur()
       },
     }
   }
 
   return { customRegister, setValue, watch, control }
 }
+
+export {useCustomRegister as useStudentCustomRegister}
