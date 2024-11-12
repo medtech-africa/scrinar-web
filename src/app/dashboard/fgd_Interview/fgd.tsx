@@ -14,7 +14,7 @@ import { useSchoolResources } from '@/hooks/queries/useSchools'
 import EmptyData from '@/components/empty-data'
 import { cn } from '@/lib/utils'
 import { IconPicker } from '@/components/ui/icon-picker'
-import { FGDUploadButton } from '@/components/interviews/FgdUploadButton'
+import { FGDUploadButton } from '@/components/interviews/fgdUploadButton'
 
 const FGD = () => {
   const CustomMediaRecorder = React.useMemo(
