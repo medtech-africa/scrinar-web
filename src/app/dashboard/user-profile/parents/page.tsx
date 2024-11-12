@@ -80,7 +80,7 @@ const FilterHeader = ({
       <Input
         leadingIcon={<IconPicker icon="search" />}
         className="rounded-[49px] bg-grey-100 text-sm  md:w-[17.25rem] w-[15rem]"
-        placeholder="Search by Name or Family Code...."
+        placeholder="Search by Name or HouseHold Code...."
         full={false}
         onChange={(e) => onSearchChange(e.target.value)}
         endingIcon={
@@ -205,7 +205,7 @@ export default function Parents() {
             <TableRow>
               <TableHead>Name</TableHead>
               <TableHead>Gender</TableHead>
-              <TableHead>Family Code</TableHead>
+              <TableHead>HouseHold Code</TableHead>
               <TableHead>Mobile No</TableHead>
               <TableHead>Date Added</TableHead>
               <TableHead>Action</TableHead>
