@@ -304,9 +304,7 @@ const ParentQuestionnaire = ({
               <ParentSurveyRiskyBehaviourStress />
             </Tabs.Content>
             <Tabs.Content value="health-sanitation-maintenance">
-              <ParentSurveyHealthServicesHealthMaintenance
-                isFemale={gender === 'female'}
-              />
+              <ParentSurveyHealthServicesHealthMaintenance gender={gender} />
             </Tabs.Content>
             <Tabs.Content value="health-hygiene">
               <ParentSurveyHealthAndHygiene />
