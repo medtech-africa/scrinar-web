@@ -30,7 +30,7 @@ import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-c
 import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add-questionnaire'
 import * as Tabs from '@radix-ui/react-tabs'
 import Interview from './fgd_Interview/interview'
-import Fda from './fgd_Interview/fda'
+import FGD from './fgd_Interview/fgd'
 
 const dashboardStats = [
   {
@@ -265,17 +265,17 @@ export default function Home() {
                 </Tabs.Trigger>
                 <Tabs.Trigger
                   className={triggerClassName}
-                  value="fda"
+                  value="fgd"
                   onClick={() => refetch()}
                 >
-                  FDA Interview
+                  FGD Interview
                 </Tabs.Trigger>
               </Tabs.List>
               <Tabs.Content value="interview">
                 <Interview />
               </Tabs.Content>
-              <Tabs.Content value="fda">
-                <Fda />
+              <Tabs.Content value="fgd">
+                <FGD />
               </Tabs.Content>
             </Tabs.Root>
           </div>

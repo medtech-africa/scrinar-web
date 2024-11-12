@@ -42,7 +42,7 @@ const FgdGuideModal = ({
 
       <Button onClick={handleClick} variant={'secondary'} type="button">
         <IconPicker icon="documentText" className={cn`mr-2`} />
-        Upload Audio
+        Upload FGD
       </Button>
 
       <Input
@@ -55,7 +55,7 @@ const FgdGuideModal = ({
 
       {/* Save button */}
       <Button loading={isLoading} type="submit">
-        Save Audio
+        Save FGD
       </Button>
     </div>
   )
