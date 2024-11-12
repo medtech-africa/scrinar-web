@@ -34,6 +34,75 @@ export const ParentSurveyPhysicalActivity = () => {
               setValue('physicalActivity.amountOfPhysicalActivityDaily', value)
             }}
           />
+          <Select
+            {...customRegister(
+              'physicalActivity.importanceOfChildPhysicalExerciseOnHealth'
+            )}
+            label="How important do you think physical exercise is for your child’s health?"
+            options={convertStringsToOptionArray([
+              'Extremely important',
+              'Very important',
+              'Somewhat important',
+              'Not very important',
+              'Not important at all',
+            ])}
+            value={{
+              value: watch(
+                'physicalActivity.importanceOfChildPhysicalExerciseOnHealth'
+              ),
+              label: watch(
+                'physicalActivity.importanceOfChildPhysicalExerciseOnHealth'
+              ),
+            }}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue(
+                'physicalActivity.importanceOfChildPhysicalExerciseOnHealth',
+                value
+              )
+            }}
+          />
+          <Select
+            {...customRegister('physicalActivity.childGetsEnoughExercise')}
+            label="Do you think your child gets enough physical exercise?"
+            options={convertStringsToOptionArray(['Yes', 'No', 'I don’t know'])}
+            value={{
+              value: watch('physicalActivity.childGetsEnoughExercise'),
+              label: watch('physicalActivity.childGetsEnoughExercise'),
+            }}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue('physicalActivity.childGetsEnoughExercise', value)
+            }}
+          />
+          <Select
+            {...customRegister(
+              'physicalActivity.importancePhysicalExerciseOnYourHealth'
+            )}
+            label="How important do you think physical exercise is for your own health?"
+            options={convertStringsToOptionArray([
+              'Extremely important',
+              'Very important',
+              'Somewhat important',
+              'Not very important',
+              'Not important at all',
+            ])}
+            value={{
+              value: watch(
+                'physicalActivity.importancePhysicalExerciseOnYourHealth'
+              ),
+              label: watch(
+                'physicalActivity.importancePhysicalExerciseOnYourHealth'
+              ),
+            }}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue(
+                'physicalActivity.importancePhysicalExerciseOnYourHealth',
+                value
+              )
+            }}
+          />
 
           <OptionsWithOthersField
             label="What is the long-term effect of performing physical activity regularly?"
@@ -75,100 +144,6 @@ export const ParentSurveyPhysicalActivity = () => {
       <PageCard title="Adolescent Physical Activity patterns" bodyStyle="px-4">
         <div className="grid md:grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] grid-cols-1 gap-6">
           <Select
-            {...customRegister('physicalActivity.amountOfSportsParticipation')}
-            label="In a typical week, how many times do you participate in  sports at school?"
-            options={convertStringsToOptionArray([
-              'Everyday',
-              'Almost every day',
-              '4 or 5 days a week',
-              '2 or 3 days a week',
-              'Occasionally',
-              'Not at all',
-            ])}
-            value={{
-              value: watch('physicalActivity.amountOfSportsParticipation'),
-              label: watch('physicalActivity.amountOfSportsParticipation'),
-            }}
-            onChange={(selectedOption: any) => {
-              const value = selectedOption.value
-              setValue('physicalActivity.amountOfSportsParticipation', value)
-            }}
-          />
-          <Select
-            {...customRegister(
-              'physicalActivity.amountOfPhysicalActivityEngagement'
-            )}
-            label="On one of those days, how long do you usually engage in it for?"
-            options={convertStringsToOptionArray([
-              'Everyday',
-              'Almost every day',
-              '4 or 5 days a week',
-              '2 or 3 days a week',
-              'Occasionally',
-              'Not at all',
-            ])}
-            value={{
-              value: watch(
-                'physicalActivity.amountOfPhysicalActivityEngagement'
-              ),
-              label: watch(
-                'physicalActivity.amountOfPhysicalActivityEngagement'
-              ),
-            }}
-            onChange={(selectedOption: any) => {
-              const value = selectedOption.value
-              setValue(
-                'physicalActivity.amountOfPhysicalActivityEngagement',
-                value
-              )
-            }}
-          />
-          <Select
-            {...customRegister(
-              'physicalActivity.amountOfPhysicalActivityHouseChore'
-            )}
-            label="How often do you participate in house chores that require physical effort and make you sweat?"
-            options={convertStringsToOptionArray([
-              'Everyday',
-              'Almost every day',
-              '4 or 5 days a week',
-              '2 or 3 days a week',
-              'Occasionally',
-              'Not at all',
-            ])}
-            value={{
-              value: watch(
-                'physicalActivity.amountOfPhysicalActivityHouseChore'
-              ),
-              label: watch(
-                'physicalActivity.amountOfPhysicalActivityHouseChore'
-              ),
-            }}
-            onChange={(selectedOption: any) => {
-              const value = selectedOption.value
-              setValue(
-                'physicalActivity.amountOfPhysicalActivityHouseChore',
-                value
-              )
-            }}
-          />
-
-          {/* <OptionsWithOthersField
-            label="What is the long-term effect of performing physical activity regularly?"
-            options={[
-              'It only helps you while you are young',
-              'It is beneficial for a long time and can help you stay healthy as you grow older.',
-              'It doesn’t have any long-term benefits',
-              'Not sure',
-              'Other (please specify)',
-            ]}
-            
-            form={{
-              id: 'longTermEffectOfPerformingPhysicalActivityRegularly',
-            }}
-          /> */}
-
-          <Select
             {...customRegister('physicalActivity.typesOfHouseChoresRegularly')}
             label="What types of house chores do you regularly do at home? (Select all that apply)"
             options={convertStringsToOptionArray([
@@ -193,31 +168,6 @@ export const ParentSurveyPhysicalActivity = () => {
               )
               setValue('physicalActivity.typesOfHouseChoresRegularly', value)
             }}
-          />
-
-          <Input
-            {...customRegister(
-              'physicalActivity.averageHoursOnMobileGamesComputerInternetDaily'
-            )}
-            label="Average hours spent with mobile games, computer/internet daily"
-            endingIcon={'hrs'}
-          />
-          <Input
-            {...customRegister(
-              'physicalActivity.averageHoursOnTelevisionDaily'
-            )}
-            label="Average hours spent watching TV/Playing video games daily"
-            endingIcon={'hrs'}
-          />
-          <Input
-            {...customRegister('physicalActivity.timeYouSleep')}
-            label="What time do you go to bed at night?"
-            endingIcon={'PM'}
-          />
-          <Input
-            {...customRegister('physicalActivity.timeYouWake')}
-            label="What time do you wake up in the morning?"
-            endingIcon={'AM'}
           />
         </div>
       </PageCard>
@@ -302,6 +252,122 @@ export const ParentSurveyPhysicalActivity = () => {
             {...customRegister('physicalActivity.suitableActivitiesForGirls')}
             label="Which types of physical activities do you think are most suitable for girls? (List all that you can think of)"
           />
+
+          <OptionsWithOthersField
+            label="Do you think the amount of physical activity needed is different for men and women?"
+            options={[
+              'Yes, men need more physical activity than women',
+              'Yes, women need more physical activity than men',
+              'No, men and women need the same amount of physical activity',
+              'I don’t know',
+              'Other (please specify)',
+            ]}
+            form={{
+              id: 'physicalActivity.amountOfPhysicalActivityNeededIsDifferentForBoth',
+            }}
+          />
+
+          <OptionsWithOthersField
+            label="What common beliefs or practices in your community discourage girls from engaging in physical activities?"
+            options={[
+              'Physical differences between boys and girls',
+              'Some sports are traditionally meant for either boys or girls',
+              'Boys and girls have different interests when it comes to sports',
+              'Concerns about injury or safety',
+              'Cultural or religious beliefs',
+              "I don't know",
+              'Other (please specify)',
+            ]}
+            form={{
+              id: 'physicalActivity.beliefsThatDiscourageGirlFromPhysical',
+            }}
+          />
+
+          <Select
+            {...customRegister(
+              'physicalActivity.amountOfTimeGirlsHaveForPhysicalThanBoys'
+            )}
+            label="In your community, do you think girls have more, less, or the same amount of time for physical activities compared to boys?"
+            options={convertStringsToOptionArray([
+              'Girls have more time than boys',
+              'Girls have less time than boys',
+              'Girls and boys have about the same amount of time',
+              'Unsure',
+            ])}
+            value={{
+              value: watch(
+                'physicalActivity.amountOfTimeGirlsHaveForPhysicalThanBoys'
+              ),
+              label: watch(
+                'physicalActivity.amountOfTimeGirlsHaveForPhysicalThanBoys'
+              ),
+            }}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue(
+                'physicalActivity.amountOfTimeGirlsHaveForPhysicalThanBoys',
+                value
+              )
+            }}
+          />
+
+          {[
+            'Girls have more time than boys',
+            'Girls have less time than boys',
+          ].includes(
+            watch('physicalActivity.amountOfTimeGirlsHaveForPhysicalThanBoys')
+          ) && (
+            <Input
+              {...customRegister(
+                'physicalActivity.whyAmountOfTimeGirlsHaveForPhysicalThanBoys'
+              )}
+              label="why do you think so?"
+            />
+          )}
+
+          <Select
+            {...customRegister(
+              'physicalActivity.amountOfOpportunitiesGirlsHaveForPhysicalThanBoys'
+            )}
+            label="In your community, do you think girls have more, less, or the same opportunities for physical activities compared to boys?"
+            options={convertStringsToOptionArray([
+              'Girls have more opportunities than boys',
+              'Girls have less opportunities than boys',
+              'Girls and boys have about the same opportunities',
+              'Unsure',
+            ])}
+            value={{
+              value: watch(
+                'physicalActivity.amountOfOpportunitiesGirlsHaveForPhysicalThanBoys'
+              ),
+              label: watch(
+                'physicalActivity.amountOfOpportunitiesGirlsHaveForPhysicalThanBoys'
+              ),
+            }}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue(
+                'physicalActivity.amountOfOpportunitiesGirlsHaveForPhysicalThanBoys',
+                value
+              )
+            }}
+          />
+
+          {[
+            'Girls have more opportunities than boys',
+            'Girls have less opportunities than boys',
+          ].includes(
+            watch(
+              'physicalActivity.amountOfOpportunitiesGirlsHaveForPhysicalThanBoys'
+            )
+          ) && (
+            <Input
+              {...customRegister(
+                'physicalActivity.whyAmountOfOpportunitiesGirlsHaveForPhysicalThanBoys'
+              )}
+              label="why do you think so?"
+            />
+          )}
         </div>
       </PageCard>
     </div>
