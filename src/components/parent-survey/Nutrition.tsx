@@ -72,6 +72,126 @@ const NutritionalBenefitsForm = () => {
   )
 }
 
+const FoodGroupFrequency = () => {
+  const { register: customRegister } = useFormContext()
+
+  const foodHabits = [
+    {
+      label:
+        'In a typical week, on how many days do you give your child “beans, nuts, meat, fish or milk products”?',
+      key: 'protein_sources_frequency',
+    },
+    {
+      label:
+        'In a typical week, on how many days do you give your child “a variety of foods from different food groups” (e.g. 4-star diet, 3 food groups)”',
+      key: 'varied_diet_frequency',
+    },
+    {
+      label:
+        'In a typical week, on how many days do you give your child “green leafy vegetables”?',
+      key: 'green_leafy_vegetables_frequency',
+    },
+    {
+      label:
+        'In a typical week, on how many days do you give your child snacks like buns, doughnut, sausage, biscuits, etc?',
+      key: 'unhealthy_snacks_frequency',
+    },
+    {
+      label:
+        'In a typical week, on how many days do you give your child sugary beverages like coke, fanta etc?',
+      key: 'sugary_drinks_frequency',
+    },
+  ]
+
+  return (
+    <div className="p-4">
+      <table className="table-auto w-full border-collapse border border-gray-300">
+        <thead>
+          <tr className="bg-blue-200 text-sm">
+            <th className="border border-gray-300 px-4 py-2"></th>
+            <th className="border border-gray-300 px-4 py-2">
+              Almost every meal
+            </th>
+            <th className="border border-gray-300 px-4 py-2">
+              Almost every day
+            </th>
+            <th className="border border-gray-300 px-4 py-2">
+              4 or 5 days a week
+            </th>
+            <th className="border border-gray-300 px-4 py-2">
+              2 or 3 days a week
+            </th>
+            <th className="border border-gray-300 px-4 py-2">Occasionally</th>
+            <th className="border border-gray-300 px-4 py-2">Not at all</th>
+          </tr>
+        </thead>
+        <tbody>
+          {foodHabits.map((group) => (
+            <tr key={group.key} className="odd:bg-white even:bg-gray-100">
+              <td className="border border-gray-300 px-4 py-2">
+                {group.label}
+              </td>
+              {[
+                'almost_every_meal',
+                'almost_every_day',
+                'four_or_five_days_a_week',
+                'two_or_three_days_a_week',
+                'occasionally',
+                'not_at_all',
+              ].map((value) => (
+                <td
+                  key={group.key + '_' + value}
+                  className="border border-gray-300 px-4 py-2 text-center relative"
+                >
+                  <label className="absolute inset-0 flex items-center justify-center cursor-pointer">
+                    <span className="w-full h-full flex items-center justify-center">
+                      <input
+                        {...customRegister(
+                          `nutrition.foodGroupFrequency.${group.key}`
+                        )}
+                        value={value}
+                        type={'radio'}
+                        title={group.key}
+                        // className="sr-only" // Hide the radio button visually
+                      />
+                    </span>
+                  </label>
+                </td>
+              ))}
+            </tr>
+          ))}
+          <tr className="odd:bg-white even:bg-gray-100">
+            <td className="border border-gray-300 px-4 py-2">
+              How many cups of vegetables do you give your child on one of those
+              days? (one cup is about the size of an adult’s closed fist)
+            </td>
+            {['1', '2', '3', '4', '5', 'More than 5'].map((value) => (
+              <td
+                className="border border-gray-300 px-4 py-2 text-center relative"
+                key={`vegetable_portion_size_${value}`}
+              >
+                <label className="absolute inset-0 flex items-center justify-center cursor-pointer">
+                  <p className="w-full h-full flex flex-col items-center justify-center">
+                    <input
+                      {...customRegister(
+                        `nutrition.foodGroupFrequency.vegetable_portion_size`
+                      )}
+                      value={value}
+                      type={'radio'}
+                      // className="sr-only" // Hide the radio button visually
+                    />
+                    <span>{value}</span>
+                  </p>
+                </label>
+              </td>
+            ))}
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  )
+}
+
 export const ParentNutritionSurvey = ({ isFemale = false }) => {
   const { register: customRegister, setValue, watch } = useFormContext()
 
@@ -214,184 +334,190 @@ export const ParentNutritionSurvey = ({ isFemale = false }) => {
             label="Why do you feel that change would help you stay healthy?"
           />
 
-          <OptionsWithOthersField
-            label="Who provides money for family meals?"
-            options={[
-              'Myself',
-              'My husband',
-              'Both my husband and I equally',
-              'Extended family members (e.g., grandparents, uncles, aunts)',
-              'Older children',
-              'Government assistance or social programs',
-              'Community support or charity organizations',
-              'Other (please specify)',
-            ]}
-            form={{
-              id: 'nutrition.providesMoneyForMeals',
-            }}
-          />
+          <PageCard title="Decision making around food">
+            <OptionsWithOthersField
+              label="Who provides money for family meals?"
+              options={[
+                'Myself',
+                'My husband',
+                'Both my husband and I equally',
+                'Extended family members (e.g., grandparents, uncles, aunts)',
+                'Older children',
+                'Government assistance or social programs',
+                'Community support or charity organizations',
+                'Other (please specify)',
+              ]}
+              form={{
+                id: 'nutrition.providesMoneyForMeals',
+              }}
+            />
 
-          <OptionsWithOthersField
-            label="Who in the household decides how much is spent on fruits and vegetables?"
-            options={[
-              'Myself',
-              'My husband',
-              'Both my husband and I equally',
-              'Extended family members (e.g., grandparents, uncles, aunts)',
-              'Older children',
-              'Community support or charity organizations',
-              'Other (please specify)',
-            ]}
-            form={{
-              id: 'nutrition.decidesMoneyOnFruits',
-            }}
-          />
+            <OptionsWithOthersField
+              label="Who in the household decides how much is spent on fruits and vegetables?"
+              options={[
+                'Myself',
+                'My husband',
+                'Both my husband and I equally',
+                'Extended family members (e.g., grandparents, uncles, aunts)',
+                'Older children',
+                'Community support or charity organizations',
+                'Other (please specify)',
+              ]}
+              form={{
+                id: 'nutrition.decidesMoneyOnFruits',
+              }}
+            />
 
-          <OptionsWithOthersField
-            label="Who decides daily meals for the family?"
-            options={[
-              'Myself',
-              'My husband',
-              'Both myself and my husband together',
-              'Parents (inlaws)',
-              'Parents (my own)',
-              'Other (please specify)',
-              'Not sure',
-            ]}
-            form={{
-              id: 'nutrition.decidesMealsForFamily',
-            }}
-          />
+            <OptionsWithOthersField
+              label="Who decides daily meals for the family?"
+              options={[
+                'Myself',
+                'My husband',
+                'Both myself and my husband together',
+                'Parents (inlaws)',
+                'Parents (my own)',
+                'Other (please specify)',
+                'Not sure',
+              ]}
+              form={{
+                id: 'nutrition.decidesMealsForFamily',
+              }}
+            />
+          </PageCard>
 
           {isFemale && (
             <>
-              <Input
-                {...customRegister('riskyBehavior.noOfDailyMeals')}
-                label="How many meals do you make for your family daily?"
-                type="number"
-              />
+              <PageCard title="Food preparation in the home">
+                <Input
+                  {...customRegister('riskyBehavior.noOfDailyMeals')}
+                  label="How many meals do you make for your family daily?"
+                  type="number"
+                />
 
-              <OptionsWithOthersField
-                label="How do you determine the Quantity of salt to use when cooking?"
-                options={[
-                  'Gradual adding of salt to taste',
-                  'Use of bare-hands to add salt',
-                  'Use of visual measure to gauge the added salt',
-                  'Use of measuring spoon to add salt',
-                  'Other (please specify)',
-                ]}
-                form={{
-                  id: 'nutrition.saltQuantityDetermination',
-                }}
-              />
+                <OptionsWithOthersField
+                  label="How do you determine the Quantity of salt to use when cooking?"
+                  options={[
+                    'Gradual adding of salt to taste',
+                    'Use of bare-hands to add salt',
+                    'Use of visual measure to gauge the added salt',
+                    'Use of measuring spoon to add salt',
+                    'Other (please specify)',
+                  ]}
+                  form={{
+                    id: 'nutrition.saltQuantityDetermination',
+                  }}
+                />
 
-              <OptionsWithOthersField
-                label="Which of these do you use when cooking"
-                options={[
-                  'Salt only',
-                  'Seasoning cubes/powder only',
-                  'Natural Spices only (eg crayfish, locust beans)',
-                  'Salt combined with seasoning cubes/powder',
-                  'Salt combined with Natural spices',
-                  'Seasoning cubes/powder combined with Natural spices',
-                  'Natural spice, salt and seasoning cubes',
-                  'Other (please specify)',
-                ]}
-                form={{
-                  id: 'nutrition.thingsUsedWhenCooking',
-                }}
-              />
+                <OptionsWithOthersField
+                  label="Which of these do you use when cooking"
+                  options={[
+                    'Salt only',
+                    'Seasoning cubes/powder only',
+                    'Natural Spices only (eg crayfish, locust beans)',
+                    'Salt combined with seasoning cubes/powder',
+                    'Salt combined with Natural spices',
+                    'Seasoning cubes/powder combined with Natural spices',
+                    'Natural spice, salt and seasoning cubes',
+                    'Other (please specify)',
+                  ]}
+                  form={{
+                    id: 'nutrition.thingsUsedWhenCooking',
+                  }}
+                />
 
-              <OptionsWithOthersField
-                label="How often does your family eat fried foods (eg fried egg, fried plantain) or oily foods (eg stew with plenty oil)"
-                options={[
-                  'Every meal',
-                  'Almost every meal',
-                  'Almost every day (not necessarily in every meal)',
-                  '4 or 5 days a week',
-                  '2 or 3 days a week',
-                  'Occasionally',
-                  'Not at all',
-                ]}
-                form={{
-                  id: 'nutrition.friedFood',
-                }}
-              />
+                <OptionsWithOthersField
+                  label="How often does your family eat fried foods (eg fried egg, fried plantain) or oily foods (eg stew with plenty oil)"
+                  options={[
+                    'Every meal',
+                    'Almost every meal',
+                    'Almost every day (not necessarily in every meal)',
+                    '4 or 5 days a week',
+                    '2 or 3 days a week',
+                    'Occasionally',
+                    'Not at all',
+                  ]}
+                  form={{
+                    id: 'nutrition.friedFood',
+                  }}
+                />
 
-              <OptionsWithOthersField
-                label="What source of fuel do you most often use for cooking?"
-                options={[
-                  'Firewood',
-                  'Charcoal',
-                  'Kerosene',
-                  'Cooking Gas',
-                  'Electricity eg electric cooker',
-                  'Biomass (e.g., crop waste, animal dung)',
-                  'Other (please specify)',
-                ]}
-                form={{
-                  id: 'nutrition.sourceOfFuel',
-                }}
-              />
+                <OptionsWithOthersField
+                  label="What source of fuel do you most often use for cooking?"
+                  options={[
+                    'Firewood',
+                    'Charcoal',
+                    'Kerosene',
+                    'Cooking Gas',
+                    'Electricity eg electric cooker',
+                    'Biomass (e.g., crop waste, animal dung)',
+                    'Other (please specify)',
+                  ]}
+                  form={{
+                    id: 'nutrition.sourceOfFuel',
+                  }}
+                />
 
-              <OptionsWithOthersField
-                label="What do you consider when making meals for your family?"
-                options={[
-                  'Cost',
-                  'Ease of preparation',
-                  "My husband's preferences",
-                  "My children's preferences",
-                  'Health reasons',
-                  'Other (please specify)',
-                ]}
-                form={{
-                  id: 'nutrition.considerationBeforeMeals',
-                }}
-              />
+                <OptionsWithOthersField
+                  label="What do you consider when making meals for your family?"
+                  options={[
+                    'Cost',
+                    'Ease of preparation',
+                    "My husband's preferences",
+                    "My children's preferences",
+                    'Health reasons',
+                    'Other (please specify)',
+                  ]}
+                  form={{
+                    id: 'nutrition.considerationBeforeMeals',
+                  }}
+                />
+              </PageCard>
 
-              <OptionsWithOthersField
-                label="How often do you give your child breakfast in the morning?"
-                options={[
-                  'Everyday',
-                  'Almost every day',
-                  '4 or 5 days a week',
-                  '2 or 3 days a week',
-                  'Occasionally',
-                  'Not at all',
-                ]}
-                form={{
-                  id: 'nutrition.childBreakfast',
-                }}
-              />
+              <PageCard title="Breakfast/Lunch Patterns">
+                <OptionsWithOthersField
+                  label="How often do you give your child breakfast in the morning?"
+                  options={[
+                    'Everyday',
+                    'Almost every day',
+                    '4 or 5 days a week',
+                    '2 or 3 days a week',
+                    'Occasionally',
+                    'Not at all',
+                  ]}
+                  form={{
+                    id: 'nutrition.childBreakfast',
+                  }}
+                />
 
-              <OptionsWithOthersField
-                label="If you don’t give them breakfast every morning, why?"
-                options={[
-                  'Lack of time',
-                  "Child doesn't want to eat in the morning",
-                  'Financial reasons',
-                  'Limited food availability',
-                  'Other (please specify)',
-                ]}
-                form={{
-                  id: 'nutrition.noChildBreakfast',
-                }}
-              />
+                <OptionsWithOthersField
+                  label="If you don’t give them breakfast every morning, why?"
+                  options={[
+                    'Lack of time',
+                    "Child doesn't want to eat in the morning",
+                    'Financial reasons',
+                    'Limited food availability',
+                    'Other (please specify)',
+                  ]}
+                  form={{
+                    id: 'nutrition.noChildBreakfast',
+                  }}
+                />
 
-              <OptionsWithOthersField
-                label="How do you provide lunch to your JSS children (choose all that you do)"
-                options={[
-                  'I give them home cooked food to take to school',
-                  'I give them money to buy lunch at school',
-                  'I buy lunch from a vendor or nearby shop for them',
-                  'I involve them in choosing their lunch options',
-                  "I don't provide lunch",
-                  'Other (please specify)',
-                ]}
-                form={{
-                  id: 'nutrition.childLunch',
-                }}
-              />
+                <OptionsWithOthersField
+                  label="How do you provide lunch to your JSS children (choose all that you do)"
+                  options={[
+                    'I give them home cooked food to take to school',
+                    'I give them money to buy lunch at school',
+                    'I buy lunch from a vendor or nearby shop for them',
+                    'I involve them in choosing their lunch options',
+                    "I don't provide lunch",
+                    'Other (please specify)',
+                  ]}
+                  form={{
+                    id: 'nutrition.childLunch',
+                  }}
+                />
+              </PageCard>
             </>
           )}
         </div>
@@ -401,6 +527,10 @@ export const ParentNutritionSurvey = ({ isFemale = false }) => {
         bodyStyle="px-4"
       >
         <NutritionalBenefitsForm />
+      </PageCard>
+
+      <PageCard title="Food group frequency" bodyStyle="px-4">
+        <FoodGroupFrequency />
       </PageCard>
     </div>
   )
