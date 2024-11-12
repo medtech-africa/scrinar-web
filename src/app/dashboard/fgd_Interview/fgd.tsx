@@ -1,6 +1,5 @@
 // 'use client'
 import React from 'react'
-import { IconPicker } from '@/components/ui/icon-picker'
 import {
   Table,
   TableBody,
@@ -11,12 +10,13 @@ import {
 } from '@/components/ui/table'
 import TableLoader from '@/components/table-loader'
 import dynamic from 'next/dynamic'
-import { InterviewUploadButton } from '@/components/interviews/InterviewUploadButton'
 import { useSchoolResources } from '@/hooks/queries/useSchools'
 import EmptyData from '@/components/empty-data'
 import { cn } from '@/lib/utils'
+import { IconPicker } from '@/components/ui/icon-picker'
+import { FGDUploadButton } from '@/components/interviews/FgdUploadButton'
 
-const Interview = () => {
+const FGD = () => {
   const CustomMediaRecorder = React.useMemo(
     () =>
       dynamic(() => import('@/components/customMediaRecorder'), {
@@ -34,46 +34,27 @@ const Interview = () => {
       }),
     []
   )
+
   const CustomMediaRecorderComponent = (props: any) => {
     return <CustomMediaRecorder {...props} />
   }
 
-  // const [selectedRow, setSelectedRow] = React.useState(null)
+  const { data: fgd, isPending: isLoading } = useSchoolResources()
+  const filteredFgd = fgd?.filter((resource) => resource.type === 'fgd')
 
-  const { data: interviews, isPending: isLoading } = useSchoolResources()
-  const filteredInterviews = interviews?.filter(
-    (resource) => resource.type === 'interview'
-  )
-  // const handleMoreClick = (rowIndex: any) => {
-  //   setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
-  // }
-  // const menuItems = [
-  //   {
-  //     title: 'Play Audio',
-  //     icon: IconNames.documentText,
-  //     action: () => console.log('play audio'),
-  //   },
-  //   {
-  //     title: 'Download Audio',
-  //     icon: IconNames.trash,
-  //     action: () => {
-  //       console.log('download audio')
-  //     },
-  //   },
-  // ]
   return (
     <div className="w-full">
       <div className="flex md:flex-row md:justify-between md:gap-0 flex-col justify-center items-center gap-y-6">
         <div className="">
-          <CustomMediaRecorderComponent type="interview" />
+          <CustomMediaRecorderComponent type="fgd" />
         </div>
-        <InterviewUploadButton />
+        <FGDUploadButton />
       </div>
       <div className="py-3 md:py-8">
         <Table
           className={cn(
             'table-auto my-12',
-            filteredInterviews?.length === 0 && 'my-0'
+            filteredFgd?.length === 0 && 'my-0'
           )}
         >
           <TableHeader className="bg-grey-100">
@@ -88,7 +69,7 @@ const Interview = () => {
             {isLoading ? (
               <TableLoader />
             ) : (
-              filteredInterviews?.map?.((resource) => (
+              filteredFgd?.map?.((resource) => (
                 <TableRow
                   key={resource.id}
                   className="font-normal text-sm text-grey-600"
@@ -129,10 +110,10 @@ const Interview = () => {
             )}
           </TableBody>
         </Table>
-        {filteredInterviews?.length === 0 && <EmptyData />}
+        {filteredFgd?.length === 0 && <EmptyData />}
       </div>
     </div>
   )
 }
 
-export default Interview
+export default FGD
