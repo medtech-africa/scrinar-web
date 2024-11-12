@@ -128,7 +128,7 @@ export const ParentNutritionSurvey = () => {
           )}
 
           <OptionsWithOthersField
-            label="What do you think can happen if you eat a lot of sweets and candies?"
+            label="What do you think can happen if your child eats a lot of sweets and candies?"
             options={[
               'It can cause tooth decay and make you gain weight',
               'It makes you grow taller',
@@ -142,7 +142,7 @@ export const ParentNutritionSurvey = () => {
           />
 
           <OptionsWithOthersField
-            label="What do you think can happen if you eat a lot of salty food or food with a lot of oil?"
+            label="What do you think can happen if your child eat a lot of salty food or food with a lot of oil?"
             options={[
               'It can make your heart and body unhealthy',
               'It helps you run faster',
@@ -155,20 +155,53 @@ export const ParentNutritionSurvey = () => {
             }}
           />
 
-          <OptionsWithOthersField
-            label="What do you think you could change in your diet to make it healthier?"
-            options={[
-              'Eat more fruits',
-              'Eat more vegetables',
-              'Drinking water instead of sugary drinks',
-              'Eat less junk food like chips and candy',
-              'No change',
-              'Other (please specify)',
-            ]}
-            form={{
-              id: 'nutrition.changeInDietToBeHealthy',
+          <Select
+            {...customRegister('nutrition.necessityForHealthChildDiet')}
+            label="Do you think it is necessary to make your child’s diet healthier?"
+            options={convertStringsToOptionArray([
+              "Yes it's necessary",
+              'Not necessary',
+            ])}
+            value={{
+              value: watch('nutrition.necessityForHealthChildDiet'),
+              label: watch('nutrition.necessityForHealthChildDiet'),
+            }}
+            onChange={(selectedOption: any) => {
+              const value = selectedOption.value
+              setValue('nutrition.necessityForHealthChildDiet', value)
             }}
           />
+
+          {watch('nutrition.necessityForHealthChildDiet') ===
+            "Yes it's necessary" && (
+            <>
+              <OptionsWithOthersField
+                label="What do you think you could change in your child’s diet to make it healthier?"
+                options={[
+                  'Eat more fruits',
+                  'Eat more vegetables',
+                  'Drinking water instead of sugary drinks',
+                  'Eat less junk food like chips and candy',
+                  'No change',
+                  'Other (please specify)',
+                ]}
+                form={{
+                  id: 'nutrition.changeInDietToBeHealthy',
+                }}
+              />
+            </>
+          )}
+          {watch('nutrition.necessityForHealthChildDiet') ===
+            'Not necessary' && (
+            <>
+              <Input
+                {...customRegister(
+                  'nutrition.whyNotNecessityForHealthChildDiet'
+                )}
+                label="If you answered no, why do you think it's not necessary?"
+              />
+            </>
+          )}
 
           <Input
             {...customRegister('nutrition.numberDailyMeals')}

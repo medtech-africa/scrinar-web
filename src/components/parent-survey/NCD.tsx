@@ -127,21 +127,20 @@ export const NonCommunicableDiseaseQuestions = () => {
             id: 'ncd.anyFamilyMemberWithNcd',
           }}
         />
-
-        {/* <Controller
-          control={control}
-          name="ncd.balancedDiet"
-          render={({ field: { onChange, ...rest } }) => (
-            <Select
-              placeholder="Select an option"
-              label="What do you understand by balanced diet?"
-              labelStyle="lg:text-base text-sm"
-              {...rest}
-              onChange={(val) => onChange(val)}
-              // options={balancedDietOptions}
-            />
-          )}
-        /> */}
+        <OptionsWithOthersField
+          label="If someone has high blood pressure (hypertension), what should they do to help manage it and stay healthy?"
+          options={[
+            'Take medicine prescribed by a doctor and eat healthy foods',
+            'Use herbal medications',
+            'Go on a water fast',
+            'Stop unnecessary physical activity',
+            'I don’t know',
+            'Others',
+          ]}
+          form={{
+            id: 'ncd.howHighBpIsManaged',
+          }}
+        />
       </div>
     </PageCard>
   )
