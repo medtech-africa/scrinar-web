@@ -83,7 +83,12 @@ const InputOption = ({
       innerProps={props}
     >
       <>
-        <input type="checkbox" checked={isSelected} className="mr-2" />
+        <input
+          type="checkbox"
+          checked={isSelected}
+          className="mr-2"
+          title={'checkbox'}
+        />
         {children}
       </>
     </components.Option>

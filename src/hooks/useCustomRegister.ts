@@ -1,6 +1,27 @@
 import { useFormContext } from 'react-hook-form'
 import { useMutateStudentsSurvey } from './queries/useStudentSurvey'
 
+function dotToNested(obj: Record<string, string>) {
+  // const result = {};
+  const result: {[key: string]: string|object} = {};
+
+  for (const [key, value] of Object.entries(obj)) {
+    const keys = key.split(".");
+    let current = result;
+
+    keys.forEach((k, index) => {
+      if (!current[k]) {
+        current[k] = index === keys.length - 1 ? value : {};
+      }
+      // TODO
+      // @ts-expect-error type mismatch
+      current = current[k];
+    });
+  }
+
+  return result;
+}
+
 export const useCustomRegister = (studentId: string) => {
   const { register, setValue, watch, control } = useFormContext()
   const { mutate } = useMutateStudentsSurvey(studentId)
@@ -19,16 +40,15 @@ export const useCustomRegister = (studentId: string) => {
         value.toLowerCase().includes('other')
           ? value.replace(/other/gi, '').trim()
           : value
-      
-      
 
       const key = newName(name)
-      let data = { [key]: currentValue }
-      if (typeof key === 'string' && key.split('.').length === 2) {
-        const [newKey, nestedKey] = key.split('.')
-        data = { [newKey]: { [nestedKey]: currentValue } }
-      }
-      
+      const data = dotToNested({ [key]: currentValue })
+      // let data = { [key]: currentValue }
+      // if (typeof key === 'string' && key.split('.').length === 2) {
+      //   const [newKey, nestedKey] = key.split('.')
+      //   data = { [newKey]: { [nestedKey]: currentValue } }
+      // }
+
       if (currentValue) {
         mutate(data)
       }
