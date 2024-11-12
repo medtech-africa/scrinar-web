@@ -1,8 +1,8 @@
 import React from 'react'
-import PageContent from '../page-content'
+import FHDPageContent from '@/components/fhd-page-content'
 
 const Mothers = () => {
-  return <PageContent type="mothers" />
+  return <FHDPageContent type="mother" />
 }
 
 export default Mothers

@@ -32,7 +32,8 @@ export interface FruitsTimes {
 }
 
 export type HealthDataPayload = {
-  userId: string
+  userId?: string
+  parentId?: string
   glucoseLevel?: string
   bloodPressure?: string
   waist?: string

@@ -1,10 +1,17 @@
 import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
-const getHealthData = (page = 1, searchVal = '', limit = 10, type = '') =>
+
+const getHealthData = (
+  page = 1,
+  searchVal = '',
+  limit = 10,
+  type = '',
+  isFamily = false
+) =>
   baseAxios
-    .get(API.getHealthData, {
-      params: { page, limit, type, search: searchVal },
+    .get(isFamily ? API.getFamilyHealthData : API.getHealthData, {
+      params: { page, limit, ...(type ? { type } : {}), search: searchVal },
     })
     .then((res) => res.data)
 
@@ -38,6 +45,19 @@ const useHealthRiskData = () => {
   })
 }
 
-export { useSingleHealthData, useHealthRiskData }
+const useFamilyHealthData = (
+  pageNumber = 1,
+  searchVal?: string,
+  type = '',
+  limit = 10
+) => {
+  return useQuery({
+    queryKey: ['family-health-data', pageNumber, searchVal, type, limit],
+    queryFn: () => getHealthData(pageNumber, searchVal, limit, type, true),
+    placeholderData: keepPreviousData,
+  })
+}
+
+export { useSingleHealthData, useHealthRiskData, useFamilyHealthData }
 
 export default useHealthData

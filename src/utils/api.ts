@@ -46,6 +46,7 @@ export const API = {
   //  health data
   healthData: `${BASE_URL}/api/v1/health-data`,
   getHealthData: `${BASE_URL}/api/v1/health-data`,
+  getFamilyHealthData: `${BASE_URL}/api/v1/health-data/house-hold`,
   singleHealthData: (id: string) => `${BASE_URL}/api/v1/health-data/${id}`,
   highRisk: `${BASE_URL}/api/v1/health-data/high-risk`,
 

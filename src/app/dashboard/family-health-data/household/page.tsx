@@ -1,8 +1,10 @@
+'use client'
+
+import FHDPageContent from '@/components/fhd-page-content'
 import React from 'react'
-import PageContent from '../page-content'
 
 const Households = () => {
-  return <PageContent type="household" />
+  return <FHDPageContent type="household" />
 }
 
 export default Households

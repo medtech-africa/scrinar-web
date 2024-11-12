@@ -85,6 +85,7 @@ export const AddNewParentContent = () => {
       gender: data.gender?.value,
       ...(avatarUrlRes && { avatarUrl: avatarUrlRes?.url }),
       ...(parentAddedId && { id: parentAddedId }),
+      age: Number(data.age),
     }
 
     try {

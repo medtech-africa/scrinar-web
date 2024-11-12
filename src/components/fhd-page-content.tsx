@@ -1,4 +1,5 @@
 'use client'
+
 import React from 'react'
 import {
   Table,
@@ -14,7 +15,7 @@ import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { useRouter } from 'next/navigation'
 import TableLoader from '@/components/table-loader'
 import { TCholesterol } from '@/types/healthData.types'
-import useHealthData from '@/hooks/queries/useHealthData'
+import { useFamilyHealthData } from '@/hooks/queries/useHealthData'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { usePaginate } from '@/hooks/usePagination'
 import { useMutation } from '@tanstack/react-query'
@@ -26,11 +27,12 @@ import Delete from '@/components/ui/delete'
 import EmptyData from '@/components/empty-data'
 import Pagination from '@/components/pagination'
 import { useFHDSharedData } from '@/context/family-health-data-context'
+import { cn } from '@/lib/utils'
 
 type Props = {
-  type: 'students' | 'mothers' | 'fathers' | 'all' | 'household'
+  type: 'student' | 'mother' | 'father' | 'all' | 'household'
 }
-const PageContent = ({ type }: Props) => {
+const FHDPageContent = ({ type }: Props) => {
   const router = useRouter()
   const { search } = useFHDSharedData()
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
@@ -41,15 +43,15 @@ const PageContent = ({ type }: Props) => {
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
-  const { data, isLoading, refetch } = useHealthData(
+  const { data, isLoading, refetch } = useFamilyHealthData(
     currentPage,
     search,
-    type,
+    type === 'all' ? '' : type,
     10
   )
   useSchoolChangeRefresh(refetch)
 
-  const healthData = data?.data
+  const healthData = data?.data?.data
   const { isPending: deleteLoading, mutate } = useMutation({
     mutationFn: () =>
       baseAxios.delete(
@@ -97,7 +99,7 @@ const PageContent = ({ type }: Props) => {
         <Table className="table-auto" hasEmptyData={healthData?.length === 0}>
           <TableHeader className="bg-grey-100">
             <TableRow>
-              {type === 'household' && <TableHead></TableHead>}
+              <TableHead></TableHead>
               <TableHead></TableHead>
               <TableHead className="bg-grey-200"></TableHead>
               <TableHead className="bg-grey-200 absolute pt-3 ">
@@ -119,7 +121,7 @@ const PageContent = ({ type }: Props) => {
           </TableHeader>
           <TableHeader className="bg-grey-100">
             <TableRow>
-              {type === 'household' && <TableHead>Type</TableHead>}
+              {type === 'household' && <TableHead>Family code</TableHead>}
               <TableHead>Name</TableHead>
               <TableHead>Ht(m)</TableHead>
               <TableHead>Wt</TableHead>
@@ -141,51 +143,37 @@ const PageContent = ({ type }: Props) => {
             {isLoading ? (
               <TableLoader />
             ) : (
-              healthData?.map?.((val: DataType) => (
-                <TableRow
-                  key={val.id}
-                  className="font-normal text-sm text-grey-600"
-                >
-                  {type === 'household' && <TableCell>Father</TableCell>}
-                  <TableCell>
-                    <div className="flex w-[100px] items-center capitalize">
-                      <div>{val?.image}</div>
-                      <div>{val?.student?.fullName}</div>
-                    </div>
-                  </TableCell>
-
-                  <TableCell>
-                    {val?.height}{' '}
-                    {/* <BadgeField variant="success" value={'n'} /> */}
-                  </TableCell>
-                  <TableCell>{val?.weight}</TableCell>
-                  <TableCell>{val?.bmi}</TableCell>
-                  <TableCell>{val?.waist}</TableCell>
-                  <TableCell>{val?.bloodPressure}</TableCell>
-                  <TableCell>{val?.pulse}</TableCell>
-                  <TableCell>{val?.glucoseLevel}</TableCell>
-                  <TableCell>{val?.cholesterol?.totalCholesterol}</TableCell>
-                  <TableCell>{val?.cholesterol?.ldl}</TableCell>
-                  <TableCell>{val?.cholesterol?.hdl}</TableCell>
-                  <TableCell>{val?.cholesterol?.triglycerides}</TableCell>
-                  {/* <TableCell>{val?.dietaryDiversityScore}</TableCell>
-                  <TableCell>{val?.physicalActivityScore}</TableCell> */}
-                  <TableCell className="relative">
-                    <div
-                      onClick={() => handleMoreClick(val?.id)}
-                      className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
-                    >
-                      <IconPicker icon="more" size="1.25rem" />
-                    </div>
-                    {selectedRow === val?.id && !deleteModal && (
-                      <DropDownMenu
-                        menuItems={menuItems}
-                        onClose={() => setSelectedRow(null)}
-                      />
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))
+              healthData?.map?.((val: DataType | MemberType) =>
+                type === 'household' && hasMemberArray(val) ? (
+                  val?.members?.map((val2: DataType, index) => (
+                    <TableBodyRow
+                      key={val2?.id}
+                      deleteModal={deleteModal}
+                      handleMoreClick={handleMoreClick}
+                      menuItems={menuItems}
+                      selectedRow={selectedRow}
+                      setSelectedRow={setSelectedRow}
+                      val={val2}
+                      className={
+                        index === val?.members?.length - 1
+                          ? 'border-b border-lust-100'
+                          : ''
+                      }
+                      isHousehold
+                    />
+                  ))
+                ) : (
+                  <TableBodyRow
+                    key={(val as DataType)?.id}
+                    deleteModal={deleteModal}
+                    handleMoreClick={handleMoreClick}
+                    menuItems={menuItems}
+                    selectedRow={selectedRow}
+                    setSelectedRow={setSelectedRow}
+                    val={val as DataType}
+                  />
+                )
+              )
             )}
           </TableBody>
         </Table>
@@ -195,7 +183,7 @@ const PageContent = ({ type }: Props) => {
         <Pagination
           current={currentPage}
           setCurrent={setCurrentPage}
-          total={healthData?.meta?.total}
+          total={data?.data?.total}
           onNext={handleNext}
           onPrev={handlePrev}
         />
@@ -204,12 +192,90 @@ const PageContent = ({ type }: Props) => {
   )
 }
 
-export default PageContent
+type BodyRowType = {
+  val: DataType
+  className?: string
+  isHousehold?: boolean
+  handleMoreClick: (rowIndex: any) => void
+  selectedRow: any
+  deleteModal: boolean
+  menuItems: {
+    title: string
+    icon: IconNames
+    action: () => void
+  }[]
+  setSelectedRow: React.Dispatch<React.SetStateAction<any>>
+}
+
+const TableBodyRow = ({
+  val,
+  className = '',
+  isHousehold = false,
+  handleMoreClick,
+  selectedRow,
+  deleteModal,
+  menuItems,
+  setSelectedRow,
+}: BodyRowType) => {
+  return (
+    <TableRow className={cn('font-normal text-sm text-grey-600', className)}>
+      {isHousehold && <TableCell>{val?.familyCodeMember}</TableCell>}
+      <TableCell>
+        <div className="flex w-[100px] items-center capitalize">
+          <div>{val?.image}</div>
+          <div>
+            {(val?.student || val?.parent)?.fullName ||
+              `${(val?.student || val?.parent)?.firstName || ''} ${(val?.student || val?.parent)?.lastName || ''}`}
+          </div>
+        </div>
+      </TableCell>
+
+      <TableCell>
+        {val?.height} {/* <BadgeField variant="success" value={'n'} /> */}
+      </TableCell>
+      <TableCell>{val?.weight}</TableCell>
+      <TableCell>{val?.bmi}</TableCell>
+      <TableCell>{val?.waist}</TableCell>
+      <TableCell>{val?.bloodPressure}</TableCell>
+      <TableCell>{val?.pulse}</TableCell>
+      <TableCell>{val?.glucoseLevel}</TableCell>
+      <TableCell>{val?.cholesterol?.totalCholesterol}</TableCell>
+      <TableCell>{val?.cholesterol?.ldl}</TableCell>
+      <TableCell>{val?.cholesterol?.hdl}</TableCell>
+      <TableCell>{val?.cholesterol?.triglycerides}</TableCell>
+      {/* <TableCell>{val?.dietaryDiversityScore}</TableCell>
+    <TableCell>{val?.physicalActivityScore}</TableCell> */}
+      <TableCell className="relative">
+        <div
+          onClick={() => handleMoreClick(val?.id)}
+          className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
+        >
+          <IconPicker icon="more" size="1.25rem" />
+        </div>
+        {selectedRow === val?.id && !deleteModal && (
+          <DropDownMenu
+            menuItems={menuItems}
+            onClose={() => setSelectedRow(null)}
+          />
+        )}
+      </TableCell>
+    </TableRow>
+  )
+}
+
+export default FHDPageContent
 type DataType = {
   id?: string
+  familyCodeMember?: string
+  familyCode?: string
   userId?: string
   image?: React.ReactNode
   student?: {
+    firstName?: string
+    lastName?: string
+    fullName?: string
+  }
+  parent?: {
     firstName?: string
     lastName?: string
     fullName?: string
@@ -227,4 +293,10 @@ type DataType = {
   timestamp?: string
   variant?: string
   variantval?: string
+}
+
+type MemberType = { members: DataType[]; familyCode: string }
+
+function hasMemberArray(val: DataType | MemberType): val is MemberType {
+  return 'members' in val
 }

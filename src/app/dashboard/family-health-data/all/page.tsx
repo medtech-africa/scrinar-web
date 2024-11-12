@@ -1,8 +1,10 @@
+'use client'
+
 import React from 'react'
-import PageContent from '../page-content'
+import FHDPageContent from '@/components/fhd-page-content'
 
 const All = () => {
-  return <PageContent type="all" />
+  return <FHDPageContent type="all" />
 }
 
 export default All

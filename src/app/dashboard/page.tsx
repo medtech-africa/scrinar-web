@@ -13,9 +13,6 @@ import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { cn } from '@/lib/utils'
 import colors from '@/constants/colors'
-import { Button } from '@/components/ui/button'
-import DashboardProgressPattern from '@/components/svg/dashboard-progress-pattern'
-import DashboardProgress from '@/components/svg/dashboard-progess'
 import { ActionBlock } from '@/components/ui/action-block'
 import { Divider } from '@/components/ui/divider'
 import Link from 'next/link'
@@ -48,9 +45,20 @@ const dashboardStats = [
     slug: '/user-profile/students',
   },
   {
-    title: 'Parents',
+    title: 'Fathers',
     icon: 'profile2User' as IconNames,
-    count: 'totalParents',
+    count: 'totalFathers',
+    avatars: [
+      'https://i.pravatar.cc/300',
+      'https://i.pravatar.cc/100',
+      'https://i.pravatar.cc/50',
+    ],
+    slug: '/user-profile/parents',
+  },
+  {
+    title: 'Mothers',
+    icon: 'profile2User' as IconNames,
+    count: 'totalMothers',
     avatars: [
       'https://i.pravatar.cc/300',
       'https://i.pravatar.cc/100',
@@ -79,29 +87,22 @@ const actionData1 = [
     type: 'student',
   },
   {
-    title: 'Enter Student Health Data',
-    subtitle: 'Add student health progress',
-    icon: 'health' as IconNames,
-    type: 'health-data',
-  },
-  {
     title: 'Create New Parent Profile',
     subtitle: 'Add Parent Profile',
     icon: 'profile2User' as IconNames,
     type: 'parent',
   },
   {
+    title: 'Enter Health Data',
+    subtitle: 'Add health progress',
+    icon: 'health' as IconNames,
+    type: 'health-data',
+  },
+  {
     title: 'Enter Parent Questionnaire',
     subtitle: 'Add/update parent questionnaire',
     icon: 'bookmark' as IconNames,
     type: 'parent questionnaire',
-  },
-  {
-    title: 'Create New Instructor Profile',
-    subtitle: 'Add New Instructor for School',
-    icon: 'teacher' as IconNames,
-    type: 'instructor',
-    admin: true,
   },
 ]
 
@@ -225,7 +226,7 @@ export default function Home() {
               )
             })}
           </div>
-          <div className="grid md:grid-cols-[70%_30%] gap-6 p-4 border border-grey-100">
+          {/* <div className="grid md:grid-cols-[70%_30%] gap-6 p-4 border border-grey-100">
             <div>
               <Text variant="text/sm" className="mb-4 text-grey-500">
                 Ongoing Learning
@@ -250,7 +251,7 @@ export default function Home() {
               <DashboardProgressPattern className="absolute right-0 left-0 hidden md:block" />
               <DashboardProgress progress={40} />
             </div>
-          </div>
+          </div> */}
 
           <div className="">
             <Tabs.Root className="mt-10" defaultValue="interview">
@@ -281,99 +282,39 @@ export default function Home() {
         </section>
         <section>
           <ActionBlock title="Quick Actions" className="mb-6">
-            {actionData1.map(
-              (act, _) =>
-                ((act?.admin && !isMI) || !act?.admin) && (
-                  <div key={_}>
-                    <div
-                      className="flex justify-between items-center cursor-pointer"
-                      onClick={() => {
-                        setModalType(act.type)
-                        setOpenModal(true)
-                      }}
-                    >
-                      <div className="flex  items-center gap-6">
-                        <IconPicker
-                          icon={act.icon}
-                          size="1.5rem"
-                          className="text-grey-900"
-                        />
-                        <div>
-                          <Text
-                            variant="text/sm"
-                            weight="medium"
-                            className="mb-1.1"
-                          >
-                            {act.title}
-                          </Text>
-                          <Text variant="text/sm" className="text-grey-500">
-                            {act.subtitle}
-                          </Text>
-                        </div>
-                      </div>
-                      <IconPicker
-                        icon="arrowOutward"
-                        className="text-grey-900"
-                      />
-                    </div>
-                    {_ !== actionData1.length - 1 && (
-                      <Divider className="my-4" />
-                    )}
-                  </div>
-                )
-            )}
-          </ActionBlock>
-
-          <ActionBlock title="Upcoming Screening">
-            <Text variant="text/sm" weight="medium" className="mb-1.1">
-              No upcoming screening
-            </Text>
-            {/* {actionData2.map((act, _) => {
-              const statusColor =
-                act.status === 'upcoming'
-                  ? 'sunglow'
-                  : act.status === 'missed'
-                  ? 'lust'
-                  : 'iris'
-              return (
+            {actionData1.map((act, _) => (
+              <div key={_}>
                 <div
-                  key={_}
-                  className={cn(
-                    'p-4 flex gap-2 border-l-4 bg-grey-50',
-                    _ !== actionData2.length - 1 && 'mb-4'
-                  )}
-                  style={{
-                    color: colors[statusColor][900],
-                    borderLeftColor: colors[statusColor][900],
+                  className="flex justify-between items-center cursor-pointer"
+                  onClick={() => {
+                    setModalType(act.type)
+                    setOpenModal(true)
                   }}
                 >
-                  <IconPicker icon="eclise" size="0.75rem" />
-                  <div>
-                    <Text
-                      variant="text/sm"
-                      weight="medium"
-                      className="mb-2 -mt-1 text-grey-900"
-                    >
-                      Upcoming Screening Here
-                    </Text>
-                    <div className="flex gap-2 items-center">
-                      <Text variant="text/sm" className="text-grey-500">
-                        {act.date}
+                  <div className="flex  items-center gap-6">
+                    <IconPicker
+                      icon={act.icon}
+                      size="1.5rem"
+                      className="text-grey-900"
+                    />
+                    <div>
+                      <Text
+                        variant="text/sm"
+                        weight="medium"
+                        className="mb-1.1"
+                      >
+                        {act.title}
                       </Text>
-                      <div className="w-[1px] min-h-[18px] h-full bg-grey-200" />
-                      <IconPicker
-                        icon="location"
-                        size="0.75rem"
-                        className="text-grey-900"
-                      />
                       <Text variant="text/sm" className="text-grey-500">
-                        {act.location}
+                        {act.subtitle}
                       </Text>
                     </div>
                   </div>
+                  <IconPicker icon="arrowOutward" className="text-grey-900" />
                 </div>
-              )
-            })} */}
+                {_ !== actionData1.length - 1 && <Divider className="my-4" />}
+              </div>
+            ))}
           </ActionBlock>
         </section>
       </section>

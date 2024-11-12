@@ -80,7 +80,10 @@ export const AddHealthDataRecordContent = () => {
 
   const { isPending: isLoading, mutate } = useMutation({
     mutationFn: (data: HealthDataPayload) =>
-      baseAxios.post(API.healthData, data),
+      baseAxios.post(
+        `${API.healthData}${profileType !== 'student' && '/parent'}`,
+        data
+      ),
   })
 
   const students = useMemo(
@@ -179,9 +182,12 @@ export const AddHealthDataRecordContent = () => {
         />
       )
     }
+    console.log(student, 'student')
 
     const dataToSend = {
-      userId: student?.id,
+      ...(profileType === 'student'
+        ? { userId: student?.id }
+        : { parentId: student.id }),
       bmi: bmi.toString(),
       ...(height && { height }),
       ...(weight && { weight }),

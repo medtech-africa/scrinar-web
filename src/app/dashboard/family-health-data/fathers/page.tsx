@@ -1,8 +1,10 @@
+'use client'
+
+import FHDPageContent from '@/components/fhd-page-content'
 import React from 'react'
-import PageContent from '../page-content'
 
 const Fathers = () => {
-  return <PageContent type="fathers" />
+  return <FHDPageContent type="father" />
 }
 
 export default Fathers

@@ -65,6 +65,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
       setValue('familyCode', data?.familyCode)
       setValue('gender', { value: data?.gender, label: data?.gender })
       setValue('avatar', !!data?.avatarUrl)
+      setValue('age', data?.age)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data])
@@ -153,6 +154,21 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                     />
                   )}
                   name="familyCode"
+                />
+
+                <Controller
+                  control={control}
+                  render={({ field: { value, ...rest } }) => (
+                    <Input
+                      {...rest}
+                      value={value ?? ''}
+                      label="Age"
+                      placeholder="Parent age"
+                      message={errors.age && errors.age.message}
+                      variant={errors?.age ? 'destructive' : 'default'}
+                    />
+                  )}
+                  name="age"
                 />
 
                 <Controller
