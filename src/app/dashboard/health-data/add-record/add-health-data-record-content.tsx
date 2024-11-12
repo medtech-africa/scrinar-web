@@ -182,7 +182,6 @@ export const AddHealthDataRecordContent = () => {
         />
       )
     }
-    console.log(student, 'student')
 
     const dataToSend = {
       ...(profileType === 'student'

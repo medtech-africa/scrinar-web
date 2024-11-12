@@ -34,9 +34,9 @@ import FGD from './fgd_Interview/fgd'
 
 const dashboardStats = [
   {
-    title: 'Students',
+    title: 'Children',
     icon: 'profile2User' as IconNames,
-    count: 'totalStudents',
+    count: 'childrenCount',
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',
@@ -47,7 +47,7 @@ const dashboardStats = [
   {
     title: 'Fathers',
     icon: 'profile2User' as IconNames,
-    count: 'totalFathers',
+    count: 'fatherCount',
     avatars: [
       'https://i.pravatar.cc/300',
       'https://i.pravatar.cc/100',
@@ -58,7 +58,7 @@ const dashboardStats = [
   {
     title: 'Mothers',
     icon: 'profile2User' as IconNames,
-    count: 'totalMothers',
+    count: 'motherCount',
     avatars: [
       'https://i.pravatar.cc/300',
       'https://i.pravatar.cc/100',
@@ -69,7 +69,7 @@ const dashboardStats = [
   {
     title: 'Health Data',
     icon: 'health' as IconNames,
-    count: 'totalHealthData',
+    count: 'healthDataCount',
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',

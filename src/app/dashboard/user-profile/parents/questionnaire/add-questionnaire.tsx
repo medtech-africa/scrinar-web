@@ -4,25 +4,16 @@ import { Input } from '@/components/ui/input'
 import { PageCard } from '@/components/ui/page-card'
 import { Select } from '@/components/ui/select'
 import { Text } from '@/components/ui/text'
-import useParents, { useParentQuestionnaire } from '@/hooks/queries/useParents'
+import useParents from '@/hooks/queries/useParents'
 import { Parent } from '@/types/questionnaire.types'
 import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 import React, { useMemo, useState } from 'react'
 import { ParentQuestionnaire } from '.'
-import { formatQuestionnaireData } from '@/utils/parentQuestionnaire'
-import ContentLoader from '@/components/content-loader'
 
 const AddParentQuestionnaire = () => {
   const { data: parentsData, isFetching: parentsLoading } = useParents()
 
   const [parent, setParent] = useState<Parent | null>()
-  const { data: questionnaireData, isLoading: qIsLoading } =
-    useParentQuestionnaire(parent?.id ?? '')
-
-  const defaultQues = useMemo(
-    () => formatQuestionnaireData(questionnaireData),
-    [questionnaireData]
-  )
 
   const parents = useMemo(
     () =>
@@ -87,9 +78,7 @@ const AddParentQuestionnaire = () => {
         </div>
       </PageCard>
 
-      <ContentLoader loading={qIsLoading} />
-
-      {parent && !qIsLoading && (
+      {parent && (
         <>
           <Text
             variant="display/xs"
@@ -101,7 +90,7 @@ const AddParentQuestionnaire = () => {
           <ParentQuestionnaire
             gender={parent?.gender}
             parentId={parent.id}
-            defaultValue={defaultQues}
+            hasDefault
           />
         </>
       )}

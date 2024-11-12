@@ -1,4 +1,5 @@
 'use client'
+import { ParentQuestionnaire } from '@/app/dashboard/user-profile/parents/questionnaire'
 import ContentLoader from '@/components/content-loader'
 import { PageHeader } from '@/components/page-header'
 import DashboardProgress from '@/components/svg/dashboard-progess'
@@ -7,7 +8,6 @@ import { Avatar } from '@/components/ui/avatar'
 import { BadgeField } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
 import ChartComp from '@/components/ui/chart'
-import { Divider } from '@/components/ui/divider'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { PageCard } from '@/components/ui/page-card'
@@ -16,6 +16,7 @@ import { useSingleHealthData } from '@/hooks/queries/useHealthData'
 import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 import { categorizeBMIWHO2007 } from '@/utils/vitalCalculations'
 import { format } from 'date-fns'
+import { Survey } from '../../add-record/survey'
 
 const navigationItems = [
   { label: 'Health Data', icon: IconNames.arrowRight },
@@ -25,14 +26,17 @@ const navigationItems = [
 export default function ViewRecord({ params }: { params: { id: string } }) {
   const { data: healthData, isLoading } = useSingleHealthData(params?.id)
   const data = healthData?.data
+  const userData = data?.student || data?.parent
+  const isStudent = !!data?.student
   const glucoseLevelData = data?.chartData?.glucoseLevel
   const bmiData = data?.chartData?.bmi
+
   const dataItems = [
     {
       id: '1',
       title:
-        data?.student?.firstName && data?.student?.lastName
-          ? data?.student.firstName + ' ' + data?.student.lastName
+        userData?.firstName && userData?.lastName
+          ? userData?.firstName + ' ' + userData?.lastName
           : '-',
       description: 'Name',
       icon: <IconPicker icon="primary" size={40} className="text-white" />,
@@ -45,7 +49,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
     },
     {
       id: '3',
-      title: data?.student?.gender ?? '-',
+      title: userData?.gender ?? '-',
       description: 'Gender',
       icon: <IconPicker icon="gender" size={40} className="text-white" />,
     },
@@ -57,7 +61,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
     },
     {
       id: '5',
-      title: data?.student?.age + ' years' ?? '-',
+      title: userData?.age + ' years' ?? '-',
       description: 'Age',
       icon: <IconPicker icon="ageIcon" size={40} className="text-white" />,
     },
@@ -66,24 +70,6 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
       title: data?.waist + 'CM' ?? '-',
       description: 'Waist',
       icon: <IconPicker icon="waist" size={40} className="text-white" />,
-    },
-    {
-      id: '7',
-      title: 'Good',
-      description: 'Nutritional Health',
-      icon: <IconPicker icon="healthIcon2" size={40} className="text-white" />,
-    },
-    {
-      id: '8',
-      title: 'Moderatively Active',
-      description: 'Exercise Habit',
-      icon: <IconPicker icon="habit" size={40} className="text-black" />,
-    },
-    {
-      id: '9',
-      title: data?.bmi + ' mmoI/L' ?? '-',
-      description: 'Blood Sugar level',
-      icon: <IconPicker icon="blood" size={40} className="text-white" />,
     },
   ]
   const formattedDate =
@@ -95,8 +81,8 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
       <PageHeader
         isAvatar
         title={
-          data?.student?.firstName && data?.student?.lastName
-            ? data?.student.firstName + ' ' + data?.student.lastName
+          userData?.firstName && userData?.lastName
+            ? data?.student?.firstName + ' ' + data?.student?.lastName
             : '-'
         }
         subtitle={`Last updated: ${formattedDate || '-'}`}
@@ -104,8 +90,8 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
           <Avatar
             src={data?.student?.avatarUrl}
             fallback={returnJoinedFirstCharacter(
-              data?.student.firstName,
-              data?.student.lastName
+              data?.student?.firstName,
+              data?.student?.lastName
             )}
           />
         }
@@ -173,62 +159,17 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
             </div>
           </div>
         </PageCard>
-        <PageCard
-          title="Data History & Update"
-          className="flex flex-col gap-y-4"
-        >
-          <div className="p-4">
-            <div className="flex gap-x-3 mb-4">
-              <div className="flex relative">
-                <div className="bg-grey-200 w-3 h-3 rounded-full z-30"></div>
-                <Divider className="h-full bg-grey-100 w-[1px] absolute right-[5.7px] z-0" />
-              </div>
-              <div>
-                <Text variant="text/sm" weight="bold">
-                  Blood Sugar Level
-                </Text>
-                <div className="mt-[5px]">
-                  <Text variant="text/xs" className="text-grey-500">
-                    Blood sugar level has been updated. You can find the revised
-                    data in the student entry history. Please review the
-                    historical records for accuracy.
-                  </Text>
-                  <Text weight="medium" variant="text/xs" className="italic">
-                    From: 5.2 mmol/L - To 5.6mmol/L
-                  </Text>
-                  <div className="flex gap-x-2">
-                    <IconPicker icon="clock" />
-                    <Text variant="text/xs">Aug 10</Text>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="flex gap-x-3">
-              <div className="flex relative">
-                <div className="bg-grey-200 w-3 h-3 rounded-full z-30"></div>
-                <Divider className="h-full bg-grey-100 w-[1px] absolute right-[5.7px] z-0" />
-              </div>
-              <div>
-                <Text variant="text/sm" weight="bold">
-                  Blood Sugar Level
-                </Text>
-                <div className="mt-[5px]">
-                  <Text variant="text/xs" className="text-grey-500">
-                    Blood sugar level has been updated. You can find the revised
-                    data in the student entry history. Please review the
-                    historical records for accuracy.
-                  </Text>
-                  <Text weight="medium" variant="text/xs" className="italic">
-                    From: 5.2 mmol/L - To 5.6mmol/L
-                  </Text>
-                  <div className="flex gap-x-2">
-                    <IconPicker icon="clock" />
-                    <Text variant="text/xs">Aug 10</Text>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+        <PageCard title="Questionnaire" className="">
+          {userData?.id &&
+            (isStudent ? (
+              <Survey studentId={userData.id} />
+            ) : (
+              <ParentQuestionnaire
+                gender={userData?.gender}
+                parentId={userData.id}
+                hasDefault
+              />
+            ))}
         </PageCard>
       </div>
     </div>

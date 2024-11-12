@@ -23,6 +23,7 @@ import { NonCommunicableDiseaseQuestions } from '@/components/student-survey/NCD
 import { PhysicalActivity } from '@/components/student-survey/PhysicalActivity'
 import { IdealBody } from '@/components/student-survey/IdealBody'
 import { StudentNutritionSurvey } from '@/components/student-survey/Nutrition'
+import ContentLoader from '@/components/content-loader'
 
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
@@ -33,14 +34,18 @@ export const Survey = ({
   // onClose,
   studentId,
 }: {
-  onClose: () => void
+  onClose?: () => void
   studentId: string
 }) => {
   const { data: studentSurvey, isLoading: isStudentSurveyLoading } =
     useStudentsSurvey(studentId)
 
   if (isStudentSurveyLoading) {
-    return <div>Loading</div>
+    return (
+      <div className="h-full w-full">
+        <ContentLoader loading />
+      </div>
+    )
   }
 
   return <SurveyForm studentSurvey={studentSurvey} studentId={studentId} />

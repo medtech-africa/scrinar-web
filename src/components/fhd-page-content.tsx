@@ -134,8 +134,8 @@ const FHDPageContent = ({ type }: Props) => {
               <TableHead>LDL</TableHead>
               <TableHead>HDL</TableHead>
               <TableHead>Triglycerides</TableHead>
-              {/* <TableHead>Nutritional Access</TableHead>
-              <TableHead>Exercise Activity</TableHead> */}
+              {/* <TableHead>Nutritional Access</TableHead>*/}
+              <TableHead>Status</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -147,7 +147,7 @@ const FHDPageContent = ({ type }: Props) => {
                 type === 'household' && hasMemberArray(val) ? (
                   val?.members?.map((val2: DataType, index) => (
                     <TableBodyRow
-                      key={val2?.id}
+                      key={val2?._id}
                       deleteModal={deleteModal}
                       handleMoreClick={handleMoreClick}
                       menuItems={menuItems}
@@ -164,7 +164,7 @@ const FHDPageContent = ({ type }: Props) => {
                   ))
                 ) : (
                   <TableBodyRow
-                    key={(val as DataType)?.id}
+                    key={(val as DataType)?._id}
                     deleteModal={deleteModal}
                     handleMoreClick={handleMoreClick}
                     menuItems={menuItems}
@@ -217,6 +217,8 @@ const TableBodyRow = ({
   menuItems,
   setSelectedRow,
 }: BodyRowType) => {
+  const user = val?.student || val?.parent
+  const userId = val?._id || user?._id
   return (
     <TableRow className={cn('font-normal text-sm text-grey-600', className)}>
       {isHousehold && <TableCell>{val?.familyCodeMember}</TableCell>}
@@ -224,8 +226,8 @@ const TableBodyRow = ({
         <div className="flex w-[100px] items-center capitalize">
           <div>{val?.image}</div>
           <div>
-            {(val?.student || val?.parent)?.fullName ||
-              `${(val?.student || val?.parent)?.firstName || ''} ${(val?.student || val?.parent)?.lastName || ''}`}
+            {user?.fullName ||
+              `${user?.firstName || ''} ${user?.lastName || ''}`}
           </div>
         </div>
       </TableCell>
@@ -243,16 +245,16 @@ const TableBodyRow = ({
       <TableCell>{val?.cholesterol?.ldl}</TableCell>
       <TableCell>{val?.cholesterol?.hdl}</TableCell>
       <TableCell>{val?.cholesterol?.triglycerides}</TableCell>
-      {/* <TableCell>{val?.dietaryDiversityScore}</TableCell>
-    <TableCell>{val?.physicalActivityScore}</TableCell> */}
+      {/* <TableCell>{val?.dietaryDiversityScore}</TableCell>*/}
+      <TableCell>{val?.percentageCompletion}</TableCell>
       <TableCell className="relative">
         <div
-          onClick={() => handleMoreClick(val?.id)}
+          onClick={() => handleMoreClick(userId)}
           className=" p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
         >
           <IconPicker icon="more" size="1.25rem" />
         </div>
-        {selectedRow === val?.id && !deleteModal && (
+        {selectedRow === userId && !deleteModal && (
           <DropDownMenu
             menuItems={menuItems}
             onClose={() => setSelectedRow(null)}
@@ -265,17 +267,19 @@ const TableBodyRow = ({
 
 export default FHDPageContent
 type DataType = {
-  id?: string
+  _id?: string
   familyCodeMember?: string
   familyCode?: string
   userId?: string
   image?: React.ReactNode
   student?: {
+    _id: string
     firstName?: string
     lastName?: string
     fullName?: string
   }
   parent?: {
+    _id: string
     firstName?: string
     lastName?: string
     fullName?: string
@@ -293,6 +297,7 @@ type DataType = {
   timestamp?: string
   variant?: string
   variantval?: string
+  percentageCompletion?: number
 }
 
 type MemberType = { members: DataType[]; familyCode: string }
