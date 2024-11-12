@@ -190,7 +190,7 @@ const ParentQuestionnaire = ({
           length *= -1
           Array.from({ length }, () => remove(noOfChildren - 1))
         }
-      }, 1000), // 800ms delay
+      }, 1000), // 1000ms delay
     [append, remove, noOfChildren]
   )
 
@@ -292,7 +292,7 @@ const ParentQuestionnaire = ({
               <NonCommunicableDiseaseQuestions />
             </Tabs.Content>
             <Tabs.Content value="nutrition">
-              <ParentNutritionSurvey />
+              <ParentNutritionSurvey isFemale={gender === 'female'} />
             </Tabs.Content>
             <Tabs.Content value="physical-activity">
               <ParentSurveyPhysicalActivity />
