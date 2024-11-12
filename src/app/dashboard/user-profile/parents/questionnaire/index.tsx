@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import {
   NonCommunicableDiseaseQuestions,
   ParentNutritionSurvey,
+  ParentSurveyHealthAndHygiene,
   ParentSurveyIdealBody,
   ParentSurveyPhysicalActivity,
   ParentSurveyRiskyBehaviourStress,
@@ -305,7 +306,7 @@ const ParentQuestionnaire = ({
               <KAPSurvey control={control} watch={watch} errors={errors} />
             </Tabs.Content>
             <Tabs.Content value="health-hygiene">
-              <KAPSurvey control={control} watch={watch} errors={errors} />
+              <ParentSurveyHealthAndHygiene />
             </Tabs.Content>
           </Tabs.Root>
           <Button

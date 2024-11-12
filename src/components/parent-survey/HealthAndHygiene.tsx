@@ -1,19 +1,19 @@
 import { PageCard } from '@/components/ui/page-card'
 import { Select } from '@/components/ui/select'
 import React from 'react'
-import { useCustomRegister } from '@/hooks/useCustomRegister'
 import { OptionsWithOthersField } from './OptionWithOthersField'
 import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
+import { useFormContext } from 'react-hook-form'
 
-export const HealthAndHygiene = ({ studentId }: { studentId: string }) => {
-  const { customRegister, setValue, watch } = useCustomRegister(studentId)
+export const ParentSurveyHealthAndHygiene = () => {
+  const { register, setValue, watch } = useFormContext()
 
   return (
     <PageCard title="Physical" bodyStyle="px-4">
       <div className="grid md:flex grid-cols-1 gap-6 parent [&>*]:w-[calc(50%-1.5rem)] flex-wrap">
         {/* <div className="grid md:grid-cols-2 grid-cols-1 gap-6"> */}
         <Select
-          {...customRegister('sourcesOfWaterAtHome')}
+          {...register('healthHygiene.sourcesOfWaterAtHome')}
           label="Which sources of water do you and your family use at home for drinking and cooking? (multiple choice allowed)"
           options={convertStringsToOptionArray([
             'Tap water',
@@ -30,16 +30,18 @@ export const HealthAndHygiene = ({ studentId }: { studentId: string }) => {
           ])}
           isMulti
           isCreatable
-          value={convertStringsToOptionArray(watch('sourcesOfWaterAtHome'))}
+          value={convertStringsToOptionArray(
+            watch('healthHygiene.sourcesOfWaterAtHome')
+          )}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map(
               (option: { value: string }) => option.value
             )
-            setValue('sourcesOfWaterAtHome', value)
+            setValue('healthHygiene.sourcesOfWaterAtHome', value)
           }}
         />
         <Select
-          {...customRegister('waterTreatmentMethodAtHome')}
+          {...register('healthHygiene.waterTreatmentMethodAtHome')}
           label="Which water treatment methods do you use at your house? (multiple answers allowed)"
           options={convertStringsToOptionArray([
             'Do not use any water Treatment',
@@ -56,13 +58,13 @@ export const HealthAndHygiene = ({ studentId }: { studentId: string }) => {
           isMulti
           isCreatable
           value={convertStringsToOptionArray(
-            watch('waterTreatmentMethodAtHome')
+            watch('healthHygiene.waterTreatmentMethodAtHome')
           )}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map(
               (option: { value: string }) => option.value
             )
-            setValue('waterTreatmentMethodAtHome', value)
+            setValue('healthHygiene.waterTreatmentMethodAtHome', value)
           }}
         />
 
@@ -72,7 +74,6 @@ export const HealthAndHygiene = ({ studentId }: { studentId: string }) => {
             'No Facility (Bush/Field)',
             'Others (specify)',
           ]}
-          studentId={studentId}
           form={{
             id: 'toiletFacility',
           }}
@@ -87,9 +88,8 @@ export const HealthAndHygiene = ({ studentId }: { studentId: string }) => {
             'Do not remember',
             'Other (specify)',
           ]}
-          studentId={studentId}
           form={{
-            id: 'facilityUsedToWashHand',
+            id: 'healthHygiene.facilityUsedToWashHand',
           }}
           label="What tool or facility did you use for washing your hands?"
         />
@@ -100,7 +100,7 @@ export const HealthAndHygiene = ({ studentId }: { studentId: string }) => {
           textContainerClassName="mb-2"
         >
           <Select
-            {...customRegister('didYouCleanHandAfterLastToiletUsage')}
+            {...register('healthHygiene.didYouCleanHandAfterLastToiletUsage')}
             label="When you used the toilet last time, did you clean your hands?"
             options={convertStringsToOptionArray([
               'Yes',
@@ -108,12 +108,15 @@ export const HealthAndHygiene = ({ studentId }: { studentId: string }) => {
               'Do not remember',
             ])}
             value={{
-              value: watch('didYouCleanHandAfterLastToiletUsage'),
-              label: watch('didYouCleanHandAfterLastToiletUsage'),
+              value: watch('healthHygiene.didYouCleanHandAfterLastToiletUsage'),
+              label: watch('healthHygiene.didYouCleanHandAfterLastToiletUsage'),
             }}
             onChange={(selectedOption: any) => {
               const value = selectedOption.value
-              setValue('didYouCleanHandAfterLastToiletUsage', value)
+              setValue(
+                'healthHygiene.didYouCleanHandAfterLastToiletUsage',
+                value
+              )
             }}
           />
           <OptionsWithOthersField
@@ -124,9 +127,8 @@ export const HealthAndHygiene = ({ studentId }: { studentId: string }) => {
               'Do not remember',
               'Other (specify)',
             ]}
-            studentId={studentId}
             form={{
-              id: 'whatWasUsedToWashHand',
+              id: 'healthHygiene.whatWasUsedToWashHand',
             }}
             label="If yes, what did you use to wash your hands? "
           />
