@@ -396,8 +396,8 @@ const Register = () => {
                   <Select
                     placeholder="Select Template"
                     label="Template"
-                    onChange={(val) => {
-                      onChange(val)
+                    onChange={(val: { value: string }) => {
+                      onChange(val.value)
                     }}
                     labelStyle="lg:text-sm text-xs"
                     className="capitalize"
