@@ -144,28 +144,29 @@ const useFormWithAutoSave = ({
   return form
 }
 
-const ParentQuestionnaire = ({
+const ParentQuestionnairePage = ({
   parentId,
   gender,
   hasDefault = false,
+  questionnaireData = {},
 }: {
   parentId: string
   gender: string
   hasDefault?: boolean
+  questionnaireData: any
 }) => {
   const { isPending, mutate: mutateQuestionnaire } = useMutation({
     mutationFn: (data: { id: string; data: any }) =>
       baseAxios.patch(API.parentQuestionnaire(data.id), data.data),
   })
 
-  const { data: questionnaireData, isLoading: qIsLoading } =
-    useParentQuestionnaire(parentId)
+  const { isPending: qIsLoading } = useParentQuestionnaire(parentId)
 
   const formMethods = useFormWithAutoSave({
     parentId,
     mutateQuestionnaire,
     debounceMs: 2000, // Adjust as needed
-    defaultValues: questionnaireData.data,
+    defaultValues: questionnaireData,
   })
 
   const {
@@ -245,9 +246,9 @@ const ParentQuestionnaire = ({
               <Tabs.Trigger className={triggerClassName} value="demographics">
                 Demographics
               </Tabs.Trigger>
-              <Tabs.Trigger className={triggerClassName} value="kap-survey">
+              {/* <Tabs.Trigger className={triggerClassName} value="kap-survey">
                 KAP Survey
-              </Tabs.Trigger>
+              </Tabs.Trigger> */}
               <Tabs.Trigger className={triggerClassName} value="ncd-knowledge">
                 NCD Knowledge
               </Tabs.Trigger>
@@ -343,6 +344,33 @@ const ParentQuestionnaire = ({
         </form>
       </FormProvider>
     </div>
+  )
+}
+const ParentQuestionnaire = ({
+  parentId,
+  gender,
+  hasDefault = true,
+}: {
+  parentId: string
+  gender: string
+  hasDefault?: boolean
+}) => {
+  const { data: questionnaireData, isPending: qIsLoading } =
+    useParentQuestionnaire(parentId)
+
+  if (qIsLoading && hasDefault) {
+    return (
+      <>
+        <p className="my-4 text-center">Loading..</p>
+        <ContentLoader loading />
+      </>
+    )
+  }
+
+  return (
+    <ParentQuestionnairePage
+      {...{ parentId, gender, hasDefault, questionnaireData }}
+    />
   )
 }
 
