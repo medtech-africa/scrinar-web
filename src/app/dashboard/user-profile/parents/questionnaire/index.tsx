@@ -227,9 +227,10 @@ const ParentQuestionnaire = ({
 
   if (qIsLoading && hasDefault) {
     return (
-      <div className="h-full w-full">
+      <>
+        <p className="my-4 text-center">Loading..</p>
         <ContentLoader loading />
-      </div>
+      </>
     )
   }
 

@@ -12,7 +12,6 @@ import {
 import DropDownMenu from '@/components/drop-down-menu'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
-import { useRouter } from 'next/navigation'
 import TableLoader from '@/components/table-loader'
 import { TCholesterol } from '@/types/healthData.types'
 import { useFamilyHealthData } from '@/hooks/queries/useHealthData'
@@ -33,7 +32,6 @@ type Props = {
   type: 'student' | 'mother' | 'father' | 'all' | 'household'
 }
 const FHDPageContent = ({ type }: Props) => {
-  const router = useRouter()
   const { search } = useFHDSharedData()
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
@@ -75,8 +73,7 @@ const FHDPageContent = ({ type }: Props) => {
     {
       title: 'View Data',
       icon: IconNames.documentText,
-      action: () =>
-        router.push(`/dashboard/health-data/view-record/${selectedRow ?? ''}`),
+      href: `/dashboard/health-data/view-record/${selectedRow ?? ''}`,
     },
     {
       title: 'Delete Data',
@@ -202,7 +199,8 @@ type BodyRowType = {
   menuItems: {
     title: string
     icon: IconNames
-    action: () => void
+    action?: () => void
+    href?: string
   }[]
   setSelectedRow: React.Dispatch<React.SetStateAction<any>>
 }

@@ -81,7 +81,7 @@ export const AddHealthDataRecordContent = () => {
   const { isPending: isLoading, mutate } = useMutation({
     mutationFn: (data: HealthDataPayload) =>
       baseAxios.post(
-        `${API.healthData}${profileType !== 'student' && '/parent'}`,
+        `${API.healthData}${profileType !== 'student' ? '/parent' : ''}`,
         data
       ),
   })
