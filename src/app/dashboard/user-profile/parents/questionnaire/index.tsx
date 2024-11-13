@@ -25,7 +25,11 @@ import {
   ParentSurveyIdealBody,
   ParentSurveyPhysicalActivity,
   ParentSurveyRiskyBehaviourStress,
+  ParentGenderHouseHoldRoles,
+  ParentSurveyNcdRiskFactors,
 } from '@/components/parent-survey'
+import { useParentQuestionnaire } from '@/hooks/queries/useParents'
+import ContentLoader from '@/components/content-loader'
 
 type FormAutoSaveProps = {
   parentId: string
@@ -140,25 +144,37 @@ const useFormWithAutoSave = ({
   return form
 }
 
-const ParentQuestionnaire = ({
+const ParentQuestionnairePage = ({
   parentId,
   gender,
-  defaultValue = {},
+  hasDefault = false,
+  questionnaireData = {},
 }: {
   parentId: string
   gender: string
-  defaultValue?: { [x: string]: any }
+  hasDefault?: boolean
+  questionnaireData: any
 }) => {
   const { isPending, mutate: mutateQuestionnaire } = useMutation({
-    mutationFn: (data: { id: string; data: any }) =>
-      baseAxios.patch(API.parentQuestionnaire(data.id), data.data),
+    mutationFn: (data: {
+      id: string
+      data: Record<string, string | object>
+    }) => {
+      delete data.data?.createdAt
+      delete data.data?.updatedAt
+      delete data.data?.parent
+      delete data.data?.id
+      return baseAxios.patch(API.parentQuestionnaire(data.id), data.data)
+    },
   })
+
+  const { isPending: qIsLoading } = useParentQuestionnaire(parentId)
 
   const formMethods = useFormWithAutoSave({
     parentId,
     mutateQuestionnaire,
     debounceMs: 2000, // Adjust as needed
-    defaultValues: defaultValue,
+    defaultValues: questionnaireData,
   })
 
   const {
@@ -220,6 +236,15 @@ const ParentQuestionnaire = ({
     })
   }
 
+  if (qIsLoading && hasDefault) {
+    return (
+      <>
+        <p className="my-4 text-center">Loading..</p>
+        <ContentLoader loading />
+      </>
+    )
+  }
+
   return (
     <div>
       <FormProvider {...formMethods}>
@@ -229,9 +254,9 @@ const ParentQuestionnaire = ({
               <Tabs.Trigger className={triggerClassName} value="demographics">
                 Demographics
               </Tabs.Trigger>
-              <Tabs.Trigger className={triggerClassName} value="kap-survey">
+              {/* <Tabs.Trigger className={triggerClassName} value="kap-survey">
                 KAP Survey
-              </Tabs.Trigger>
+              </Tabs.Trigger> */}
               <Tabs.Trigger className={triggerClassName} value="ncd-knowledge">
                 NCD Knowledge
               </Tabs.Trigger>
@@ -309,6 +334,13 @@ const ParentQuestionnaire = ({
             <Tabs.Content value="health-hygiene">
               <ParentSurveyHealthAndHygiene />
             </Tabs.Content>
+
+            <Tabs.Content value="ncd-risks-family">
+              <ParentSurveyNcdRiskFactors />
+            </Tabs.Content>
+            <Tabs.Content value="gender-household-roles">
+              <ParentGenderHouseHoldRoles />
+            </Tabs.Content>
           </Tabs.Root>
           <Button
             variant={'primary'}
@@ -320,6 +352,33 @@ const ParentQuestionnaire = ({
         </form>
       </FormProvider>
     </div>
+  )
+}
+const ParentQuestionnaire = ({
+  parentId,
+  gender,
+  hasDefault = true,
+}: {
+  parentId: string
+  gender: string
+  hasDefault?: boolean
+}) => {
+  const { data: questionnaireData, isPending: qIsLoading } =
+    useParentQuestionnaire(parentId)
+
+  if (qIsLoading && hasDefault) {
+    return (
+      <>
+        <p className="my-4 text-center">Loading..</p>
+        <ContentLoader loading />
+      </>
+    )
+  }
+
+  return (
+    <ParentQuestionnairePage
+      {...{ parentId, gender, hasDefault, questionnaireData }}
+    />
   )
 }
 
