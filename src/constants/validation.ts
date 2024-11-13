@@ -227,8 +227,7 @@ const register = yupResolver(
       .lowercase(),
     template: yup
       .string()
-      .optional()
-      .lowercase(),
+      .optional(),
     website: yup
       .string()
       .typeError('Please enter website')
