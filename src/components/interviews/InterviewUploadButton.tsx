@@ -26,7 +26,7 @@ const modalTypeToFileType = {
   [ModalType.fgdGuide]: 'fgdGuide',
 }
 
-export const InterviewUploadButton = () => {
+export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
   const [openModal, setOpenModal] = React.useState(false)
   const [selectedOption, setSelectedOption] = React.useState<string | null>(
     null
@@ -53,6 +53,7 @@ export const InterviewUploadButton = () => {
     }) => baseAxios.post(API.schoolUpload, data),
     onSuccess: () => {
       setOpenModal(false)
+      refetch()
       setUploadedFile(null)
       setFileName('')
       toast.success('File uploaded successfully')
