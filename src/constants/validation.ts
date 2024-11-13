@@ -225,6 +225,9 @@ const register = yupResolver(
       .required('Please enter school name')
       .typeError('Please enter school name')
       .lowercase(),
+    template: yup
+      .string()
+      .lowercase(),
     website: yup
       .string()
       .typeError('Please enter website')

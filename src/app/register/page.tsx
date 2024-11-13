@@ -13,6 +13,7 @@ import {
 import validation from '@/constants/validation'
 import useStateLGA from '@/hooks/queries/useStateLGA'
 import useSelectImage from '@/hooks/useSelectImage'
+import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { errorMessage } from '@/utils/errorMessage'
@@ -35,6 +36,7 @@ interface IFormValue {
   schoolType: { value: string; label: string }
   educationalInstitution: { value: string; label: string }[]
   avatar?: boolean
+  template?: string
 }
 interface IDataToSend
   extends Omit<
@@ -57,6 +59,7 @@ const defaultValue = {
   zipCode: '',
   phoneNumber: undefined,
   address: '',
+  template: 'jica',
 }
 const Register = () => {
   const { isLoading: stateLoading, data: states } = useStateLGA()
@@ -73,7 +76,7 @@ const Register = () => {
     formState: { errors },
   } = useForm<IFormValue>({
     resolver: validation.register,
-    defaultValues: { avatar: true },
+    defaultValues: { avatar: true, template: 'jica' },
   })
   const inputFile = useRef<HTMLInputElement | null>(null)
   const {
@@ -176,6 +179,7 @@ const Register = () => {
                 ref={inputFile}
                 className="hidden"
                 accept="image/*"
+                title="profile pic"
               />
               <Text
                 variant="text/sm"
@@ -383,6 +387,30 @@ const Register = () => {
                   />
                 )}
                 name="educationalInstitution"
+              />
+
+              <Controller
+                control={control}
+                render={({ field: { onChange, ...field } }: any) => (
+                  <Select
+                    placeholder="Select Template"
+                    label="Template"
+                    onChange={(val) => {
+                      onChange(val)
+                    }}
+                    labelStyle="lg:text-sm text-xs"
+                    className="capitalize"
+                    isLoading={stateLoading}
+                    {...field}
+                    options={convertStringsToOptionArray([
+                      'jica',
+                      'play4health',
+                    ])}
+                    variant={errors?.template ? 'destructive' : 'default'}
+                    message={errors.template?.message}
+                  />
+                )}
+                name="template"
               />
             </div>
 
