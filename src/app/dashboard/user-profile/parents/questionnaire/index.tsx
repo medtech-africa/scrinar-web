@@ -156,8 +156,16 @@ const ParentQuestionnairePage = ({
   questionnaireData: any
 }) => {
   const { isPending, mutate: mutateQuestionnaire } = useMutation({
-    mutationFn: (data: { id: string; data: any }) =>
-      baseAxios.patch(API.parentQuestionnaire(data.id), data.data),
+    mutationFn: (data: {
+      id: string
+      data: Record<string, string | object>
+    }) => {
+      delete data.data?.createdAt
+      delete data.data?.updatedAt
+      delete data.data?.parent
+      delete data.data?.id
+      return baseAxios.patch(API.parentQuestionnaire(data.id), data.data)
+    },
   })
 
   const { isPending: qIsLoading } = useParentQuestionnaire(parentId)
