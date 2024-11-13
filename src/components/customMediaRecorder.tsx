@@ -13,7 +13,7 @@ import { API } from '@/utils/api'
 import uploadImage from '@/utils/uploadImage'
 import { Input } from './ui/input'
 
-const CustomMediaRecorder = () => {
+const CustomMediaRecorder = (props: { type: string }) => {
   const { startRecording, stopRecording, mediaBlobUrl, status, clearBlobUrl } =
     useReactMediaRecorder({ audio: true })
   const [openModal, setOpenModal] = React.useState(false)
@@ -52,7 +52,7 @@ const CustomMediaRecorder = () => {
               fileURL: res.url,
               fileName: fileName,
               fileType: 'audio',
-              type: 'interview',
+              type: props.type,
             })
           }
         },

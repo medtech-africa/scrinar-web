@@ -18,12 +18,11 @@ import { errorMessage } from '@/utils/errorMessage'
 import toast from 'react-hot-toast'
 import filterObject from '@/utils/filterObject'
 import { API } from '@/utils/api'
-import { useParent, useParentQuestionnaire } from '@/hooks/queries/useParents'
+import { useParent } from '@/hooks/queries/useParents'
 import ContentLoader from '@/components/content-loader'
-import { useEffect, useMemo } from 'react'
+import { useEffect } from 'react'
 import { Avatar } from '@/components/ui/avatar'
 import { ParentQuestionnaire } from '../../questionnaire'
-import { formatQuestionnaireData } from '@/utils/parentQuestionnaire'
 
 const navigationItems = [
   { label: 'User Profile', icon: IconNames.arrowRight },
@@ -35,13 +34,6 @@ interface IDataToSend extends Omit<IFormValue, 'level' | 'gender' | 'avatar'> {
 }
 export default function EditRecord({ params }: { params: { id: string } }) {
   const { data, isLoading, refetch } = useParent(params.id)
-  const { data: questionnaireData, isLoading: qIsLoading } =
-    useParentQuestionnaire(params.id)
-
-  const defaultQues = useMemo(
-    () => formatQuestionnaireData(questionnaireData),
-    [questionnaireData]
-  )
 
   const { isPending: updateLoading, mutate } = useMutation({
     mutationFn: (dataToSend: IDataToSend) =>
@@ -94,7 +86,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
 
   return (
     <div className="relative">
-      <ContentLoader loading={isLoading || qIsLoading} />
+      <ContentLoader loading={isLoading} />
       <PageHeader
         title="Edit Parent"
         subtitle="Edit Parent: Modify Parent Profile"
@@ -302,7 +294,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
           <ParentQuestionnaire
             gender={data?.gender}
             parentId={data.id}
-            defaultValue={defaultQues}
+            hasDefault
           />
         </>
       )}

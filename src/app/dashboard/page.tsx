@@ -30,13 +30,13 @@ import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-c
 import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add-questionnaire'
 import * as Tabs from '@radix-ui/react-tabs'
 import Interview from './fgd_Interview/interview'
-import Fda from './fgd_Interview/fda'
+import FGD from './fgd_Interview/fgd'
 
 const dashboardStats = [
   {
-    title: 'Students',
+    title: 'Children',
     icon: 'profile2User' as IconNames,
-    count: 'totalStudents',
+    count: 'childrenCount',
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',
@@ -47,7 +47,7 @@ const dashboardStats = [
   {
     title: 'Fathers',
     icon: 'profile2User' as IconNames,
-    count: 'totalFathers',
+    count: 'fatherCount',
     avatars: [
       'https://i.pravatar.cc/300',
       'https://i.pravatar.cc/100',
@@ -58,7 +58,7 @@ const dashboardStats = [
   {
     title: 'Mothers',
     icon: 'profile2User' as IconNames,
-    count: 'totalMothers',
+    count: 'motherCount',
     avatars: [
       'https://i.pravatar.cc/300',
       'https://i.pravatar.cc/100',
@@ -69,7 +69,7 @@ const dashboardStats = [
   {
     title: 'Health Data',
     icon: 'health' as IconNames,
-    count: 'totalHealthData',
+    count: 'healthDataCount',
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',
@@ -265,17 +265,17 @@ export default function Home() {
                 </Tabs.Trigger>
                 <Tabs.Trigger
                   className={triggerClassName}
-                  value="fda"
+                  value="fgd"
                   onClick={() => refetch()}
                 >
-                  FDA Interview
+                  FGD Interview
                 </Tabs.Trigger>
               </Tabs.List>
               <Tabs.Content value="interview">
                 <Interview />
               </Tabs.Content>
-              <Tabs.Content value="fda">
-                <Fda />
+              <Tabs.Content value="fgd">
+                <FGD />
               </Tabs.Content>
             </Tabs.Root>
           </div>

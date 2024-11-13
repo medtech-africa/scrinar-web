@@ -28,6 +28,8 @@ import {
   ParentGenderHouseHoldRoles,
   ParentSurveyNcdRiskFactors,
 } from '@/components/parent-survey'
+import { useParentQuestionnaire } from '@/hooks/queries/useParents'
+import ContentLoader from '@/components/content-loader'
 
 type FormAutoSaveProps = {
   parentId: string
@@ -145,22 +147,25 @@ const useFormWithAutoSave = ({
 const ParentQuestionnaire = ({
   parentId,
   gender,
-  defaultValue = {},
+  hasDefault = false,
 }: {
   parentId: string
   gender: string
-  defaultValue?: { [x: string]: any }
+  hasDefault?: boolean
 }) => {
   const { isPending, mutate: mutateQuestionnaire } = useMutation({
     mutationFn: (data: { id: string; data: any }) =>
       baseAxios.patch(API.parentQuestionnaire(data.id), data.data),
   })
 
+  const { data: questionnaireData, isLoading: qIsLoading } =
+    useParentQuestionnaire(parentId)
+
   const formMethods = useFormWithAutoSave({
     parentId,
     mutateQuestionnaire,
     debounceMs: 2000, // Adjust as needed
-    defaultValues: defaultValue,
+    defaultValues: questionnaireData.data,
   })
 
   const {
@@ -220,6 +225,15 @@ const ParentQuestionnaire = ({
         errorMessage(err)
       },
     })
+  }
+
+  if (qIsLoading && hasDefault) {
+    return (
+      <>
+        <p className="my-4 text-center">Loading..</p>
+        <ContentLoader loading />
+      </>
+    )
   }
 
   return (
