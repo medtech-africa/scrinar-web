@@ -26,6 +26,7 @@ import {
   ParentSurveyPhysicalActivity,
   ParentSurveyRiskyBehaviourStress,
   ParentGenderHouseHoldRoles,
+  ParentSurveyNcdRiskFactors,
 } from '@/components/parent-survey'
 
 type FormAutoSaveProps = {
@@ -312,7 +313,7 @@ const ParentQuestionnaire = ({
             </Tabs.Content>
 
             <Tabs.Content value="ncd-risks-family">
-              <ParentSurveyHealthAndHygiene />
+              <ParentSurveyNcdRiskFactors />
             </Tabs.Content>
             <Tabs.Content value="gender-household-roles">
               <ParentGenderHouseHoldRoles />
