@@ -30,6 +30,8 @@ import {
 } from '@/components/parent-survey'
 import { useParentQuestionnaire } from '@/hooks/queries/useParents'
 import ContentLoader from '@/components/content-loader'
+import { deepMerge } from '@/utils/deepMerge'
+import { useLocalParentSurvey } from '@/hooks/useLocalParentSurvey'
 
 type FormAutoSaveProps = {
   parentId: string
@@ -97,6 +99,9 @@ const useFormWithAutoSave = ({
     defaultValues,
   })
 
+  // const [__, setFormData] = useLocalStorage(`parent_survey_${parentId}`, {})
+  const { storeParentSurvey } = useLocalParentSurvey()
+
   // Store previous values to compare changes
   const previousValues = useRef<Record<string, any>>({})
 
@@ -106,6 +111,13 @@ const useFormWithAutoSave = ({
       const cleanedData = cleanFormData(changedData)
 
       if (Object.keys(cleanedData).length > 0) {
+        // setFormData((formData) => {
+        //   const localDataToStore = deepMerge(formData, cleanedData)
+
+        //   return localDataToStore
+        // })
+        storeParentSurvey(parentId, cleanedData)
+
         mutateQuestionnaire(
           {
             id: parentId,
@@ -170,11 +182,37 @@ const ParentQuestionnairePage = ({
 
   const { isPending: qIsLoading } = useParentQuestionnaire(parentId)
 
+  // const [formData, setFormData] = useLocalStorage(
+  //   `parent_survey_${parentId}`,
+  //   questionnaireData || {}
+  // )
+  const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
+
+  const formData = getParentSurvey(parentId)
+
+  useEffect(() => {
+    if (questionnaireData) {
+      // TODO use type
+      // setFormData((prevData: any) => ({
+      //   ...questionnaireData,
+      //   ...prevData,
+      // }))
+      if (!getParentSurvey(parentId)) {
+        storeParentSurvey(parentId, questionnaireData)
+      } else {
+        storeParentSurvey(
+          parentId,
+          deepMerge(getParentSurvey(parentId), questionnaireData)
+        )
+      }
+    }
+  }, [questionnaireData, parentId])
+
   const formMethods = useFormWithAutoSave({
     parentId,
     mutateQuestionnaire,
     debounceMs: 2000, // Adjust as needed
-    defaultValues: questionnaireData,
+    defaultValues: formData,
   })
 
   const {
@@ -364,7 +402,10 @@ const ParentQuestionnaire = ({
   hasDefault?: boolean
 }) => {
   const { data: questionnaireData, isPending: qIsLoading } =
-    useParentQuestionnaire(parentId)
+    useParentQuestionnaire(parentId, {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    })
 
   if (qIsLoading && hasDefault) {
     return (

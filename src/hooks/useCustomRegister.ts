@@ -1,39 +1,50 @@
 import { useFormContext } from 'react-hook-form'
 import { useMutateStudentsSurvey } from './queries/useStudentSurvey'
+import { useLocalStudentSurvey } from './useLocalParentSurvey'
 
 function dotToNested(obj: Record<string, string>) {
   // const result = {};
-  const result: {[key: string]: string|object} = {};
+  const result: { [key: string]: string | object } = {}
 
   for (const [key, value] of Object.entries(obj)) {
-    const keys = key.split(".");
-    let current = result;
+    const keys = key.split('.')
+    let current = result
 
     keys.forEach((k, index) => {
       if (!current[k]) {
-        current[k] = index === keys.length - 1 ? value : {};
+        current[k] = index === keys.length - 1 ? value : {}
       }
       // TODO
       // @ts-expect-error type mismatch
-      current = current[k];
-    });
+      current = current[k]
+    })
   }
 
-  return result;
+  return result
 }
 
 export const useCustomRegister = (studentId?: string) => {
   const { register, setValue, watch, control } = useFormContext()
   const { mutate } = useMutateStudentsSurvey(studentId ?? '')
 
+  // const [__, setFormData] = useLocalStorage(
+  //   `student_survey_${studentId}`,
+  //   {}
+  // )
+  const { storeStudentSurvey } = useLocalStudentSurvey()
+
   const customRegister = (name: string, options: any = {}) => {
-    const {exclude, ...restOptions} = options
+    const { exclude, ...restOptions } = options
     const { onBlur: originalBlur, ...rest } = register(name, restOptions)
 
     const handleBlur = () => {
       const currentValue = watch(name)
-      
-      if (currentValue === 'Other' || currentValue === 'Yes, I have' || currentValue === exclude) {
+
+      if (
+        currentValue === 'Other' ||
+        currentValue === 'Yes, I have' ||
+        currentValue === exclude
+      ) {
         return
       }
       const newName = (value: string): string | number =>
@@ -50,6 +61,7 @@ export const useCustomRegister = (studentId?: string) => {
       // }
 
       if (currentValue) {
+        storeStudentSurvey(studentId ?? "", data)
         mutate(data)
       }
     }
@@ -58,7 +70,7 @@ export const useCustomRegister = (studentId?: string) => {
       ...rest,
       onBlur: (e: any) => {
         if (originalBlur) originalBlur(e)
-        if(studentId) handleBlur()
+        if (studentId) handleBlur()
       },
     }
   }
@@ -66,4 +78,4 @@ export const useCustomRegister = (studentId?: string) => {
   return { customRegister, setValue, watch, control }
 }
 
-export {useCustomRegister as useStudentCustomRegister}
+export { useCustomRegister as useStudentCustomRegister }

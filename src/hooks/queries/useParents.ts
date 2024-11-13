@@ -20,12 +20,13 @@ const useParent = (id: string) => {
   })
 }
 
-const useParentQuestionnaire = (id: string) => {
+const useParentQuestionnaire = (id: string, options={}) => {
   return useQuery({
     queryKey: ['parentQuestionnaire', id],
     queryFn: () =>
       baseAxios.get(API.parentQuestionnaire(id)).then((res) => res.data?.data),
     enabled: !!id,
+    ...options
   })
 }
 

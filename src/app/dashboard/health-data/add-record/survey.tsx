@@ -24,6 +24,8 @@ import { PhysicalActivity } from '@/components/student-survey/PhysicalActivity'
 import { IdealBody } from '@/components/student-survey/IdealBody'
 import { StudentNutritionSurvey } from '@/components/student-survey/Nutrition'
 import ContentLoader from '@/components/content-loader'
+import { useEffect } from 'react'
+import { useLocalStudentSurvey } from '@/hooks/useLocalParentSurvey'
 
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
@@ -37,8 +39,25 @@ export const Survey = ({
   onClose?: () => void
   studentId: string
 }) => {
-  const { data: studentSurvey, isLoading: isStudentSurveyLoading } =
+  const { data: studentSurvey, isPending: isStudentSurveyLoading } =
     useStudentsSurvey(studentId)
+
+  const { getStudentSurvey, storeStudentSurvey } = useLocalStudentSurvey()
+
+  useEffect(() => {
+    if (studentSurvey) {
+      // TODO use type
+      // setFormData((prevData: any) => ({
+      //   ...studentSurvey,
+      //   ...prevData,
+      // }))
+      if (!getStudentSurvey(studentId)) {
+        storeStudentSurvey(studentId, studentSurvey)
+      } else {
+        storeStudentSurvey(studentId, studentSurvey)
+      }
+    }
+  }, [studentSurvey, studentId])
 
   if (isStudentSurveyLoading) {
     return (
@@ -49,7 +68,12 @@ export const Survey = ({
     )
   }
 
-  return <SurveyForm studentSurvey={studentSurvey} studentId={studentId} />
+  return (
+    <SurveyForm
+      studentSurvey={getStudentSurvey(studentId, studentSurvey)}
+      studentId={studentId}
+    />
+  )
 }
 
 export const SurveyForm = ({
@@ -59,14 +83,23 @@ export const SurveyForm = ({
   studentId: string
   studentSurvey: any
 }) => {
-  const methods = useForm({
-    defaultValues: studentSurvey,
-  })
-
   const { refetch } = useStudentsSurvey(studentId)
   const { data } = useStudent(studentId)
 
   const { mutate } = useMutateStudentsPostSurvey(studentId)
+
+  // const [formData, setFormData] = useLocalStorage(
+  //   `student_survey_${studentId}`,
+  //   studentSurvey || {}
+  // )
+
+  // const { getStudentSurvey, storeStudentSurvey } = useLocalStudentSurvey()
+
+  // const formData = getStudentSurvey(studentId, studentSurvey)
+
+  const methods = useForm({
+    defaultValues: studentSurvey,
+  })
 
   const onSubmit = (data: any) => {
     mutate(cleanObject(data), {
