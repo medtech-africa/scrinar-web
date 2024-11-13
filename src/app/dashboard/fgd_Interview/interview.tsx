@@ -40,7 +40,11 @@ const Interview = () => {
 
   // const [selectedRow, setSelectedRow] = React.useState(null)
 
-  const { data: interviews, isPending: isLoading } = useSchoolResources()
+  const {
+    data: interviews,
+    isPending: isLoading,
+    refetch,
+  } = useSchoolResources()
   const filteredInterviews = interviews?.filter(
     (resource) => resource.type === 'interview'
   )
@@ -65,9 +69,9 @@ const Interview = () => {
     <div className="w-full">
       <div className="flex md:flex-row md:justify-between md:gap-0 flex-col justify-center items-center gap-y-6">
         <div className="">
-          <CustomMediaRecorderComponent type="interview" />
+          <CustomMediaRecorderComponent type="interview" refetch={refetch} />
         </div>
-        <InterviewUploadButton />
+        <InterviewUploadButton refetch={refetch} />
       </div>
       <div className="py-3 md:py-8">
         <Table

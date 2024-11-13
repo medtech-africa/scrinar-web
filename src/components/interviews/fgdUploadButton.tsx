@@ -26,7 +26,7 @@ const modalTypeToFileType = {
   [ModalType.fgdGuide]: 'fgdGuide',
 }
 
-export const FGDUploadButton = () => {
+export const FGDUploadButton = ({ refetch }: { refetch: () => void }) => {
   const [openModal, setOpenModal] = React.useState(false)
   const [selectedOption, setSelectedOption] = React.useState<string | null>(
     null
@@ -54,6 +54,7 @@ export const FGDUploadButton = () => {
     onSuccess: () => {
       setOpenModal(false)
       setUploadedFile(null)
+      refetch()
       setFileName('')
       toast.success('File uploaded successfully')
     },
