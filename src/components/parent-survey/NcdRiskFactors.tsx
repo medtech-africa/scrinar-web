@@ -378,6 +378,148 @@ export const ParentSurveyNcdRiskFactors = () => {
                   </div>
                 </div>
 
+                <div>
+                  <label>
+                    On average, how many of the following products do you smoke
+                    each day/week?
+                  </label>
+                  <div style={{ marginTop: '1rem' }}>
+                    <div>
+                      <label>Manufactured cigarettes</label>
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: '1rem',
+                          marginTop: '0.5rem',
+                        }}
+                      >
+                        <Input
+                          type="number"
+                          placeholder="Per Day"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.manufacturedCigarettes.perDay'
+                          )}
+                        />
+                        <Input
+                          type="number"
+                          placeholder="Per Week"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.manufacturedCigarettes.perWeek'
+                          )}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label>Hand-rolled cigarettes</label>
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: '1rem',
+                          marginTop: '0.5rem',
+                        }}
+                      >
+                        <Input
+                          type="number"
+                          placeholder="Per Day"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.handRolledCigarettes.perDay'
+                          )}
+                        />
+                        <Input
+                          type="number"
+                          placeholder="Per Week"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.handRolledCigarettes.perWeek'
+                          )}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label>Pipes full of tobacco</label>
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: '1rem',
+                          marginTop: '0.5rem',
+                        }}
+                      >
+                        <Input
+                          type="number"
+                          placeholder="Per Day"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.pipes.perDay'
+                          )}
+                        />
+                        <Input
+                          type="number"
+                          placeholder="Per Week"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.pipes.perWeek'
+                          )}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label>Number of Shisha sessions</label>
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: '1rem',
+                          marginTop: '0.5rem',
+                        }}
+                      >
+                        <Input
+                          type="number"
+                          placeholder="Per Day"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.shisha.perDay'
+                          )}
+                        />
+                        <Input
+                          type="number"
+                          placeholder="Per Week"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.shisha.perWeek'
+                          )}
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label>Other (please specify)</label>
+                      <Input
+                        type="text"
+                        placeholder="Specify product"
+                        {...register(
+                          'ncdRiskFactor.smokingProducts.other.specify'
+                        )}
+                        style={{ width: '250px', marginTop: '0.5rem' }}
+                      />
+                      <div
+                        style={{
+                          display: 'flex',
+                          gap: '1rem',
+                          marginTop: '0.5rem',
+                        }}
+                      >
+                        <Input
+                          type="number"
+                          placeholder="Per Day"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.other.perDay'
+                          )}
+                        />
+                        <Input
+                          type="number"
+                          placeholder="Per Week"
+                          {...register(
+                            'ncdRiskFactor.smokingProducts.other.perWeek'
+                          )}
+                        />
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
                 <Select
                   {...customRegister('ncdRiskFactor.smoking.triedToStop')}
                   label="During the past 12 months, have you tried to stop smoking?"
@@ -498,6 +640,132 @@ export const ParentSurveyNcdRiskFactors = () => {
                 setValue('ncdRiskFactor.smoking.dailySmokelessTobacco', value)
               }}
             />
+          </PageCard>
+          <PageCard
+            title="Alcohol consumption"
+            bodyStyle="px-4 py-2 space-y-4"
+            textContainerClassName="mb-2"
+          >
+            <Select
+              {...customRegister('ncdRiskFactor.alcohol.everConsumed')}
+              label="Have you ever consumed any alcohol such as beer, wine, spirits, sachet alcohol, bitters, etc even if it's a few sips (excluding alcohol-based medication)?"
+              options={convertStringsToOptionArray(['Yes', 'No'])}
+              value={{
+                value: watch('ncdRiskFactor.alcohol.everConsumed'),
+                label: watch('ncdRiskFactor.alcohol.everConsumed'),
+              }}
+              onChange={(selectedOption: any) => {
+                const value = selectedOption.value
+                setValue('ncdRiskFactor.alcohol.everConsumed', value)
+              }}
+            />
+
+            <Select
+              {...customRegister('ncdRiskFactor.alcohol.consumedPast12Months')}
+              label="Have you consumed any alcohol within the past 12 months even if it's a few sips (excluding alcohol-based medication)?"
+              options={convertStringsToOptionArray(['Yes', 'No'])}
+              value={{
+                value: watch('ncdRiskFactor.alcohol.consumedPast12Months'),
+                label: watch('ncdRiskFactor.alcohol.consumedPast12Months'),
+              }}
+              onChange={(selectedOption: any) => {
+                const value = selectedOption.value
+                setValue('ncdRiskFactor.alcohol.consumedPast12Months', value)
+              }}
+            />
+
+            <Select
+              {...customRegister('ncdRiskFactor.alcohol.past30DaysFrequency')}
+              label="During the past 30 days, how many times have you had at least one standard alcoholic drink? A standard drink is one glass of beer, wine, or a shot of local spirits, all having about the same amount of alcohol. If you only had a few sips, your answer will be 'Never.'"
+              options={convertStringsToOptionArray([
+                'Daily',
+                '5-6 days per week',
+                '3-4 days per week',
+                '1-2 days per week',
+                '1-3 days per month',
+                'Less than once a month',
+                'Never',
+              ])}
+              value={{
+                value: watch('ncdRiskFactor.alcohol.past30DaysFrequency'),
+                label: watch('ncdRiskFactor.alcohol.past30DaysFrequency'),
+              }}
+              onChange={(selectedOption: any) => {
+                const value = selectedOption.value
+                setValue('ncdRiskFactor.alcohol.past30DaysFrequency', value)
+              }}
+            />
+
+            <Select
+              {...customRegister('ncdRiskFactor.alcohol.past7DaysHomebrewed')}
+              label="During the past 7 days, did you consume any homebrewed alcohol, ogogoro, palm wine, or any alcohol not intended for drinking (e.g., alcohol-based medicines)?"
+              options={convertStringsToOptionArray(['Yes', 'No'])}
+              value={{
+                value: watch('ncdRiskFactor.alcohol.past7DaysHomebrewed'),
+                label: watch('ncdRiskFactor.alcohol.past7DaysHomebrewed'),
+              }}
+              onChange={(selectedOption: any) => {
+                const value = selectedOption.value
+                setValue('ncdRiskFactor.alcohol.past7DaysHomebrewed', value)
+              }}
+            />
+
+            <div className="space-y-4">
+              <label>
+                On average, how many standard drinks of the following did you
+                consume during the past 7 days?
+              </label>
+              <div>
+                <div>
+                  <label>Homebrewed spirits, e.g., ogogoro</label>
+                  <Input
+                    type="number"
+                    placeholder="Drinks"
+                    {...register(
+                      'ncdRiskFactor.alcohol.drinks.homebrewedSpirits'
+                    )}
+                  />
+                </div>
+                <div>
+                  <label>Homebrewed beer or wine, e.g., palm wine</label>
+                  <Input
+                    type="number"
+                    placeholder="Drinks"
+                    {...register(
+                      'ncdRiskFactor.alcohol.drinks.homebrewedBeerWine'
+                    )}
+                  />
+                </div>
+                <div>
+                  <label>
+                    Alcohol not intended for drinking, e.g., alcohol-based
+                    medicines, perfumes, aftershaves
+                  </label>
+                  <Input
+                    type="number"
+                    placeholder="Drinks"
+                    {...register(
+                      'ncdRiskFactor.alcohol.drinks.nonDrinkableAlcohol'
+                    )}
+                  />
+                </div>
+                <div>
+                  <Select
+                    {...customRegister('ncdRiskFactor.alcohol.drinks.unknown')}
+                    label="I don't know"
+                    options={convertStringsToOptionArray(['I Don’t Know'])}
+                    value={{
+                      value: watch('ncdRiskFactor.alcohol.drinks.unknown'),
+                      label: watch('ncdRiskFactor.alcohol.drinks.unknown'),
+                    }}
+                    onChange={(selectedOption: any) => {
+                      const value = selectedOption.value
+                      setValue('ncdRiskFactor.alcohol.drinks.unknown', value)
+                    }}
+                  />
+                </div>
+              </div>
+            </div>
           </PageCard>
         </div>
       </PageCard>
