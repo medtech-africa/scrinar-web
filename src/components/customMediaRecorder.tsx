@@ -13,7 +13,7 @@ import { API } from '@/utils/api'
 import uploadImage from '@/utils/uploadImage'
 import { Input } from './ui/input'
 
-const CustomMediaRecorder = (props: { type: string }) => {
+const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
   const { startRecording, stopRecording, mediaBlobUrl, status, clearBlobUrl } =
     useReactMediaRecorder({ audio: true })
   const [openModal, setOpenModal] = React.useState(false)
@@ -32,6 +32,7 @@ const CustomMediaRecorder = (props: { type: string }) => {
       fileType: string
     }) => baseAxios.post(API.schoolUpload, data),
     onSuccess: () => {
+      props.refetch()
       clearBlobUrl()
       setOpenModal(false)
       setFileName('')

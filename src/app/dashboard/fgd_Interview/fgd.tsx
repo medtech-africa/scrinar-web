@@ -39,16 +39,16 @@ const FGD = () => {
     return <CustomMediaRecorder {...props} />
   }
 
-  const { data: fgd, isPending: isLoading } = useSchoolResources()
+  const { data: fgd, isPending: isLoading, refetch } = useSchoolResources()
   const filteredFgd = fgd?.filter((resource) => resource.type === 'fgd')
 
   return (
     <div className="w-full">
       <div className="flex md:flex-row md:justify-between md:gap-0 flex-col justify-center items-center gap-y-6">
         <div className="">
-          <CustomMediaRecorderComponent type="fgd" />
+          <CustomMediaRecorderComponent type="fgd" refetch={refetch} />
         </div>
-        <FGDUploadButton />
+        <FGDUploadButton refetch={refetch} />
       </div>
       <div className="py-3 md:py-8">
         <Table
