@@ -49,6 +49,8 @@ export const useLocalParentSurveyStore = create(
     {
       name: 'parents_survey_store', // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage),
+      merge: (persistedState, currentState) =>
+        deepMerge(currentState, persistedState),
     }
   )
 )
@@ -59,7 +61,7 @@ type StudentSurveyStoreType = {
     formData: object
   }[]
   storeStudentSurvey: (id: string, data: object) => void
-  getStudentSurvey: (id: string, data: object) => object | null
+  getStudentSurvey: (id: string, data?: object) => object | null
 }
 
 export const useLocalStudentSurveyStore = create(
@@ -81,9 +83,13 @@ export const useLocalStudentSurveyStore = create(
           set({ data: Array.from(dataMap.values()) })
         }
       },
-      getStudentSurvey: (id: string) => {
+      getStudentSurvey: (id: string, defaultValues) => {
         const survey = get().data
         const parentData = survey.find((surveyData) => surveyData.id === id)
+
+        if (!parentData) {
+          get().storeStudentSurvey(id, defaultValues || {})
+        }
 
         return parentData?.formData ?? null
       },
@@ -91,6 +97,8 @@ export const useLocalStudentSurveyStore = create(
     {
       name: 'students_survey_store', // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage),
+      merge: (persistedState, currentState) =>
+        deepMerge(currentState, persistedState),
     }
   )
 )
@@ -160,6 +168,9 @@ export const useLocalStudentSurvey = () => {
     }[]
   >(`student_survey`, [])
 
+  const getSurvey = useLocalStudentSurveyStore(state=> state.getStudentSurvey)
+  const storeSurvey = useLocalStudentSurveyStore(state=> state.storeStudentSurvey)
+
   const getStudentSurvey = (parentId: string, defaultData?: object) => {
     const parentData = survey.find((surveyData) => surveyData.id === parentId)
 
@@ -167,7 +178,8 @@ export const useLocalStudentSurvey = () => {
       storeStudentSurvey(parentId, defaultData)
     }
 
-    return parentData?.formData || defaultData
+    // return parentData?.formData || defaultData
+    return getSurvey(parentId, defaultData)
   }
 
   const storeStudentSurvey = (parentId: string, data: any) => {
@@ -179,7 +191,7 @@ export const useLocalStudentSurvey = () => {
       setSurvey((prevData) => {
         return [...prevData, { id: parentId, formData: data }]
       })
-      return
+      return storeSurvey(parentId, data)
     }
 
     if (parentData) {
@@ -194,7 +206,8 @@ export const useLocalStudentSurvey = () => {
       })
     }
 
-    return parentData
+    return storeSurvey(parentId, data)
+    // return parentData
   }
 
   return {
