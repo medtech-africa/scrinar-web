@@ -35,7 +35,7 @@ const config: Config = {
         ring: 'var(--ring)',
         background: '#F9FAFB',
         primary: {
-          DEFAULT: '#E31B23',
+          DEFAULT: process.env.ENV === 'development' ? '#1570EF' : '#E31B23',
           // foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -43,11 +43,11 @@ const config: Config = {
           // foreground: "hsl(var(--secondary-foreground))",
         },
         lust: {
-          900: '#E31B23',
-          800: '#E63239',
-          700: '#E9494F',
-          600: '#EB5F65',
-          500: '#EE767B',
+          900: process.env.ENV === 'development' ? '#1570EF' : '#E31B23',
+          800: process.env.ENV === 'development' ? '#1570EF' : '#E63239',
+          700: process.env.ENV === 'development' ? '#1590EF' : '#E9494F',
+          600: process.env.ENV === 'development' ? '#1595EF' : '#EB5F65',
+          500: process.env.ENV === 'development' ? '#15A0EF' : '#EE767B',
           400: '#F18D91',
           300: '#F4A4A7',
           200: '#F7BBBD',
