@@ -450,6 +450,17 @@ export const DemographicsSection = ({
             )}
           />
         )}
+        {gender === 'male' && (
+          <Controller
+            control={control}
+            name="howManyWives"
+            render={({ field }) => (
+              <div className="space-y-2">
+                <Input label="How many wives do you have?" {...field} />
+              </div>
+            )}
+          />
+        )}
       </div>
     </PageCard>
   )

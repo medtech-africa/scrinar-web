@@ -20,6 +20,7 @@ export type ParentFormData = {
     label: string
     value: string
   }
+  howManyWives: string
   otherEthnicity?: string
   languagesSpoken: string[]
   otherLanguage?: string
