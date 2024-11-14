@@ -101,7 +101,7 @@ export const AddNewStudentContent = () => {
     mutateHealthData(dataToSend, {
       onSuccess: () => {
         if (showSurveys) return
-        toast.success('Successfully added student and health data')
+        toast.success('Successfully added child and health data')
         setResetFields(true)
         reset(defaultValues)
         setSelectedImg(null)
@@ -154,7 +154,7 @@ export const AddNewStudentContent = () => {
               setStudentAddedId(studentId)
               setModalType('Survey'), setOpenModal(true)
             } else {
-              toast.success('Successfully added student')
+              toast.success('Successfully added child')
               reset(defaultValues)
               setSelectedImg(null)
               setStudentAddedId('')
@@ -230,7 +230,7 @@ export const AddNewStudentContent = () => {
                     {...rest}
                     value={value ?? ''}
                     label="Age"
-                    placeholder="Student age"
+                    placeholder="Child age"
                     message={errors.age && errors.age.message}
                     variant={errors?.age ? 'destructive' : 'default'}
                   />

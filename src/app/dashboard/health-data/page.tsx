@@ -288,7 +288,7 @@ export default function HealthData() {
           </TableHeader>
           <TableHeader className="bg-grey-100">
             <TableRow>
-              <TableHead>Students Name</TableHead>
+              <TableHead>Child Name</TableHead>
               <TableHead>Ht(m)</TableHead>
               <TableHead>Wt</TableHead>
               <TableHead className="w-3">BMI</TableHead>

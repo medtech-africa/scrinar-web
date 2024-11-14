@@ -213,7 +213,7 @@ export default function FamilyHealthDataLayout({
               href="/dashboard/family-health-data/students"
               data-state={pathname.includes('students') && 'active'}
             >
-              Students
+              Children
             </Link>
             <Link
               className={triggerClassName}

@@ -37,8 +37,8 @@ export default function AddNewStudent() {
   return (
     <div>
       <PageHeader
-        title="Add New Student"
-        subtitle="Add Student: Create New Student Profile"
+        title="Add New Child"
+        subtitle="Add Child: Create New Child Profile"
         navigation={navigationItems}
       />
       <AddNewStudentContent />
