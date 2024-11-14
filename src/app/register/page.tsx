@@ -62,7 +62,7 @@ const defaultValue = {
   template: 'jica',
 }
 const Register = () => {
-  const { isLoading: stateLoading, data: states } = useStateLGA()
+  const { isPending: stateLoading, data: states } = useStateLGA()
   const { isPending: isLoading, mutate } = useMutation({
     mutationFn: (dataToSend: IDataToSend) =>
       baseAxios.post(API.schoolRegister, dataToSend),

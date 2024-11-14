@@ -42,7 +42,7 @@ interface IFormValue {
 }
 
 const AdminUpdate = ({ selectedImg = null as File | null }) => {
-  const { isLoading: stateLoading, data: states } = useStateLGA()
+  const { isPending: stateLoading, data: states } = useStateLGA()
   const { isPending: isLoading, mutate } = useMutation({
     mutationFn: (dataToSend: Omit<HealthDataPayload, 'userId'>) =>
       baseAxios.patch(API.schoolUpdate, dataToSend),

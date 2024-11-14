@@ -133,7 +133,7 @@ const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
   })
   const {
     data: modules,
-    isLoading: isModulesLoading,
+    isPending: isModulesLoading,
     refetch,
   } = useTrainingModules({
     courseId: id,

@@ -396,7 +396,7 @@ const ScreeningEdit = ({
   refetchScreenings,
   id,
 }: Iprops & { id: string }) => {
-  const { data: screeningData, isLoading: dataLoading } = useScreening(id)
+  const { data: screeningData, isPending: dataLoading } = useScreening(id)
 
   const { data: assessmentTypesData, isFetching: assessmentTypesLoading } =
     useAssessmentType()

@@ -107,12 +107,12 @@ const FHDPageContent = ({ type }: Props) => {
               <TableHead></TableHead>
               <TableHead></TableHead>
               <TableHead></TableHead>
-              <TableHead className="bg-grey-200"></TableHead>
+              {/* <TableHead className="bg-grey-200"></TableHead>
               <TableHead className="bg-grey-200 absolute pt-3 ">
                 Cholesterol(mg/dL)
               </TableHead>
               <TableHead className="bg-grey-200"></TableHead>
-              <TableHead className="bg-grey-200"></TableHead>
+              <TableHead className="bg-grey-200"></TableHead> */}
               <TableHead></TableHead>
             </TableRow>
           </TableHeader>
@@ -127,10 +127,10 @@ const FHDPageContent = ({ type }: Props) => {
               <TableHead>BP(mmHg)</TableHead>
               <TableHead>Pulse(bpm)</TableHead>
               <TableHead>Blood Sugar(mg/dL)</TableHead>
-              <TableHead>Total Cholesterol</TableHead>
+              {/* <TableHead>Total Cholesterol</TableHead>
               <TableHead>LDL</TableHead>
               <TableHead>HDL</TableHead>
-              <TableHead>Triglycerides</TableHead>
+              <TableHead>Triglycerides</TableHead> */}
               {/* <TableHead>Nutritional Access</TableHead>*/}
               <TableHead>Status</TableHead>
               <TableHead>Action</TableHead>
@@ -239,12 +239,19 @@ const TableBodyRow = ({
       <TableCell>{val?.bloodPressure}</TableCell>
       <TableCell>{val?.pulse}</TableCell>
       <TableCell>{val?.glucoseLevel}</TableCell>
-      <TableCell>{val?.cholesterol?.totalCholesterol}</TableCell>
+      {/* <TableCell>{val?.cholesterol?.totalCholesterol}</TableCell>
       <TableCell>{val?.cholesterol?.ldl}</TableCell>
       <TableCell>{val?.cholesterol?.hdl}</TableCell>
-      <TableCell>{val?.cholesterol?.triglycerides}</TableCell>
+      <TableCell>{val?.cholesterol?.triglycerides}</TableCell> */}
       {/* <TableCell>{val?.dietaryDiversityScore}</TableCell>*/}
-      <TableCell>{val?.percentageCompletion}</TableCell>
+      <TableCell
+        className={cn({
+          'text-green-600': (val?.percentageCompletion || 0) >= 75,
+          'text-red-600': (val?.percentageCompletion || 0) < 75,
+        })}
+      >
+        {(val?.percentageCompletion || 0)?.toFixed(0)}%
+      </TableCell>
       <TableCell className="relative">
         <div
           onClick={() => handleMoreClick(userId)}

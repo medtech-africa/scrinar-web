@@ -172,7 +172,7 @@ export const SurveyForm = ({
             >
               Health & Hygiene
             </Tabs.Trigger>
-            <Tabs.Trigger
+            {/* <Tabs.Trigger
               className={triggerClassName}
               value="ncd-risks-family"
               onClick={() => refetch()}
@@ -185,7 +185,7 @@ export const SurveyForm = ({
               onClick={() => refetch()}
             >
               Gender & Household Roles
-            </Tabs.Trigger>
+            </Tabs.Trigger> */}
           </Tabs.List>
 
           <Tabs.Content value="demographics">
