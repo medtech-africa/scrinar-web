@@ -29,6 +29,7 @@ export const API = {
     const params = new URLSearchParams({
       page: String(page),
       limit: gender ? '1000' : '15',
+      per_page: gender ? '1000' : '15',
       search: searchVal,
       gender,
     })
