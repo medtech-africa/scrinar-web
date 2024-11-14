@@ -35,7 +35,7 @@ export const useLocalParentSurvey = () => {
       })
     }
 
-    return parentData
+    return survey
   }
 
   return {

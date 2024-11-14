@@ -31,7 +31,7 @@ export const useCustomRegister = (studentId?: string) => {
   //   `student_survey_${studentId}`,
   //   {}
   // )
-  const { storeStudentSurvey } = useLocalStudentSurvey()
+  const { getStudentSurvey, storeStudentSurvey } = useLocalStudentSurvey()
 
   const customRegister = (name: string, options: any = {}) => {
     const { exclude, ...restOptions } = options
@@ -62,7 +62,8 @@ export const useCustomRegister = (studentId?: string) => {
 
       if (currentValue) {
         storeStudentSurvey(studentId ?? "", data)
-        mutate(data)
+        const dataToSend = getStudentSurvey(studentId ?? '')
+        mutate(dataToSend || data)
       }
     }
 

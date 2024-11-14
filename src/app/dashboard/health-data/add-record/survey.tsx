@@ -96,7 +96,7 @@ export const SurveyForm = ({
   //   studentSurvey || {}
   // )
 
-  // const { getStudentSurvey, storeStudentSurvey } = useLocalStudentSurvey()
+  const { getStudentSurvey, storeStudentSurvey } = useLocalStudentSurvey()
 
   // const formData = getStudentSurvey(studentId, studentSurvey)
 
@@ -105,7 +105,10 @@ export const SurveyForm = ({
   })
 
   const onSubmit = (data: any) => {
-    mutate(cleanObject(data), {
+    storeStudentSurvey(studentId, cleanObject(data))
+    const dataToSend = getStudentSurvey(studentId, cleanObject(data))
+
+    mutate(dataToSend, {
       onSuccess: () => {
         refetch()
         toast.success('Survey saved successfully')

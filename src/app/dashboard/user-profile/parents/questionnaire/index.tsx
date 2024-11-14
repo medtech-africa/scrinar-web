@@ -99,7 +99,7 @@ const useFormWithAutoSave = ({
   })
 
   // const [__, setFormData] = useLocalStorage(`parent_survey_${parentId}`, {})
-  const { storeParentSurvey } = useLocalParentSurvey()
+  const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
 
   // Store previous values to compare changes
   const previousValues = useRef<Record<string, any>>({})
@@ -117,10 +117,12 @@ const useFormWithAutoSave = ({
         // })
         storeParentSurvey(parentId, cleanedData)
 
+        const dataToSend = getParentSurvey(parentId)
+
         mutateQuestionnaire(
           {
             id: parentId,
-            data: cleanedData,
+            data: dataToSend,
           },
           {
             onSuccess: () => {
