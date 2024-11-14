@@ -82,16 +82,16 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
         isAvatar
         title={
           userData?.firstName && userData?.lastName
-            ? data?.student?.firstName + ' ' + data?.student?.lastName
+            ? userData?.firstName + ' ' + userData?.lastName
             : '-'
         }
         subtitle={`Last updated: ${formattedDate || '-'}`}
         user={
           <Avatar
-            src={data?.student?.avatarUrl}
+            src={userData?.avatarUrl}
             fallback={returnJoinedFirstCharacter(
-              data?.student?.firstName,
-              data?.student?.lastName
+              userData?.firstName,
+              userData?.lastName
             )}
           />
         }
@@ -128,8 +128,8 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
                   progress={data?.bmi}
                   variant={
                     categorizeBMIWHO2007(
-                      data?.student?.age,
-                      data?.student?.gender,
+                      userData?.age,
+                      userData?.gender,
                       data?.bmi
                     )?.variant
                   }
@@ -138,15 +138,15 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
               <BadgeField
                 variant={
                   categorizeBMIWHO2007(
-                    data?.student?.age,
-                    data?.student?.gender,
+                    userData?.age,
+                    userData?.gender,
                     data?.bmi
                   )?.variant
                 }
                 value={
                   categorizeBMIWHO2007(
-                    data?.student?.age,
-                    data?.student?.gender,
+                    userData?.age,
+                    userData?.gender,
                     data?.bmi
                   )?.message
                 }

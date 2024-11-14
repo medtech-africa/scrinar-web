@@ -317,7 +317,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                           <DotIcon />
                           <Text variant="text/md">
                             <span className="block md:hidden lg:block">
-                              Students
+                              Children
                             </span>
                             <span className="hidden md:block lg:hidden">S</span>
                           </Text>

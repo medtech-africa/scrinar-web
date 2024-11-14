@@ -81,8 +81,8 @@ const dashboardStats = [
 
 const actionData1 = [
   {
-    title: 'Create New Student Profile',
-    subtitle: 'Add Student Profile',
+    title: 'Create New Child Profile',
+    subtitle: 'Add Child Profile',
     icon: 'profile2User' as IconNames,
     type: 'student',
   },
