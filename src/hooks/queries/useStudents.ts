@@ -23,6 +23,7 @@ type Student = {
   avatarUrl: string
   parentMobile: string
   parentMobileAlt: string
+  familyCode?: string
   level: string
   email?: string
   familyCode?: string
@@ -39,7 +40,8 @@ type Student = {
 const useStudent = (id: string) => {
   return useQuery({
     queryKey: ['singleStudent', id],
-    queryFn: () => baseAxios.get(API.student(id)).then((res) => res.data as Student),
+    queryFn: () =>
+      baseAxios.get(API.student(id)).then((res) => res.data as Student),
   })
 }
 
