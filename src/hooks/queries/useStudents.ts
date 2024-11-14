@@ -26,7 +26,6 @@ type Student = {
   familyCode?: string
   level: string
   email?: string
-  familyCode?: string
   lga: string
   state: string
   user: string
