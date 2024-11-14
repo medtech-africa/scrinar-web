@@ -5,3 +5,9 @@ export const convertStringsToOptionArray = (values: string[] = []) => {
     label: value,
   }));
 };
+export const convertStringToOption = (value = '') => {
+  return ({
+    value,
+    label: value,
+  });
+};

@@ -30,7 +30,10 @@ import {
 } from '@/components/parent-survey'
 import { useParentQuestionnaire } from '@/hooks/queries/useParents'
 import ContentLoader from '@/components/content-loader'
-import { useLocalParentSurvey } from '@/hooks/useLocalParentSurvey'
+import {
+  // useLocalParentSurvey,
+  useLocalParentSurveyStore,
+} from '@/hooks/useLocalParentSurvey'
 
 type FormAutoSaveProps = {
   parentId: string
@@ -97,7 +100,11 @@ const useFormWithAutoSave = ({
   const form = useForm<ParentFormData>({
     defaultValues,
   })
-  const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
+  // const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
+  const storeSurvey = useLocalParentSurveyStore(
+    (state) => state.storeParentSurvey
+  )
+  const getSurvey = useLocalParentSurveyStore((state) => state.getParentSurvey)
 
   // Store previous values to compare changes
   const previousValues = useRef<Record<string, any>>({})
@@ -108,14 +115,8 @@ const useFormWithAutoSave = ({
       const cleanedData = cleanFormData(changedData)
 
       if (Object.keys(cleanedData).length > 0) {
-        // setFormData((formData) => {
-        //   const localDataToStore = deepMerge(formData, cleanedData)
-
-        //   return localDataToStore
-        // })
-        storeParentSurvey(parentId, cleanedData)
-
-        const dataToSend = getParentSurvey(parentId)
+        storeSurvey(parentId, cleanedData)
+        const dataToSend = getSurvey(parentId)
 
         mutateQuestionnaire(
           {
@@ -180,6 +181,7 @@ const ParentQuestionnairePage = ({
   })
 
   const { isPending: qIsLoading } = useParentQuestionnaire(parentId)
+  console.log('questionnaireData', questionnaireData)
 
   const formMethods = useFormWithAutoSave({
     parentId,
@@ -379,26 +381,21 @@ const ParentQuestionnaire = ({
       refetchOnReconnect: false,
     })
 
-  const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
+  // const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
+  const storeSurvey = useLocalParentSurveyStore(
+    (state) => state.storeParentSurvey
+  )
+  const getSurvey = useLocalParentSurveyStore((state) => state.getParentSurvey)
 
-  const formData = getParentSurvey(parentId)
+  const formData = getSurvey(parentId, questionnaireData)
 
   useEffect(() => {
     if (questionnaireData) {
-      // TODO use type
-      // setFormData((prevData: any) => ({
-      //   ...questionnaireData,
-      //   ...prevData,
-      // }))
-      if (!getParentSurvey(parentId)) {
-        storeParentSurvey(parentId, questionnaireData)
-      } else {
-        storeParentSurvey(parentId, questionnaireData)
-      }
+      storeSurvey(parentId, questionnaireData)
     }
   }, [questionnaireData, parentId])
 
-  if (qIsLoading && hasDefault) {
+  if (qIsLoading && hasDefault && !formData) {
     return (
       <>
         <p className="my-4 text-center">Loading..</p>
@@ -406,6 +403,8 @@ const ParentQuestionnaire = ({
       </>
     )
   }
+
+  console.log(qIsLoading, hasDefault, !formData, formData)
 
   return (
     <ParentQuestionnairePage

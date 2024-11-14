@@ -11,7 +11,7 @@ type ParentSurveyStoreType = {
     formData: object
   }[]
   storeParentSurvey: (id: string, data: object) => void
-  getParentSurvey: (id: string, data: object) => object | null
+  getParentSurvey: (id: string, data?: object) => object | null
 }
 
 export const useLocalParentSurveyStore = create(
@@ -33,11 +33,15 @@ export const useLocalParentSurveyStore = create(
           set({ data: Array.from(dataMap.values()) })
         }
       },
-      getParentSurvey: (parentId: string) => {
+      getParentSurvey: (parentId: string, defaultValues) => {
         const survey = get().data
         const parentData = survey.find(
           (surveyData) => surveyData.id === parentId
         )
+
+        if (!parentData) {
+          get().storeParentSurvey(parentId, defaultValues || {})
+        }
 
         return parentData?.formData ?? null
       },

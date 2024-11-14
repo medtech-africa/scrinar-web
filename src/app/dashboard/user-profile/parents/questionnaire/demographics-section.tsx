@@ -22,6 +22,7 @@ import {
 import { genderOptions } from '@/constants/selectOptions'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Text } from '@/components/ui/text'
+import { convertStringToOption } from '@/lib/convertStringsToOptionArray'
 
 interface Props {
   control: Control<ParentFormData, any, ParentFormData>
@@ -48,7 +49,9 @@ export const DemographicsSection = ({
               label="How many years have you lived in this community?"
               labelStyle="lg:text-base text-sm"
               onBlur={onBlur}
-              value={value}
+              value={
+                typeof value === 'string' ? convertStringToOption(value) : value
+              }
               onChange={(val) => {
                 onChange(val)
               }}
@@ -68,7 +71,11 @@ export const DemographicsSection = ({
                 label="Ethnicity"
                 labelStyle="lg:text-base text-sm"
                 onBlur={onBlur}
-                value={value}
+                value={
+                  typeof value === 'string'
+                    ? convertStringToOption(value)
+                    : value
+                }
                 onChange={(val) => {
                   onChange(val)
                 }}
@@ -153,7 +160,11 @@ export const DemographicsSection = ({
                 label="Religion"
                 labelStyle="lg:text-base text-sm"
                 onBlur={onBlur}
-                value={value}
+                value={
+                  typeof value === 'string'
+                    ? convertStringToOption(value)
+                    : value
+                }
                 onChange={(val) => {
                   onChange(val)
                 }}
@@ -190,7 +201,9 @@ export const DemographicsSection = ({
               label="Highest level of education:"
               labelStyle="lg:text-base text-sm"
               onBlur={onBlur}
-              value={value}
+              value={
+                typeof value === 'string' ? convertStringToOption(value) : value
+              }
               onChange={(val) => {
                 onChange(val)
               }}
@@ -210,7 +223,9 @@ export const DemographicsSection = ({
               label="Work status"
               labelStyle="lg:text-base text-sm"
               onBlur={onBlur}
-              value={value}
+              value={
+                typeof value === 'string' ? convertStringToOption(value) : value
+              }
               onChange={(val) => {
                 onChange(val)
               }}
@@ -287,12 +302,15 @@ export const DemographicsSection = ({
 
         <Controller
           control={control}
-          render={({ field: { onChange, ...rest } }) => (
+          render={({ field: { onChange, value, ...rest } }) => (
             <Select
               placeholder="Select an option"
               label="Average total household income in the last one  year"
               labelStyle="lg:text-base text-sm"
               {...rest}
+              value={
+                typeof value === 'string' ? convertStringToOption(value) : value
+              }
               onChange={(val) => {
                 onChange(val)
               }}
@@ -313,7 +331,11 @@ export const DemographicsSection = ({
                 label="Do you or any family member have a chronic health condition?"
                 labelStyle="lg:text-base text-sm"
                 onBlur={onBlur}
-                value={value}
+                value={
+                  typeof value === 'string'
+                    ? convertStringToOption(value)
+                    : value
+                }
                 onChange={(val) => {
                   onChange(val)
                 }}
@@ -387,12 +409,17 @@ export const DemographicsSection = ({
 
                 <Controller
                   control={control}
-                  render={({ field: { onChange, ...rest } }) => (
+                  render={({ field: { onChange, value, ...rest } }) => (
                     <Select
                       placeholder="Select an option"
                       label="Gender"
                       labelStyle="lg:text-base text-sm"
                       {...rest}
+                      value={
+                        typeof value === 'string'
+                          ? convertStringToOption(value)
+                          : value
+                      }
                       onChange={(val) => {
                         onChange(val)
                       }}
