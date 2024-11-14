@@ -49,11 +49,6 @@ export const Survey = ({
 
   useEffect(() => {
     if (studentSurvey) {
-      // TODO use type
-      // setFormData((prevData: any) => ({
-      //   ...studentSurvey,
-      //   ...prevData,
-      // }))
       if (!getStudentSurvey(studentId)) {
         storeStudentSurvey(studentId, studentSurvey)
       } else {
@@ -62,7 +57,9 @@ export const Survey = ({
     }
   }, [studentSurvey, studentId])
 
-  if (isStudentSurveyLoading) {
+  const formData = getStudentSurvey(studentId, studentSurvey)
+
+  if (isStudentSurveyLoading || !formData) {
     return (
       <>
         <p className="my-4 text-center">Loading..</p>
@@ -71,12 +68,7 @@ export const Survey = ({
     )
   }
 
-  return (
-    <SurveyForm
-      studentSurvey={getStudentSurvey(studentId, studentSurvey)}
-      studentId={studentId}
-    />
-  )
+  return <SurveyForm studentSurvey={formData} studentId={studentId} />
 }
 
 export const SurveyForm = ({
