@@ -24,7 +24,10 @@ const useSchools = (search?: string, state?: string) => {
 export const useSchoolResources = () => {
   return useQuery({
     queryKey: ['school-resources'],
-    queryFn: () => baseAxios.get<{data:SchoolResource[]}>(API.schoolResources).then((res) => res.data?.data),
+    queryFn: () =>
+      baseAxios
+        .get<{ data: SchoolResource[] }>(API.schoolResources)
+        .then((res) => res.data?.data),
   })
 }
 
@@ -42,6 +45,8 @@ type SchoolResource = {
   createdAt: string
   updatedAt: string
   id: string
+  transcription?: string
+  translation?: string
 }
 
 export interface UploadedBy {

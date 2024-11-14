@@ -24,7 +24,10 @@ const FGD = () => {
         loading: () => (
           <div className="justify-items-center">
             <p className="text-grey-500">Record Audio</p>
-            <button className="outline-none border-none bg-transparent">
+            <button
+              className="outline-none border-none bg-transparent"
+              title="play"
+            >
               <div role="button" tabIndex={0}>
                 <IconPicker icon="play" size={24} className="text-primary" />
               </div>
@@ -56,11 +59,14 @@ const FGD = () => {
             'table-auto my-12',
             filteredFgd?.length === 0 && 'my-0'
           )}
+          containerClassName="!max-h-[90vh]"
         >
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead className="">Name</TableHead>
               <TableHead className="">Type</TableHead>
+              <TableHead className="">Transcription</TableHead>
+              <TableHead className="">Translation</TableHead>
               <TableHead className=""></TableHead>
               {/* <TableHead className="">Action</TableHead> */}
             </TableRow>

@@ -11,6 +11,7 @@ const uploadImage = async (imageString: File, throwError = false) => {
       return response.data as {
         key: string
         url: string
+        mimeType: string
       }
     } catch (error) {
       return errorMessage(error)
@@ -23,6 +24,7 @@ const uploadImage = async (imageString: File, throwError = false) => {
   return response.data as {
     key: string
     url: string
+    mimeType: string
   }
 }
 

@@ -50,6 +50,8 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
       fileName: string
       type: string
       fileType: string
+      mimeType: string
+      language: string
     }) => baseAxios.post(API.schoolUpload, data),
     onSuccess: () => {
       setOpenModal(false)
@@ -118,6 +120,8 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
               fileType:
                 modalTypeToFileType[modalType as ModalType] ?? 'general',
               type: 'interview',
+              language: 'hausa',
+              mimeType: res.mimeType,
             })
           }
         },

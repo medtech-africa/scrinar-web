@@ -1,5 +1,5 @@
 // 'use client'
-import React from 'react'
+import React, { useState } from 'react'
 import { IconPicker } from '@/components/ui/icon-picker'
 import {
   Table,
@@ -15,6 +15,7 @@ import { InterviewUploadButton } from '@/components/interviews/InterviewUploadBu
 import { useSchoolResources } from '@/hooks/queries/useSchools'
 import EmptyData from '@/components/empty-data'
 import { cn } from '@/lib/utils'
+import Modal from '@/components/ui/modal'
 
 const Interview = () => {
   const CustomMediaRecorder = React.useMemo(
@@ -24,7 +25,10 @@ const Interview = () => {
         loading: () => (
           <div className="justify-items-center">
             <p className="text-grey-500">Record Audio</p>
-            <button className="outline-none border-none bg-transparent">
+            <button
+              className="outline-none border-none bg-transparent"
+              title="play"
+            >
               <div role="button" tabIndex={0}>
                 <IconPicker icon="play" size={24} className="text-primary" />
               </div>
@@ -48,6 +52,8 @@ const Interview = () => {
   const filteredInterviews = interviews?.filter(
     (resource) => resource.type === 'interview'
   )
+
+  const [modalContent, setModalContent] = useState('')
   // const handleMoreClick = (rowIndex: any) => {
   //   setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   // }
@@ -79,10 +85,13 @@ const Interview = () => {
             'table-auto my-12',
             filteredInterviews?.length === 0 && 'my-0'
           )}
+          containerClassName="!max-h-[90vh]"
         >
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead className="">Name</TableHead>
+              <TableHead className="">Transcription</TableHead>
+              <TableHead className="">Translation</TableHead>
               <TableHead className="">Type</TableHead>
               <TableHead className=""></TableHead>
               {/* <TableHead className="">Action</TableHead> */}
@@ -102,6 +111,34 @@ const Interview = () => {
                     <p className="text-grey-600">
                       Uploaded by: {resource?.uploadedBy.name}
                     </p>
+                  </TableCell>
+                  <TableCell>
+                    {resource.transcription ? (
+                      <a
+                        onClick={() =>
+                          setModalContent(resource.transcription ?? '')
+                        }
+                        className="underline"
+                      >
+                        view
+                      </a>
+                    ) : (
+                      '-'
+                    )}
+                  </TableCell>
+                  <TableCell>
+                    {resource.translation ? (
+                      <a
+                        onClick={() =>
+                          setModalContent(resource.translation ?? '')
+                        }
+                        className="underline"
+                      >
+                        view
+                      </a>
+                    ) : (
+                      '-'
+                    )}
                   </TableCell>
                   <TableCell>{resource?.fileType || resource?.type}</TableCell>
                   <TableCell>
@@ -134,6 +171,14 @@ const Interview = () => {
           </TableBody>
         </Table>
         {filteredInterviews?.length === 0 && <EmptyData />}
+        <Modal
+          className="sm:w-1/2 sm:h-1/2 flex items-center justify-center"
+          open={!!modalContent}
+          closeModal={() => setModalContent('')}
+          // title={`${modalType}`}
+        >
+          <p className="">{modalContent}</p>
+        </Modal>
       </div>
     </div>
   )
