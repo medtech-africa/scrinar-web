@@ -25,6 +25,7 @@ type Student = {
   parentMobileAlt: string
   level: string
   email?: string
+  familyCode?: string
   lga: string
   state: string
   user: string

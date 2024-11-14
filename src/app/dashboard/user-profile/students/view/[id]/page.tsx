@@ -63,6 +63,12 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
                 labelStyle="lg:text-sm text-xs"
               />
               <Input
+                defaultValue={data?.familyCode ?? `-`}
+                disabled
+                label="Household Code"
+                labelStyle="lg:text-sm text-xs"
+              />
+              <Input
                 defaultValue={data?.age && `${data?.age} Years`}
                 disabled
                 label="Age"
