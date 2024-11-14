@@ -11,7 +11,11 @@ import React, { useMemo, useState } from 'react'
 import { ParentQuestionnaire } from '.'
 
 const AddParentQuestionnaire = () => {
-  const { data: parentsData, isFetching: parentsLoading } = useParents()
+  const { data: parentsData, isFetching: parentsLoading } = useParents(
+    0,
+    '',
+    true
+  )
 
   const [parent, setParent] = useState<Parent | null>()
 
