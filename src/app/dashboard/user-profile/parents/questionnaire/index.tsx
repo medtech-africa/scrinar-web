@@ -186,33 +186,12 @@ const ParentQuestionnairePage = ({
   //   `parent_survey_${parentId}`,
   //   questionnaireData || {}
   // )
-  const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
-
-  const formData = getParentSurvey(parentId)
-
-  useEffect(() => {
-    if (questionnaireData) {
-      // TODO use type
-      // setFormData((prevData: any) => ({
-      //   ...questionnaireData,
-      //   ...prevData,
-      // }))
-      if (!getParentSurvey(parentId)) {
-        storeParentSurvey(parentId, questionnaireData)
-      } else {
-        storeParentSurvey(
-          parentId,
-          deepMerge(getParentSurvey(parentId), questionnaireData)
-        )
-      }
-    }
-  }, [questionnaireData, parentId])
 
   const formMethods = useFormWithAutoSave({
     parentId,
     mutateQuestionnaire,
     debounceMs: 2000, // Adjust as needed
-    defaultValues: formData,
+    defaultValues: questionnaireData,
   })
 
   const {
@@ -407,6 +386,28 @@ const ParentQuestionnaire = ({
       refetchOnReconnect: false,
     })
 
+  const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
+
+  const formData = getParentSurvey(parentId)
+
+  useEffect(() => {
+    if (questionnaireData) {
+      // TODO use type
+      // setFormData((prevData: any) => ({
+      //   ...questionnaireData,
+      //   ...prevData,
+      // }))
+      if (!getParentSurvey(parentId)) {
+        storeParentSurvey(parentId, questionnaireData)
+      } else {
+        storeParentSurvey(
+          parentId,
+          deepMerge(getParentSurvey(parentId), questionnaireData)
+        )
+      }
+    }
+  }, [questionnaireData, parentId])
+
   if (qIsLoading && hasDefault) {
     return (
       <>
@@ -418,7 +419,7 @@ const ParentQuestionnaire = ({
 
   return (
     <ParentQuestionnairePage
-      {...{ parentId, gender, hasDefault, questionnaireData }}
+      {...{ parentId, gender, hasDefault, questionnaireData: formData }}
     />
   )
 }
