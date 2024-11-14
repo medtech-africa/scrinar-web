@@ -59,6 +59,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
       setValue('lastName', data?.lastName)
       setValue('email', data?.email)
       setValue('age', data?.age)
+      setValue('familyCode', data?.familyCode)
       setValue('parentMobile', data?.parentMobile)
       setValue('parentMobileAlt', data?.parentMobileAlt)
       setValue('gender', { value: data?.gender, label: data?.gender })
@@ -135,6 +136,22 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                     />
                   )}
                   name="lastName"
+                />
+                <Controller
+                  control={control}
+                  render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                      onChange={onChange}
+                      onBlur={onBlur}
+                      value={value ?? ''}
+                      placeholder="ayans124"
+                      label="HouseHold code"
+                      labelStyle="lg:text-sm text-xs"
+                      variant={errors?.familyCode ? 'destructive' : 'default'}
+                      message={errors.familyCode && errors.familyCode.message}
+                    />
+                  )}
+                  name="familyCode"
                 />
 
                 <Controller
