@@ -11,7 +11,13 @@ const getHealthData = (
 ) =>
   baseAxios
     .get(isFamily ? API.getFamilyHealthData : API.getHealthData, {
-      params: { page, limit, ...(type ? { type } : {}), search: searchVal },
+      params: {
+        page,
+        limit,
+        per_page: limit,
+        ...(type ? { type } : {}),
+        search: searchVal,
+      },
     })
     .then((res) => res.data)
 

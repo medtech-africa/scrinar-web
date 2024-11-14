@@ -25,10 +25,11 @@ export const API = {
     `${BASE_URL}/api/v1/students${page ? `?page=${page}` : ''}${
       level ? `${page ? '&' : '?'}level=${level}` : ''
     }${searchVal ? `${page || level ? '&' : '?'}search=${searchVal}` : ''}`,
-  getParents: (page?: number, searchVal = '', gender = '') => {
+  getParents: (page?: number, searchVal = '', gender = '', all = false) => {
     const params = new URLSearchParams({
       page: String(page),
-      limit: gender ? '1000' : '15',
+      limit: gender || all ? '1000' : '15',
+      per_page: gender || all ? '1000' : '15',
       search: searchVal,
       gender,
     })

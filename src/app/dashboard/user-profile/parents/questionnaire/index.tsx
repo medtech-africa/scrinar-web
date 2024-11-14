@@ -97,7 +97,6 @@ const useFormWithAutoSave = ({
   const form = useForm<ParentFormData>({
     defaultValues,
   })
-
   // const [__, setFormData] = useLocalStorage(`parent_survey_${parentId}`, {})
   const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
 
@@ -239,7 +238,6 @@ const ParentQuestionnairePage = ({
 
   const onSubmit = (data: any) => {
     const questionnaire = cleanFormData(data)
-    console.log(questionnaire)
     const dataToSend = {
       id: parentId,
       data: questionnaire,

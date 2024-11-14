@@ -2,13 +2,15 @@ import { useQuery, keepPreviousData } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 
-const getParents = (page?: number, searchVal = '') =>
-  baseAxios.get(API.getParents(page, searchVal)).then((res) => res.data?.data)
+const getParents = (page?: number, searchVal = '', all = false) =>
+  baseAxios
+    .get(API.getParents(page, searchVal, '', all))
+    .then((res) => res.data?.data)
 
-const useParents = (page?: number, searchVal?: string) => {
+const useParents = (page?: number, searchVal?: string, all = false) => {
   return useQuery({
     queryKey: ['parents', page, searchVal],
-    queryFn: () => getParents(page, searchVal),
+    queryFn: () => getParents(page, searchVal, all),
     placeholderData: keepPreviousData,
   })
 }
@@ -20,13 +22,13 @@ const useParent = (id: string) => {
   })
 }
 
-const useParentQuestionnaire = (id: string, options={}) => {
+const useParentQuestionnaire = (id: string, options = {}) => {
   return useQuery({
     queryKey: ['parentQuestionnaire', id],
     queryFn: () =>
       baseAxios.get(API.parentQuestionnaire(id)).then((res) => res.data?.data),
     enabled: !!id,
-    ...options
+    ...options,
   })
 }
 

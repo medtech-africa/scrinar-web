@@ -17,6 +17,7 @@ import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 import { categorizeBMIWHO2007 } from '@/utils/vitalCalculations'
 import { format } from 'date-fns'
 import { Survey } from '../../add-record/survey'
+import { TVariantEnum } from '@/types/variants.types'
 
 const navigationItems = [
   { label: 'Health Data', icon: IconNames.arrowRight },
@@ -113,7 +114,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
           )}
         </div>
       </div>
-      <div className="grid xl:grid-rows-1 xl:grid-cols-2  gap-6 mt-9">
+      <div className="space-y-6 mt-9">
         <PageCard title="Data Summary" bodyStyle="p-4">
           <div className="grid md:grid-rows-3 md:grid-cols-2 gap-x-6 gap-y-2 mb-4">
             {dataItems.slice(0, 6).map((item) => (
@@ -152,10 +153,22 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
                 }
               />
             </div>
-            <div className="grid md:grid-rows-3 md:grid-cols-1 gap-x-6 gap-y-2 ">
-              {dataItems.slice(6, 9).map((item) => (
-                <Card key={item.id} {...item} className="w-full" />
-              ))}
+
+            <div className="flex flex-col gap-y-4">
+              <div className="relative justify-center items-center flex">
+                <DashboardProgressPattern className="absolute right-0 left-0 hidden md:block" />
+                <DashboardProgress
+                  progress={data?.percentageCompletion}
+                  variant={
+                    (data?.percentageCompletion || 0) >= 75
+                      ? TVariantEnum.Success
+                      : TVariantEnum.Danger
+                  }
+                />
+              </div>
+              <Text variant="text/lg" className="text-center">
+                Questionnaire Progress
+              </Text>
             </div>
           </div>
         </PageCard>
