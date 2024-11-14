@@ -52,6 +52,12 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
                 />
               )}
               <Input
+                defaultValue={data?.familyCode}
+                disabled
+                label="HouseHold Code"
+                labelStyle="lg:text-sm text-xs"
+              />
+              <Input
                 defaultValue={
                   data?.dob && new Date(data?.dob)?.toLocaleDateString()
                 }
