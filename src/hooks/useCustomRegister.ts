@@ -26,11 +26,7 @@ function dotToNested(obj: Record<string, string>) {
 export const useCustomRegister = (studentId?: string) => {
   const { register, setValue, watch, control } = useFormContext()
   const { mutate } = useMutateStudentsSurvey(studentId ?? '')
-
-  // const [__, setFormData] = useLocalStorage(
-  //   `student_survey_${studentId}`,
-  //   {}
-  // )
+  
   const { getStudentSurvey, storeStudentSurvey } = useLocalStudentSurvey()
 
   const customRegister = (name: string, options: any = {}) => {

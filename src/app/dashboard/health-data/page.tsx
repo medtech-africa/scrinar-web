@@ -265,12 +265,17 @@ export default function HealthData() {
       />
 
       <div className="">
-        <p className="">Household code format</p>
-        <p className="">/F = Father</p>
-        <p className="">/M = Mother</p>
-        <p className="">/S = Student</p>
-        <p className="">/G = Guardian</p>
+        <p className="">
+          Household code format (do not enter &apos;/&apos; when entering
+          household code)
+        </p>
+        <p className="">it is done automatically</p>
+        <span className="">/F = Father</span>,{' '}
+        <span className="">/M = Mother</span>,{' '}
+        <span className="">/S = Student</span>,{' '}
+        <span className="">/G = Guardian</span>
       </div>
+
       <div className="py-3 md:py-8">
         <Table className="table-auto" hasEmptyData={healthData?.length === 0}>
           <TableHeader className="bg-grey-100">

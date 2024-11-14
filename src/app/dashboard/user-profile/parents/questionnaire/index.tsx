@@ -97,7 +97,6 @@ const useFormWithAutoSave = ({
   const form = useForm<ParentFormData>({
     defaultValues,
   })
-  // const [__, setFormData] = useLocalStorage(`parent_survey_${parentId}`, {})
   const { storeParentSurvey, getParentSurvey } = useLocalParentSurvey()
 
   // Store previous values to compare changes
@@ -181,11 +180,6 @@ const ParentQuestionnairePage = ({
   })
 
   const { isPending: qIsLoading } = useParentQuestionnaire(parentId)
-
-  // const [formData, setFormData] = useLocalStorage(
-  //   `parent_survey_${parentId}`,
-  //   questionnaireData || {}
-  // )
 
   const formMethods = useFormWithAutoSave({
     parentId,

@@ -91,11 +91,6 @@ export const SurveyForm = ({
 
   const { mutate } = useMutateStudentsPostSurvey(studentId)
 
-  // const [formData, setFormData] = useLocalStorage(
-  //   `student_survey_${studentId}`,
-  //   studentSurvey || {}
-  // )
-
   const { getStudentSurvey, storeStudentSurvey } = useLocalStudentSurvey()
 
   // const formData = getStudentSurvey(studentId, studentSurvey)
