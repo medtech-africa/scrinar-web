@@ -118,7 +118,7 @@ const FHDPageContent = ({ type }: Props) => {
           </TableHeader>
           <TableHeader className="bg-grey-100">
             <TableRow>
-              {type === 'household' && <TableHead>Family code</TableHead>}
+              {type === 'household' && <TableHead>Household code</TableHead>}
               <TableHead>Name</TableHead>
               <TableHead>Ht(m)</TableHead>
               <TableHead>Wt</TableHead>

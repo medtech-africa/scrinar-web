@@ -263,6 +263,14 @@ export default function HealthData() {
         action={handleDelete}
         actionLoading={deleteLoading}
       />
+
+      <div className="">
+        <p className="">Household code format</p>
+        <p className="">/F = Father</p>
+        <p className="">/M = Mother</p>
+        <p className="">/S = Student</p>
+        <p className="">/G = Guardian</p>
+      </div>
       <div className="py-3 md:py-8">
         <Table className="table-auto" hasEmptyData={healthData?.length === 0}>
           <TableHeader className="bg-grey-100">
