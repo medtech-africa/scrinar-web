@@ -93,7 +93,11 @@ const FHDPageContent = ({ type }: Props) => {
           action={handleDelete}
           actionLoading={deleteLoading}
         />
-        <Table className="table-auto" hasEmptyData={healthData?.length === 0}>
+        <Table
+          className="table-auto"
+          hasEmptyData={healthData?.length === 0}
+          containerClassName="!max-h-[90vh]"
+        >
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead></TableHead>
@@ -246,8 +250,11 @@ const TableBodyRow = ({
       {/* <TableCell>{val?.dietaryDiversityScore}</TableCell>*/}
       <TableCell
         className={cn({
-          'text-green-600': (val?.percentageCompletion || 0) >= 75,
-          'text-red-600': (val?.percentageCompletion || 0) < 75,
+          'text-green-900': (val?.percentageCompletion || 0) >= 75,
+          'text-yellow-orange-900':
+            (val?.percentageCompletion || 0) >= 50 &&
+            (val?.percentageCompletion || 0) <= 74,
+          'text-red-600': (val?.percentageCompletion || 0) < 50,
         })}
       >
         {(val?.percentageCompletion || 0)?.toFixed(0)}%

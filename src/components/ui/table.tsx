@@ -4,12 +4,16 @@ import { cn } from '@/lib/utils'
 
 const Table = React.forwardRef<
   HTMLTableElement,
-  React.HTMLAttributes<HTMLTableElement> & { hasEmptyData?: boolean }
->(({ className, hasEmptyData = true, ...props }, ref) => (
+  React.HTMLAttributes<HTMLTableElement> & {
+    hasEmptyData?: boolean
+    containerClassName?: string
+  }
+>(({ className, hasEmptyData = true, containerClassName, ...props }, ref) => (
   <div
     className={cn(
       'w-full overflow-auto max-h-[460px]',
-      !hasEmptyData && 'min-h-[250px]'
+      !hasEmptyData && 'min-h-[250px]',
+      containerClassName
     )}
   >
     <table
