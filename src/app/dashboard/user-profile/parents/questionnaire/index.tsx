@@ -30,7 +30,6 @@ import {
 } from '@/components/parent-survey'
 import { useParentQuestionnaire } from '@/hooks/queries/useParents'
 import ContentLoader from '@/components/content-loader'
-import { deepMerge } from '@/utils/deepMerge'
 import { useLocalParentSurvey } from '@/hooks/useLocalParentSurvey'
 
 type FormAutoSaveProps = {
@@ -400,10 +399,7 @@ const ParentQuestionnaire = ({
       if (!getParentSurvey(parentId)) {
         storeParentSurvey(parentId, questionnaireData)
       } else {
-        storeParentSurvey(
-          parentId,
-          deepMerge(getParentSurvey(parentId), questionnaireData)
-        )
+        storeParentSurvey(parentId, questionnaireData)
       }
     }
   }, [questionnaireData, parentId])

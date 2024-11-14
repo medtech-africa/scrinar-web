@@ -8,7 +8,7 @@ export const useLocalParentSurvey = () => {
       id: string
       formData: object
     }[]
-  >(`parent_survey`, [])
+  >(`parents_survey`, [])
 
   const getParentSurvey = (parentId: string) => {
     const parentData = survey.find((surveyData) => surveyData.id === parentId)

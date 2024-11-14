@@ -40,7 +40,10 @@ export const Survey = ({
   studentId: string
 }) => {
   const { data: studentSurvey, isPending: isStudentSurveyLoading } =
-    useStudentsSurvey(studentId)
+    useStudentsSurvey(studentId, {
+      refetchOnWindowFocus: false,
+      refetchOnReconnect: false,
+    })
 
   const { getStudentSurvey, storeStudentSurvey } = useLocalStudentSurvey()
 

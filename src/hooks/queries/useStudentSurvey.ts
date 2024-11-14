@@ -7,10 +7,11 @@ import { AxiosError, AxiosResponse } from 'axios'
 const getStudentsSurvey = (id: string) =>
   baseAxios.get(API.studentSurvey(id)).then((res) => res.data?.data)
 
-const useStudentsSurvey = (id: string) => {
+const useStudentsSurvey = (id: string, options={}) => {
   return useQuery({
     queryKey: ['students_survey', id],
     queryFn: () => getStudentsSurvey(id),
+    ...options
   })
 }
 
