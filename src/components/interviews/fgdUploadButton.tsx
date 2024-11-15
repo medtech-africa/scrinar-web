@@ -5,14 +5,10 @@ import { IconPicker } from '@/components/ui/icon-picker'
 import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
 import Modal from '@/components/ui/modal'
-import toast from 'react-hot-toast'
 import AudioModal from '@/components/interviews/InterviewModalContent/audioModal'
 import TranscriptModal from '@/components/interviews/InterviewModalContent/transcriptModal'
 import FgdGuideModal from '@/components/interviews/InterviewModalContent/fgdGuideModal'
-import { useMutation } from '@tanstack/react-query'
-import baseAxios from '@/utils/baseAxios'
-import { API } from '@/utils/api'
-import uploadImage from '@/utils/uploadImage'
+import { useSchoolResourceUpload } from '@/hooks/useSchoolResource'
 
 enum ModalType {
   audio = 'Upload Audio',
@@ -40,29 +36,11 @@ export const FGDUploadButton = ({ refetch }: { refetch: () => void }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
 
-  const { isPending: isUploading, mutate: uploadFile } = useMutation({
-    mutationFn: (file: File) => uploadImage(file, true),
-  })
-
-  const { isPending: isSubmitting, mutate: submitFile } = useMutation({
-    mutationFn: (data: {
-      fileURL: string
-      fileName: string
-      type: string
-      fileType: string
-    }) => baseAxios.post(API.schoolUpload, data),
-    onSuccess: () => {
-      setOpenModal(false)
-      setUploadedFile(null)
-      refetch()
-      setFileName('')
-      toast.success('File uploaded successfully')
-    },
-    onError: (error) => {
-      console.error('Error uploading file:', error)
-      toast.error('Error uploading file')
-    },
-  })
+  const {
+    handleSave: onSave,
+    isSubmitting,
+    isUploading,
+  } = useSchoolResourceUpload()
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option)
@@ -103,27 +81,22 @@ export const FGDUploadButton = ({ refetch }: { refetch: () => void }) => {
       setFileName(selectedFile.name?.split('.')[0] || 'Fgd')
     }
   }
-  // type this e, it is onSubmit for a form
 
   const handleSave: React.FormEventHandler<HTMLFormElement> = async (e) => {
     e.preventDefault()
 
     if (uploadedFile) {
-      uploadFile(uploadedFile, {
-        onSuccess: (res) => {
-          if (res) {
-            submitFile({
-              fileURL: res.url,
-              fileName: fileName,
-              fileType:
-                modalTypeToFileType[modalType as ModalType] ?? 'general',
-              type: 'fgd',
-            })
-          }
-        },
-        onError: (error) => {
-          console.error('Error uploading file:', error)
-          toast.error('Error uploading file')
+      onSave({
+        uploadedFile,
+        fileName: fileName,
+        fileType: modalTypeToFileType[modalType as ModalType] ?? 'general',
+        type: 'fgd',
+        language: 'hausa',
+        onSuccess: () => {
+          setOpenModal(false)
+          setUploadedFile(null)
+          refetch()
+          setFileName('')
         },
       })
     }

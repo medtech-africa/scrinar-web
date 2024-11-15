@@ -15,10 +15,24 @@ const navigationItems = [
   { label: 'View' },
 ]
 export default function ViewRecord({ params }: { params: { id: string } }) {
-  const { data, isLoading } = useStudent(params.id)
+  const { data, isPending } = useStudent(params.id)
+
+  if (isPending) {
+    return (
+      <div className="relative">
+        <ContentLoader loading={isPending} />
+        <PageHeader
+          title="View"
+          subtitle="View details about student."
+          navigation={navigationItems}
+        />
+      </div>
+    )
+  }
+
   return (
     <div className="relative">
-      <ContentLoader loading={isLoading} />
+      <ContentLoader loading={isPending} />
       <PageHeader
         title="View"
         subtitle="View details about student."

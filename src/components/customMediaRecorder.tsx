@@ -7,11 +7,8 @@ import Modal from './ui/modal'
 import { Button } from './ui/button'
 import Lottie from 'lottie-react'
 import waveAnimation from '@/assets/wave.json'
-import { useMutation } from '@tanstack/react-query'
-import baseAxios from '@/utils/baseAxios'
-import { API } from '@/utils/api'
-import uploadImage from '@/utils/uploadImage'
 import { Input } from './ui/input'
+import { useSchoolResourceUpload } from '@/hooks/useSchoolResource'
 
 const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
   const { startRecording, stopRecording, mediaBlobUrl, status, clearBlobUrl } =
@@ -20,50 +17,25 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
 
   const [fileName, setFileName] = React.useState('Audio 1')
 
-  const { isPending: isUploading, mutate: uploadFile } = useMutation({
-    mutationFn: (file: File | Blob) => uploadImage(file as File, true),
-  })
-
-  const { isPending: isSubmitting, mutate: submitFile } = useMutation({
-    mutationFn: (data: {
-      fileURL: string
-      fileName: string
-      type: string
-      fileType: string
-      mimeType: string
-      language: string
-    }) => baseAxios.post(API.schoolUpload, data),
-    onSuccess: () => {
-      props.refetch()
-      clearBlobUrl()
-      setOpenModal(false)
-      setFileName('')
-      toast.success('File uploaded successfully')
-    },
-    onError: (error) => {
-      console.error('Error uploading file:', error)
-      toast.error('Error uploading file')
-    },
-  })
+  const {
+    handleSave: onSubmit,
+    isSubmitting,
+    isUploading,
+  } = useSchoolResourceUpload()
 
   const onSave = (audioFile: Blob | null) => {
     if (audioFile) {
-      uploadFile(audioFile, {
-        onSuccess: (res) => {
-          if (res) {
-            submitFile({
-              fileURL: res.url,
-              fileName: fileName,
-              fileType: 'audio',
-              type: props.type,
-              language: 'hausa',
-              mimeType: res.mimeType,
-            })
-          }
-        },
-        onError: (error) => {
-          console.error('Error uploading file:', error)
-          toast.error('Error uploading file')
+      onSubmit({
+        uploadedFile: audioFile,
+        fileName: fileName,
+        fileType: 'audio',
+        type: props.type,
+        language: 'hausa',
+        onSuccess: () => {
+          props.refetch()
+          clearBlobUrl()
+          setOpenModal(false)
+          setFileName('')
         },
       })
     }

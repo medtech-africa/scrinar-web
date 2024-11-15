@@ -4,7 +4,7 @@ import uploadImage from '@/utils/uploadImage'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 
-export const useSchoolResource = () => {
+export const useSchoolResourceUpload = () => {
   const { isPending: isUploading, mutate: uploadFile } = useMutation({
     mutationFn: (file: File) => uploadImage(file, true),
   })
@@ -19,10 +19,6 @@ export const useSchoolResource = () => {
       language: string
     }) => baseAxios.post(API.schoolUpload, data),
     onSuccess: () => {
-      //   setOpenModal(false)
-      //   refetch()
-      //   setUploadedFile(null)
-      //   setFileName('')
       toast.success('File uploaded successfully')
     },
     onError: (error) => {
@@ -35,29 +31,36 @@ export const useSchoolResource = () => {
     uploadedFile,
     fileName,
     fileType,
-    onSuccess
+    onSuccess,
+    type,
+    language,
   }: {
-    uploadedFile: File | null
+    uploadedFile: File | Blob | null
     fileName: string
     fileType: string
+    type: string
+    language: string
     onSuccess?: () => void
   }) => {
     if (uploadedFile) {
-      uploadFile(uploadedFile, {
+      uploadFile(uploadedFile as File, {
         onSuccess: (res) => {
           if (res) {
-            submitFile({
-              fileURL: res.url,
-              fileName: fileName,
-              fileType: fileType,
-              type: 'interview',
-              language: 'hausa',
-              mimeType: res.mimeType,
-            }, {
+            submitFile(
+              {
+                fileURL: res.url,
+                fileName: fileName,
+                fileType: fileType,
+                type,
+                language,
+                mimeType: res.mimeType,
+              },
+              {
                 onSuccess: () => {
                   onSuccess?.()
-                }
-            })
+                },
+              }
+            )
           }
         },
         onError: (error) => {

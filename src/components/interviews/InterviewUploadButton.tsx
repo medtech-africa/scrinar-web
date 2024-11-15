@@ -5,14 +5,10 @@ import { IconPicker } from '@/components/ui/icon-picker'
 import { Text } from '@/components/ui/text'
 import { cn } from '@/lib/utils'
 import Modal from '@/components/ui/modal'
-import toast from 'react-hot-toast'
 import AudioModal from '@/components/interviews/InterviewModalContent/audioModal'
 import TranscriptModal from '@/components/interviews/InterviewModalContent/transcriptModal'
 import FgdGuideModal from '@/components/interviews/InterviewModalContent/fgdGuideModal'
-import { useMutation } from '@tanstack/react-query'
-import baseAxios from '@/utils/baseAxios'
-import { API } from '@/utils/api'
-import uploadImage from '@/utils/uploadImage'
+import { useSchoolResourceUpload } from '@/hooks/useSchoolResource'
 
 enum ModalType {
   audio = 'Upload Audio',
@@ -32,6 +28,12 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
     null
   )
 
+  const {
+    handleSave: onSave,
+    isSubmitting,
+    isUploading,
+  } = useSchoolResourceUpload()
+
   const [modalType, setModalType] = React.useState('')
   const [fileName, setFileName] = React.useState('')
   const [open, toggleOpen] = React.useState(false)
@@ -39,32 +41,6 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
 
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
-
-  const { isPending: isUploading, mutate: uploadFile } = useMutation({
-    mutationFn: (file: File) => uploadImage(file, true),
-  })
-
-  const { isPending: isSubmitting, mutate: submitFile } = useMutation({
-    mutationFn: (data: {
-      fileURL: string
-      fileName: string
-      type: string
-      fileType: string
-      mimeType: string
-      language: string
-    }) => baseAxios.post(API.schoolUpload, data),
-    onSuccess: () => {
-      setOpenModal(false)
-      refetch()
-      setUploadedFile(null)
-      setFileName('')
-      toast.success('File uploaded successfully')
-    },
-    onError: (error) => {
-      console.error('Error uploading file:', error)
-      toast.error('Error uploading file')
-    },
-  })
 
   const handleOptionClick = (option: string) => {
     setSelectedOption(option)
@@ -111,23 +87,17 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
     e.preventDefault()
 
     if (uploadedFile) {
-      uploadFile(uploadedFile, {
-        onSuccess: (res) => {
-          if (res) {
-            submitFile({
-              fileURL: res.url,
-              fileName: fileName,
-              fileType:
-                modalTypeToFileType[modalType as ModalType] ?? 'general',
-              type: 'interview',
-              language: 'hausa',
-              mimeType: res.mimeType,
-            })
-          }
-        },
-        onError: (error) => {
-          console.error('Error uploading file:', error)
-          toast.error('Error uploading file')
+      onSave({
+        uploadedFile,
+        fileName: fileName,
+        fileType: modalTypeToFileType[modalType as ModalType] ?? 'general',
+        type: 'interview',
+        language: 'hausa',
+        onSuccess: () => {
+          setOpenModal(false)
+          refetch()
+          setUploadedFile(null)
+          setFileName('')
         },
       })
     }

@@ -15,11 +15,24 @@ const navigationItems = [
   { label: 'View' },
 ]
 export default function ViewRecord({ params }: { params: { id: string } }) {
-  const { data, isLoading } = useParent(params.id)
+  const { data, isPending } = useParent(params.id)
+
+  if (isPending) {
+    return (
+      <div className="relative">
+        <ContentLoader loading={isPending} />
+        <PageHeader
+          title="View"
+          subtitle="View details about student."
+          navigation={navigationItems}
+        />
+      </div>
+    )
+  }
 
   return (
     <div className="relative">
-      <ContentLoader loading={isLoading} />
+      <ContentLoader loading={isPending} />
       <PageHeader
         title="View"
         subtitle="View details about parent."
@@ -32,12 +45,14 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
               <Input
                 label="First Name"
                 defaultValue={data?.firstName ?? ''}
+                value={data?.firstName ?? ''}
                 disabled
                 className="capitalize"
                 labelStyle="lg:text-sm text-xs"
               />
               <Input
                 defaultValue={data?.lastName ?? ''}
+                value={data?.lastName ?? ''}
                 disabled
                 label="Last Name"
                 className="capitalize"
@@ -46,6 +61,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
               {data?.email && (
                 <Input
                   defaultValue={data?.email ?? ''}
+                  value={data?.email ?? ''}
                   disabled
                   label="Email"
                   labelStyle="lg:text-sm text-xs"
@@ -54,6 +70,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
 
               <Input
                 defaultValue={data?.familyCode}
+                value={data?.familyCode}
                 disabled
                 label="HouseHold Code"
                 labelStyle="lg:text-sm text-xs"
@@ -62,12 +79,14 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
               <Input
                 labelStyle="lg:text-sm text-xs"
                 defaultValue={data?.mobile ?? ''}
+                value={data?.mobile ?? ''}
                 disabled
                 label="Mobile Number"
               />
 
               <Input
                 defaultValue={data?.gender}
+                value={data?.gender}
                 className="capitalize"
                 disabled
                 label="Gender"
