@@ -61,7 +61,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
 
               <Input
                 labelStyle="lg:text-sm text-xs"
-                defaultValue={data?.mobile ?? '-'}
+                defaultValue={data?.mobile ?? ''}
                 disabled
                 label="Mobile Number"
               />
