@@ -41,12 +41,11 @@ const FHDPageContent = ({ type }: Props) => {
   const handleMoreClick = (rowIndex: any) => {
     setSelectedRow(selectedRow === rowIndex ? null : rowIndex)
   }
-  const { data, isLoading, refetch } = useFamilyHealthData(
-    currentPage,
-    search,
-    type === 'all' ? '' : type,
-    10
-  )
+  const {
+    data,
+    isPending: isLoading,
+    refetch,
+  } = useFamilyHealthData(currentPage, search, type === 'all' ? '' : type, 10)
   useSchoolChangeRefresh(refetch)
 
   const healthData = data?.data?.data

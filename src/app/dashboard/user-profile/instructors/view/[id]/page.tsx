@@ -22,7 +22,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
   if (!restrictNonAdmin(user?.user?.roles)) {
     notFound()
   }
-  const { data, isLoading } = useInstructor(params.id)
+  const { data, isPending: isLoading } = useInstructor(params.id)
 
   return (
     <div className="relative">

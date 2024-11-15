@@ -37,7 +37,7 @@ interface IDataToSend
   // age: number
 }
 export default function EditRecord({ params }: { params: { id: string } }) {
-  const { data, isLoading, refetch } = useStudent(params.id)
+  const { data, isPending: isLoading, refetch } = useStudent(params.id)
   const { isPending: updateLoading, mutate } = useMutation({
     mutationFn: (dataToSend: IDataToSend) =>
       baseAxios.patch(API.student(params.id), dataToSend),

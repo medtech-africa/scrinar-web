@@ -34,7 +34,7 @@ const TrainingModule = () => {
   const user = useUser((state) => state.user)
   const [activeTab, setActiveTab] = useState('All Training Module')
   const [activeTab2, setActiveTab2] = useState('all')
-  const { data: trainingData, isLoading } = useTrainingCourses()
+  const { data: trainingData, isPending: isLoading } = useTrainingCourses()
 
   const handleTabClick = (label: any) => {
     setActiveTab(label)
@@ -48,9 +48,8 @@ const TrainingModule = () => {
     const allCourses = trainingData?.data?.data ?? []
     const currentTab = coursesTab.find((course) => course.value === activeTab2)
     if (!currentTab || activeTab2 === 'all') return allCourses
-    return allCourses.filter(
-      (course) =>
-        course.categories?.includes(currentTab?.label.toLowerCase() ?? '')
+    return allCourses.filter((course) =>
+      course.categories?.includes(currentTab?.label.toLowerCase() ?? '')
     )
   }, [activeTab2, trainingData?.data?.data])
 

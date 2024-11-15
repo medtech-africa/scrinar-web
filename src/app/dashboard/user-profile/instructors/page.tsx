@@ -115,9 +115,11 @@ export default function Instructors() {
   const [deleteModal, setDeleteModal] = useState(false)
   const [lastKey, setLastKey] = useState(null)
 
-  const { data, isLoading, refetch } = useInstructors(
-    encodeURIComponent(JSON.stringify(lastKey))
-  )
+  const {
+    data,
+    isPending: isLoading,
+    refetch,
+  } = useInstructors(encodeURIComponent(JSON.stringify(lastKey)))
   useSchoolChangeRefresh(refetch)
 
   const instructorsData = data?.data

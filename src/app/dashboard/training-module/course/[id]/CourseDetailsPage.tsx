@@ -128,7 +128,7 @@ const Module = ({
 
 const CourseDetailsPage = ({ courseId }: { courseId: string }) => {
   const id = courseId
-  const { data: course, isLoading } = useTrainingCourse({
+  const { data: course, isPending: isLoading } = useTrainingCourse({
     courseId,
   })
   const {

@@ -73,7 +73,7 @@ const ScreeningList = ({
     {}
   )
 
-  const { data, isLoading, refetch } = useScreenings(currentPage)
+  const { data, isPending: isLoading, refetch } = useScreenings(currentPage)
   useSchoolChangeRefresh(refetch)
 
   const screeningData: DataType = data?.data
@@ -244,7 +244,7 @@ export default function ScreeningManagement() {
   const [actionType, setActionType] = useState('')
 
   return (
-    (<div>
+    <div>
       <PageHeader
         title="Screening Management"
         subtitle="Tracking and Schedule Screenings"
@@ -274,10 +274,10 @@ export default function ScreeningManagement() {
       </div>
       {selectedTab === 'Calendar View' ? (
         // @TODO: This is a dummy content
-        (<div>
+        <div>
           <MD />
           <CC />
-        </div>)
+        </div>
       ) : (
         <ScreeningList actionType={actionType} setActionType={setActionType} />
       )}
@@ -287,8 +287,8 @@ export default function ScreeningManagement() {
           actionOpened={actionType === 'add'}
         />
       )}
-    </div>)
-  );
+    </div>
+  )
 }
 type DataType = {
   id: string

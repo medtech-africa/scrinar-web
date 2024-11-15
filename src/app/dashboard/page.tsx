@@ -133,9 +133,11 @@ export default function Home() {
   const user = useUser((state) => state.user)
   const selectedSchool = useUser((state) => state.selectedSchool)
   const isMI = isMasterInstructor(user?.user?.roles ?? user?.roles)
-  const { isLoading, data, refetch } = useDashboardStats(
-    isMI ? (selectedSchool ? true : false) : true
-  )
+  const {
+    isPending: isLoading,
+    data,
+    refetch,
+  } = useDashboardStats(isMI ? (selectedSchool ? true : false) : true)
   useSchoolChangeRefresh(refetch)
 
   if (isMI && !selectedSchool) {

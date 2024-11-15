@@ -52,7 +52,11 @@ export default function TrainerPage() {
     {}
   )
   const [search, setSearch] = useDebouncedState('')
-  const { data, isLoading, refetch } = useTrainers({
+  const {
+    data,
+    isPending: isLoading,
+    refetch,
+  } = useTrainers({
     search,
     page: currentPage,
   })

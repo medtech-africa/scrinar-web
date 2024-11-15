@@ -123,11 +123,12 @@ export default function Students() {
     {}
   )
   const [search, setSearch] = useDebouncedState('')
-  const { data, isLoading, refetch, isFetching } = useStudents(
-    currentPage,
-    '',
-    search
-  )
+  const {
+    data,
+    isPending: isLoading,
+    refetch,
+    isFetching,
+  } = useStudents(currentPage, '', search)
   useSchoolChangeRefresh(refetch)
 
   const studentsData = data?.data

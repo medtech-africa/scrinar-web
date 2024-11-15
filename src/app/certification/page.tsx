@@ -13,7 +13,7 @@ const Certification = () => {
   const userId = searchParams.get('id')
   const generatePdf = usePdfGenerator()
   const html_pdf = useRef<any>(null)
-  const { data, isLoading } = useCertificate(userId ?? '')
+  const { data, isPending: isLoading } = useCertificate(userId ?? '')
   const certificate = data?.data
 
   useEffect(() => {

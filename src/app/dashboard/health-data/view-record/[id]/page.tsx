@@ -25,7 +25,9 @@ const navigationItems = [
 ]
 
 export default function ViewRecord({ params }: { params: { id: string } }) {
-  const { data: healthData, isLoading } = useSingleHealthData(params?.id)
+  const { data: healthData, isPending: isLoading } = useSingleHealthData(
+    params?.id
+  )
   const data = healthData?.data
   const userData = data?.student || data?.parent
   const isStudent = !!data?.student

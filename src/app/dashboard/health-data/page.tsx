@@ -158,10 +158,12 @@ export default function HealthData() {
     {}
   )
   const [search, setSearch] = useDebouncedState('')
-  const { data, isLoading, refetch, isFetching } = useHealthData(
-    currentPage,
-    search
-  )
+  const {
+    data,
+    isPending: isLoading,
+    refetch,
+    isFetching,
+  } = useHealthData(currentPage, search)
   useSchoolChangeRefresh(refetch)
   const healthData = data?.data
 

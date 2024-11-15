@@ -71,7 +71,7 @@ const ScreeningView = ({
   setActionType,
   id,
 }: Iprops & { id: string }) => {
-  const { data, isLoading } = useScreening(id)
+  const { data, isPending: isLoading } = useScreening(id)
   console.log(data)
 
   return (

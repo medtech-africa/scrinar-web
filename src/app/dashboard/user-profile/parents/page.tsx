@@ -123,10 +123,12 @@ export default function Parents() {
     {}
   )
   const [search, setSearch] = useDebouncedState('')
-  const { data, isLoading, refetch, isFetching } = useParents(
-    currentPage,
-    search
-  )
+  const {
+    data,
+    isPending: isLoading,
+    refetch,
+    isFetching,
+  } = useParents(currentPage, search)
   useSchoolChangeRefresh(refetch)
 
   const parentsData = data?.data

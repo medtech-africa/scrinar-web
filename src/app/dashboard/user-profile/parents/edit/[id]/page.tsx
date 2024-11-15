@@ -33,7 +33,7 @@ interface IDataToSend extends Omit<IFormValue, 'level' | 'gender' | 'avatar'> {
   gender?: string
 }
 export default function EditRecord({ params }: { params: { id: string } }) {
-  const { data, isLoading, refetch } = useParent(params.id)
+  const { data, isPending: isLoading, refetch } = useParent(params.id)
 
   const { isPending: updateLoading, mutate } = useMutation({
     mutationFn: (dataToSend: IDataToSend) =>
