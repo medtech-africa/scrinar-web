@@ -31,12 +31,14 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
               <Input
                 label="First Name"
                 defaultValue={data?.firstName ?? ''}
+                value={data?.firstName ?? ''}
                 disabled
                 className="capitalize"
                 labelStyle="lg:text-sm text-xs"
               />
               <Input
                 defaultValue={data?.lastName ?? ''}
+                value={data?.lastName ?? ''}
                 disabled
                 label="Last Name"
                 className="capitalize"
@@ -45,6 +47,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
               {data?.email && (
                 <Input
                   defaultValue={data?.email ?? ''}
+                  value={data?.email ?? ''}
                   disabled
                   label="Email"
                   labelStyle="lg:text-sm text-xs"
@@ -63,12 +66,14 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
               />
               <Input
                 defaultValue={data?.familyCode ?? ''}
+                value={data?.familyCode ?? ''}
                 disabled
                 label="Household Code"
                 labelStyle="lg:text-sm text-xs"
               />
               <Input
                 defaultValue={data?.age && `${data?.age} Years`}
+                value={data?.age && `${data?.age} Years`}
                 disabled
                 label="Age"
                 labelStyle="lg:text-sm text-xs"
@@ -77,17 +82,20 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
               <Input
                 labelStyle="lg:text-sm text-xs"
                 defaultValue={data?.parentMobile ?? ''}
+                value={data?.parentMobile ?? ''}
                 disabled
                 label="Parent Mobile Number 1"
               />
               <Input
                 labelStyle="lg:text-sm text-xs"
                 defaultValue={data?.parentMobileAlt ?? ''}
+                value={data?.parentMobileAlt ?? ''}
                 disabled
                 label="Parent Mobile Number 2"
               />
               <Input
                 defaultValue={data?.gender}
+                value={data?.gender}
                 className="capitalize"
                 disabled
                 label="Gender"
@@ -97,6 +105,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
               <Input
                 labelStyle="lg:text-sm text-xs"
                 defaultValue={data?.level}
+                value={data?.level}
                 className="capitalize"
                 disabled
                 label="Class"

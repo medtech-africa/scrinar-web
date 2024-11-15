@@ -30,6 +30,8 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
       fileName: string
       type: string
       fileType: string
+      mimeType: string
+      language: string
     }) => baseAxios.post(API.schoolUpload, data),
     onSuccess: () => {
       props.refetch()
@@ -54,6 +56,8 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
               fileName: fileName,
               fileType: 'audio',
               type: props.type,
+              language: 'hausa',
+              mimeType: res.mimeType,
             })
           }
         },
