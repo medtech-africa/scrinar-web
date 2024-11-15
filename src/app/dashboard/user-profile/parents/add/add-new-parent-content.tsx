@@ -166,7 +166,7 @@ export const AddNewParentContent = () => {
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
-                      placeholder="ayans124"
+                      placeholder="123"
                       label="HouseHold code"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.familyCode ? 'destructive' : 'default'}

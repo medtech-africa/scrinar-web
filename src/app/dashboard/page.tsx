@@ -42,7 +42,7 @@ const dashboardStats = [
       'https://i.pravatar.cc/200',
       'https://i.pravatar.cc/60',
     ],
-    slug: '/user-profile/students',
+    slug: '/family-health-data/students',
   },
   {
     title: 'Fathers',
@@ -53,7 +53,7 @@ const dashboardStats = [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/50',
     ],
-    slug: '/user-profile/parents',
+    slug: '/family-health-data/fathers',
   },
   {
     title: 'Mothers',
@@ -64,7 +64,7 @@ const dashboardStats = [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/50',
     ],
-    slug: '/user-profile/parents',
+    slug: '/family-health-data/mothers',
   },
   {
     title: 'Health Data',

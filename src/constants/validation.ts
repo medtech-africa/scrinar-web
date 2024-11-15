@@ -42,7 +42,13 @@ const createPatient = yupResolver(
     //   'Enter a valid phone number'
     // ),
     parentMobileAlt: yup.string().optional(),
-    familyCode: yup.string().optional(),
+    familyCode: yup
+      .string()
+      .matches(
+        /^[0-9]{1,5}$/,
+        'Must not contain any special character or M or F or S (e.g 12 or 123)'
+      )
+      .optional(),
     avatar: yup.boolean(),
   })
 )
@@ -225,9 +231,7 @@ const register = yupResolver(
       .required('Please enter school name')
       .typeError('Please enter school name')
       .lowercase(),
-    template: yup
-      .string()
-      .optional(),
+    template: yup.string().optional(),
     website: yup
       .string()
       .typeError('Please enter website')
@@ -633,7 +637,13 @@ const createParent = yupResolver(
       .required('Please select a gender')
       .typeError('Please select a gender'),
     mobile: yup.string().optional(),
-    familyCode: yup.string().optional(),
+    familyCode: yup
+      .string()
+      .matches(
+        /^[0-9]{1,5}$/,
+        'Must not contain any special character or M or F or S (e.g 12 or 123)'
+      )
+      .optional(),
     avatar: yup.boolean(),
     isGuardian: yup.boolean(),
   })
