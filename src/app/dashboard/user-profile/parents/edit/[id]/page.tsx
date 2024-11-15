@@ -138,7 +138,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
-                      placeholder="ayans124"
+                      placeholder="enter code here"
                       label="HouseHold code"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.familyCode ? 'destructive' : 'default'}
@@ -170,7 +170,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
-                      placeholder="email@play4health.com"
+                      placeholder=""
                       label="Email"
                       disabled={!!data?.email}
                       labelStyle="lg:text-sm text-xs"
@@ -189,7 +189,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
-                      placeholder="08112345678"
+                      placeholder=""
                       label="Parent Mobile Number 1"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.mobile ? 'destructive' : 'default'}

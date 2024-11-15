@@ -144,7 +144,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
-                      placeholder="ayans124"
+                      placeholder=""
                       label="HouseHold code"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.familyCode ? 'destructive' : 'default'}
@@ -197,7 +197,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
-                      placeholder="08112345678"
+                      placeholder="enter number here"
                       label="Parent Mobile Number 1"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.parentMobile ? 'destructive' : 'default'}
@@ -216,7 +216,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
-                      placeholder="08112345678"
+                      placeholder="enter phone number"
                       label="Parent Mobile Number 2"
                       labelStyle="lg:text-sm text-xs"
                       variant={
