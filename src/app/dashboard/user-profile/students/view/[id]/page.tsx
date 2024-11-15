@@ -16,7 +16,6 @@ const navigationItems = [
 ]
 export default function ViewRecord({ params }: { params: { id: string } }) {
   const { data, isLoading } = useStudent(params.id)
-
   return (
     <div className="relative">
       <ContentLoader loading={isLoading} />
@@ -63,7 +62,7 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
                 labelStyle="lg:text-sm text-xs"
               />
               <Input
-                defaultValue={data?.familyCode ?? `-`}
+                defaultValue={data?.familyCode ?? ''}
                 disabled
                 label="Household Code"
                 labelStyle="lg:text-sm text-xs"
@@ -77,13 +76,13 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
 
               <Input
                 labelStyle="lg:text-sm text-xs"
-                defaultValue={data?.parentMobile ?? '-'}
+                defaultValue={data?.parentMobile ?? ''}
                 disabled
                 label="Parent Mobile Number 1"
               />
               <Input
                 labelStyle="lg:text-sm text-xs"
-                defaultValue={data?.parentMobileAlt ?? '-'}
+                defaultValue={data?.parentMobileAlt ?? ''}
                 disabled
                 label="Parent Mobile Number 2"
               />
