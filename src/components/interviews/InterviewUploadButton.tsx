@@ -9,6 +9,7 @@ import AudioModal from '@/components/interviews/InterviewModalContent/audioModal
 import TranscriptModal from '@/components/interviews/InterviewModalContent/transcriptModal'
 import FgdGuideModal from '@/components/interviews/InterviewModalContent/fgdGuideModal'
 import { useSchoolResourceUpload } from '@/hooks/useSchoolResource'
+import { useRouter, useSearchParams, usePathname } from 'next/navigation'
 
 enum ModalType {
   audio = 'Upload Audio',
@@ -42,11 +43,35 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
   const fileInputRef = useRef<HTMLInputElement | null>(null)
   const dropdownRef = useRef<HTMLDivElement | null>(null)
 
+  const params = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
+  const uploadType = params.get('uploadType')
+
+  React.useEffect(() => {
+    if (
+      uploadType &&
+      Object.values(ModalType).includes(uploadType as ModalType)
+    ) {
+      setSelectedOption(uploadType)
+      setModalType(uploadType)
+      setOpenModal(true)
+      toggleOpen(false)
+    }
+  }, [uploadType])
+
   const handleOptionClick = (option: string) => {
-    setSelectedOption(option)
-    setModalType(option)
-    setOpenModal(true)
-    toggleOpen(false)
+    // const url = new URL(`${pathname}`)
+
+    const searchParams = new URLSearchParams()
+    searchParams.set('uploadType', option)
+
+    // url.search = searchParams.toString()
+    router.push(pathname + '?' + searchParams.toString())
+    // setSelectedOption(option)
+    // setModalType(option)
+    // setOpenModal(true)
+    // toggleOpen(false)
   }
 
   useEffect(() => {
@@ -195,7 +220,10 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
       <Modal
         className="sm:w-1/2 sm:h-1/2 flex items-center justify-center"
         open={openModal}
-        closeModal={() => setOpenModal(false)}
+        closeModal={() => {
+          setOpenModal(false)
+          router.push(pathname)
+        }}
         title={`${modalType}`}
       >
         <form onSubmit={handleSave}>

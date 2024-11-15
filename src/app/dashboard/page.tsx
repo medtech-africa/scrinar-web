@@ -285,7 +285,7 @@ export default function Home() {
         <section>
           <ActionBlock title="Quick Actions" className="mb-6">
             {actionData1.map((act, _) => (
-              <div key={_}>
+              <div key={`quick_actions_${_}`}>
                 <div
                   className="flex justify-between items-center cursor-pointer"
                   onClick={() => {

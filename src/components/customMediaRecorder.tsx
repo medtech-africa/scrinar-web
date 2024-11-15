@@ -9,6 +9,9 @@ import Lottie from 'lottie-react'
 import waveAnimation from '@/assets/wave.json'
 import { Input } from './ui/input'
 import { useSchoolResourceUpload } from '@/hooks/useSchoolResource'
+import { useSearchParams, usePathname } from 'next/navigation'
+import { useRouter } from 'next/router'
+import Link from 'next/link'
 
 const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
   const { startRecording, stopRecording, mediaBlobUrl, status, clearBlobUrl } =
@@ -42,6 +45,17 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
   }
 
   const isRecording = status === 'recording'
+
+  const params = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
+  const uploadType = params.get('uploadType')
+
+  React.useEffect(() => {
+    if (uploadType === 'record') {
+      setOpenModal(true)
+    }
+  }, [uploadType])
 
   const toggleRecording = () => {
     if (isRecording) {
@@ -83,23 +97,22 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
       <p className="text-grey-500">Record Audio</p>
       <div className="inline-flex flex-col px-4 rounded-full text-white items-center gap-y-2">
         <div className="flex flex-row gap-4">
-          <button
-            onClick={() => setOpenModal(true)}
-            className="outline-none border-none bg-transparent"
-          >
-            {isRecording ? (
-              <IconPicker icon="pause" size={24} className="text-primary" />
-            ) : (
-              <IconPicker icon="play" size={24} className="text-primary" />
-            )}
-          </button>
+          <Link href={`?uploadType=record`}>
+            <button className="outline-none border-none bg-transparent">
+              {isRecording ? (
+                <IconPicker icon="pause" size={24} className="text-primary" />
+              ) : (
+                <IconPicker icon="play" size={24} className="text-primary" />
+              )}
+            </button>
+          </Link>
         </div>
       </div>
 
       <Modal
         className="sm:w-1/2 sm:h-1/2 flex items-center justify-center"
         open={openModal}
-        closeModal={() => setOpenModal(false)}
+        closeModal={() => router.push(pathname)}
         title={'Record audio'}
       >
         <form onSubmit={handleSave} className="grid gap-y-2 min-w-56">
