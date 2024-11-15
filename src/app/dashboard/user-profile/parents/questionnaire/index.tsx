@@ -404,8 +404,6 @@ const ParentQuestionnaire = ({
     )
   }
 
-  console.log(qIsLoading, hasDefault, !formData, formData)
-
   return (
     <ParentQuestionnairePage
       {...{ parentId, gender, hasDefault, questionnaireData: formData }}

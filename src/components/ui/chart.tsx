@@ -1,64 +1,78 @@
 import React from 'react'
-import { AxisOptions, Chart } from 'react-charts'
-import { Text } from './text'
-import { ResizableBox } from '../resizableBox'
-
-export interface Root2 {
-  name: string
-  healthData: Datum[]
-}
+import {
+  LineChart,
+  Line,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  ReferenceLine,
+} from 'recharts'
 
 export interface Datum {
   x: string
   y: string
 }
 
-export default function ChartComp({ healthData, name }: Root2) {
-  const data = [
-    {
-      label: name,
-      data: healthData?.map((item: Datum) => ({
-        primary: new Date(item?.x),
-        secondary: parseInt(item?.y, 10),
-      })),
-    },
-  ]
-  const primaryAxis = React.useMemo<
-    AxisOptions<(typeof data)[number]['data'][number]>
-  >(
-    () => ({
-      getValue: (datum) => datum.primary,
-      show: false,
-    }),
-    []
-  )
+export interface ThresholdChartProps {
+  name: string
+  healthData: Datum[]
+  highThreshold: number
+  lowThreshold: number
+}
 
-  const secondaryAxes = React.useMemo<
-    AxisOptions<(typeof data)[number]['data'][number]>[]
-  >(
-    () => [
-      {
-        getValue: (datum) => datum.secondary,
-        elementType: 'area',
-      },
-    ],
-    []
-  )
+export default function ThresholdChart({
+  healthData,
+  name,
+  highThreshold,
+  lowThreshold,
+}: ThresholdChartProps) {
+  const hasData = healthData && healthData.length > 0
+
+  const formattedData = healthData?.map((item: Datum) => ({
+    x: new Date(item.x).toLocaleDateString(),
+    y: parseInt(item.y, 10),
+  }))
 
   return (
-    <>
-      <br />
-      <ResizableBox>
-        <Text>{name}</Text>
-        <Chart
-          options={{
-            data,
-            primaryAxis,
-            secondaryAxes,
-            defaultColors: ['#F9B4AF'],
-          }}
-        />
-      </ResizableBox>
-    </>
+    <div style={{ width: '100%', height: 400, textAlign: 'center' }}>
+      <h3>{name}</h3>
+
+      {!hasData ? (
+        <div style={{ marginTop: '20px' }}>
+          <p>No data available</p>
+        </div>
+      ) : (
+        <ResponsiveContainer width="100%" height="100%">
+          <LineChart data={formattedData}>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis dataKey="x" hide />
+            <YAxis domain={['auto', 'auto']} />
+            <Tooltip />
+            <ReferenceLine
+              y={highThreshold}
+              stroke="red"
+              strokeDasharray="3 3"
+              label={{ position: 'insideTopRight', value: 'High Threshold' }}
+            />
+            <ReferenceLine
+              y={lowThreshold}
+              stroke="blue"
+              strokeDasharray="3 3"
+              label={{ position: 'insideBottomRight', value: 'Low Threshold' }}
+            />
+            <Line
+              type="monotone"
+              dataKey="y"
+              stroke="#F9B4AF"
+              strokeWidth={2}
+              dot={{ r: 3 }}
+              activeDot={{ r: 6 }}
+            />
+          </LineChart>
+        </ResponsiveContainer>
+      )}
+    </div>
   )
 }
