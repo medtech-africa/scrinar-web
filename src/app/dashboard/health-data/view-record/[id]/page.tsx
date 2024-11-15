@@ -7,7 +7,6 @@ import DashboardProgressPattern from '@/components/svg/dashboard-progress-patter
 import { Avatar } from '@/components/ui/avatar'
 import { BadgeField } from '@/components/ui/badge'
 import { Card } from '@/components/ui/card'
-import ChartComp from '@/components/ui/chart'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { PageCard } from '@/components/ui/page-card'
@@ -18,6 +17,7 @@ import { categorizeBMIWHO2007 } from '@/utils/vitalCalculations'
 import { format } from 'date-fns'
 import { Survey } from '../../add-record/survey'
 import { TVariantEnum } from '@/types/variants.types'
+import ThresholdChart from '@/components/ui/chart'
 
 const navigationItems = [
   { label: 'Health Data', icon: IconNames.arrowRight },
@@ -101,14 +101,24 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
       <div className="grid grid-cols-2 gap-x-3">
         <div>
           {glucoseLevelData ? (
-            <ChartComp healthData={glucoseLevelData} name="Glucose Level" />
+            <ThresholdChart
+              name="Glucose Levels"
+              healthData={glucoseLevelData}
+              highThreshold={140}
+              lowThreshold={70}
+            />
           ) : (
             <Text>No Data </Text>
           )}
         </div>
         <div>
           {bmiData ? (
-            <ChartComp healthData={bmiData} name="BMI" />
+            <ThresholdChart
+              name="BMI"
+              healthData={bmiData}
+              highThreshold={24.9}
+              lowThreshold={18.5}
+            />
           ) : (
             <Text>No Data </Text>
           )}
