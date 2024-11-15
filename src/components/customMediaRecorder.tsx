@@ -1,4 +1,5 @@
 // CustomMediaRecorder.tsx
+'use client'
 import React from 'react'
 import { useReactMediaRecorder } from 'react-media-recorder'
 import toast from 'react-hot-toast'
@@ -9,9 +10,13 @@ import Lottie from 'lottie-react'
 import waveAnimation from '@/assets/wave.json'
 import { Input } from './ui/input'
 import { useSchoolResourceUpload } from '@/hooks/useSchoolResource'
-import { useSearchParams, usePathname } from 'next/navigation'
-import { useRouter } from 'next/router'
+import { useSearchParams, usePathname, useRouter } from 'next/navigation'
 import Link from 'next/link'
+import { Select } from './ui/select'
+import {
+  convertStringsToOptionArray,
+  convertStringToOption,
+} from '@/lib/convertStringsToOptionArray'
 
 const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
   const { startRecording, stopRecording, mediaBlobUrl, status, clearBlobUrl } =
@@ -19,12 +24,24 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
   const [openModal, setOpenModal] = React.useState(false)
 
   const [fileName, setFileName] = React.useState('Audio 1')
+  const [language, setLanguage] = React.useState('english')
+
+  const params = useSearchParams()
+  const pathname = usePathname()
+  const router = useRouter()
 
   const {
     handleSave: onSubmit,
     isSubmitting,
     isUploading,
   } = useSchoolResourceUpload()
+
+  const closeModal = () => {
+    setOpenModal(false)
+    clearBlobUrl()
+    setFileName('Audio 1')
+    router.push(pathname)
+  }
 
   const onSave = (audioFile: Blob | null) => {
     if (audioFile) {
@@ -33,12 +50,10 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
         fileName: fileName,
         fileType: 'audio',
         type: props.type,
-        language: 'hausa',
+        language,
         onSuccess: () => {
           props.refetch()
-          clearBlobUrl()
-          setOpenModal(false)
-          setFileName('')
+          closeModal()
         },
       })
     }
@@ -46,9 +61,6 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
 
   const isRecording = status === 'recording'
 
-  const params = useSearchParams()
-  const pathname = usePathname()
-  const router = useRouter()
   const uploadType = params.get('uploadType')
 
   React.useEffect(() => {
@@ -112,7 +124,7 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
       <Modal
         className="sm:w-1/2 sm:h-1/2 flex items-center justify-center"
         open={openModal}
-        closeModal={() => router.push(pathname)}
+        closeModal={closeModal}
         title={'Record audio'}
       >
         <form onSubmit={handleSave} className="grid gap-y-2 min-w-56">
@@ -141,6 +153,24 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
             className="w-full"
           />
 
+          <Select
+            onChange={(val) => {
+              setLanguage((val as { value: string }).value)
+            }}
+            placeholder="Select State"
+            label="Select state"
+            labelStyle="lg:text-sm text-xs"
+            options={convertStringsToOptionArray([
+              'english',
+              'hausa',
+              'yoruba',
+            ])}
+            classNames={{
+              menuList: () => 'h-[200px]',
+            }}
+            value={convertStringToOption(language)}
+          />
+
           <div className="mt-5 justify-between flex">
             <Button
               type="button"
@@ -151,7 +181,11 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
               Cancel
             </Button>
             {showAudio && (
-              <Button type="submit" loading={isSubmitting || isUploading}>
+              <Button
+                type="submit"
+                loading={isSubmitting || isUploading}
+                disabled={!fileName}
+              >
                 Upload
               </Button>
             )}

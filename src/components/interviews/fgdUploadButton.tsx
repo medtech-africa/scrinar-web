@@ -30,6 +30,7 @@ export const FGDUploadButton = ({ refetch }: { refetch: () => void }) => {
 
   const [modalType, setModalType] = React.useState('')
   const [fileName, setFileName] = React.useState('')
+  const [language, setLanguage] = React.useState('english')
   const [open, toggleOpen] = React.useState(false)
   const [uploadedFile, setUploadedFile] = React.useState<File | null>(null)
 
@@ -202,6 +203,8 @@ export const FGDUploadButton = ({ refetch }: { refetch: () => void }) => {
             <AudioModal
               fileInputRef={fileInputRef}
               fileName={fileName}
+              language={language}
+              setLanguage={setLanguage}
               setFileName={setFileName}
               handleFileChange={handleFileChange}
               hasFile={!!uploadedFile}

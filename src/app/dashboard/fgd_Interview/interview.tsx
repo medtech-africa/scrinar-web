@@ -16,6 +16,7 @@ import { useSchoolResources } from '@/hooks/queries/useSchools'
 import EmptyData from '@/components/empty-data'
 import { cn } from '@/lib/utils'
 import Modal from '@/components/ui/modal'
+import Markdown from 'react-markdown'
 
 const Interview = () => {
   const CustomMediaRecorder = React.useMemo(
@@ -177,7 +178,7 @@ const Interview = () => {
           closeModal={() => setModalContent('')}
           // title={`${modalType}`}
         >
-          <p className="">{modalContent}</p>
+          <Markdown className="">{modalContent}</Markdown>
         </Modal>
       </div>
     </div>

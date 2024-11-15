@@ -1,4 +1,4 @@
-// 'use client'
+'use client'
 import React, { useRef, useEffect } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import { IconPicker } from '@/components/ui/icon-picker'
@@ -37,6 +37,7 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
 
   const [modalType, setModalType] = React.useState('')
   const [fileName, setFileName] = React.useState('')
+  const [language, setLanguage] = React.useState('english')
   const [open, toggleOpen] = React.useState(false)
   const [uploadedFile, setUploadedFile] = React.useState<File | null>(null)
 
@@ -47,6 +48,13 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
   const pathname = usePathname()
   const router = useRouter()
   const uploadType = params.get('uploadType')
+
+  const closeModal = () => {
+    setOpenModal(false)
+    setFileName('')
+    setModalType('')
+    router.push(pathname)
+  }
 
   React.useEffect(() => {
     if (
@@ -61,17 +69,11 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
   }, [uploadType])
 
   const handleOptionClick = (option: string) => {
-    // const url = new URL(`${pathname}`)
-
     const searchParams = new URLSearchParams()
     searchParams.set('uploadType', option)
 
     // url.search = searchParams.toString()
     router.push(pathname + '?' + searchParams.toString())
-    // setSelectedOption(option)
-    // setModalType(option)
-    // setOpenModal(true)
-    // toggleOpen(false)
   }
 
   useEffect(() => {
@@ -117,12 +119,11 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
         fileName: fileName,
         fileType: modalTypeToFileType[modalType as ModalType] ?? 'general',
         type: 'interview',
-        language: 'hausa',
+        language,
         onSuccess: () => {
-          setOpenModal(false)
           refetch()
           setUploadedFile(null)
-          setFileName('')
+          closeModal()
         },
       })
     }
@@ -220,10 +221,7 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
       <Modal
         className="sm:w-1/2 sm:h-1/2 flex items-center justify-center"
         open={openModal}
-        closeModal={() => {
-          setOpenModal(false)
-          router.push(pathname)
-        }}
+        closeModal={closeModal}
         title={`${modalType}`}
       >
         <form onSubmit={handleSave}>
@@ -232,6 +230,8 @@ export const InterviewUploadButton = ({ refetch }: { refetch: () => void }) => {
               fileInputRef={fileInputRef}
               fileName={fileName}
               setFileName={setFileName}
+              language={language}
+              setLanguage={setLanguage}
               handleFileChange={handleFileChange}
               hasFile={!!uploadedFile}
               isLoading={isUploading || isSubmitting}
