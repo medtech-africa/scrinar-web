@@ -145,30 +145,27 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
 
           {showAudio && <audio src={mediaBlobUrl} controls />}
 
-          <Input
-            label="File Name"
-            value={fileName}
-            onChange={(e) => setFileName(e.target.value)}
-            labelStyle="lg:text-sm text-xs"
-            className="w-full"
-          />
-
           <Select
             onChange={(val) => {
               setLanguage((val as { value: string }).value)
             }}
-            placeholder="Select State"
-            label="Select state"
+            placeholder="Select language"
+            label="Select language"
             labelStyle="lg:text-sm text-xs"
             options={convertStringsToOptionArray([
               'english',
               'hausa',
               'yoruba',
             ])}
-            classNames={{
-              menuList: () => 'h-[200px]',
-            }}
             value={convertStringToOption(language)}
+          />
+
+          <Input
+            label="File Name"
+            value={fileName}
+            onChange={(e) => setFileName(e.target.value)}
+            labelStyle="lg:text-sm text-xs"
+            className="w-full"
           />
 
           <div className="mt-5 justify-between flex">

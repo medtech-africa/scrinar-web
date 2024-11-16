@@ -33,7 +33,7 @@ export const useSchoolResources = () => {
 
 export default useSchools
 
-type SchoolResource = {
+export type SchoolResource = {
   fileURL: string
   fileName: string
   type: string

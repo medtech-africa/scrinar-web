@@ -74,13 +74,10 @@ const AudioModal = ({
           onChange={(val) => {
             setLanguage((val as { value: string }).value)
           }}
-          placeholder="Select State"
-          label="Select state"
+          placeholder="Select language"
+          label="Select language"
           labelStyle="lg:text-sm text-xs"
           options={convertStringsToOptionArray(['english', 'hausa', 'yoruba'])}
-          classNames={{
-            menuList: () => 'h-[200px]',
-          }}
           value={convertStringToOption(language)}
         />
       </div>

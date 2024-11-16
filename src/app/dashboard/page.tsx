@@ -28,9 +28,6 @@ import { isMasterInstructor } from '@/utils/checkPermission'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-content'
 import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add-questionnaire'
-import * as Tabs from '@radix-ui/react-tabs'
-import Interview from './fgd_Interview/interview'
-import FGD from './fgd_Interview/fgd'
 
 const dashboardStats = [
   {
@@ -123,10 +120,7 @@ const _actionData2 = [
     status: 'other',
   },
 ]
-const triggerClassName = cn(
-  'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
-  'data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:font-bold data-[state=active]:text-grey-900'
-)
+
 export default function Home() {
   const [modalType, setModalType] = useState('')
   const [openModal, setOpenModal] = useState(false)
@@ -254,33 +248,6 @@ export default function Home() {
               <DashboardProgress progress={40} />
             </div>
           </div> */}
-
-          <div className="">
-            <Tabs.Root className="mt-10" defaultValue="interview">
-              <Tabs.List className="mb-4" aria-label="">
-                <Tabs.Trigger
-                  className={triggerClassName}
-                  value="interview"
-                  onClick={() => refetch()}
-                >
-                  Interviews
-                </Tabs.Trigger>
-                <Tabs.Trigger
-                  className={triggerClassName}
-                  value="fgd"
-                  onClick={() => refetch()}
-                >
-                  FGD Interview
-                </Tabs.Trigger>
-              </Tabs.List>
-              <Tabs.Content value="interview">
-                <Interview />
-              </Tabs.Content>
-              <Tabs.Content value="fgd">
-                <FGD />
-              </Tabs.Content>
-            </Tabs.Root>
-          </div>
         </section>
         <section>
           <ActionBlock title="Quick Actions" className="mb-6">

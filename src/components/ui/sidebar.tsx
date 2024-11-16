@@ -60,6 +60,12 @@ const generalData = [
     href: '',
     roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   },
+  {
+    title: 'Interviews',
+    icon: 'grid7',
+    href: 'interviews',
+    roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
+  },
   // {
   //   title: 'Health Data',
   //   icon: 'health',

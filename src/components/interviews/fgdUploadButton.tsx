@@ -92,7 +92,7 @@ export const FGDUploadButton = ({ refetch }: { refetch: () => void }) => {
         fileName: fileName,
         fileType: modalTypeToFileType[modalType as ModalType] ?? 'general',
         type: 'fgd',
-        language: 'hausa',
+        language,
         onSuccess: () => {
           setOpenModal(false)
           setUploadedFile(null)
