@@ -93,7 +93,7 @@ const Interview = () => {
                   <TableCell>
                     {resource?.fileName}
                     <p className="text-grey-600">
-                      Uploaded by: {resource?.uploadedBy.name}
+                      Uploaded by: {resource?.uploadedBy?.name}
                     </p>
                   </TableCell>
                   <TableCell>
