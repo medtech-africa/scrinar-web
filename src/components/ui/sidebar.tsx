@@ -64,7 +64,13 @@ const generalData = [
     title: 'Interviews',
     icon: 'grid7',
     href: 'interviews',
-    roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
+    roles: [
+      'school',
+      'instructor',
+      'play4health_admin',
+      'super_admin',
+      'jica_enumerators',
+    ],
   },
   // {
   //   title: 'Health Data',
