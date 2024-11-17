@@ -395,7 +395,7 @@ const ParentQuestionnaire = ({
     }
   }, [questionnaireData, parentId])
 
-  if (qIsLoading && hasDefault && !formData) {
+  if (qIsLoading && hasDefault) {
     return (
       <>
         <p className="my-4 text-center">Loading..</p>
@@ -404,8 +404,13 @@ const ParentQuestionnaire = ({
     )
   }
 
+  const isLocalFormNotEmpty = formData && Object.keys(formData).length > 0
+
   return (
     <ParentQuestionnairePage
+      key={
+        isLocalFormNotEmpty ? 'parent-survey-present' : 'parent-survey-absent'
+      }
       {...{ parentId, gender, hasDefault, questionnaireData: formData }}
     />
   )
