@@ -68,7 +68,15 @@ export const Survey = ({
     )
   }
 
-  return <SurveyForm studentSurvey={formData} studentId={studentId} />
+  const isLocalFormNotEmpty = formData && Object.keys(formData).length > 0
+
+  return (
+    <SurveyForm
+      key={isLocalFormNotEmpty ? 'child-survey-present' : 'child-survey-absent'}
+      studentSurvey={formData}
+      studentId={studentId}
+    />
+  )
 }
 
 export const SurveyForm = ({
