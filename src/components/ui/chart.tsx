@@ -1,25 +1,12 @@
 import React from 'react'
-import {
-  LineChart,
-  Line,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-  ReferenceLine,
-} from 'recharts'
-
-export interface Datum {
-  x: string
-  y: string
-}
+import GaugeChart from 'react-gauge-chart'
 
 export interface ThresholdChartProps {
   name: string
-  healthData: Datum[]
+  healthData: string
   highThreshold: number
   lowThreshold: number
+  units: string
 }
 
 export default function ThresholdChart({
@@ -27,51 +14,53 @@ export default function ThresholdChart({
   name,
   highThreshold,
   lowThreshold,
+  units,
 }: ThresholdChartProps) {
-  const hasData = healthData && healthData.length > 0
+  const latestDataPoint = parseFloat(healthData)
 
-  const formattedData = healthData?.map((item: Datum) => ({
-    x: new Date(item.x).toLocaleDateString(),
-    y: parseInt(item.y, 10),
-  }))
+  const midRange = (highThreshold - lowThreshold) / 2
+  const lowYellowThreshold = lowThreshold - midRange
+  const highYellowThreshold = highThreshold + midRange
+  function getColorForValue(value: number) {
+    if (value < lowYellowThreshold) {
+      return '#FF5F6D' // Red for low danger
+    } else if (value >= lowYellowThreshold && value < lowThreshold) {
+      return '#FFC371' // Yellow for low caution
+    } else if (value >= lowThreshold && value <= highThreshold) {
+      return '#96FF72' // Green for healthy
+    } else if (value > highThreshold && value <= highYellowThreshold) {
+      return '#FFC371' // Yellow for high caution
+    } else {
+      return '#FF5F6D' // Red for high danger
+    }
+  }
+  const pointerData =
+    latestDataPoint / 100 > 1
+      ? 1
+      : latestDataPoint / 100 < 0
+        ? 0
+        : latestDataPoint / 100
+
+  const gaugeColor = getColorForValue(latestDataPoint)
 
   return (
-    <div style={{ width: '100%', height: 400, textAlign: 'center' }}>
+    <div style={{ width: '100%', height: 200, textAlign: 'center' }}>
       <h3>{name}</h3>
-
-      {!hasData ? (
+      {!healthData ? (
         <div style={{ marginTop: '20px' }}>
           <p>No data available</p>
         </div>
       ) : (
-        <ResponsiveContainer width="100%" height="100%">
-          <LineChart data={formattedData}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="x" hide />
-            <YAxis domain={['auto', 'auto']} />
-            <Tooltip />
-            <ReferenceLine
-              y={highThreshold}
-              stroke="red"
-              strokeDasharray="3 3"
-              label={{ position: 'insideTopRight', value: 'High Threshold' }}
-            />
-            <ReferenceLine
-              y={lowThreshold}
-              stroke="blue"
-              strokeDasharray="3 3"
-              label={{ position: 'insideBottomRight', value: 'Low Threshold' }}
-            />
-            <Line
-              type="monotone"
-              dataKey="y"
-              stroke="#F9B4AF"
-              strokeWidth={2}
-              dot={{ r: 3 }}
-              activeDot={{ r: 6 }}
-            />
-          </LineChart>
-        </ResponsiveContainer>
+        <GaugeChart
+          id="gauge-chart"
+          formatTextValue={() => `${latestDataPoint} ${units}`}
+          nrOfLevels={30}
+          percent={pointerData}
+          colors={[gaugeColor]}
+          textColor="#000000"
+
+          // arcWidth={0.2}
+        />
       )}
     </div>
   )
