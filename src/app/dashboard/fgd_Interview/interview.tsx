@@ -100,7 +100,7 @@ const Interview = () => {
                     {resource.transcription ? (
                       <a
                         onClick={() => setModalContent(resource)}
-                        className="underline"
+                        className="underline cursor-pointer"
                       >
                         view
                       </a>
@@ -155,12 +155,11 @@ const Interview = () => {
           className="sm:w-3/4 sm:h-1/2 grid items-center justify-center"
           open={!!modalContent}
           closeModal={() => setModalContent(null)}
-          // title={`${modalType}`}
         >
-          <div className="w-full bg-primary">
+          <div className="w-full">
             <TextArea
               defaultValue={modalContent?.transcription}
-              className="w-full h-96 md:min-w-[75vw]"
+              className="w-full min-h-96 md:min-w-[70vw]"
             />
           </div>
         </Modal>

@@ -17,6 +17,7 @@ const useScreening = (id: string) => {
   return useQuery({
     queryKey: ['single-screening', id],
 
+
     queryFn: () =>
       baseAxios.get(API.screening(id)).then((res) => res.data)
   });
@@ -34,6 +35,7 @@ const useAssessmentType = () => {
 const useAssessmentStatus = () => {
   return useQuery({
     queryKey: ['assessment-status'],
+
 
     queryFn: () =>
       baseAxios.get(API.getAssessmentStatus).then((res) => res.data)
