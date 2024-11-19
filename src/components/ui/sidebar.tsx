@@ -78,12 +78,18 @@ const generalData = [
   //   href: 'health-data',
   //   roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   // },
-  // {
-  //   title: 'Screening',
-  //   icon: 'calendar',
-  //   href: 'screening',
-  //   roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
-  // },
+  {
+    title: 'Screening',
+    icon: 'calendar',
+    href: 'screening',
+    roles: [
+      'school',
+      'instructor',
+      'play4health_admin',
+      'super_admin',
+      'jica_enumerators',
+    ],
+  },
   // {
   //   title: 'Training Module',
   //   icon: 'book',

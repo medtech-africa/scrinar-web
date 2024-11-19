@@ -16,7 +16,7 @@ import { SchoolResource, useSchoolResources } from '@/hooks/queries/useSchools'
 import EmptyData from '@/components/empty-data'
 import { cn } from '@/lib/utils'
 import Modal from '@/components/ui/modal'
-import Markdown from 'react-markdown'
+// import Markdown from 'react-markdown'
 import { TextArea } from '@/components/ui/textarea'
 
 const Interview = () => {
@@ -152,16 +152,17 @@ const Interview = () => {
         </Table>
         {filteredInterviews?.length === 0 && <EmptyData />}
         <Modal
-          className="sm:w-3/4 sm:h-1/2 flex items-center justify-center"
+          className="sm:w-3/4 sm:h-1/2 grid items-center justify-center"
           open={!!modalContent}
           closeModal={() => setModalContent(null)}
           // title={`${modalType}`}
         >
-          <Markdown className="">{modalContent?.transcription}</Markdown>
-          <Markdown className="">{modalContent?.translation}</Markdown>
-
-          <TextArea defaultValue={modalContent?.transcription} />
-          <TextArea defaultValue={modalContent?.translation} />
+          <div className="w-full bg-primary">
+            <TextArea
+              defaultValue={modalContent?.transcription}
+              className="w-full h-96 md:min-w-[75vw]"
+            />
+          </div>
         </Modal>
       </div>
     </div>
