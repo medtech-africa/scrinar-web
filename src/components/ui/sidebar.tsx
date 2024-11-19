@@ -79,7 +79,7 @@ const generalData = [
   //   roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   // },
   {
-    title: 'Screening',
+    title: 'Schedule',
     icon: 'calendar',
     href: 'screening',
     roles: [

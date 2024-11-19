@@ -31,6 +31,16 @@ import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add
 
 const dashboardStats = [
   {
+    title: 'Total Users',
+    icon: 'profile2User' as IconNames,
+    count: 'totalCount',
+    avatars: [
+      'https://i.pravatar.cc/100',
+      'https://i.pravatar.cc/200',
+      'https://i.pravatar.cc/60',
+    ],
+  },
+  {
     title: 'Children',
     icon: 'profile2User' as IconNames,
     count: 'childrenCount',
@@ -162,7 +172,15 @@ export default function Home() {
               return (
                 <DashboardCard className="w-ful relative" key={_}>
                   <DashboardCardHeader
-                    title={data?.[stat.count] ?? '..'}
+                    title={
+                      stat.count === 'totalCount'
+                        ? data?.childrenCount
+                          ? data?.childrenCount +
+                            data?.fatherCount +
+                            data?.motherCount
+                          : '..'
+                        : data?.[stat.count] ?? '..'
+                    }
                     subtitle={stat.title}
                     icon={
                       <DashboardCardIcon
@@ -215,9 +233,11 @@ export default function Home() {
                       />
                     </div>
                   </DashboardCardFooter>
-                  <Link href={`/dashboard${stat.slug}`}>
-                    <span className="absolute inset-0" />
-                  </Link>
+                  {stat.slug && (
+                    <Link href={`/dashboard${stat.slug}`}>
+                      <span className="absolute inset-0" />
+                    </Link>
+                  )}
                 </DashboardCard>
               )
             })}

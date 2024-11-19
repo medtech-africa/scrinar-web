@@ -204,10 +204,10 @@ export default function FamilyHealthDataLayout({
           household code)
         </p>
         <p className="">it is done automatically</p>
-        <span className="">/F = Father</span>,{' '}
-        <span className="">/M = Mother</span>,{' '}
-        <span className="">/S = Student</span>,{' '}
-        <span className="">/G = Guardian</span>
+        <p className="">&quot;/F&quot; = Father</p>
+        <p className="">&quot;/M&quot; = Mother</p>
+        <p className="">&quot;/S&quot; = Student</p>
+        <p className="">&quot;/G&quot; = Guardian</p>
       </div>
 
       <div className="py-3 md:py-8">

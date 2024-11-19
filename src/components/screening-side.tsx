@@ -78,10 +78,10 @@ const ScreeningView = ({
     <ViewLayout actionOpened={actionOpened}>
       <ContentLoader loading={isLoading} />
       <Text variant="text/lg" weight="medium" className="mb-4">
-        Screening Details
+        Schedule Details
       </Text>
       <Text variant="text/sm" className="text-grey-600 mb-6">
-        Your Scheduled Screening Details: Explore Your Upcoming Appointment
+        Your Scheduled Details: Explore Your Upcoming Appointment
       </Text>
       <Text variant="text/lg" weight="medium" className="mb-4">
         Health Data Collection
@@ -225,7 +225,7 @@ const ScreeningAdd = ({
           queryClient.invalidateQueries('screening' as any)
           reset()
           postReset()
-          toast.success('Successfully created new screening event')
+          toast.success('Successfully created new schedule event')
           refetchScreenings && refetchScreenings()
         },
         onError: (err) => {
@@ -239,10 +239,10 @@ const ScreeningAdd = ({
   return (
     <ViewLayout actionOpened={actionOpened}>
       <Text variant="text/lg" weight="medium" className="mb-4">
-        Add New Screening
+        Add New Schedule
       </Text>
       <Text variant="text/sm" className="text-grey-600 mb-6">
-        Schedule a New Screening Event
+        Schedule a New Schedule Event
       </Text>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -252,7 +252,7 @@ const ScreeningAdd = ({
             <Input
               {...field}
               value={value ?? ''}
-              label="Screening Title"
+              label="Schedule Title"
               placeholder="e.g Data Collection"
               className="mb-4"
               variant={errors?.title ? 'destructive' : 'default'}
@@ -267,7 +267,7 @@ const ScreeningAdd = ({
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <DatePicker
-                label="Screening Date"
+                label="Schedule Date"
                 placeholder="DD/MM/YYYY"
                 // leadingIcon={<IconPicker icon="calendar" size="1.25rem" />}
                 onBlur={onBlur}
@@ -289,7 +289,7 @@ const ScreeningAdd = ({
                 onBlur={onBlur}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                label="Screening Time"
+                label="Schedule Time"
                 placeholder="HH:MM"
                 variant={errors?.time ? 'destructive' : 'default'}
                 message={errors.time && errors.time.message}
@@ -306,7 +306,7 @@ const ScreeningAdd = ({
             <Input
               {...field}
               value={value ?? ''}
-              label="Screening Location"
+              label="Location"
               placeholder="e.g School Halln"
               className="mb-4"
               variant={errors?.location ? 'destructive' : 'default'}
@@ -354,7 +354,7 @@ const ScreeningAdd = ({
         />
 
         <div>
-          <Label htmlFor="de">Screening Note</Label>
+          <Label htmlFor="de">Schedule Note</Label>
           <Controller
             control={control}
             render={({ field: { value, ...field } }) => (
@@ -503,10 +503,10 @@ const ScreeningEdit = ({
     <ViewLayout actionOpened={actionOpened}>
       <ContentLoader loading={dataLoading} />
       <Text variant="text/lg" weight="medium" className="mb-4">
-        Edit Screening
+        Edit Schedule
       </Text>
       <Text variant="text/sm" className="text-grey-600 mb-6">
-        Update a Screening Event
+        Update a Schedule Event
       </Text>
 
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -516,7 +516,7 @@ const ScreeningEdit = ({
             <Input
               {...field}
               value={value ?? ''}
-              label="Screening Title"
+              label="Schedule Title"
               placeholder="e.g Data Collection"
               className="mb-4"
               variant={errors?.title ? 'destructive' : 'default'}
@@ -531,7 +531,7 @@ const ScreeningEdit = ({
             control={control}
             render={({ field: { onChange, onBlur, value } }) => (
               <DatePicker
-                label="Screening Date"
+                label="Schedule Date"
                 placeholder="DD/MM/YYYY"
                 // leadingIcon={<IconPicker icon="calendar" size="1.25rem" />}
                 onBlur={onBlur}
@@ -553,7 +553,7 @@ const ScreeningEdit = ({
                 onBlur={onBlur}
                 value={value}
                 onChange={(e) => onChange(e.target.value)}
-                label="Screening Time"
+                label="Schedule Time"
                 placeholder="HH:MM"
                 variant={errors?.time ? 'destructive' : 'default'}
                 message={errors.time && errors.time.message}
@@ -570,7 +570,7 @@ const ScreeningEdit = ({
             <Input
               {...field}
               value={value ?? ''}
-              label="Screening Location"
+              label="Location"
               placeholder="e.g School Halln"
               className="mb-4"
               variant={errors?.location ? 'destructive' : 'default'}
@@ -618,7 +618,7 @@ const ScreeningEdit = ({
         />
 
         <div>
-          <Label htmlFor="de">Screening Note</Label>
+          <Label htmlFor="de">Schedule Note</Label>
           <Controller
             control={control}
             render={({ field: { value, ...field } }) => (

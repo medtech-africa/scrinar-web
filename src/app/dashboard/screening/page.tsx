@@ -85,7 +85,7 @@ const ScreeningList = ({
 
   const menuItems = [
     {
-      title: 'Screening Details',
+      title: 'Schedule Details',
       icon: IconNames.calendar,
       action: () => {
         setActionType('view')
@@ -118,7 +118,7 @@ const ScreeningList = ({
           setSelectedRow(null)
           setDeleteModal(false)
           refetch()
-          toast.success('Successfully deleted screening')
+          toast.success('Successfully deleted schedule')
         },
         onError: (err) => {
           errorMessage(err)
@@ -240,17 +240,14 @@ const ScreeningList = ({
 
 export default function ScreeningManagement() {
   const [openFilter, _setOpenFilter] = useState(false)
-  const [selectedTab, setSelectedTab] = useState('Screening List')
+  const [selectedTab, setSelectedTab] = useState('Schedule List')
   const [actionType, setActionType] = useState('')
 
   return (
     <div>
-      <PageHeader
-        title="Screening Management"
-        subtitle="Tracking and Schedule Screenings"
-      />
+      <PageHeader title="Schedule Management" subtitle="Tracking Schedule" />
       <Button
-        value="Schedule Screening"
+        value="Schedule"
         className="my-6"
         leadingIcon={<IconPicker icon="add" />}
         onClick={() => setActionType('add')}
@@ -258,7 +255,7 @@ export default function ScreeningManagement() {
       <div className="md:flex md:flex-row md:items-start grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
         <TabList
           //Calendar View',
-          labels={['Screening List']}
+          labels={['Schedule List']}
           onClickTabItem={setSelectedTab}
           activeTab={selectedTab}
         />
