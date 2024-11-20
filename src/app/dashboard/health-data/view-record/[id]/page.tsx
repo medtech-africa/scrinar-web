@@ -103,28 +103,14 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
           <ThresholdChart
             name="Glucose Levels"
             healthData={data?.glucoseLevel}
-            highThreshold={140}
-            lowThreshold={70}
             units="mg/dL"
           />
         </div>
         <div>
-          <ThresholdChart
-            name="BMI"
-            healthData={data?.bmi}
-            highThreshold={24.9}
-            lowThreshold={18.5}
-            units="kg/m2"
-          />
+          <ThresholdChart name="BMI" healthData={data?.bmi} units="kg/m2" />
         </div>
         <div>
-          <ThresholdChart
-            name="Pulse"
-            healthData={data?.pulse}
-            highThreshold={100}
-            lowThreshold={60}
-            units="BPM"
-          />
+          <ThresholdChart name="Pulse" healthData={data?.pulse} units="BPM" />
         </div>
       </div>
       <div className="space-y-6 mt-9">
