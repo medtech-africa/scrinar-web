@@ -28,7 +28,7 @@ export default function BarStacked({
 }: {
   data: HealthDataAnalyticsType[]
 }) {
-  const transformedData = transformData(data ?? [])
+  const transformedData = transformData(data || [])
 
   const primaryAxis = React.useMemo<
     AxisOptions<(typeof transformedData)[number]['data'][number]>
@@ -67,7 +67,7 @@ export default function BarStacked({
 export function HealthDataBarStats() {
   const { data, isPending } = useHealthDataAnalytics()
 
-  if (isPending) return null
+  if (isPending || !data) return null
 
   return (
     <div>

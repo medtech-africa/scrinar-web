@@ -160,7 +160,7 @@ export default function Home() {
           Dashboard Overview
         </Text>
       </section>
-      <section className="grid lg:grid-cols-[2.5fr_1fr] gap-6 mt-2.2 py-8">
+      <section className="grid lg:grid-cols-[2.5fr_1fr] gap-6 mt-2.2 py-5">
         <section>
           <div className="lg:grid-cols-3 flex flex-wrap gap-4 mb-6 sm:grid-cols-1 justify-center sm:justify-start">
             {dashboardStats.map((stat, _) => {
