@@ -28,6 +28,7 @@ import { isMasterInstructor } from '@/utils/checkPermission'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-content'
 import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add-questionnaire'
+import { HealthDataBarStats } from '@/components/dashboard/HealthDataBarStats'
 
 const dashboardStats = [
   {
@@ -270,7 +271,7 @@ export default function Home() {
           </div> */}
         </section>
         <section>
-          <ActionBlock title="Quick Actions" className="mb-6">
+          <ActionBlock title="Quick Actions" className="mb-4">
             {actionData1.map((act, _) => (
               <div key={`quick_actions_${_}`}>
                 <div
@@ -307,6 +308,7 @@ export default function Home() {
           </ActionBlock>
         </section>
       </section>
+      <HealthDataBarStats />
       <Modal
         open={openModal}
         closeModal={() => setOpenModal(false)}
