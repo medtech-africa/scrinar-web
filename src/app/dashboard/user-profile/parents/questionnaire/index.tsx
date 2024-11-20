@@ -181,7 +181,6 @@ const ParentQuestionnairePage = ({
   })
 
   const { isPending: qIsLoading } = useParentQuestionnaire(parentId)
-  console.log('questionnaireData', questionnaireData)
 
   const formMethods = useFormWithAutoSave({
     parentId,

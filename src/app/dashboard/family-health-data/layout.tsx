@@ -7,13 +7,11 @@ import { Input } from '@/components/ui/input'
 import { usePathname } from 'next/navigation'
 import React, { useEffect, useState } from 'react'
 import { useDebouncedState } from '@/hooks/useDebouncedState'
-import { useUser } from '@/context/user'
-import { isMasterInstructor } from '@/utils/checkPermission'
-import DropDownMenuExportAll from '../health-data/drop-down-export-all'
-import DropDownMenuExport from '../health-data/drop-down-export'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { useFHDSharedData } from '@/context/family-health-data-context'
+import DropDownMenuExportParents from './export/parent/drop-down-export-all'
+import DropDownMenuExportChildren from './export/children/drop-down-export-all'
 
 const FilterData = () => {
   return (
@@ -66,7 +64,6 @@ const FilterHeader = ({
 }: FilterHeaderProps) => {
   const [openExport, setOpenExport] = useState(false)
   const [openExportAll, setOpenExportAll] = useState(false)
-  const user = useUser((state) => state.user)
 
   return (
     <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between items-center mt-2 border-y border-grey-50 mb-2">
@@ -90,31 +87,29 @@ const FilterHeader = ({
         />*/}
 
         <div>
-          {isMasterInstructor(user?.roles) && (
-            <div className="relative mb-2">
-              <Button
-                value="Export All Health Data"
-                className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
-                endingIcon={<IconPicker icon="export" />}
-                onClick={() => setOpenExportAll(true)}
+          <div className="relative mb-2">
+            <Button
+              value="Export Children"
+              className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
+              endingIcon={<IconPicker icon="export" />}
+              onClick={() => setOpenExportAll(true)}
+            />
+            {openExportAll && (
+              <DropDownMenuExportChildren
+                onClose={() => setOpenExportAll(false)}
               />
-              {openExportAll && (
-                <DropDownMenuExportAll
-                  onClose={() => setOpenExportAll(false)}
-                />
-              )}
-            </div>
-          )}
+            )}
+          </div>
 
           <div className="relative">
             <Button
-              value="Export Health Risk"
+              value="Export Parents"
               className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
               endingIcon={<IconPicker icon="export" />}
               onClick={() => setOpenExport(true)}
             />
             {openExport && (
-              <DropDownMenuExport onClose={() => setOpenExport(false)} />
+              <DropDownMenuExportParents onClose={() => setOpenExport(false)} />
             )}
           </div>
         </div>
