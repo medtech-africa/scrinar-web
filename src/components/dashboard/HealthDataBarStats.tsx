@@ -12,6 +12,8 @@ import { Text } from '../ui/text'
 function transformData(
   data: { date: string; children: number; fathers: number; mothers: number }[]
 ) {
+  if (!data || !data[0]) return []
+
   return Object.keys(data[0])
     .filter((key) => key !== 'date')
     .map((label) => ({
