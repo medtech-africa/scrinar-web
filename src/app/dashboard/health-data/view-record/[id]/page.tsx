@@ -31,8 +31,6 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
   const data = healthData?.data
   const userData = data?.student || data?.parent
   const isStudent = !!data?.student
-  const glucoseLevelData = data?.chartData?.glucoseLevel
-  const bmiData = data?.chartData?.bmi
 
   const dataItems = [
     {
@@ -100,30 +98,33 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
         }
         navigation={navigationItems}
       />
-      <div className="grid grid-cols-2 gap-x-3">
+      <div className="grid grid-cols-3 gap-x-3">
         <div>
-          {glucoseLevelData ? (
-            <ThresholdChart
-              name="Glucose Levels"
-              healthData={glucoseLevelData}
-              highThreshold={140}
-              lowThreshold={70}
-            />
-          ) : (
-            <Text>No Data </Text>
-          )}
+          <ThresholdChart
+            name="Glucose Levels"
+            healthData={data?.glucoseLevel}
+            highThreshold={140}
+            lowThreshold={70}
+            units="mg/dL"
+          />
         </div>
         <div>
-          {bmiData ? (
-            <ThresholdChart
-              name="BMI"
-              healthData={bmiData}
-              highThreshold={24.9}
-              lowThreshold={18.5}
-            />
-          ) : (
-            <Text>No Data </Text>
-          )}
+          <ThresholdChart
+            name="BMI"
+            healthData={data?.bmi}
+            highThreshold={24.9}
+            lowThreshold={18.5}
+            units="kg/m2"
+          />
+        </div>
+        <div>
+          <ThresholdChart
+            name="Pulse"
+            healthData={data?.pulse}
+            highThreshold={100}
+            lowThreshold={60}
+            units="BPM"
+          />
         </div>
       </div>
       <div className="space-y-6 mt-9">
