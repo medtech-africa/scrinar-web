@@ -1,6 +1,6 @@
 'use client'
 
-import FHDPageContent from '@/components/fhd-page-content'
+import FHDPageContent from '@/components/fhd/page-content'
 import React from 'react'
 
 const Households = () => {

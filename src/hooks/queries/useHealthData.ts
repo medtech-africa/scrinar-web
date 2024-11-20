@@ -64,6 +64,32 @@ const useFamilyHealthData = (
   })
 }
 
-export { useSingleHealthData, useHealthRiskData, useFamilyHealthData }
+const useExportParentQuestionnaire = () => {
+  return useQuery({
+    queryKey: ['exportParentQuestionnaire'],
+    queryFn: () =>
+      baseAxios
+        .get(API.exportParentQuestionnaire)
+        .then((res) => res.data?.data),
+  })
+}
+
+const useExportStudentQuestionnaire = () => {
+  return useQuery({
+    queryKey: ['exportStudentQuestionnaire'],
+    queryFn: () =>
+      baseAxios
+        .get(API.exportStudentQuestionnaire)
+        .then((res) => res.data?.data),
+  })
+}
+
+export {
+  useSingleHealthData,
+  useHealthRiskData,
+  useFamilyHealthData,
+  useExportParentQuestionnaire,
+  useExportStudentQuestionnaire,
+}
 
 export default useHealthData

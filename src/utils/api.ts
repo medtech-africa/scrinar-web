@@ -17,9 +17,11 @@ export const API = {
   students: `${BASE_URL}/api/v1/students`,
   registerStudents: `${BASE_URL}/api/v1/students/createByPublic`,
   parents: `${BASE_URL}/api/v1/parents`,
+  exportParentQuestionnaire: `${BASE_URL}/api/v1/parents/questionnaire/export`,
   parentQuestionnaire: (id: string) =>
     `${BASE_URL}/api/v1/parents/${id}/questionnaire`,
   student: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
+  exportStudentQuestionnaire: `${BASE_URL}/api/v1/students/questionnaire/export`,
   parent: (id: string) => `${BASE_URL}/api/v1/parents/${id}`,
   getStudents: (page?: number, level?: string, searchVal?: string) =>
     `${BASE_URL}/api/v1/students${page ? `?page=${page}` : ''}${
