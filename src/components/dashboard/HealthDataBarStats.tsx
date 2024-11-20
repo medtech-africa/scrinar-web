@@ -20,10 +20,14 @@ function transformData(
       label,
       data: data.map((item) => ({
         date: item.date,
-        count: item[label as keyof typeof item],
+        count: item[label as keyof Omit<typeof item, 'date'>],
       })),
     }))
 }
+
+type AxisType = AxisOptions<
+  ReturnType<typeof transformData>[number]['data'][number]
+>
 
 export default function BarStacked({
   data,
@@ -31,27 +35,28 @@ export default function BarStacked({
   data: HealthDataAnalyticsType[]
 }) {
   const transformedData = transformData(data || [])
+  console.log('🚀 ~ transformedData:', transformedData)
 
-  const primaryAxis = React.useMemo<
-    AxisOptions<(typeof transformedData)[number]['data'][number]>
-  >(
+  // AxisOptions<(typeof transformedData)[number]['data'][number]>
+  const primaryAxis = React.useMemo<AxisType>(
     () => ({
-      getValue: (datum) => datum.date,
+      getValue: (datum) => datum?.date,
     }),
     []
   )
 
-  const secondaryAxes = React.useMemo<
-    AxisOptions<(typeof transformedData)[number]['data'][number]>[]
-  >(
+  const secondaryAxes = React.useMemo<AxisType[]>(
     () => [
       {
-        getValue: (datum) => datum.count,
+        getValue: (datum) => datum?.count,
         stacked: true,
+        scaleType: 'linear',
       },
     ],
     []
   )
+
+  if (transformedData.length === 0) return null
 
   return (
     <ResizableBox>
@@ -71,6 +76,7 @@ export function HealthDataBarStats() {
 
   if (isPending || !data) return null
 
+  console.log('🚀 ~ HealthDataBarStats ~ data:', data)
   return (
     <div>
       <Text className="text-grey-600">
