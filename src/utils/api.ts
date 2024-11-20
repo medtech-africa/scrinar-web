@@ -105,4 +105,8 @@ export const API = {
   // survey
   studentSurvey: (id: string) =>
     `${BASE_URL}/api/v1/students/${id}/questionnaire`,
+
+  // analytics
+  healthDataAnalytics: 
+    `${BASE_URL}/api/v1/analytics/health-data/category-data`,
 }
