@@ -7,7 +7,8 @@ const getHealthData = (
   searchVal = '',
   limit = 10,
   type = '',
-  isFamily = false
+  isFamily = false,
+  sort = ''
 ) =>
   baseAxios
     .get(isFamily ? API.getFamilyHealthData : API.getHealthData, {
@@ -17,6 +18,7 @@ const getHealthData = (
         per_page: limit,
         ...(type ? { type } : {}),
         search: searchVal,
+        sort,
       },
     })
     .then((res) => res.data)
@@ -55,11 +57,13 @@ const useFamilyHealthData = (
   pageNumber = 1,
   searchVal?: string,
   type = '',
-  limit = 10
+  limit = 10,
+  sort = ''
 ) => {
   return useQuery({
-    queryKey: ['family-health-data', pageNumber, searchVal, type, limit],
-    queryFn: () => getHealthData(pageNumber, searchVal, limit, type, true),
+    queryKey: ['family-health-data', pageNumber, searchVal, type, limit, sort],
+    queryFn: () =>
+      getHealthData(pageNumber, searchVal, limit, type, true, sort),
     placeholderData: keepPreviousData,
   })
 }

@@ -3,6 +3,7 @@ import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
 import { PageHeader } from '@/components/page-header'
 import Pagination from '@/components/pagination'
+import SortBy from '@/components/sort-by'
 import TableLoader from '@/components/table-loader'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -67,6 +68,7 @@ type FilterHeaderProps = {
   onSearchChange: (val: string) => void
   searchVal?: string
   loading?: boolean
+  onSortChange: (val: string) => void
 }
 const FilterHeader = ({
   setOpenFilter: _,
@@ -74,19 +76,24 @@ const FilterHeader = ({
   onSearchChange,
   searchVal,
   loading,
+  onSortChange,
 }: FilterHeaderProps) => {
   return (
-    <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2">
-      <Input
-        leadingIcon={<IconPicker icon="search" />}
-        className="rounded-[49px] bg-grey-100 text-sm  md:w-[17.25rem] w-[15rem]"
-        placeholder="Search by Name, Level or Gender...."
-        full={false}
-        onChange={(e) => onSearchChange(e.target.value)}
-        endingIcon={
-          loading && searchVal && <IconPicker icon="loader2" size={20} />
-        }
-      />
+    <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2 items-center">
+      <div>
+        <Input
+          leadingIcon={<IconPicker icon="search" />}
+          className="rounded-[49px] bg-grey-100 text-sm  md:w-[17.25rem] w-[15rem]"
+          placeholder="Search by Name, Level or Gender...."
+          full={false}
+          onChange={(e) => onSearchChange(e.target.value)}
+          endingIcon={
+            loading && searchVal && <IconPicker icon="loader2" size={20} />
+          }
+        />
+
+        <SortBy onChange={onSortChange} />
+      </div>
       <div className="flex gap-x-4 mt-2 md:mt-0">
         {/* @Todo:not time */}
         {/* <Button
@@ -118,6 +125,7 @@ export default function Students() {
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState<string | null>(null)
   const [deleteModal, setDeleteModal] = useState(false)
+  const [sortVal, setSort] = useState('')
 
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
@@ -128,7 +136,7 @@ export default function Students() {
     isPending: isLoading,
     refetch,
     isFetching,
-  } = useStudents(currentPage, '', search)
+  } = useStudents(currentPage, '', search, sortVal)
   useSchoolChangeRefresh(refetch)
 
   const studentsData = data?.data
@@ -194,6 +202,7 @@ export default function Students() {
         onSearchChange={setSearch}
         searchVal={search}
         loading={isFetching}
+        onSortChange={setSort}
       />
       {openFilter && <FilterData />}
       <Delete

@@ -23,17 +23,38 @@ export const API = {
   student: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
   exportStudentQuestionnaire: `${BASE_URL}/api/v1/students/questionnaire/export`,
   parent: (id: string) => `${BASE_URL}/api/v1/parents/${id}`,
-  getStudents: (page?: number, level?: string, searchVal?: string) =>
-    `${BASE_URL}/api/v1/students${page ? `?page=${page}` : ''}${
-      level ? `${page ? '&' : '?'}level=${level}` : ''
-    }${searchVal ? `${page || level ? '&' : '?'}search=${searchVal}` : ''}`,
-  getParents: (page?: number, searchVal = '', gender = '', all = false) => {
+  getStudents: (
+    page?: number,
+    level?: string,
+    searchVal?: string,
+    sortVal = ''
+  ) => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: '15',
+      per_page: '15',
+      level: level ?? '',
+      search: searchVal ?? '',
+      sort: sortVal,
+    })
+
+    const queryString = params.toString()
+    return `${BASE_URL}/api/v1/students${queryString ? `?${queryString}` : ''}`
+  },
+  getParents: (
+    page?: number,
+    searchVal = '',
+    gender = '',
+    all = false,
+    sortVal = ''
+  ) => {
     const params = new URLSearchParams({
       page: String(page),
       limit: gender || all ? '1000' : '15',
       per_page: gender || all ? '1000' : '15',
       search: searchVal,
       gender,
+      sort: sortVal,
     })
 
     const queryString = params.toString()
