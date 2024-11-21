@@ -8,6 +8,7 @@ import {
 import { AxisOptions, Chart as ChartX } from 'react-charts'
 import { ResizableBox } from '../resizableBox'
 import { Text } from '../ui/text'
+import useWindowSize from '@/hooks/useWindowSize'
 
 function transformData(
   data: { date: string; children: number; fathers: number; mothers: number }[]
@@ -35,7 +36,8 @@ export default function BarStacked({
   data: HealthDataAnalyticsType[]
 }) {
   const transformedData = transformData(data || [])
-  console.log('🚀 ~ transformedData:', transformedData)
+
+  const { width = 0 } = useWindowSize()
 
   // AxisOptions<(typeof transformedData)[number]['data'][number]>
   const primaryAxis = React.useMemo<AxisType>(
@@ -59,7 +61,7 @@ export default function BarStacked({
   if (transformedData.length === 0) return null
 
   return (
-    <ResizableBox>
+    <ResizableBox width={width * 0.7}>
       <ChartX
         options={{
           data: transformedData,
@@ -76,10 +78,9 @@ export function HealthDataBarStats() {
 
   if (isPending || !data) return null
 
-  console.log('🚀 ~ HealthDataBarStats ~ data:', data)
   return (
-    <div>
-      <Text className="text-grey-600">
+    <div className="w-full">
+      <Text className="text-grey-700" variant="text/md" weight="medium">
         Health Data entered per day grouped by user type
       </Text>
       <BarStacked data={data || []} />

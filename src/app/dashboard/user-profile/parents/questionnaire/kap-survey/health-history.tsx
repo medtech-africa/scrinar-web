@@ -6,7 +6,7 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Control, Controller, FieldErrors, UseFormWatch } from 'react-hook-form'
 
 interface Props {
-  control: Control<ParentFormData, any, ParentFormData>
+  control: Control<ParentFormData, ParentFormData>
   errors: FieldErrors<ParentFormData>
   watch: UseFormWatch<ParentFormData>
 }

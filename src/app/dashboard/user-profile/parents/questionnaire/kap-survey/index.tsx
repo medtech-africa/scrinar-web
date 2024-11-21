@@ -13,7 +13,7 @@ import { HealthHistorySection } from './health-history'
 import { cn } from '@/lib/utils'
 
 interface Props {
-  control: Control<ParentFormData, any, ParentFormData>
+  control: Control<ParentFormData, ParentFormData>
   errors: FieldErrors<ParentFormData>
   watch: UseFormWatch<ParentFormData>
 }

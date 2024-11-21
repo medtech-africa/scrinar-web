@@ -3,16 +3,16 @@ import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 
 export type HealthDataAnalyticsType = {
-      date: string
-      children: number
-      fathers: number
-      mothers: number
-    }
+  date: string
+  children: number
+  fathers: number
+  mothers: number
+}
 
 const fetchStats = async () => {
-  const { data } = await baseAxios.get<
-    HealthDataAnalyticsType[]
-  >(API.healthDataAnalytics)
+  const { data } = await baseAxios.get<HealthDataAnalyticsType[]>(
+    API.healthDataAnalytics
+  )
   return data
 }
 
@@ -20,6 +20,20 @@ export const useHealthDataAnalytics = () => {
   return useQuery({
     queryKey: ['health-data-analytics-stats'],
     queryFn: fetchStats,
+  })
+}
+
+export const useHealthDataCompletionAnalytics = () => {
+  return useQuery({
+    queryKey: ['health-data-completion-stats'],
+    queryFn: async () => {
+      const { data } = await baseAxios.get<{
+        fathers: number
+        mothers: number
+        children: number
+      }>(API.healthDataCompletionAnalytics)
+      return data
+    },
   })
 }
 

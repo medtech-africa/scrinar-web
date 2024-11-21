@@ -70,7 +70,7 @@ const stressorOptions = [
 ]
 
 interface Props {
-  control: Control<ParentFormData, any, ParentFormData>
+  control: Control<ParentFormData, ParentFormData>
   errors: FieldErrors<ParentFormData>
   watch: UseFormWatch<ParentFormData>
 }
