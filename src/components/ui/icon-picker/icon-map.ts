@@ -62,4 +62,6 @@ export const IconMap: Map<string, string> = new Map([
   [Icons.eyeClose, 'EyeCloseIcon'],
   [Icons.pause, 'PauseIcon'],
   [Icons.playAudio, 'PlayAudioIcon'],
+  [Icons.sortAsc, 'SortAscIcon'],
+  [Icons.sortDesc, 'SortDescIcon'],
 ])

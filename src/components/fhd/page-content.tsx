@@ -32,7 +32,7 @@ type Props = {
   type: 'student' | 'mother' | 'father' | 'all' | 'household'
 }
 const FHDPageContent = ({ type }: Props) => {
-  const { search } = useFHDSharedData()
+  const { search, sort } = useFHDSharedData()
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
   )
@@ -45,7 +45,13 @@ const FHDPageContent = ({ type }: Props) => {
     data,
     isPending: isLoading,
     refetch,
-  } = useFamilyHealthData(currentPage, search, type === 'all' ? '' : type, 10)
+  } = useFamilyHealthData(
+    currentPage,
+    search,
+    type === 'all' ? '' : type,
+    10,
+    sort
+  )
   useSchoolChangeRefresh(refetch)
 
   const healthData = data?.data?.data

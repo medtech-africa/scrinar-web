@@ -12,6 +12,7 @@ import Link from 'next/link'
 import { useFHDSharedData } from '@/context/family-health-data-context'
 import DropDownMenuExportParents from './export/parent/drop-down-export-all'
 import DropDownMenuExportChildren from './export/children/drop-down-export-all'
+import SortBy from '@/components/sort-by'
 
 const FilterData = () => {
   return (
@@ -53,6 +54,7 @@ type FilterHeaderProps = {
   searchVal?: string
   loading?: boolean
   type: string
+  onSortChange: (val: string) => void
 }
 const FilterHeader = ({
   setOpenFilter: _,
@@ -61,22 +63,26 @@ const FilterHeader = ({
   searchVal,
   loading,
   type,
+  onSortChange,
 }: FilterHeaderProps) => {
   const [openExport, setOpenExport] = useState(false)
   const [openExportAll, setOpenExportAll] = useState(false)
 
   return (
     <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between items-center mt-2 border-y border-grey-50 mb-2">
-      <Input
-        leadingIcon={<IconPicker icon="search" />}
-        className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
-        placeholder="Search by Name, Gender or Age.."
-        full={false}
-        onChange={(e) => onSearchChange(e.target.value)}
-        endingIcon={
-          loading && searchVal && <IconPicker icon="loader2" size={20} />
-        }
-      />
+      <div>
+        <Input
+          leadingIcon={<IconPicker icon="search" />}
+          className="rounded-[49px] bg-grey-100 text-sm md:w-[17.25rem] w-[15rem]"
+          placeholder="Search by Name, Gender or Age.."
+          full={false}
+          onChange={(e) => onSearchChange(e.target.value)}
+          endingIcon={
+            loading && searchVal && <IconPicker icon="loader2" size={20} />
+          }
+        />
+        <SortBy onChange={onSortChange} />
+      </div>
       <div className="flex items-center gap-x-4 mt-2 md:mt-0">
         {/* @Todo:not time */}
         {/* <Button
@@ -138,7 +144,7 @@ export default function FamilyHealthDataLayout({
   const [openFilter, setOpenFilter] = useState(false)
 
   const [search, setSearch] = useDebouncedState('')
-  const { setSearch: setSearchContext } = useFHDSharedData()
+  const { setSearch: setSearchContext, setSort } = useFHDSharedData()
 
   useEffect(() => {
     setSearchContext(search)
@@ -190,6 +196,7 @@ export default function FamilyHealthDataLayout({
             ? 'student'
             : type?.replace('s', '')
         }
+        onSortChange={setSort}
       />
       {openFilter && <FilterData />}
 

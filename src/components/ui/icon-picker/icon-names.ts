@@ -61,6 +61,8 @@ export enum Icons {
   eyeOpen = 'eyeOpen',
   pause = 'pause',
   playAudio = 'playAudio',
+  sortAsc = 'sortAsc',
+  sortDesc = 'sortDesc',
 }
 
 export { Icons as IconNames }
