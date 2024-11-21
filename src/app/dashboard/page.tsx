@@ -29,6 +29,7 @@ import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-content'
 import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add-questionnaire'
 import { HealthDataBarStats } from '@/components/dashboard/HealthDataBarStats'
+import { HealthDataCompletionStats } from '@/components/dashboard/HealthDataCompletionStats'
 
 const dashboardStats = [
   {
@@ -308,7 +309,10 @@ export default function Home() {
           </ActionBlock>
         </section>
       </section>
-      <HealthDataBarStats />
+      <div className="grid gap-6">
+        <HealthDataBarStats />
+        <HealthDataCompletionStats />
+      </div>
       <Modal
         open={openModal}
         closeModal={() => setOpenModal(false)}

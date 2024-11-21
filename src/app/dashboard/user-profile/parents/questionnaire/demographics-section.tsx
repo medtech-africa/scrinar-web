@@ -25,7 +25,7 @@ import { Text } from '@/components/ui/text'
 import { convertStringToOption } from '@/lib/convertStringsToOptionArray'
 
 interface Props {
-  control: Control<ParentFormData, any, ParentFormData>
+  control: Control<ParentFormData, ParentFormData>
   errors: FieldErrors<ParentFormData>
   watch: UseFormWatch<ParentFormData>
   fields: FieldArrayWithId<ParentFormData, 'children', 'id'>[]

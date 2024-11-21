@@ -108,5 +108,7 @@ export const API = {
 
   // analytics
   healthDataAnalytics: 
-    `${BASE_URL}/api/v1/analytics/health-data/category-data`,
+  `${BASE_URL}/api/v1/analytics/health-data/category-data`,
+  healthDataCompletionAnalytics: 
+    `${BASE_URL}/api/v1/analytics/health-data/data-with-completion`,
 }
