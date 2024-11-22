@@ -32,7 +32,7 @@ const getData = (percent = 0) => {
     {
       value: percent,
       color: percent >= 80 ? '#12B76A' : '#E38627',
-      title: `${percent}%`,
+      title: percent ? `${percent}%` : '-',
     },
     { value: 100 - percent, color: '#F2F4F7' },
   ]
