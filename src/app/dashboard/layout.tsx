@@ -15,6 +15,7 @@ import useHealthData, {
 import useParents from '@/hooks/queries/useParents'
 import useStudents from '@/hooks/queries/useStudents'
 import useScreenings from '@/hooks/queries/useScreenings'
+import { useSyncLocalStorage } from '@/hooks/useSyncLocalStorage'
 
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const [sideOpen, sideToggleOpen] = useState(false)
@@ -31,6 +32,8 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
   useFamilyHealthData(1, '', 'student', 10)
   useStudents(1, '', '')
   useScreenings(1)
+
+  useSyncLocalStorage()
 
   return (
     <>

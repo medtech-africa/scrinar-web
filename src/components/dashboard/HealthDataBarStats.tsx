@@ -95,15 +95,15 @@ export function HealthDataBarStats() {
       <Text className="text-grey-700" variant="text/md" weight="medium">
         Health Data entered per day grouped by user type
       </Text>
-      <ResizableBox width={width * 0.7}>
-        <Example data={data || []} />
+      <ResizableBox width={width * 0.6}>
+        <StackedBarChart data={data || []} />
       </ResizableBox>
       {/* <BarStacked data={data || []} /> */}
     </div>
   )
 }
 
-const Example = ({ data }: { data: HealthDataAnalyticsType[] }) => {
+const StackedBarChart = ({ data }: { data: HealthDataAnalyticsType[] }) => {
   const dataWithTotal = data.map((v) => ({
     ...v,
     total: v.children + v.fathers + v.mothers,
