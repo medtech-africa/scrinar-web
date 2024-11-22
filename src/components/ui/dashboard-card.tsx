@@ -50,7 +50,7 @@ const DashboardCardHeader = React.forwardRef<
       <div className="text-gray-900 text-2xl font-bold leading-loose">
         {title}
       </div>
-      <div className="text-gray-500 text-[10px] font-medium leading-[10px]">
+      <div className="text-gray-500 text-xs font-medium leading-[10px]">
         {subtitle}
       </div>
     </div>

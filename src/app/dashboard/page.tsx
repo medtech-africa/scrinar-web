@@ -35,7 +35,7 @@ const dashboardStats = [
   {
     title: 'Total Users',
     icon: 'profile2User' as IconNames,
-    count: 'totalCount',
+    count: 'totalCount' as const,
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',
@@ -45,7 +45,7 @@ const dashboardStats = [
   {
     title: 'Children',
     icon: 'profile2User' as IconNames,
-    count: 'childrenCount',
+    count: 'childrenCount' as const,
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',
@@ -56,7 +56,7 @@ const dashboardStats = [
   {
     title: 'Fathers',
     icon: 'profile2User' as IconNames,
-    count: 'fatherCount',
+    count: 'fatherCount' as const,
     avatars: [
       'https://i.pravatar.cc/300',
       'https://i.pravatar.cc/100',
@@ -67,7 +67,7 @@ const dashboardStats = [
   {
     title: 'Mothers',
     icon: 'profile2User' as IconNames,
-    count: 'motherCount',
+    count: 'motherCount' as const,
     avatars: [
       'https://i.pravatar.cc/300',
       'https://i.pravatar.cc/100',
@@ -78,13 +78,24 @@ const dashboardStats = [
   {
     title: 'Health Data',
     icon: 'health' as IconNames,
-    count: 'healthDataCount',
+    count: 'healthDataCount' as const,
     avatars: [
       'https://i.pravatar.cc/100',
       'https://i.pravatar.cc/200',
       'https://i.pravatar.cc/60',
     ],
     slug: '/health-data',
+  },
+  {
+    title: 'House holds',
+    icon: 'eclise' as IconNames,
+    count: 'totalUniqueFamilies' as const,
+    avatars: [
+      'https://i.pravatar.cc/100x100',
+      'https://i.pravatar.cc/200x100',
+      'https://i.pravatar.cc/300x400',
+    ],
+    slug: '/family-health-data/household',
   },
 ]
 
@@ -150,6 +161,20 @@ export default function Home() {
     return null
   }
 
+  const getCardTitle = (count: (typeof dashboardStats)[number]['count']) => {
+    if (count === 'totalCount') {
+      if (data?.childrenCount) {
+        const totalCount =
+          data?.childrenCount + data?.fatherCount + data?.motherCount
+        return String(totalCount)
+      } else {
+        return '..'
+      }
+    }
+
+    return data?.[count] ? String(data?.[count]) : '..'
+  }
+
   return (
     <div className="text-grey-900">
       <section className="pb-4">
@@ -174,15 +199,7 @@ export default function Home() {
               return (
                 <DashboardCard className="w-ful relative" key={_}>
                   <DashboardCardHeader
-                    title={
-                      stat.count === 'totalCount'
-                        ? data?.childrenCount
-                          ? data?.childrenCount +
-                            data?.fatherCount +
-                            data?.motherCount
-                          : '..'
-                        : data?.[stat.count] ?? '..'
-                    }
+                    title={getCardTitle(stat.count)}
                     subtitle={stat.title}
                     icon={
                       <DashboardCardIcon
