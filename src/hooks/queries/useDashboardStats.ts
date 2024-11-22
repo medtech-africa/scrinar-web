@@ -3,7 +3,13 @@ import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 
 const fetchStats = async () => {
-  const { data } = await baseAxios.get(API.householdStats)
+  const { data } = await baseAxios.get<{
+    fatherCount: number;
+    motherCount: number;
+    childrenCount: number;
+    healthDataCount: number;
+    totalUniqueFamilies: number;
+  }>(API.householdStats)
   return data
 }
 
