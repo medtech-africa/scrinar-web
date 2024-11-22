@@ -9,6 +9,9 @@ const fetchStats = async () => {
     childrenCount: number;
     healthDataCount: number;
     totalUniqueFamilies: number;
+    healthDataFatherCount: number;
+    healthDataMotherCount: number;
+    healthDataStudentCount: number;
   }>(API.householdStats)
   return data
 }

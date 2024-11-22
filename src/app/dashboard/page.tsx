@@ -76,6 +76,20 @@ const dashboardStats = [
     slug: '/family-health-data/mothers',
   },
   {
+    title: 'House holds',
+    icon: 'eclise' as IconNames,
+    count: 'totalUniqueFamilies' as const,
+    avatars: [
+      'https://i.pravatar.cc/100x100',
+      'https://i.pravatar.cc/200x100',
+      'https://i.pravatar.cc/300x400',
+    ],
+    slug: '/family-health-data/household',
+  },
+]
+
+const dashboardHealthDataStats = [
+  {
     title: 'Health Data',
     icon: 'health' as IconNames,
     count: 'healthDataCount' as const,
@@ -87,15 +101,37 @@ const dashboardStats = [
     slug: '/health-data',
   },
   {
-    title: 'House holds',
-    icon: 'eclise' as IconNames,
-    count: 'totalUniqueFamilies' as const,
+    title: 'Children',
+    icon: 'profile2User' as IconNames,
+    count: 'healthDataStudentCount' as const,
     avatars: [
-      'https://i.pravatar.cc/100x100',
-      'https://i.pravatar.cc/200x100',
-      'https://i.pravatar.cc/300x400',
+      'https://i.pravatar.cc/100',
+      'https://i.pravatar.cc/200',
+      'https://i.pravatar.cc/60',
     ],
-    slug: '/family-health-data/household',
+    slug: '/family-health-data/students',
+  },
+  {
+    title: 'Fathers',
+    icon: 'profile2User' as IconNames,
+    count: 'healthDataFatherCount' as const,
+    avatars: [
+      'https://i.pravatar.cc/300',
+      'https://i.pravatar.cc/100',
+      'https://i.pravatar.cc/50',
+    ],
+    slug: '/family-health-data/fathers',
+  },
+  {
+    title: 'Mothers',
+    icon: 'profile2User' as IconNames,
+    count: 'healthDataMotherCount' as const,
+    avatars: [
+      'https://i.pravatar.cc/300',
+      'https://i.pravatar.cc/100',
+      'https://i.pravatar.cc/50',
+    ],
+    slug: '/family-health-data/mothers',
   },
 ]
 
@@ -161,7 +197,9 @@ export default function Home() {
     return null
   }
 
-  const getCardTitle = (count: (typeof dashboardStats)[number]['count']) => {
+  const totalStats = [...dashboardStats, ...dashboardHealthDataStats]
+
+  const getCardTitle = (count: (typeof totalStats)[number]['count']) => {
     if (count === 'totalCount') {
       if (data?.childrenCount) {
         const totalCount =
@@ -187,81 +225,85 @@ export default function Home() {
         </Text>
       </section>
       <section className="grid lg:grid-cols-[2.5fr_1fr] gap-6 mt-2.2 py-5">
-        <section>
-          <div className="lg:grid-cols-3 flex flex-wrap gap-4 mb-6 sm:grid-cols-1 justify-center sm:justify-start">
-            {dashboardStats.map((stat, _) => {
-              const statColor =
-                stat.icon === 'health'
-                  ? 'lust'
-                  : stat.icon === 'teacher'
-                    ? 'green'
-                    : 'iris'
-              return (
-                <DashboardCard className="w-ful relative" key={_}>
-                  <DashboardCardHeader
-                    title={getCardTitle(stat.count)}
-                    subtitle={stat.title}
-                    icon={
-                      <DashboardCardIcon
-                        className={cn(`bg-${statColor}-50`)}
-                        style={{ borderColor: colors[statColor][100] }}
-                      >
-                        <IconPicker
-                          icon={stat.icon}
-                          size="1.5rem"
-                          className={cn(`text-${statColor}-900`)}
+        <div className="">
+          <section>
+            <Text className="text-grey-700" variant="text/md" weight="medium">
+              Users
+            </Text>
+            <div className="lg:grid-cols-3 flex flex-wrap gap-4 mb-6 sm:grid-cols-1 justify-center sm:justify-start">
+              {dashboardStats.map((stat, _) => {
+                const statColor =
+                  stat.icon === 'health'
+                    ? 'lust'
+                    : stat.icon === 'teacher'
+                      ? 'green'
+                      : 'iris'
+                return (
+                  <DashboardCard className="w-ful relative" key={_}>
+                    <DashboardCardHeader
+                      title={getCardTitle(stat.count)}
+                      subtitle={stat.title}
+                      icon={
+                        <DashboardCardIcon
+                          className={cn(`bg-${statColor}-50`)}
+                          style={{ borderColor: colors[statColor][100] }}
+                        >
+                          <IconPicker
+                            icon={stat.icon}
+                            size="1.5rem"
+                            className={cn(`text-${statColor}-900`)}
+                          />
+                        </DashboardCardIcon>
+                      }
+                    />
+                    <DashboardCardDivider />
+                    <DashboardCardFooter>
+                      <div className="justify-start items-start flex">
+                        <DashboardCardAvatar
+                          src="https://i.pravatar.cc/100"
+                          background="bg-rose-100"
+                          border="border-rose-200"
                         />
-                      </DashboardCardIcon>
-                    }
-                  />
-                  <DashboardCardDivider />
-                  <DashboardCardFooter>
-                    <div className="justify-start items-start flex">
-                      <DashboardCardAvatar
-                        src="https://i.pravatar.cc/100"
-                        background="bg-rose-100"
-                        border="border-rose-200"
-                      />
-                      <DashboardCardAvatar
-                        className="-ml-1.2"
-                        src="https://i.pravatar.cc/200"
-                        background="bg-violet-100"
-                        border="border-violet-200"
-                      />
-                      <DashboardCardAvatar
-                        className="-ml-1.2"
-                        src="https://i.pravatar.cc/60"
-                        background="bg-emerald-50"
-                        border="border-emerald-100"
-                      />
+                        <DashboardCardAvatar
+                          className="-ml-1.2"
+                          src="https://i.pravatar.cc/200"
+                          background="bg-violet-100"
+                          border="border-violet-200"
+                        />
+                        <DashboardCardAvatar
+                          className="-ml-1.2"
+                          src="https://i.pravatar.cc/60"
+                          background="bg-emerald-50"
+                          border="border-emerald-100"
+                        />
 
-                      <DashboardCardAvatar
-                        className="-ml-1.2"
-                        background="bg-emerald-50"
-                        border="border-emerald-100"
-                      >
-                        <div className="left-[13px] top-[10px] absolute text-slate-800 text-[10px] font-bold leading-[10px]">
-                          +
-                        </div>
-                      </DashboardCardAvatar>
-                    </div>
-                    <div className="w-4 h-4 relative">
-                      <IconPicker
-                        icon="arrowOutward"
-                        className="text-grey-900"
-                      />
-                    </div>
-                  </DashboardCardFooter>
-                  {stat.slug && (
-                    <Link href={`/dashboard${stat.slug}`}>
-                      <span className="absolute inset-0" />
-                    </Link>
-                  )}
-                </DashboardCard>
-              )
-            })}
-          </div>
-          {/* <div className="grid md:grid-cols-[70%_30%] gap-6 p-4 border border-grey-100">
+                        <DashboardCardAvatar
+                          className="-ml-1.2"
+                          background="bg-emerald-50"
+                          border="border-emerald-100"
+                        >
+                          <div className="left-[13px] top-[10px] absolute text-slate-800 text-[10px] font-bold leading-[10px]">
+                            +
+                          </div>
+                        </DashboardCardAvatar>
+                      </div>
+                      <div className="w-4 h-4 relative">
+                        <IconPicker
+                          icon="arrowOutward"
+                          className="text-grey-900"
+                        />
+                      </div>
+                    </DashboardCardFooter>
+                    {stat.slug && (
+                      <Link href={`/dashboard${stat.slug}`}>
+                        <span className="absolute inset-0" />
+                      </Link>
+                    )}
+                  </DashboardCard>
+                )
+              })}
+            </div>
+            {/* <div className="grid md:grid-cols-[70%_30%] gap-6 p-4 border border-grey-100">
             <div>
               <Text variant="text/sm" className="mb-4 text-grey-500">
                 Ongoing Learning
@@ -287,7 +329,87 @@ export default function Home() {
               <DashboardProgress progress={40} />
             </div>
           </div> */}
-        </section>
+          </section>
+          <section>
+            <Text className="text-grey-700" variant="text/md" weight="medium">
+              Health data count
+            </Text>
+            <div className="lg:grid-cols-3 flex flex-wrap gap-4 mb-6 sm:grid-cols-1 justify-center sm:justify-start">
+              {dashboardHealthDataStats.map((stat, _) => {
+                const statColor =
+                  stat.icon === 'health'
+                    ? 'lust'
+                    : stat.icon === 'teacher'
+                      ? 'green'
+                      : 'iris'
+                return (
+                  <DashboardCard className="w-ful relative" key={_}>
+                    <DashboardCardHeader
+                      title={getCardTitle(stat.count)}
+                      subtitle={stat.title}
+                      icon={
+                        <DashboardCardIcon
+                          className={cn(`bg-${statColor}-50`)}
+                          style={{ borderColor: colors[statColor][100] }}
+                        >
+                          <IconPicker
+                            icon={stat.icon}
+                            size="1.5rem"
+                            className={cn(`text-${statColor}-900`)}
+                          />
+                        </DashboardCardIcon>
+                      }
+                    />
+                    <DashboardCardDivider />
+                    <DashboardCardFooter>
+                      <div className="justify-start items-start flex">
+                        <DashboardCardAvatar
+                          src="https://i.pravatar.cc/100"
+                          background="bg-rose-100"
+                          border="border-rose-200"
+                        />
+                        <DashboardCardAvatar
+                          className="-ml-1.2"
+                          src="https://i.pravatar.cc/200"
+                          background="bg-violet-100"
+                          border="border-violet-200"
+                        />
+                        <DashboardCardAvatar
+                          className="-ml-1.2"
+                          src="https://i.pravatar.cc/60"
+                          background="bg-emerald-50"
+                          border="border-emerald-100"
+                        />
+
+                        <DashboardCardAvatar
+                          className="-ml-1.2"
+                          background="bg-emerald-50"
+                          border="border-emerald-100"
+                        >
+                          <div className="left-[13px] top-[10px] absolute text-slate-800 text-[10px] font-bold leading-[10px]">
+                            +
+                          </div>
+                        </DashboardCardAvatar>
+                      </div>
+                      <div className="w-4 h-4 relative">
+                        <IconPicker
+                          icon="arrowOutward"
+                          className="text-grey-900"
+                        />
+                      </div>
+                    </DashboardCardFooter>
+                    {stat.slug && (
+                      <Link href={`/dashboard${stat.slug}`}>
+                        <span className="absolute inset-0" />
+                      </Link>
+                    )}
+                  </DashboardCard>
+                )
+              })}
+            </div>
+          </section>
+        </div>
+
         <section>
           <ActionBlock title="Quick Actions" className="mb-4">
             {actionData1.map((act, _) => (
