@@ -109,7 +109,7 @@ const Example = ({ data }: { data: HealthDataAnalyticsType[] }) => {
     total: v.children + v.fathers + v.mothers,
   }))
   const maxTotal = Math.max(...dataWithTotal.map((v) => v.total))
-  const tickCount = Math.ceil(maxTotal / 2) + 1
+  const tickCount = Math.ceil(maxTotal / 2) + 3
 
   return (
     <ResponsiveContainer width="100%" height="100%">
