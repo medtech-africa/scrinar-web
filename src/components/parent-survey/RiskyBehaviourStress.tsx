@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { feelingsOfstressOptions } from '@/types/studentsSurvey.types'
 import { useFormContext } from 'react-hook-form'
 import { OptionsWithOthersField } from '../student-survey/OptionWithOthersField'
+import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 
 const StressCausesForm = () => {
   const { register: customRegister, setValue } = useFormContext()
@@ -115,14 +116,14 @@ export const ParentSurveyRiskyBehaviourStress = () => {
               return { value: option, label: option }
             }
           )}
-          options={[
+          options={convertStringsToOptionArray([
             'Listen to them without interrupting',
             'Give them a hug or other comforting physical contact',
             'Talk to them about what’s bothering them',
             'Help them find a solution to their problem',
             'Give them space to calm down on their own',
             'Offer comfort through a favourite item (e.g., favourite food, etc)',
-          ]}
+          ])}
           onChange={(selectedOption: any) => {
             const value = selectedOption?.map((option: any) => option.value)
             setValue('riskyBehavior.thingsDoneToChildToEaseWorryUpset', value)
