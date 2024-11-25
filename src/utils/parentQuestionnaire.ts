@@ -188,6 +188,7 @@ export const formatQuestionnaireData = (data: any): Partial<ParentFormData> => {
   // Handle risky behavior section
   if (data.riskyBehavior) {
     formatted.riskyBehavior = {
+      // TODO remove. old data
       smokingRisks: data.riskyBehavior.smokingRisks ?? [],
       secondhandSmoking: createLabelValue(data.riskyBehavior.secondhandSmoking),
       checkupImportance: createLabelValue(data.riskyBehavior.checkupImportance),
@@ -195,6 +196,13 @@ export const formatQuestionnaireData = (data: any): Partial<ParentFormData> => {
       longTermStress: data.riskyBehavior.longTermStress ?? [],
       stressSigns: data.riskyBehavior.stressSigns ?? [],
       otherStressSigns: data.riskyBehavior.otherStressSigns ?? '',
+// end of TODO remove. old data
+
+      mentalHealthImportance: data.riskyBehavior.mentalHealthImportance ?? '',
+      stressCauses: data.riskyBehavior.stressCauses ?? '',
+      thingsDoneToChildToEaseWorryUpset: data.riskyBehavior.thingsDoneToChildToEaseWorryUpset ?? [],
+      feelingsOfstress: data.riskyBehavior.feelingsOfstress ?? '',
+      whenAdolescentsExposedToSmoking: data.riskyBehavior.whenAdolescentsExposedToSmoking ?? '',
     }
   }
 

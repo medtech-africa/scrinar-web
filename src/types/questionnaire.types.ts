@@ -89,6 +89,26 @@ export type ParentFormData = {
     suitableActivities: string[]
   }
   riskyBehavior: {
+    
+    mentalHealthImportance?: {
+      label: string
+      value: string
+    }
+    stressCauses?: {
+      label: string
+      value: string
+    }
+    thingsDoneToChildToEaseWorryUpset?: string[]
+    feelingsOfstress?: {
+      label: string
+      value: string
+    }
+    whenAdolescentsExposedToSmoking?: {
+      label: string
+      value: string
+    }
+
+    // TODO: old data. remove
     smokingRisks: string[]
     secondhandSmoking?: {
       label: string
@@ -98,6 +118,7 @@ export type ParentFormData = {
       label: string
       value: string
     }
+
     stressFactors: string[]
     longTermStress: string[]
     stressSigns: string[]
