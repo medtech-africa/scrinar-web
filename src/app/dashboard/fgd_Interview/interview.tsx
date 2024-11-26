@@ -1,5 +1,5 @@
 // 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import { IconPicker } from '@/components/ui/icon-picker'
 import {
   Table,
@@ -12,12 +12,10 @@ import {
 import TableLoader from '@/components/table-loader'
 import dynamic from 'next/dynamic'
 import { InterviewUploadButton } from '@/components/interviews/InterviewUploadButton'
-import { SchoolResource, useSchoolResources } from '@/hooks/queries/useSchools'
+import { useSchoolResources } from '@/hooks/queries/useSchools'
 import EmptyData from '@/components/empty-data'
 import { cn } from '@/lib/utils'
-import Modal from '@/components/ui/modal'
-// import Markdown from 'react-markdown'
-import { TextArea } from '@/components/ui/textarea'
+import { ViewTranscript } from '@/components/interviews/ViewTranscript'
 
 const Interview = () => {
   const CustomMediaRecorder = React.useMemo(
@@ -52,8 +50,6 @@ const Interview = () => {
   const filteredInterviews = interviews?.filter(
     (resource) => resource.type === 'interview'
   )
-
-  const [modalContent, setModalContent] = useState<SchoolResource | null>(null)
 
   return (
     <div className="w-full">
@@ -97,29 +93,8 @@ const Interview = () => {
                     </p>
                   </TableCell>
                   <TableCell>
-                    {resource.transcription ? (
-                      <a
-                        onClick={() => setModalContent(resource)}
-                        className="underline cursor-pointer"
-                      >
-                        view
-                      </a>
-                    ) : (
-                      '-'
-                    )}
+                    <ViewTranscript resource={resource} />
                   </TableCell>
-                  {/* <TableCell>
-                    {resource.translation ? (
-                      <a
-                        onClick={() => setModalContent(resource)}
-                        className="underline"
-                      >
-                        view
-                      </a>
-                    ) : (
-                      '-'
-                    )}
-                  </TableCell> */}
                   <TableCell>{resource?.fileType || resource?.type}</TableCell>
                   <TableCell>
                     <a
@@ -151,18 +126,6 @@ const Interview = () => {
           </TableBody>
         </Table>
         {filteredInterviews?.length === 0 && <EmptyData />}
-        <Modal
-          className="sm:w-3/4 sm:h-1/2 grid items-center justify-center"
-          open={!!modalContent}
-          closeModal={() => setModalContent(null)}
-        >
-          <div className="w-full">
-            <TextArea
-              defaultValue={modalContent?.transcription}
-              className="w-full min-h-96 md:min-w-[70vw]"
-            />
-          </div>
-        </Modal>
       </div>
     </div>
   )

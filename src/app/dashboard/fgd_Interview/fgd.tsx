@@ -1,5 +1,5 @@
 // 'use client'
-import React, { useState } from 'react'
+import React from 'react'
 import {
   Table,
   TableBody,
@@ -15,7 +15,7 @@ import EmptyData from '@/components/empty-data'
 import { cn } from '@/lib/utils'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { FGDUploadButton } from '@/components/interviews/fgdUploadButton'
-import Modal from '@/components/ui/modal'
+import { ViewTranscript } from '@/components/interviews/ViewTranscript'
 
 const FGD = () => {
   const CustomMediaRecorder = React.useMemo(
@@ -45,8 +45,6 @@ const FGD = () => {
 
   const { data: fgd, isPending: isLoading, refetch } = useSchoolResources()
   const filteredFgd = fgd?.filter((resource) => resource.type === 'fgd')
-
-  const [modalContent, setModalContent] = useState('')
 
   return (
     <div className="w-full">
@@ -86,24 +84,13 @@ const FGD = () => {
                   <TableCell>
                     {resource?.fileName}
                     <p className="text-grey-600">
-                      Uploaded by: {resource?.uploadedBy.name}
+                      Uploaded by: {resource?.uploadedBy?.name}
                     </p>
                   </TableCell>
                   <TableCell>
-                    {resource.transcription ? (
-                      <a
-                        onClick={() =>
-                          setModalContent(resource.transcription ?? '')
-                        }
-                        className="underline"
-                      >
-                        view
-                      </a>
-                    ) : (
-                      '-'
-                    )}
+                    <ViewTranscript resource={resource} />
                   </TableCell>
-                  <TableCell>
+                  {/* <TableCell>
                     {resource.translation ? (
                       <a
                         onClick={() =>
@@ -116,7 +103,7 @@ const FGD = () => {
                     ) : (
                       '-'
                     )}
-                  </TableCell>
+                  </TableCell> */}
                   <TableCell>{resource?.fileType || resource?.type}</TableCell>
                   <TableCell>
                     <a
@@ -148,14 +135,6 @@ const FGD = () => {
           </TableBody>
         </Table>
         {filteredFgd?.length === 0 && <EmptyData />}
-        <Modal
-          className="sm:w-1/2 sm:h-1/2 flex items-center justify-center"
-          open={!!modalContent}
-          closeModal={() => setModalContent('')}
-          // title={`${modalType}`}
-        >
-          <p className="">{modalContent}</p>
-        </Modal>
       </div>
     </div>
   )
