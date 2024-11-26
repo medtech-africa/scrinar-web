@@ -99,7 +99,7 @@ const AdminUpdate = ({ selectedImg = null as File | null }) => {
     let avatarUrlRes
     if (selectedImg) {
       setImageLoading(true)
-      avatarUrlRes = await uploadImage(selectedImg)
+      avatarUrlRes = await uploadImage({ file: selectedImg })
     }
     const dataToSend = {
       ...filteredData,
@@ -363,7 +363,7 @@ const InstructorUpdate = ({ selectedImg = null as File | null, id = '' }) => {
     let avatarUrlRes
     if (selectedImg) {
       setImageLoading(true)
-      avatarUrlRes = await uploadImage(selectedImg)
+      avatarUrlRes = await uploadImage({ file: selectedImg })
     }
     const dataToSend = {
       ...filteredData,

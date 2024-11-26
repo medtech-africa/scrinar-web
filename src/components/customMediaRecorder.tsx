@@ -17,6 +17,7 @@ import {
   convertStringsToOptionArray,
   convertStringToOption,
 } from '@/lib/convertStringsToOptionArray'
+import { UploadProgress } from './interviews/UploadProgress'
 
 const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
   const { startRecording, stopRecording, mediaBlobUrl, status, clearBlobUrl } =
@@ -34,6 +35,7 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
     handleSave: onSubmit,
     isSubmitting,
     isUploading,
+    uploadProgress,
   } = useSchoolResourceUpload()
 
   const closeModal = () => {
@@ -187,6 +189,7 @@ const CustomMediaRecorder = (props: { type: string; refetch: () => void }) => {
               </Button>
             )}
           </div>
+          <UploadProgress progress={uploadProgress} />
         </form>
       </Modal>
     </div>

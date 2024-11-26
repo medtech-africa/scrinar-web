@@ -9,6 +9,7 @@ import AudioModal from '@/components/interviews/InterviewModalContent/audioModal
 import TranscriptModal from '@/components/interviews/InterviewModalContent/transcriptModal'
 import FgdGuideModal from '@/components/interviews/InterviewModalContent/fgdGuideModal'
 import { useSchoolResourceUpload } from '@/hooks/useSchoolResource'
+import { UploadProgress } from './UploadProgress'
 
 enum ModalType {
   audio = 'Upload Audio',
@@ -41,6 +42,7 @@ export const FGDUploadButton = ({ refetch }: { refetch: () => void }) => {
     handleSave: onSave,
     isSubmitting,
     isUploading,
+    uploadProgress,
   } = useSchoolResourceUpload()
 
   const handleOptionClick = (option: string) => {
@@ -229,6 +231,7 @@ export const FGDUploadButton = ({ refetch }: { refetch: () => void }) => {
               isLoading={isUploading || isSubmitting}
             />
           )}
+          <UploadProgress progress={uploadProgress} />
         </form>
       </Modal>
     </div>
