@@ -75,7 +75,7 @@ export const AddRecordContent = () => {
     let avatarUrlRes
     if (selectedImg) {
       setImageLoading(true)
-      avatarUrlRes = await uploadImage(selectedImg)
+      avatarUrlRes = await uploadImage({ file: selectedImg })
     }
     const dataToSend = {
       ...filteredData,
@@ -305,6 +305,7 @@ export const AddRecordContent = () => {
                 ref={inputFile}
                 className="hidden"
                 accept="image/*"
+                title="profile picture"
               />
               <Text
                 variant="text/sm"

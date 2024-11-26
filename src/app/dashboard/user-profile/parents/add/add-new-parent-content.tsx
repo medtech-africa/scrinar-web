@@ -78,7 +78,7 @@ export const AddNewParentContent = () => {
     let avatarUrlRes
     if (selectedImg) {
       setImageLoading(true)
-      avatarUrlRes = await uploadImage(selectedImg)
+      avatarUrlRes = await uploadImage({ file: selectedImg })
     }
     const dataToSend = {
       ...filteredData,
