@@ -50,7 +50,7 @@ export const ScreeningQuestionsForm = () => {
         />
       </PageCard>
 
-      <PageCard title="Sleep Patterns">
+      <PageCard title="Sleep Patterns" bodyStyle="px-4 pb-4">
         {/* Sleep Patterns */}
         <OptionWithRadioField
           label="How many hours do you sleep per night on average?"

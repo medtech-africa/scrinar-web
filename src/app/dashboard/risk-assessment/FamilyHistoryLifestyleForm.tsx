@@ -59,7 +59,7 @@ export const FamilyHistoryLifestyleForm = () => {
       {/*  */}
       <PageCard
         title="Lifestyle & Habits"
-        bodyStyle="mt-4 gap-4 grid grid-cols-2"
+        bodyStyle="px-4 mt-4 gap-4 grid grid-cols-2"
       >
         {/* Tobacco Use */}
         <OptionWithRadioField
