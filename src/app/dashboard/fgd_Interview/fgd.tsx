@@ -66,7 +66,7 @@ const FGD = () => {
             <TableRow>
               <TableHead className="">Name</TableHead>
               <TableHead className="">Transcription</TableHead>
-              <TableHead className="">Translation</TableHead>
+              {/* <TableHead className="">Translation</TableHead> */}
               <TableHead className="">Type</TableHead>
               <TableHead className=""></TableHead>
               {/* <TableHead className="">Action</TableHead> */}
