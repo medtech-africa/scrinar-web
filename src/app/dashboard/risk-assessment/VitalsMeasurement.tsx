@@ -8,34 +8,19 @@ import {
   calculateBloodPressureRisk,
   categorizeBMIWHO2007,
   categorizeBloodSugarLevel,
-  categorizeHDLC,
-  categorizeLDLC,
-  categorizeTG,
-  categorizeTotalCholesterol,
 } from '@/utils/vitalCalculations'
 import { Label } from '@/components/ui/label'
 import { messageCheck, variantValidityCheck } from './utils'
 import isValidNumber from '@/utils/isValidNumber'
 
 export const VitalsMeasurement = () => {
-  const { control, getValues, setValue } = useFormContext()
+  const { control, watch, setValue } = useFormContext()
 
-  const { vitals = {} } = getValues()
-
-  const {
-    tg,
-    bmi,
-    gender,
-    age,
-    totalCholesterol,
-    hdlc,
-    ldlc,
-    bloodSugar,
-    sys,
-    dys,
-    height,
-    weight,
-  } = vitals
+  const { bmi, gender, age, bloodSugar, sys, dys, height, weight } = watch(
+    'vitals',
+    {}
+  )
+  console.log('🚀 ~ VitalsMeasurement ~ vitals:', watch('vitals'))
 
   useEffect(() => {
     if (isValidNumber(height) && isValidNumber(weight)) {
@@ -212,102 +197,6 @@ export const VitalsMeasurement = () => {
               <BadgeField
                 variant={categorizeBloodSugarLevel(Number(bloodSugar)).variant}
                 value={categorizeBloodSugarLevel(Number(bloodSugar)).message}
-                className="ml-2 mt-6"
-              />
-            )}
-          </div>
-        </PageCard>
-
-        <PageCard title="Cholesterol (mg/dL)" bodyStyle="p-4 mt-4">
-          <div className="grid grid-cols-[2fr_2fr] gap-2 items-baseline">
-            <Controller
-              name="vitals.totalCholesterol"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="170"
-                  label="TC"
-                  labelStyle="lg:text-sm text-xs"
-                  variant={variantValidityCheck(field.value)}
-                  message={messageCheck(field.value)}
-                />
-              )}
-            />
-            {totalCholesterol && (
-              <BadgeField
-                variant={
-                  categorizeTotalCholesterol(Number(totalCholesterol)).variant
-                }
-                value={
-                  categorizeTotalCholesterol(Number(totalCholesterol)).message
-                }
-                className="ml-2 mt-6"
-              />
-            )}
-
-            <Controller
-              name="vitals.ldlc"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="170"
-                  label="LDLC"
-                  labelStyle="lg:text-sm text-xs"
-                  variant={variantValidityCheck(field.value)}
-                  message={messageCheck(field.value)}
-                />
-              )}
-            />
-            {ldlc && (
-              <BadgeField
-                variant={categorizeLDLC(Number(ldlc)).variant}
-                value={categorizeLDLC(Number(ldlc)).message}
-                className="ml-2 mt-6"
-              />
-            )}
-
-            <Controller
-              name="vitals.hdlc"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="170"
-                  label="HDLC"
-                  labelStyle="lg:text-sm text-xs"
-                  variant={variantValidityCheck(field.value)}
-                  message={messageCheck(field.value)}
-                />
-              )}
-            />
-            {hdlc && (
-              <BadgeField
-                variant={categorizeHDLC(Number(hdlc)).variant}
-                value={categorizeHDLC(Number(hdlc)).message}
-                className="ml-2 mt-6"
-              />
-            )}
-
-            <Controller
-              name="vitals.tg"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="170"
-                  label="TG"
-                  labelStyle="lg:text-sm text-xs"
-                  variant={variantValidityCheck(field.value)}
-                  message={messageCheck(field.value)}
-                />
-              )}
-            />
-            {tg && (
-              <BadgeField
-                variant={categorizeTG(Number(tg)).variant}
-                value={categorizeTG(Number(tg)).message}
                 className="ml-2 mt-6"
               />
             )}
