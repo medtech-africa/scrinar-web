@@ -58,7 +58,13 @@ const generalData = [
     title: 'Dashboard',
     icon: 'grid7',
     href: '',
-    roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
+    roles: [
+      'school',
+      'instructor',
+      'play4health_admin',
+      'super_admin',
+      'jica_researchers',
+    ],
   },
   {
     title: 'Interviews',
@@ -70,6 +76,7 @@ const generalData = [
       'play4health_admin',
       'super_admin',
       'jica_enumerators',
+      'jica_researchers',
     ],
   },
   // {
@@ -88,6 +95,7 @@ const generalData = [
       'play4health_admin',
       'super_admin',
       'jica_enumerators',
+      'jica_researchers',
     ],
   },
   // {
