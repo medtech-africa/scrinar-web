@@ -198,7 +198,7 @@ const config: Config = {
     require('tailwindcss-animate'),
     plugin(function ({ theme, addComponents }) {
       const focusOutset = {
-        'box-shadow': `0px 0px 0px 4px ${theme(
+        'box-shadow': `0px 0px 0px 1px ${theme(
           'colors.lust[50]'
         )}, 0px 1px 2px 0px rgba(16, 24, 40, 0.05)`,
       }

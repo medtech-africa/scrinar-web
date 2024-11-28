@@ -79,6 +79,19 @@ const generalData = [
       'jica_researchers',
     ],
   },
+  {
+    title: 'Risk assessment',
+    icon: 'grid7',
+    href: 'risk-assessment',
+    roles: [
+      'school',
+      'instructor',
+      'play4health_admin',
+      'super_admin',
+      'jica_enumerators',
+      'jica_researchers',
+    ],
+  },
   // {
   //   title: 'Health Data',
   //   icon: 'health',
