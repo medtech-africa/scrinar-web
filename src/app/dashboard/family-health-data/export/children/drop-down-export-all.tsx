@@ -19,124 +19,138 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
   useClickAway(menuRef, () => (onClose ? onClose() : null))
 
   const { data, isLoading } = useExportStudentQuestionnaire()
-
   // Formatted Data Structure
   const formattedData = useMemo(
     () =>
-      data?.map((studentData: any) => ({
-        // Basic Information
-        userId: studentData?.student?.id,
-        fullName: studentData?.student?.fullName,
-        age: studentData?.student?.age,
-        gender: studentData?.student?.gender,
-        ethnicity: studentData?.ethnicity,
-        religion: studentData?.religion,
-        classLevel: studentData?.classLevel,
-        distanceToSchool: studentData?.distanceToSchool,
-        yearsAtSchool: studentData?.yearsAtSchool,
-        communityName: studentData?.communityName,
-        numberOfChildren: studentData?.numberOfChildren,
-        siblingPosition: studentData?.siblingPosition,
-        fatherOccupation: studentData?.fatherOccupation,
-        motherOccupation: studentData?.motherOccupation,
-        livingSituation: studentData?.livingSituation,
-        healthProblems: studentData?.healthProblems,
-        healthStatus: studentData?.healthStatus,
+      data?.map((studentData: any) => {
+        const latestHealthData = studentData?.parent?.latestHealthData ?? {}
 
-        // Diet and Nutrition
-        balancedDietImportance: studentData?.balancedDietImportance,
-        eatingHealthyFoods: studentData?.eatingHealthyFoods,
-        snackPreference: studentData?.snackPreference,
-        fruitsVegetables: studentData?.fruitsVegetables,
-        snacksConsumption: studentData?.snacksConsumption,
-        sugaryBeverages: studentData?.sugaryBeverages,
-        dietConsequence: studentData?.dietConsequence,
-        carbExamples: studentData?.carbExamples?.join(', '),
-        proteinExamples: studentData?.proteinExamples?.join(', '),
-        fatExamples: studentData?.fatExamples?.join(', '),
-        vitaminExamples: studentData?.vitaminExamples?.join(', '),
-        sweetsEffect: studentData?.sweetsEffect,
-        saltyFoodEffect: studentData?.saltyFoodEffect,
+        return {
+          // Basic Information
+          userId: studentData?.student?.id,
+          fullName: studentData?.student?.fullName,
+          age: studentData?.student?.age,
+          gender: studentData?.student?.gender,
+          ethnicity: studentData?.ethnicity,
+          religion: studentData?.religion,
+          classLevel: studentData?.classLevel,
+          distanceToSchool: studentData?.distanceToSchool,
+          yearsAtSchool: studentData?.yearsAtSchool,
+          communityName: studentData?.communityName,
+          numberOfChildren: studentData?.numberOfChildren,
+          siblingPosition: studentData?.siblingPosition,
+          fatherOccupation: studentData?.fatherOccupation,
+          motherOccupation: studentData?.motherOccupation,
+          livingSituation: studentData?.livingSituation,
+          healthProblems: studentData?.healthProblems,
+          healthStatus: studentData?.healthStatus,
 
-        // Physical Activity
-        physicalActivity: studentData?.physicalActivity,
-        physicalActivityDuration: studentData?.physicalActivityDuration,
-        physicalActivityTypes: studentData?.physicalActivityTypes?.join(', '),
-        regularPhysicalActivity: studentData?.regularPhysicalActivity,
-        barriersToPhysicalActivity:
-          studentData?.barriersToPhysicalActivity?.join(', '),
-        importanceOfPhysicalActivity: studentData?.importanceOfPhysicalActivity,
-        activityBenefits: studentData?.activityBenefits,
-        exerciseActivities: studentData?.exerciseActivities?.join(', '),
-        houseChoresFrequency: studentData?.houseChoresFrequency,
-        houseChoresTypes: studentData?.houseChoresTypes?.join(', '),
-        outsidePhysicalActivitiesFrequency:
-          studentData?.outsidePhysicalActivitiesFrequency,
-        averageHoursOnMobileGamesComputerInternetDaily:
-          studentData?.averageHoursOnMobileGamesComputerInternetDaily,
-        averageHoursOnTelevisionDaily:
-          studentData?.averageHoursOnTelevisionDaily,
-        timeYouSleep: studentData?.timeYouSleep,
-        timeYouWake: studentData?.timeYouWake,
+          // health data
+          bmi: latestHealthData?.bmi,
+          height: latestHealthData?.height,
+          weight: latestHealthData?.weight,
+          pulse: latestHealthData?.pulse,
+          waist: latestHealthData?.waist,
+          bloodPressure: latestHealthData?.bloodPressure,
+          // cholesterol: data?.cholesterol?.totalCholeterol,
+          glucoseLevel: latestHealthData?.glucoseLevel,
 
-        // Gender and Activities
-        shouldBoysGirlsDoSameSports: studentData?.shouldBoysGirlsDoSameSports,
-        suitableActivitiesForBoys: studentData?.suitableActivitiesForBoys,
-        suitableActivitiesForGirls: studentData?.suitableActivitiesForGirls,
-        sameTypesOfSportsAndActivities:
-          studentData?.sameTypesOfSportsAndActivities,
-        timeForPhysicalActivities: studentData?.timeForPhysicalActivities,
-        moreOpportunitiesOutsideHouseChores:
-          studentData?.moreOpportunitiesOutsideHouseChores,
+          // Diet and Nutrition
+          balancedDietImportance: studentData?.balancedDietImportance,
+          eatingHealthyFoods: studentData?.eatingHealthyFoods,
+          snackPreference: studentData?.snackPreference,
+          fruitsVegetables: studentData?.fruitsVegetables,
+          snacksConsumption: studentData?.snacksConsumption,
+          sugaryBeverages: studentData?.sugaryBeverages,
+          dietConsequence: studentData?.dietConsequence,
+          carbExamples: studentData?.carbExamples?.join(', '),
+          proteinExamples: studentData?.proteinExamples?.join(', '),
+          fatExamples: studentData?.fatExamples?.join(', '),
+          vitaminExamples: studentData?.vitaminExamples?.join(', '),
+          sweetsEffect: studentData?.sweetsEffect,
+          saltyFoodEffect: studentData?.saltyFoodEffect,
 
-        // Health Knowledge
-        doYouKnowNCD: studentData?.doYouKnowNCD?.join(', '),
-        ageGroupAtRiskOfNcd: studentData?.ageGroupAtRiskOfNcd,
-        doYouKnowHighBloodPressure: studentData?.doYouKnowHighBloodPressure,
-        doYouKnowDiabetes: studentData?.doYouKnowDiabetes,
-        doYouKnowObesity: studentData?.doYouKnowObesity,
-        howPreventGettingNcd: studentData?.howPreventGettingNcd,
-        anyFamilyMemberWithNcd: studentData?.anyFamilyMemberWithNcd,
+          // Physical Activity
+          physicalActivity: studentData?.physicalActivity,
+          physicalActivityDuration: studentData?.physicalActivityDuration,
+          physicalActivityTypes: studentData?.physicalActivityTypes?.join(', '),
+          regularPhysicalActivity: studentData?.regularPhysicalActivity,
+          barriersToPhysicalActivity:
+            studentData?.barriersToPhysicalActivity?.join(', '),
+          importanceOfPhysicalActivity:
+            studentData?.importanceOfPhysicalActivity,
+          activityBenefits: studentData?.activityBenefits,
+          exerciseActivities: studentData?.exerciseActivities?.join(', '),
+          houseChoresFrequency: studentData?.houseChoresFrequency,
+          houseChoresTypes: studentData?.houseChoresTypes?.join(', '),
+          outsidePhysicalActivitiesFrequency:
+            studentData?.outsidePhysicalActivitiesFrequency,
+          averageHoursOnMobileGamesComputerInternetDaily:
+            studentData?.averageHoursOnMobileGamesComputerInternetDaily,
+          averageHoursOnTelevisionDaily:
+            studentData?.averageHoursOnTelevisionDaily,
+          timeYouSleep: studentData?.timeYouSleep,
+          timeYouWake: studentData?.timeYouWake,
 
-        // Mental Health and Stress
-        mentalHealthImportance: studentData?.mentalHealthImportance,
-        stressCauses: studentData?.stressCauses?.join(', '),
-        feelingsOfstress: studentData?.feelingsOfstress,
-        stressSigns: studentData?.stressSigns,
-        makesFeelBetter: studentData?.makesFeelBetter?.join(', '),
-        stressors: studentData?.stressors?.join(', '),
+          // Gender and Activities
+          shouldBoysGirlsDoSameSports: studentData?.shouldBoysGirlsDoSameSports,
+          suitableActivitiesForBoys: studentData?.suitableActivitiesForBoys,
+          suitableActivitiesForGirls: studentData?.suitableActivitiesForGirls,
+          sameTypesOfSportsAndActivities:
+            studentData?.sameTypesOfSportsAndActivities,
+          timeForPhysicalActivities: studentData?.timeForPhysicalActivities,
+          moreOpportunitiesOutsideHouseChores:
+            studentData?.moreOpportunitiesOutsideHouseChores,
 
-        // Risk Behaviors
-        everSmoked: studentData?.everSmoked,
-        currentSmoking: studentData?.currentSmoking,
-        everTakenAlcohol: studentData?.everTakenAlcohol,
-        currentAlcohol: studentData?.currentAlcohol,
-        smokingRisks: studentData?.smokingRisks?.join(', '),
-        alcoholRisks: studentData?.alcoholRisks?.join(', '),
-        thoughtsOnSubstances: studentData?.thoughtsOnSubstances,
+          // Health Knowledge
+          doYouKnowNCD: studentData?.doYouKnowNCD?.join(', '),
+          ageGroupAtRiskOfNcd: studentData?.ageGroupAtRiskOfNcd,
+          doYouKnowHighBloodPressure: studentData?.doYouKnowHighBloodPressure,
+          doYouKnowDiabetes: studentData?.doYouKnowDiabetes,
+          doYouKnowObesity: studentData?.doYouKnowObesity,
+          howPreventGettingNcd: studentData?.howPreventGettingNcd,
+          anyFamilyMemberWithNcd: studentData?.anyFamilyMemberWithNcd,
 
-        // HPV and Health Services
-        hpvVaccine: studentData?.hpvVaccine,
-        ideaOfHpvVaccine: studentData?.ideaOfHpvVaccine,
-        ideaOfHpvVaccineSource: studentData?.ideaOfHpvVaccineSource,
-        hadHpvVaccine: studentData?.hadHpvVaccine,
-        willingToReceiveHpvVaccine: studentData?.willingToReceiveHpvVaccine,
-        healthCheckupsImportance: studentData?.healthCheckupsImportance,
-        benefitsOfRegularHealthCheckups:
-          studentData?.benefitsOfRegularHealthCheckups,
-        doctorVisitFrequency: studentData?.doctorVisitFrequency,
-        someoneToTalkToAboutHealth: studentData?.someoneToTalkToAboutHealth,
+          // Mental Health and Stress
+          mentalHealthImportance: studentData?.mentalHealthImportance,
+          stressCauses: studentData?.stressCauses?.join(', '),
+          feelingsOfstress: studentData?.feelingsOfstress,
+          stressSigns: studentData?.stressSigns,
+          makesFeelBetter: studentData?.makesFeelBetter?.join(', '),
+          stressors: studentData?.stressors?.join(', '),
 
-        // Water and Hygiene
-        sourcesOfWaterAtHome: studentData?.sourcesOfWaterAtHome?.join(', '),
-        waterTreatmentMethodAtHome:
-          studentData?.waterTreatmentMethodAtHome?.join(', '),
-        toiletFacility: studentData?.toiletFacility,
-        facilityUsedToWashHand: studentData?.facilityUsedToWashHand,
-        didYouCleanHandAfterLastToiletUsage:
-          studentData?.didYouCleanHandAfterLastToiletUsage,
-        whatWasUsedToWashHand: studentData?.whatWasUsedToWashHand,
-      })),
+          // Risk Behaviors
+          everSmoked: studentData?.everSmoked,
+          currentSmoking: studentData?.currentSmoking,
+          everTakenAlcohol: studentData?.everTakenAlcohol,
+          currentAlcohol: studentData?.currentAlcohol,
+          smokingRisks: studentData?.smokingRisks?.join(', '),
+          alcoholRisks: studentData?.alcoholRisks?.join(', '),
+          thoughtsOnSubstances: studentData?.thoughtsOnSubstances,
+
+          // HPV and Health Services
+          hpvVaccine: studentData?.hpvVaccine,
+          ideaOfHpvVaccine: studentData?.ideaOfHpvVaccine,
+          ideaOfHpvVaccineSource: studentData?.ideaOfHpvVaccineSource,
+          hadHpvVaccine: studentData?.hadHpvVaccine,
+          willingToReceiveHpvVaccine: studentData?.willingToReceiveHpvVaccine,
+          healthCheckupsImportance: studentData?.healthCheckupsImportance,
+          benefitsOfRegularHealthCheckups:
+            studentData?.benefitsOfRegularHealthCheckups,
+          doctorVisitFrequency: studentData?.doctorVisitFrequency,
+          someoneToTalkToAboutHealth: studentData?.someoneToTalkToAboutHealth,
+
+          // Water and Hygiene
+          sourcesOfWaterAtHome: studentData?.sourcesOfWaterAtHome?.join(', '),
+          waterTreatmentMethodAtHome:
+            studentData?.waterTreatmentMethodAtHome?.join(', '),
+          toiletFacility: studentData?.toiletFacility,
+          facilityUsedToWashHand: studentData?.facilityUsedToWashHand,
+          didYouCleanHandAfterLastToiletUsage:
+            studentData?.didYouCleanHandAfterLastToiletUsage,
+          whatWasUsedToWashHand: studentData?.whatWasUsedToWashHand,
+        }
+      }),
     [data]
   )
   return (
