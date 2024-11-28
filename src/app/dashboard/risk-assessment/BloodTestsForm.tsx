@@ -11,11 +11,13 @@ import {
   categorizeTG,
   categorizeTotalCholesterol,
 } from '@/utils/vitalCalculations'
+import { Text } from '@/components/ui/text'
 
 export const BloodTestsForm = () => {
   const { control, watch } = useFormContext()
 
-  const bloodSugar = watch('bloodTest.bloodSugar.random')
+  const bloodSugar1 = watch('bloodTest.bloodSugar.random')
+  const bloodSugar2 = watch('bloodTest.bloodSugar.fasting')
 
   const tg = watch('bloodTest.cholesterol.triglycerides')
   const hdlc = watch('bloodTest.cholesterol.hdl')
@@ -27,31 +29,34 @@ export const BloodTestsForm = () => {
       title="Blood tests (optional)"
       bodyStyle="px-4 pb-4 gap-4 grid grid-cols-2"
     >
-      <PageCard title="Blood Sugar Level (mg/dL)">
-        <div className="grid grid-cols-2 gap-4">
-          <div className="grid grid-cols-[2fr_1fr] items-center">
-            <Controller
-              name="bloodTest.bloodSugar.random"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="Enter Random Blood Sugar Level"
-                  label="Random Blood Sugar"
-                  labelStyle="lg:text-sm text-xs"
-                  variant={variantValidityCheck(field.value)}
-                  message={messageCheck(field.value)}
-                />
-              )}
-            />
-            {bloodSugar && (
-              <BadgeField
-                variant={categorizeBloodSugarLevel(Number(bloodSugar)).variant}
-                value={categorizeBloodSugarLevel(Number(bloodSugar)).message}
-                className="ml-2 mt-6"
+      <PageCard title="Blood Sugar Level (mg/dL)" bodyStyle="space-y-1 px-2">
+        <Text>
+          Optional but recommended, especially for people with Diabetes
+        </Text>
+        <div className="grid grid-cols-[2fr_1fr] items-center">
+          <Controller
+            name="bloodTest.bloodSugar.random"
+            control={control}
+            render={({ field }) => (
+              <Input
+                {...field}
+                placeholder="Enter Random Blood Sugar Level"
+                label="Random Blood Sugar"
+                labelStyle="lg:text-sm text-xs"
+                variant={variantValidityCheck(field.value)}
+                message={messageCheck(field.value)}
               />
             )}
-          </div>
+          />
+          {bloodSugar1 && (
+            <BadgeField
+              variant={categorizeBloodSugarLevel(Number(bloodSugar1)).variant}
+              value={categorizeBloodSugarLevel(Number(bloodSugar1)).message}
+              className="ml-2 mt-6"
+            />
+          )}
+        </div>
+        <div className="grid grid-cols-[2fr_1fr] items-center">
           <Controller
             name="bloodTest.bloodSugar.fasting"
             control={control}
@@ -66,10 +71,20 @@ export const BloodTestsForm = () => {
               />
             )}
           />
+          {bloodSugar2 && (
+            <BadgeField
+              variant={categorizeBloodSugarLevel(Number(bloodSugar2)).variant}
+              value={categorizeBloodSugarLevel(Number(bloodSugar2)).message}
+              className="ml-2 mt-6"
+            />
+          )}
         </div>
       </PageCard>
 
-      <PageCard title="Blood Cholesterol Level (Most Recent Lipid Profile)">
+      <PageCard
+        title="Blood Cholesterol Level (Most Recent Lipid Profile)"
+        bodyStyle="px-2"
+      >
         <div className="grid gap-4 grid-cols-2">
           <div className="grid grid-cols-[2fr_1fr] items-center">
             <Controller
@@ -175,7 +190,7 @@ export const BloodTestsForm = () => {
         </div>
       </PageCard>
 
-      <PageCard title="HbA1c (Glycated Hemoglobin)">
+      <PageCard title="HbA1c (Glycated Hemoglobin)" bodyStyle="px-2">
         <Controller
           name="bloodTest.hba1c.level"
           control={control}

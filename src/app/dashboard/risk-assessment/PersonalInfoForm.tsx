@@ -1,10 +1,12 @@
 import { Input } from '@/components/ui/input'
 import { PageCard } from '@/components/ui/page-card'
+import { Select } from '@/components/ui/select'
+import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 
 export const PersonalInfoForm = () => {
-  const { control } = useFormContext()
+  const { control, register, watch, setValue } = useFormContext()
   return (
     <PageCard
       title="Patient Bio Data"
@@ -38,18 +40,19 @@ export const PersonalInfoForm = () => {
         )}
       />
 
-      <Controller
-        name="personalInfo.gender"
-        control={control}
-        render={({ field }) => (
-          <Input
-            {...field}
-            type="text"
-            placeholder="Enter Gender"
-            label="Gender"
-            labelStyle="lg:text-sm text-xs"
-          />
-        )}
+      <Select
+        {...register('personalInfo.gender')}
+        label="Select Gender"
+        placeholder="Select Gender"
+        options={convertStringsToOptionArray(['Male', 'Female'])}
+        value={{
+          value: watch('personalInfo.gender'),
+          label: watch('personalInfo.gender'),
+        }}
+        onChange={(selectedOption: any) => {
+          const value = selectedOption.value
+          setValue('personalInfo.gender', value)
+        }}
       />
 
       <Controller
