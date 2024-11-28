@@ -18,6 +18,15 @@ export const csvHeaders = [
   { label: 'Health Problems', key: 'healthProblems' },
   { label: 'Health Status', key: 'healthStatus' },
 
+  //healthData
+  { label: 'BMI', key: 'bmi' },
+  { label: 'Height', key: 'height' },
+  { label: 'Weight', key: 'weight' },
+  { label: 'Pulse', key: 'pulse' },
+  { label: 'Waist', key: 'waist' },
+  { label: 'Blood pressure', key: 'bloodPressure' },
+  { label: 'Glucose level', key: 'glucoseLevel' },
+
   // Diet and Nutrition
   { label: 'Balanced Diet Importance', key: 'balancedDietImportance' },
   { label: 'Eating Healthy Foods', key: 'eatingHealthyFoods' },
