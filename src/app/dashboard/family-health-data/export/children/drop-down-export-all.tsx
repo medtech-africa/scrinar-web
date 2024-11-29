@@ -23,7 +23,7 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
   const formattedData = useMemo(
     () =>
       data?.map((studentData: any) => {
-        const latestHealthData = studentData?.parent?.latestHealthData ?? {}
+        const latestHealthData = studentData?.student?.latestHealthData ?? {}
 
         return {
           // Basic Information
