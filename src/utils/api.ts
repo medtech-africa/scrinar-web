@@ -128,8 +128,9 @@ export const API = {
     `${BASE_URL}/api/v1/students/${id}/questionnaire`,
 
   // analytics
-  healthDataAnalytics: 
-  `${BASE_URL}/api/v1/analytics/health-data/category-data`,
-  healthDataCompletionAnalytics: 
-    `${BASE_URL}/api/v1/analytics/health-data/data-with-completion`,
+  healthDataAnalytics: `${BASE_URL}/api/v1/analytics/health-data/category-data`,
+  healthDataCompletionAnalytics: `${BASE_URL}/api/v1/analytics/health-data/data-with-completion`,
+
+  // risk assessment
+  riskAssessment: `${BASE_URL}/api/v1/risk-assessment`,
 }
