@@ -58,6 +58,15 @@ export const RiskAssessmentForm = () => {
   })
 
   const handleSubmit = async (data: any) => {
+    const totalFields = 50
+    const filledFields = countFilledFields(data)
+
+    const filledPercentage = (filledFields / totalFields) * 100
+    if (filledPercentage < 60) {
+      toast.error('Please fill more data to analyze risk assessment')
+      return
+    }
+
     analyzeRisk(data)
   }
 
@@ -91,7 +100,6 @@ export const RiskAssessmentForm = () => {
               disabled={isPending}
               type="submit"
             />
-            <form />
           </div>
         </form>
 
@@ -117,4 +125,25 @@ export const RiskAssessmentForm = () => {
       </div>
     </FormProvider>
   )
+}
+
+const countFilledFields = (obj: any): number => {
+  let count = 0
+
+  const traverse = (value: any) => {
+    if (value === null || value === undefined || value === '') {
+      return
+    }
+
+    if (Array.isArray(value)) {
+      value.forEach((item) => traverse(item))
+    } else if (typeof value === 'object') {
+      Object.values(value).forEach((val) => traverse(val))
+    } else {
+      count++
+    }
+  }
+
+  traverse(obj)
+  return count
 }

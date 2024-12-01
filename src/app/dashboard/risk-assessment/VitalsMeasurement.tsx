@@ -15,7 +15,8 @@ import isValidNumber from '@/utils/isValidNumber'
 export const VitalsMeasurement = () => {
   const { control, watch, setValue } = useFormContext()
 
-  const { bmi, gender, age, sys, dys, height, weight } = watch('vitals', {})
+  const { bmi, age, sys, dys, height, weight } = watch('vitals', {})
+  const { gender } = watch('personalInfo', {})
   console.log('🚀 ~ VitalsMeasurement ~ vitals:', watch('vitals'))
 
   useEffect(() => {
@@ -74,6 +75,21 @@ export const VitalsMeasurement = () => {
                   {...field}
                   placeholder="0"
                   label="Waist(cm)"
+                  labelStyle="flex justify-center items-center"
+                  variant={variantValidityCheck(field.value)}
+                  message={messageCheck(field.value)}
+                />
+              )}
+            />
+          </div>
+          <div className="px-4 max-w-[50%]">
+            <Controller
+              name="vitals.age"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  label="Age"
                   labelStyle="flex justify-center items-center"
                   variant={variantValidityCheck(field.value)}
                   message={messageCheck(field.value)}

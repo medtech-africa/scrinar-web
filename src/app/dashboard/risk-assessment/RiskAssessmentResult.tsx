@@ -14,7 +14,7 @@ import {
 import { motion } from 'framer-motion'
 
 // Risk Gauge Component
-const RiskGauge = ({ manualRiskScore = 0 }) => {
+const RiskGauge = ({ manualRiskScore = 0, title = 'Risk Score' }) => {
   const COLORS = ['#22c55e', '#eab308', '#ef4444']
   const data = [
     { name: 'Risk', value: manualRiskScore },
@@ -27,8 +27,8 @@ const RiskGauge = ({ manualRiskScore = 0 }) => {
         <PieChart>
           <Pie
             data={data}
-            cx="80"
-            cy="80"
+            cx="50%"
+            cy="50%"
             startAngle={180}
             endAngle={0}
             innerRadius={60}
@@ -55,7 +55,7 @@ const RiskGauge = ({ manualRiskScore = 0 }) => {
       </ResponsiveContainer>
       <div className="text-center mt-4">
         <span className="text-2xl font-bold">{manualRiskScore}%</span>
-        <p className="text-gray-600">Risk Score</p>
+        <p className="text-gray-600">{title}</p>
       </div>
     </div>
   )
@@ -100,7 +100,7 @@ const RiskAssessmentResult = ({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
         <div className="bg-gray-50 p-6 rounded-lg">
           <h3 className="text-xl font-semibold mb-4">NCD Score</h3>
-          <RiskGauge manualRiskScore={Number(data.ncdScore)} />
+          <RiskGauge manualRiskScore={Number(data.ncdScore)} title="score" />
         </div>
 
         <div className="bg-gray-50 p-6 rounded-lg">
