@@ -14,10 +14,9 @@ import { API } from '@/utils/api'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { LoadingAnalysis } from './LoadingAnalysis'
-import { RiskAssessmentResult } from './RiskAssessmentResult'
 import { ConsentForm } from './ConsentForm'
-import { ProviderNotesForm } from './ProviderNotesForm'
-import { ReportActions } from './PDFReport'
+import { RiskAssessmentResult } from '@/components/risk-assessment/RiskAssessmentResult'
+import { ReportActions } from '@/components/risk-assessment/PDFReport'
 
 export const RiskAssessmentForm = () => {
   const [progress, setProgress] = useState(0)
@@ -109,8 +108,8 @@ export const RiskAssessmentForm = () => {
             {showResults && (
               <div className="bg-white p-8 rounded-lg w-full max-w-[70%] m-auto max-h-[90vh] overflow-y-auto">
                 <RiskAssessmentResult data={resultData?.data?.data} />
-                <ConsentForm />
-                <ProviderNotesForm />
+                <ConsentForm assessmentId={resultData?.data?.data?.id} />
+
                 <ReportActions
                   assessmentData={resultData?.data}
                   personalInfo={formMethods.watch('personalInfo')}

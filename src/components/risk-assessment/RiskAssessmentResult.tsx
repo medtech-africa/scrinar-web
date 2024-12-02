@@ -121,12 +121,12 @@ const RiskAssessmentResult = ({
 
       <div className="mt-8">
         <h3 className="text-xl font-semibold mb-4">Recommendations</h3>
-        <div className="bg-blue-50 p-6 rounded-lg">
+        <div className="bg-lust-100 p-6 rounded-lg">
           <ul className="space-y-3">
             {[data.followUpAction, data.lifestyleModification].map(
               (rec, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="text-blue-500 mr-2">•</span>
+                  <span className="text-primary mr-2">•</span>
                   <span>{rec}</span>
                 </li>
               )

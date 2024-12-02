@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import {
   PDFDownloadLink,
   Document,
@@ -10,6 +10,10 @@ import {
 import { Button } from '@/components/ui/button'
 import { IconPicker } from '@/components/ui/icon-picker'
 import toast from 'react-hot-toast'
+import { useFormContext } from 'react-hook-form'
+import { useMutation } from '@tanstack/react-query'
+import baseAxios from '@/utils/baseAxios'
+import { API } from '@/utils/api'
 
 // PDF Report Styles
 const styles = StyleSheet.create({
@@ -59,24 +63,55 @@ const PDFReport = ({ data, personalInfo }: any) => (
   </Document>
 )
 
-// Report Actions Component
-export const ReportActions = ({ assessmentData, personalInfo }: any) => {
-  const [isEmailSent, setIsEmailSent] = useState(false)
+const sendReportEmail = async ({ email, pdfUrl }: any) => {
+  return baseAxios.post(API.sendRiskAssessment, {
+    email,
+    pdfUrl,
+  })
+}
 
+// Report Actions Component
+export const ReportActions = ({
+  assessmentData,
+  personalInfo,
+  isFromEmail = false,
+}: any) => {
+  const [isEmailSent, setIsEmailSent] = useState(false)
+  const downloadLink = useRef<any>(null)
+
+  const formContext = useFormContext()
+
+  const consentAgreement =
+    formContext?.watch?.('consentAgreement') ?? isFromEmail
+  const reportEmail = formContext?.watch?.('reportEmail')
+
+  const { mutateAsync: sendEmailMutation } = useMutation({
+    mutationFn: sendReportEmail,
+    onSuccess: () => {
+      setIsEmailSent(true)
+      toast.success('Report sent successfully to ' + reportEmail)
+    },
+    onError: () => {
+      toast.error('Failed to send report email')
+    },
+  })
+
+  // Updated handleEmailReport function
   const handleEmailReport = async () => {
     try {
-      // Implement email sending logic here
-      //   await sendReportEmail(assessmentData)
-      setIsEmailSent(true)
-      toast.success('Report sent successfully')
+      await sendEmailMutation({
+        email: reportEmail,
+        pdfUrl: downloadLink.current.href,
+      })
     } catch (error) {
-      toast.error('Failed to send report')
+      console.error('Error sending report:', error)
     }
   }
 
   return (
     <div className="flex gap-4 mt-6">
       <PDFDownloadLink
+        ref={downloadLink}
         document={
           <PDFReport data={assessmentData} personalInfo={personalInfo} />
         }
@@ -86,7 +121,7 @@ export const ReportActions = ({ assessmentData, personalInfo }: any) => {
           (({ loading = false }) => (
             <Button
               variant="primary"
-              disabled={loading}
+              disabled={loading || !consentAgreement}
               leadingIcon={<IconPicker icon="document" />}
             >
               {loading ? 'Generating PDF...' : 'Download Report'}
@@ -95,14 +130,16 @@ export const ReportActions = ({ assessmentData, personalInfo }: any) => {
         }
       </PDFDownloadLink>
 
-      <Button
-        variant="secondary"
-        onClick={handleEmailReport}
-        disabled={isEmailSent}
-        leadingIcon={<IconPicker icon="mail" />}
-      >
-        {isEmailSent ? 'Report Sent' : 'Email Report'}
-      </Button>
+      {!isFromEmail && (
+        <Button
+          variant="secondary"
+          onClick={handleEmailReport}
+          disabled={isEmailSent || !consentAgreement}
+          leadingIcon={<IconPicker icon="mail" />}
+        >
+          {isEmailSent ? 'Report Sent' : 'Email Report'}
+        </Button>
+      )}
     </div>
   )
 }

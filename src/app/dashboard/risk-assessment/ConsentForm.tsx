@@ -2,13 +2,45 @@ import { Button } from '@/components/ui/button'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { PageCard } from '@/components/ui/page-card'
-import { useState } from 'react'
+import { TextArea } from '@/components/ui/textarea'
+import { API } from '@/utils/api'
+import baseAxios from '@/utils/baseAxios'
+import { useMutation } from '@tanstack/react-query'
+import { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import SignatureCanvas from 'react-signature-canvas'
 
-export const ConsentForm = () => {
-  const { control } = useFormContext()
+const updateConsent = async (data: any, assessmentId: string) =>
+  await baseAxios.patch(`${API.riskAssessment}/${assessmentId}`, data)
+
+export const ConsentForm = ({ assessmentId = '' }) => {
+  const { control, setValue, watch } = useFormContext()
   const [signatureRef, setSignatureRef] = useState<any>(null)
+
+  const { mutate } = useMutation({
+    mutationFn: (data: any) => updateConsent(data, assessmentId),
+  })
+
+  const consentAgreement = watch('consentAgreement')
+  const consentSignature = watch('consentSignature')
+  const reportEmail = watch('reportEmail')
+  const providerNotes = watch('providerNotes')
+
+  useEffect(() => {
+    const data = {
+      consentAgreement,
+      consentSignature,
+      reportEmail,
+      providerNotes,
+    }
+
+    const timeoutId = setTimeout(() => {
+      mutate(data)
+    }, 1000)
+
+    return () => clearTimeout(timeoutId)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [consentAgreement, consentSignature, reportEmail, providerNotes])
 
   return (
     <PageCard
@@ -17,7 +49,7 @@ export const ConsentForm = () => {
     >
       <div className="flex items-start space-x-2">
         <Controller
-          name="consent.agreed"
+          name="consentAgreement"
           control={control}
           render={({ field }) => (
             <Checkbox
@@ -49,6 +81,9 @@ export const ConsentForm = () => {
         <div className="border rounded-lg bg-white">
           <SignatureCanvas
             ref={(ref: any) => setSignatureRef(ref)}
+            onEnd={() => {
+              setValue('consentSignature', signatureRef?.toDataURL())
+            }}
             canvasProps={{
               className: 'w-full h-32',
             }}
@@ -57,7 +92,10 @@ export const ConsentForm = () => {
         <div className="flex justify-end mt-2">
           <Button
             type="button"
-            onClick={() => signatureRef?.clear()}
+            onClick={() => {
+              signatureRef?.clear()
+              setValue('consentSignature', null)
+            }}
             variant="secondary"
           >
             Clear
@@ -66,7 +104,7 @@ export const ConsentForm = () => {
       </div>
 
       <Controller
-        name="consent.email"
+        name="reportEmail"
         control={control}
         render={({ field }) => (
           <Input
@@ -74,6 +112,19 @@ export const ConsentForm = () => {
             type="email"
             placeholder="Enter email for report delivery"
             label="Email for Report"
+          />
+        )}
+      />
+
+      <Controller
+        name="providerNotes"
+        control={control}
+        render={({ field }) => (
+          <TextArea
+            {...field}
+            placeholder="Enter additional observations or comments..."
+            label="Additional Notes"
+            rows={4}
           />
         )}
       />

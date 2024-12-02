@@ -17,7 +17,6 @@ export const VitalsMeasurement = () => {
 
   const { bmi, age, sys, dys, height, weight } = watch('vitals', {})
   const { gender } = watch('personalInfo', {})
-  console.log('🚀 ~ VitalsMeasurement ~ vitals:', watch('vitals'))
 
   useEffect(() => {
     if (isValidNumber(height) && isValidNumber(weight)) {

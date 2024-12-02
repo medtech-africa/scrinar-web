@@ -133,4 +133,5 @@ export const API = {
 
   // risk assessment
   riskAssessment: `${BASE_URL}/api/v1/risk-assessment`,
+  sendRiskAssessment: `${BASE_URL}/api/v1/risk-assessment/send`,
 }
