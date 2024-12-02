@@ -113,6 +113,7 @@ export const RiskAssessmentForm = () => {
                 <ReportActions
                   assessmentData={resultData?.data}
                   personalInfo={formMethods.watch('personalInfo')}
+                  assessmentId={resultData?.data?.data?.id}
                 />
                 <div className="mt-8 flex justify-end">
                   <Button onClick={() => setShowResults(false)}>Close</Button>

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import {
   PDFDownloadLink,
   Document,
@@ -14,6 +14,11 @@ import { useFormContext } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
+
+const siteUrl =
+  process.env.ENV === 'development'
+    ? 'https://dev.play4health.forcardio.app'
+    : 'https://www.play4health.forcardio.app'
 
 // PDF Report Styles
 const styles = StyleSheet.create({
@@ -74,15 +79,14 @@ const sendReportEmail = async ({ email, pdfUrl }: any) => {
 export const ReportActions = ({
   assessmentData,
   personalInfo,
-  isFromEmail = false,
+  assessmentId,
 }: any) => {
   const [isEmailSent, setIsEmailSent] = useState(false)
-  const downloadLink = useRef<any>(null)
 
   const formContext = useFormContext()
 
   const consentAgreement =
-    formContext?.watch?.('consentAgreement') ?? isFromEmail
+    formContext?.watch?.('consentAgreement') ?? !assessmentId
   const reportEmail = formContext?.watch?.('reportEmail')
 
   const { mutateAsync: sendEmailMutation } = useMutation({
@@ -101,7 +105,7 @@ export const ReportActions = ({
     try {
       await sendEmailMutation({
         email: reportEmail,
-        pdfUrl: downloadLink.current.href,
+        url: `${siteUrl}/risk-assessment/${assessmentId}`,
       })
     } catch (error) {
       console.error('Error sending report:', error)
@@ -111,7 +115,6 @@ export const ReportActions = ({
   return (
     <div className="flex gap-4 mt-6">
       <PDFDownloadLink
-        ref={downloadLink}
         document={
           <PDFReport data={assessmentData} personalInfo={personalInfo} />
         }
@@ -130,7 +133,7 @@ export const ReportActions = ({
         }
       </PDFDownloadLink>
 
-      {!isFromEmail && (
+      {assessmentId && (
         <Button
           variant="secondary"
           onClick={handleEmailReport}
