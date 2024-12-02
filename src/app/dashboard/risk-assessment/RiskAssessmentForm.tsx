@@ -40,7 +40,7 @@ export const RiskAssessmentForm = () => {
           }
           return prev + 10
         })
-      }, 500)
+      }, 200)
       return () => clearInterval(interval)
     },
     onSuccess: (data) => {
