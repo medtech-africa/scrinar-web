@@ -28,129 +28,449 @@ export const csvHeaders = [
   { label: 'Glucose level', key: 'glucoseLevel' },
 
   // Diet and Nutrition
-  { label: 'Balanced Diet Importance', key: 'balancedDietImportance' },
-  { label: 'Eating Healthy Foods', key: 'eatingHealthyFoods' },
-  { label: 'Snack Preference', key: 'snackPreference' },
-  { label: 'Fruits and Vegetables', key: 'fruitsVegetables' },
-  { label: 'Snacks Consumption', key: 'snacksConsumption' },
-  { label: 'Sugary Beverages', key: 'sugaryBeverages' },
-  { label: 'Diet Consequence', key: 'dietConsequence' },
-  { label: 'Carb Examples', key: 'carbExamples' },
-  { label: 'Protein Examples', key: 'proteinExamples' },
-  { label: 'Fat Examples', key: 'fatExamples' },
-  { label: 'Vitamin Examples', key: 'vitaminExamples' },
-  { label: 'Sweets Effect', key: 'sweetsEffect' },
-  { label: 'Salty Food Effect', key: 'saltyFoodEffect' },
+  {
+    label: 'Balanced Diet Importance',
+    key: 'nutrition.balancedDietImportance',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Eating Healthy Foods',
+    key: 'nutrition.eatingHealthyFoods',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Snack Preference',
+    key: 'nutrition.snackPreference',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Fruits and Vegetables',
+    key: 'nutrition.fruitsVegetables',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Snacks Consumption',
+    key: 'nutrition.snacksConsumption',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Sugary Beverages',
+    key: 'nutrition.sugaryBeverages',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Diet Consequence',
+    key: 'nutrition.dietConsequence',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Carb Examples',
+    key: 'nutrition.carbExamples',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Protein Examples',
+    key: 'nutrition.proteinExamples',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Fat Examples',
+    key: 'nutrition.fatExamples',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Vitamin Examples',
+    key: 'nutrition.vitaminExamples',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Sweets Effect',
+    key: 'nutrition.sweetsEffect',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Salty Food Effect',
+    key: 'nutrition.saltyFoodEffect',
+    studentId: 'nutrition',
+  },
 
   // Physical Activity
-  { label: 'Physical Activity', key: 'physicalActivity' },
-  { label: 'Physical Activity Duration', key: 'physicalActivityDuration' },
-  { label: 'Physical Activity Types', key: 'physicalActivityTypes' },
-  { label: 'Regular Physical Activity', key: 'regularPhysicalActivity' },
-  { label: 'Barriers to Physical Activity', key: 'barriersToPhysicalActivity' },
+  {
+    label: 'Physical Activity',
+    key: 'physicalActivity.physicalActivity',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'Physical Activity Duration',
+    key: 'physicalActivity.physicalActivityDuration',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'Physical Activity Types',
+    key: 'physicalActivity.physicalActivityTypes',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'Regular Physical Activity',
+    key: 'physicalActivity.regularPhysicalActivity',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'Barriers to Physical Activity',
+    key: 'physicalActivity.barriersToPhysicalActivity',
+    studentId: 'physicalActivity',
+  },
   {
     label: 'Importance of Physical Activity',
-    key: 'importanceOfPhysicalActivity',
+    key: 'physicalActivity.importanceOfPhysicalActivity',
+    studentId: 'physicalActivity',
   },
-  { label: 'Activity Benefits', key: 'activityBenefits' },
-  { label: 'Exercise Activities', key: 'exerciseActivities' },
-  { label: 'House Chores Frequency', key: 'houseChoresFrequency' },
-  { label: 'House Chores Types', key: 'houseChoresTypes' },
+  {
+    label: 'Activity Benefits',
+    key: 'physicalActivity.activityBenefits',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'Exercise Activities',
+    key: 'physicalActivity.exerciseActivities',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'House Chores Frequency',
+    key: 'physicalActivity.houseChoresFrequency',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'House Chores Types',
+    key: 'physicalActivity.houseChoresTypes',
+    studentId: 'physicalActivity',
+  },
   {
     label: 'Outside Physical Activities Frequency',
-    key: 'outsidePhysicalActivitiesFrequency',
+    key: 'physicalActivity.outsidePhysicalActivitiesFrequency',
+    studentId: 'physicalActivity',
   },
   {
     label: 'Average Mobile Games Hours',
-    key: 'averageHoursOnMobileGamesComputerInternetDaily',
+    key: 'physicalActivity.averageHoursOnMobileGamesComputerInternetDaily',
+    studentId: 'physicalActivity',
   },
-  { label: 'Average TV Hours', key: 'averageHoursOnTelevisionDaily' },
-  { label: 'Time You Sleep', key: 'timeYouSleep' },
-  { label: 'Time You Wake', key: 'timeYouWake' },
+  {
+    label: 'Average TV Hours',
+    key: 'physicalActivity.averageHoursOnTelevisionDaily',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'Time You Sleep',
+    key: 'physicalActivity.timeYouSleep',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'Time You Wake',
+    key: 'physicalActivity.timeYouWake',
+    studentId: 'physicalActivity',
+  },
 
   // Gender and Activities
   {
     label: 'Should Boys Girls Do Same Sports',
-    key: 'shouldBoysGirlsDoSameSports',
+    key: 'physicalActivity.shouldBoysGirlsDoSameSports',
+    studentId: 'physicalActivity',
   },
-  { label: 'Suitable Activities for Boys', key: 'suitableActivitiesForBoys' },
-  { label: 'Suitable Activities for Girls', key: 'suitableActivitiesForGirls' },
+  {
+    label: 'Suitable Activities for Boys',
+    key: 'physicalActivity.suitableActivitiesForBoys',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'Suitable Activities for Girls',
+    key: 'physicalActivity.suitableActivitiesForGirls',
+    studentId: 'physicalActivity',
+  },
   {
     label: 'Same Types of Sports Activities',
-    key: 'sameTypesOfSportsAndActivities',
+    key: 'physicalActivity.sameTypesOfSportsAndActivities',
+    studentId: 'physicalActivity',
   },
-  { label: 'Time for Physical Activities', key: 'timeForPhysicalActivities' },
+  {
+    label: 'Time for Physical Activities',
+    key: 'physicalActivity.timeForPhysicalActivities',
+    studentId: 'physicalActivity',
+  },
   {
     label: 'More Opportunities Outside House Chores',
-    key: 'moreOpportunitiesOutsideHouseChores',
+    key: 'physicalActivity.moreOpportunitiesOutsideHouseChores',
+    studentId: 'physicalActivity',
   },
 
   // Health Knowledge
-  { label: 'Do You Know NCD', key: 'doYouKnowNCD' },
-  { label: 'Age Group at Risk of NCD', key: 'ageGroupAtRiskOfNcd' },
+  {
+    label: 'Do You Know NCD',
+    key: 'ncd.doYouKnowNCD',
+    studentId: 'ncd',
+  },
+  {
+    label: 'Age Group at Risk of NCD',
+    key: 'ncd.ageGroupAtRiskOfNcd',
+    studentId: 'ncd',
+  },
   {
     label: 'Do You Know High Blood Pressure',
-    key: 'doYouKnowHighBloodPressure',
+    key: 'ncd.doYouKnowHighBloodPressure',
+    studentId: 'ncd',
   },
-  { label: 'Do You Know Diabetes', key: 'doYouKnowDiabetes' },
-  { label: 'Do You Know Obesity', key: 'doYouKnowObesity' },
-  { label: 'How Prevent Getting NCD', key: 'howPreventGettingNcd' },
-  { label: 'Any Family Member with NCD', key: 'anyFamilyMemberWithNcd' },
+  {
+    label: 'Do You Know Diabetes',
+    key: 'ncd.doYouKnowDiabetes',
+    studentId: 'ncd',
+  },
+  {
+    label: 'Do You Know Obesity',
+    key: 'ncd.doYouKnowObesity',
+    studentId: 'ncd',
+  },
+  {
+    label: 'How Prevent Getting NCD',
+    key: 'ncd.howPreventGettingNcd',
+    studentId: 'ncd',
+  },
+  {
+    label: 'Any Family Member with NCD',
+    key: 'ncd.anyFamilyMemberWithNcd',
+    studentId: 'ncd',
+  },
 
   // Mental Health and Stress
-  { label: 'Mental Health Importance', key: 'mentalHealthImportance' },
-  { label: 'Stress Causes', key: 'stressCauses' },
-  { label: 'Feelings of Stress', key: 'feelingsOfstress' },
-  { label: 'Stress Signs', key: 'stressSigns' },
-  { label: 'Makes Feel Better', key: 'makesFeelBetter' },
-  { label: 'Stressors', key: 'stressors' },
+  {
+    label: 'Mental Health Importance',
+    key: 'ncdRiskFactor.mentalHealthImportance',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Stress Causes',
+    key: 'ncdRiskFactor.stressCauses',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Feelings of Stress',
+    key: 'ncdRiskFactor.feelingsOfstress',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Stress Signs',
+    key: 'ncdRiskFactor.stressSigns',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Makes Feel Better',
+    key: 'ncdRiskFactor.makesFeelBetter',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Stressors',
+    key: 'ncdRiskFactor.stressors',
+    studentId: 'ncdRiskFactor',
+  },
 
   // Risk Behaviors
-  { label: 'Ever Smoked', key: 'everSmoked' },
-  { label: 'Current Smoking', key: 'currentSmoking' },
-  { label: 'Ever Taken Alcohol', key: 'everTakenAlcohol' },
-  { label: 'Current Alcohol', key: 'currentAlcohol' },
-  { label: 'Smoking Risks', key: 'smokingRisks' },
-  { label: 'Alcohol Risks', key: 'alcoholRisks' },
-  { label: 'Thoughts on Substances', key: 'thoughtsOnSubstances' },
+  {
+    label: 'Ever Smoked',
+    key: 'ncdRiskFactor.everSmoked',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Current Smoking',
+    key: 'ncdRiskFactor.currentSmoking',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Ever Taken Alcohol',
+    key: 'ncdRiskFactor.everTakenAlcohol',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Current Alcohol',
+    key: 'ncdRiskFactor.currentAlcohol',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Smoking Risks',
+    key: 'ncdRiskFactor.smokingRisks',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Alcohol Risks',
+    key: 'ncdRiskFactor.alcoholRisks',
+    studentId: 'ncdRiskFactor',
+  },
+  {
+    label: 'Thoughts on Substances',
+    key: 'ncdRiskFactor.thoughtsOnSubstances',
+    studentId: 'ncdRiskFactor',
+  },
 
   // HPV and Health Services
-  { label: 'HPV Vaccine', key: 'hpvVaccine' },
-  { label: 'Idea of HPV Vaccine', key: 'ideaOfHpvVaccine' },
-  { label: 'Idea of HPV Vaccine Source', key: 'ideaOfHpvVaccineSource' },
-  { label: 'Had HPV Vaccine', key: 'hadHpvVaccine' },
+  {
+    label: 'HPV Vaccine',
+    key: 'healthServices.hpvVaccine',
+    studentId: 'healthServices',
+  },
+  {
+    label: 'Idea of HPV Vaccine',
+    key: 'healthServices.ideaOfHpvVaccine',
+    studentId: 'healthServices',
+  },
+  {
+    label: 'Idea of HPV Vaccine Source',
+    key: 'healthServices.ideaOfHpvVaccineSource',
+    studentId: 'healthServices',
+  },
+  {
+    label: 'Had HPV Vaccine',
+    key: 'healthServices.hadHpvVaccine',
+    studentId: 'healthServices',
+  },
   {
     label: 'Willing to Receive HPV Vaccine',
-    key: 'willingToReceiveHpvVaccine',
+    key: 'healthServices.willingToReceiveHpvVaccine',
+    studentId: 'healthServices',
   },
-  { label: 'Health Checkups Importance', key: 'healthCheckupsImportance' },
+  {
+    label: 'Health Checkups Importance',
+    key: 'healthServices.healthCheckupsImportance',
+    studentId: 'healthServices',
+  },
   {
     label: 'Benefits of Regular Health Checkups',
-    key: 'benefitsOfRegularHealthCheckups',
+    key: 'healthServices.benefitsOfRegularHealthCheckups',
+    studentId: 'healthServices',
   },
-  { label: 'Doctor Visit Frequency', key: 'doctorVisitFrequency' },
+  {
+    label: 'Doctor Visit Frequency',
+    key: 'healthServices.doctorVisitFrequency',
+    studentId: 'healthServices',
+  },
   {
     label: 'Someone to Talk to About Health',
-    key: 'someoneToTalkToAboutHealth',
+    key: 'healthServices.someoneToTalkToAboutHealth',
+    studentId: 'healthServices',
   },
 
   // Water and Hygiene
-  { label: 'Sources of Water at Home', key: 'sourcesOfWaterAtHome' },
+  {
+    label: 'Sources of Water at Home',
+    key: 'healthHygiene.sourcesOfWaterAtHome',
+    studentId: 'healthHygiene',
+  },
   {
     label: 'Water Treatment Method at Home',
-    key: 'waterTreatmentMethodAtHome',
+    key: 'healthHygiene.waterTreatmentMethodAtHome',
+    studentId: 'healthHygiene',
   },
-  { label: 'Toilet Facility', key: 'toiletFacility' },
-  { label: 'Facility Used to Wash Hand', key: 'facilityUsedToWashHand' },
+  {
+    label: 'Toilet Facility',
+    key: 'healthHygiene.toiletFacility',
+    studentId: 'healthHygiene',
+  },
+  {
+    label: 'Facility Used to Wash Hand',
+    key: 'healthHygiene.facilityUsedToWashHand',
+    studentId: 'healthHygiene',
+  },
   {
     label: 'Did You Clean Hand After Last Toilet Usage',
-    key: 'didYouCleanHandAfterLastToiletUsage',
+    key: 'healthHygiene.didYouCleanHandAfterLastToiletUsage',
+    studentId: 'healthHygiene',
   },
-  { label: 'What Was Used to Wash Hand', key: 'whatWasUsedToWashHand' },
+  {
+    label: 'What Was Used to Wash Hand',
+    key: 'healthHygiene.whatWasUsedToWashHand',
+    studentId: 'healthHygiene',
+  },
+
+  //Ideal Body
+
+  {
+    label: 'Body Shape - What do you think is the ideal body size for women?',
+    key: 'idealBody.womenShape',
+    studentId: 'idealBody',
+  },
+  {
+    label: 'Weight - What do you think is the ideal body size for women?',
+    key: 'idealBody.womenWeight',
+    studentId: 'idealBody',
+  },
+  {
+    label:
+      'Body Shape - What do you think is an ideal body size for adolescent girls?',
+    key: 'idealBody.adolescentWomenShape',
+    studentId: 'idealBody',
+  },
+  {
+    label:
+      'Weight - What do you think is an ideal body size for adolescent girls?',
+    key: 'idealBody.adolescentWomenWeight',
+    studentId: 'idealBody',
+  },
+  {
+    label: 'Body Shape - What do you think is the ideal body size for men?',
+    key: 'idealBody.menShape',
+    studentId: 'idealBody',
+  },
+  {
+    label: 'Weight - What do you think is the ideal body size for men?',
+    key: 'idealBody.menWeight',
+    studentId: 'idealBody',
+  },
+  {
+    label:
+      'Body Shape - What do you think is the ideal body size for adolescent boys?',
+    key: 'idealBody.adolescentMenShape',
+    studentId: 'idealBody',
+  },
+  {
+    label:
+      'Weight - What do you think is the ideal body size for adolescent boys?',
+    key: 'idealBody.adolescentMenWeight',
+    studentId: 'idealBody',
+  },
+
+  {
+    label: 'Do you know your weight?',
+    key: 'idealBody.knowYourWeight',
+    studentId: 'idealBody',
+  },
+  {
+    label: 'What is your weight?',
+    key: 'idealBody.yourWeight',
+    studentId: 'idealBody',
+  },
+  {
+    label: "If yes, do you think it's a healthy weight?",
+    key: 'idealBody.isYourWeightHealthy',
+    studentId: 'idealBody',
+  },
+
+  {
+    label: 'Do you know your height?',
+    key: 'idealBody.knowYourHeight',
+    studentId: 'idealBody',
+  },
+  {
+    label: 'What is your height?',
+    key: 'idealBody.yourHeight',
+    studentId: 'idealBody',
+  },
+  {
+    label: "If yes, do you think it's a healthy height?",
+    key: 'idealBody.isYourHeightHealthy',
+    studentId: 'idealBody',
+  },
 ]
 
 export const excelHeaders = csvHeaders.map((header) => ({
   header: header.label,
   key: header.key,
+  studentId: header.studentId,
   width: 30, // Default width, adjust as needed for specific columns
 }))
