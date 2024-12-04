@@ -132,6 +132,8 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
             isYourWeightHealthy: studentData?.idealBody?.isYourWeightHealthy,
           },
 
+          // Physical Activity
+
           physicalActivity: {
             amountOfPhysicalActivityDaily:
               studentData?.amountOfPhysicalActivityDaily,
@@ -161,9 +163,6 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
             suitableActivitiesForBoys: studentData?.suitableActivitiesForBoys,
             suitableActivitiesForGirls: studentData?.suitableActivitiesForGirls,
           },
-
-          // Physical Activity
-
           // Health Knowledge
           ncd: {
             doYouKnowNCD: studentData?.doYouKnowNCD?.join(', '),

@@ -28,77 +28,6 @@ export const csvHeaders = [
   { label: 'Glucose level', key: 'glucoseLevel' },
 
   // Diet and Nutrition
-  // {
-  //   label: 'Balanced Diet Importance',
-  //   key: 'nutrition.balancedDietImportance',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Eating Healthy Foods',
-  //   key: 'nutrition.eatingHealthyFoods',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Snack Preference',
-  //   key: 'nutrition.snackPreference',
-  //   studentId: 'nutrition',
-  // },
-  /* The above code appears to be defining a series of objects with properties related to nutrition.
-  Each object represents a specific aspect of nutrition, such as fruits and vegetables, snacks
-  consumption, sugary beverages, diet consequences, examples of different types of nutrients (carbs,
-  protein, fat, vitamins), and the effects of sweets and salty foods. Each object has a label, key,
-  and studentId property associated with it. */
-  // {
-  //   label: 'Fruits and Vegetables',
-  //   key: 'nutrition.fruitsVegetables',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Snacks Consumption',
-  //   key: 'nutrition.snacksConsumption',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Sugary Beverages',
-  //   key: 'nutrition.sugaryBeverages',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Diet Consequence',
-  //   key: 'nutrition.dietConsequence',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Carb Examples',
-  //   key: 'nutrition.carbExamples',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Protein Examples',
-  //   key: 'nutrition.proteinExamples',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Fat Examples',
-  //   key: 'nutrition.fatExamples',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Vitamin Examples',
-  //   key: 'nutrition.vitaminExamples',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Sweets Effect',
-  //   key: 'nutrition.sweetsEffect',
-  //   studentId: 'nutrition',
-  // },
-  // {
-  //   label: 'Salty Food Effect',
-  //   key: 'nutrition.saltyFoodEffect',
-  //   studentId: 'nutrition',
-  // },
-
   {
     label:
       'Do you know that taking a diet with a variety of foods from different food groups is important for your health?',
@@ -217,131 +146,140 @@ export const csvHeaders = [
   { label: 'Vegetables', key: 'nutrition.foodKnowledge.vegetables', studentId: 'nutrition' },
   { label: 'Fruits', key: 'nutrition.foodKnowledge.fruits', studentId: 'nutrition' },
 
-  // mealFrequncy: {
-  //             breakfast_frequency:
-  //               studentData?.nutrition?.foodKnowledge?.breakfast_frequency,
-  //             breakfast_time:
-  //               studentData?.nutrition?.foodKnowledge?.breakfast_time,
-  //             breakfast_skipped_reason:
-  //               studentData?.nutrition?.foodKnowledge?.breakfast_skipped_reason,
-  //             lunch_frequency:
-  //               studentData?.nutrition?.foodKnowledge?.lunch_frequency,
-  //             dinner_frequency:
-  //               studentData?.nutrition?.foodKnowledge?.dinner_frequency,
-  //           },
-  //           numberDailyMeals: studentData?.nutrition?.numberDailyMeals,
-  //           reasonChangeImpactHealth:
-  //             studentData?.nutrition?.reasonChangeImpactHealth,
-  //         }
-
   // Physical Activity
+  
   {
-    label: 'Physical Activity',
-    key: 'physicalActivity.physicalActivity',
+    label:
+      'How much physical activity should a person do everyday to be healthy?',
+    key: 'physicalActivity.amountOfPhysicalActivityDaily',
+    studentId: 'physicalActivity',
+  },
+  // {
+  //   label:
+  //     'How important do you think physical exercise is for your own health?',
+  //   key: 'physicalActivity.importancePhysicalExerciseOnYourHealth',
+  //   studentId: 'physicalActivity',
+  // },
+  {
+    label:
+      'What is the long-term effect of performing physical activity regularly?',
+    key: 'physicalActivity.longTermEffectOfPerformingPhysicalActivityRegularly',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Physical Activity Duration',
-    key: 'physicalActivity.physicalActivityDuration',
+    label: 'What kinds of activities are good forms of exercise?',
+    key: 'physicalActivity.goodFormsOfExercise',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Physical Activity Types',
-    key: 'physicalActivity.physicalActivityTypes',
+    label: 'In a typical week, how many times do you participate in  sports at school?',
+    key: 'physicalActivity.amountOfSportsParticipation',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Regular Physical Activity',
-    key: 'physicalActivity.regularPhysicalActivity',
+    label: 'On one of those days, how long do you usually engage in it for?',
+    key: 'physicalActivity.amountOfPhysicalActivityEngagement',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Barriers to Physical Activity',
-    key: 'physicalActivity.barriersToPhysicalActivity',
+    label: 'How often do you participate in house chores that require physical effort and make you sweat?',
+    key: 'physicalActivity.amountOfPhysicalActivityHouseChore',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Importance of Physical Activity',
-    key: 'physicalActivity.importanceOfPhysicalActivity',
+    label: 'What types of house chores do you regularly do at home?',
+    key: 'physicalActivity.typesOfHouseChoresRegularly',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Activity Benefits',
-    key: 'physicalActivity.activityBenefits',
-    studentId: 'physicalActivity',
-  },
-  {
-    label: 'Exercise Activities',
-    key: 'physicalActivity.exerciseActivities',
-    studentId: 'physicalActivity',
-  },
-  {
-    label: 'House Chores Frequency',
-    key: 'physicalActivity.houseChoresFrequency',
-    studentId: 'physicalActivity',
-  },
-  {
-    label: 'House Chores Types',
-    key: 'physicalActivity.houseChoresTypes',
-    studentId: 'physicalActivity',
-  },
-  {
-    label: 'Outside Physical Activities Frequency',
-    key: 'physicalActivity.outsidePhysicalActivitiesFrequency',
-    studentId: 'physicalActivity',
-  },
-  {
-    label: 'Average Mobile Games Hours',
+    label: 'Average hours spent with mobile games, computer/internet daily',
     key: 'physicalActivity.averageHoursOnMobileGamesComputerInternetDaily',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Average TV Hours',
+    label: 'Average hours spent watching TV/Playing video games daily',
     key: 'physicalActivity.averageHoursOnTelevisionDaily',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Time You Sleep',
+    label: 'What time do you go to bed at night?',
     key: 'physicalActivity.timeYouSleep',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Time You Wake',
+    label: 'What time do you wake up in the morning?',
     key: 'physicalActivity.timeYouWake',
     studentId: 'physicalActivity',
   },
-
-  // Gender and Activities
   {
-    label: 'Should Boys Girls Do Same Sports',
+    label: 'Should boys and girls do the same types of sports and activities?',
     key: 'physicalActivity.shouldBoysGirlsDoSameSports',
     studentId: 'physicalActivity',
   },
+
+
+
   {
-    label: 'Suitable Activities for Boys',
+    label:
+      'What are some challenges that you think prevent children your age from being physically active?',
+    key: 'physicalActivity.challengesFromBeingPhysicallyActive',
+    studentId: 'physicalActivity',
+  },
+  {
+    label: 'Is it important for both boys and girls to be physically active?',
+    key: 'physicalActivity.importanceOfBeingPhysicallyActive',
+    studentId: 'physicalActivity',
+  },
+  {
+    label:
+      'Which types of physical activities do you think are most suitable for boys?',
     key: 'physicalActivity.suitableActivitiesForBoys',
     studentId: 'physicalActivity',
   },
   {
-    label: 'Suitable Activities for Girls',
+    label:
+      'Which types of physical activities do you think are most suitable for girls?',
     key: 'physicalActivity.suitableActivitiesForGirls',
     studentId: 'physicalActivity',
   },
-  {
-    label: 'Same Types of Sports Activities',
-    key: 'physicalActivity.sameTypesOfSportsAndActivities',
-    studentId: 'physicalActivity',
-  },
-  {
-    label: 'Time for Physical Activities',
-    key: 'physicalActivity.timeForPhysicalActivities',
-    studentId: 'physicalActivity',
-  },
-  {
-    label: 'More Opportunities Outside House Chores',
-    key: 'physicalActivity.moreOpportunitiesOutsideHouseChores',
-    studentId: 'physicalActivity',
-  },
+
+
+
+
+  // {
+  //   label:
+  //     'Do you think the amount of physical activity needed is different for men and women?',
+  //   key: 'physicalActivity.amountOfPhysicalActivityNeededIsDifferentForBoth',
+  //   studentId: 'physicalActivity',
+  // },
+  // {
+  //   label:
+  //     'What common beliefs or practices in your community discourage girls from engaging in physical activities?',
+  //   key: 'physicalActivity.beliefsThatDiscourageGirlFromPhysical',
+  //   studentId: 'physicalActivity',
+  // },
+  // {
+  //   label:
+  //     'In your community, do you think girls have more, less, or the same amount of time for physical activities compared to boys?',
+  //   key: 'physicalActivity.amountOfTimeGirlsHaveForPhysicalThanBoys',
+  //   studentId: 'physicalActivity',
+  // },
+  // {
+  //   label: 'Why do you think so?',
+  //   key: 'physicalActivity.whyAmountOfTimeGirlsHaveForPhysicalThanBoys',
+  //   studentId: 'physicalActivity',
+  // },
+  // {
+  //   label:
+  //     'In your community, do you think girls have more, less, or the same opportunities for physical activities compared to boys?',
+  //   key: 'physicalActivity.amountOfOpportunitiesGirlsHaveForPhysicalThanBoys',
+  //   studentId: 'physicalActivity',
+  // },
+  // {
+  //   label: 'Why do you think so?',
+  //   key: 'physicalActivity.whyAmountOfOpportunitiesGirlsHaveForPhysicalThanBoys',
+  //   studentId: 'physicalActivity',
+  // },
 
   // Health Knowledge
   {
@@ -396,11 +334,11 @@ export const csvHeaders = [
     key: 'ncdRiskFactor.feelingsOfstress',
     studentId: 'ncdRiskFactor',
   },
-  {
-    label: 'Stress Signs',
-    key: 'ncdRiskFactor.stressSigns',
-    studentId: 'ncdRiskFactor',
-  },
+  // {
+  //   label: 'Stress Signs',
+  //   key: 'ncdRiskFactor.stressSigns',
+  //   studentId: 'ncdRiskFactor',
+  // },
   {
     label: 'Makes Feel Better',
     key: 'ncdRiskFactor.makesFeelBetter',
@@ -451,33 +389,8 @@ export const csvHeaders = [
 
   // HPV and Health Services
   {
-    label: 'HPV Vaccine',
-    key: 'healthServices.hpvVaccine',
-    studentId: 'healthServices',
-  },
-  {
-    label: 'Idea of HPV Vaccine',
-    key: 'healthServices.ideaOfHpvVaccine',
-    studentId: 'healthServices',
-  },
-  {
-    label: 'Idea of HPV Vaccine Source',
-    key: 'healthServices.ideaOfHpvVaccineSource',
-    studentId: 'healthServices',
-  },
-  {
-    label: 'Had HPV Vaccine',
-    key: 'healthServices.hadHpvVaccine',
-    studentId: 'healthServices',
-  },
-  {
-    label: 'Willing to Receive HPV Vaccine',
-    key: 'healthServices.willingToReceiveHpvVaccine',
-    studentId: 'healthServices',
-  },
-  {
-    label: 'Health Checkups Importance',
-    key: 'healthServices.healthCheckupsImportance',
+    label: 'How often do you visit the doctor for health check-ups?',
+    key: 'healthServices.doctorVisitFrequency',
     studentId: 'healthServices',
   },
   {
@@ -485,16 +398,63 @@ export const csvHeaders = [
     key: 'healthServices.benefitsOfRegularHealthCheckups',
     studentId: 'healthServices',
   },
-  {
-    label: 'Doctor Visit Frequency',
-    key: 'healthServices.doctorVisitFrequency',
-    studentId: 'healthServices',
-  },
-  {
+{
     label: 'Someone to Talk to About Health',
     key: 'healthServices.someoneToTalkToAboutHealth',
     studentId: 'healthServices',
   },
+   {
+    label: 'Idea of HPV Vaccine',
+    key: 'healthServices.ideaOfHpvVaccine',
+    studentId: 'healthServices',
+  },
+{
+    label: 'Idea of HPV Vaccine Source',
+    key: 'healthServices.ideaOfHpvVaccineSource',
+    studentId: 'healthServices',
+  },
+   {
+    label: 'Had HPV Vaccine',
+    key: 'healthServices.hadHpvVaccine',
+    studentId: 'healthServices',
+  },
+  {
+    label: 'If you have not received the vaccine, would you be willing to receive it?',
+    key: 'healthServices.willingToReceiveHpvVaccineIfNotReceived',
+    studentId: 'healthServices',
+  },
+  {
+    label: 'Are you willing to receive the HPV vaccine if it is offered to you?',
+    key: 'healthServices.willingToReceiveHpvVaccineIfOffered',
+    studentId: 'healthServices',
+  },
+  {
+    label: "If you’re not sure, can you tell us why?",
+    key: 'healthServices.reasonForHpvVaccineUncertainty',
+    studentId: 'healthServices',
+  },
+  // {
+  //   label: 'HPV Vaccine',
+  //   key: 'healthServices.hpvVaccine',
+  //   studentId: 'healthServices',
+  // },
+  // {
+  //   label: 'Willing to Receive HPV Vaccine',
+  //   key: 'healthServices.willingToReceiveHpvVaccine',
+  //   studentId: 'healthServices',
+  // },
+  // {
+  //   label: 'Health Checkups Importance',
+  //   key: 'healthServices.healthCheckupsImportance',
+  //   studentId: 'healthServices',
+  // },
+  
+  // {
+  //   label: 'Doctor Visit Frequency',
+  //   key: 'healthServices.doctorVisitFrequency',
+  //   studentId: 'healthServices',
+  // },
+  
 
   // Water and Hygiene
   {

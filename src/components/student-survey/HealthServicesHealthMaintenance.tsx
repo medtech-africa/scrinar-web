@@ -186,10 +186,6 @@ export const HealthServicesHealthMaintenance = ({
                 setValue('reasonForHpvVaccineUncertainty', value)
               }}
             />
-            {/*  */}
-            {/*  */}
-            {/*  */}
-            {/*  */}
           </>
         )}
       </div>
