@@ -59,15 +59,15 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
           nutrition: {
             // Diet and Nutrition
             awareImportanceOfFoodVariety:
-              studentData?.nutrition.awareImportanceOfFoodVariety,
+              studentData?.nutrition?.awareImportanceOfFoodVariety,
             awareFoodHasDiffBenefits:
-              studentData?.nutrition.awareFoodHasDiffBenefits,
+              studentData?.nutrition?.awareFoodHasDiffBenefits,
             changeInDietToBeHealthy:
-              studentData?.nutrition.changeInDietToBeHealthy,
+              studentData?.nutrition?.changeInDietToBeHealthy,
             effectsOfTooMuchSaltAndOil:
-              studentData?.nutrition.effectsOfTooMuchSaltAndOil,
+              studentData?.nutrition?.effectsOfTooMuchSaltAndOil,
             effectsOfTooMuchSweets:
-              studentData?.nutrition.effectsOfTooMuchSweets,
+              studentData?.nutrition?.effectsOfTooMuchSweets,
             foodGroupFrequency: {
               protein_sources_frequency:
                 studentData?.nutrition?.foodGroupFrequency
@@ -108,9 +108,9 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
               dinner_frequency:
                 studentData?.nutrition?.foodKnowledge?.dinner_frequency,
             },
-            numberDailyMeals: studentData?.nutrition.numberDailyMeals,
+            numberDailyMeals: studentData?.nutrition?.numberDailyMeals,
             reasonChangeImpactHealth:
-              studentData?.nutrition.reasonChangeImpactHealth,
+              studentData?.nutrition?.reasonChangeImpactHealth,
           },
           idealBody: {
             womenShape: studentData?.idealBody?.womenShape,
@@ -227,8 +227,10 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
     [data]
   )
   return (
-    <div
+    <button
       ref={menuRef}
+      title="export dropdown"
+      type="button"
       role="menu"
       aria-orientation="vertical"
       aria-labelledby="menu-option"
@@ -244,7 +246,11 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
           Please wait
         </>
       ) : (
-        <>
+        <div
+          role="menuitem"
+          title="menu"
+          className="flex flex-col justify-center space-y-2 items-start"
+        >
           <ExportAsCsv
             fileName="children-questionnaires"
             data={formattedData ?? []}
@@ -255,9 +261,9 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
             data={formattedData ?? []}
             excelHeaders={excelHeaders}
           />
-        </>
+        </div>
       )}
-    </div>
+    </button>
   )
 }
 
