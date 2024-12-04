@@ -19,7 +19,6 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
   useClickAway(menuRef, () => (onClose ? onClose() : null))
 
   const { data, isLoading } = useExportStudentQuestionnaire()
-  console.log(data)
   // Formatted Data Structure
   const formattedData = useMemo(
     () =>
@@ -53,24 +52,64 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
           pulse: latestHealthData?.pulse,
           waist: latestHealthData?.waist,
           bloodPressure: latestHealthData?.bloodPressure,
-          // cholesterol: data?.cholesterol?.totalCholeterol,
+          // cholesterol: data?.cholesterol?.totalCholeterol,awareImportanceOfFoodVariety
           glucoseLevel: latestHealthData?.glucoseLevel,
 
           nutrition: {
             // Diet and Nutrition
-            balancedDietImportance: studentData?.balancedDietImportance,
-            eatingHealthyFoods: studentData?.eatingHealthyFoods,
-            snackPreference: studentData?.snackPreference,
-            fruitsVegetables: studentData?.fruitsVegetables,
-            snacksConsumption: studentData?.snacksConsumption,
-            sugaryBeverages: studentData?.sugaryBeverages,
-            dietConsequence: studentData?.dietConsequence,
-            carbExamples: studentData?.carbExamples?.join(', '),
-            proteinExamples: studentData?.proteinExamples?.join(', '),
-            fatExamples: studentData?.fatExamples?.join(', '),
-            vitaminExamples: studentData?.vitaminExamples?.join(', '),
-            sweetsEffect: studentData?.sweetsEffect,
-            saltyFoodEffect: studentData?.saltyFoodEffect,
+            awareImportanceOfFoodVariety:
+              studentData?.nutrition.awareImportanceOfFoodVariety,
+            awareFoodHasDiffBenefits:
+              studentData?.nutrition.awareFoodHasDiffBenefits,
+            changeInDietToBeHealthy:
+              studentData?.nutrition.changeInDietToBeHealthy,
+            effectsOfTooMuchSaltAndOil:
+              studentData?.nutrition.effectsOfTooMuchSaltAndOil,
+            effectsOfTooMuchSweets:
+              studentData?.nutrition.effectsOfTooMuchSweets,
+            foodGroupFrequency: {
+              protein_sources_frequency:
+                studentData?.nutrition?.foodGroupFrequency
+                  ?.protein_sources_frequency,
+              varied_diet_frequency:
+                studentData?.nutrition?.foodGroupFrequency
+                  ?.varied_diet_frequency,
+              green_leafy_vegetables_frequency:
+                studentData?.nutrition?.foodGroupFrequency
+                  ?.green_leafy_vegetables_frequency,
+              unhealthy_snacks_frequency:
+                studentData?.nutrition?.foodGroupFrequency
+                  ?.unhealthy_snacks_frequency,
+              sugary_drinks_frequency:
+                studentData?.nutrition?.foodGroupFrequency
+                  ?.sugary_drinks_frequency,
+              vegetable_portion_size:
+                studentData?.nutrition?.foodGroupFrequency
+                  ?.vegetable_portion_size,
+            },
+            foodKnowledge: {
+              cereals: studentData?.nutrition?.foodKnowledge?.cereals,
+              roots: studentData?.nutrition?.foodKnowledge?.roots,
+              beans_nuts: studentData?.nutrition?.foodKnowledge?.beans_nuts,
+              meat_fish: studentData?.nutrition?.foodKnowledge?.meat_fish,
+              vegetables: studentData?.nutrition?.foodKnowledge?.vegetables,
+              fruits: studentData?.nutrition?.foodKnowledge?.fruits,
+            },
+            mealFrequncy: {
+              breakfast_frequency:
+                studentData?.nutrition?.foodKnowledge?.breakfast_frequency,
+              breakfast_time:
+                studentData?.nutrition?.foodKnowledge?.breakfast_time,
+              breakfast_skipped_reason:
+                studentData?.nutrition?.foodKnowledge?.breakfast_skipped_reason,
+              lunch_frequency:
+                studentData?.nutrition?.foodKnowledge?.lunch_frequency,
+              dinner_frequency:
+                studentData?.nutrition?.foodKnowledge?.dinner_frequency,
+            },
+            numberDailyMeals: studentData?.nutrition.numberDailyMeals,
+            reasonChangeImpactHealth:
+              studentData?.nutrition.reasonChangeImpactHealth,
           },
           idealBody: {
             womenShape: studentData?.idealBody?.womenShape,
@@ -92,41 +131,37 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
             isYourWeightHealthy: studentData?.idealBody?.isYourWeightHealthy,
           },
 
-          // Physical Activity
           physicalActivity: {
-            physicalActivity: studentData?.physicalActivity,
-            physicalActivityDuration: studentData?.physicalActivityDuration,
-            physicalActivityTypes:
-              studentData?.physicalActivityTypes?.join(', '),
-            regularPhysicalActivity: studentData?.regularPhysicalActivity,
-            barriersToPhysicalActivity:
-              studentData?.barriersToPhysicalActivity?.join(', '),
-            importanceOfPhysicalActivity:
-              studentData?.importanceOfPhysicalActivity,
-            activityBenefits: studentData?.activityBenefits,
-            exerciseActivities: studentData?.exerciseActivities?.join(', '),
-            houseChoresFrequency: studentData?.houseChoresFrequency,
-            houseChoresTypes: studentData?.houseChoresTypes?.join(', '),
-            outsidePhysicalActivitiesFrequency:
-              studentData?.outsidePhysicalActivitiesFrequency,
+            amountOfPhysicalActivityDaily:
+              studentData?.amountOfPhysicalActivityDaily,
+            longTermEffectOfPerformingPhysicalActivityRegularly:
+              studentData?.longTermEffectOfPerformingPhysicalActivityRegularly,
+            goodFormsOfExercise: studentData?.goodFormsOfExercise?.join(', '),
+            amountOfSportsParticipation:
+              studentData?.amountOfSportsParticipation,
+            amountOfPhysicalActivityEngagement:
+              studentData?.amountOfPhysicalActivityEngagement,
+            amountOfPhysicalActivityHouseChore:
+              studentData?.amountOfPhysicalActivityHouseChore,
+            typesOfHouseChoresRegularly:
+              studentData?.typesOfHouseChoresRegularly?.join(', '),
             averageHoursOnMobileGamesComputerInternetDaily:
               studentData?.averageHoursOnMobileGamesComputerInternetDaily,
             averageHoursOnTelevisionDaily:
               studentData?.averageHoursOnTelevisionDaily,
             timeYouSleep: studentData?.timeYouSleep,
             timeYouWake: studentData?.timeYouWake,
-
-            // Gender and Activities
             shouldBoysGirlsDoSameSports:
               studentData?.shouldBoysGirlsDoSameSports,
+            challengesFromBeingPhysicallyActive:
+              studentData?.challengesFromBeingPhysicallyActive?.join(', '),
+            importanceOfBeingPhysicallyActive:
+              studentData?.importanceOfBeingPhysicallyActive?.join(', '),
             suitableActivitiesForBoys: studentData?.suitableActivitiesForBoys,
             suitableActivitiesForGirls: studentData?.suitableActivitiesForGirls,
-            sameTypesOfSportsAndActivities:
-              studentData?.sameTypesOfSportsAndActivities,
-            timeForPhysicalActivities: studentData?.timeForPhysicalActivities,
-            moreOpportunitiesOutsideHouseChores:
-              studentData?.moreOpportunitiesOutsideHouseChores,
           },
+
+          // Physical Activity
 
           // Health Knowledge
           ncd: {
@@ -146,30 +181,33 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
             stressors: studentData?.stressors?.join(', '),
             makesFeelBetter: studentData?.makesFeelBetter?.join(', '),
             thoughtsOnSubstances: studentData?.thoughtsOnSubstances,
-            stressCauses: studentData?.stressCauses?.join(', '),
             feelingsOfstress: studentData?.feelingsOfstress,
             everSmoked: studentData?.everSmoked,
-            stressSigns: studentData?.stressSigns,
-
-            // Risk Behaviors
             currentAlcohol: studentData?.currentAlcohol,
             everTakenAlcohol: studentData?.everTakenAlcohol,
             currentSmoking: studentData?.currentSmoking,
+            stressCauses: studentData?.stressCauses?.join(', '),
+
+            // Risk Behaviors
             // smokingRisks: studentData?.smokingRisks?.join(', '),
             // alcoholRisks: studentData?.alcoholRisks?.join(', '),
           },
 
           healthServices: {
+            doctorVisitFrequency: studentData?.doctorVisitFrequency,
             benefitsOfRegularHealthCheckups:
               studentData?.benefitsOfRegularHealthCheckups,
-            doctorVisitFrequency: studentData?.doctorVisitFrequency,
             someoneToTalkToAboutHealth: studentData?.someoneToTalkToAboutHealth,
             // HPV and Health Services
-            hpvVaccine: studentData?.hpvVaccine,
             ideaOfHpvVaccine: studentData?.ideaOfHpvVaccine,
             ideaOfHpvVaccineSource: studentData?.ideaOfHpvVaccineSource,
             hadHpvVaccine: studentData?.hadHpvVaccine,
-            willingToReceiveHpvVaccine: studentData?.willingToReceiveHpvVaccine,
+            willingToReceiveHpvVaccineIfNotReceived:
+              studentData?.willingToReceiveHpvVaccineIfNotReceived,
+            willingToReceiveHpvVaccineIfOffered:
+              studentData?.willingToReceiveHpvVaccineIfOffered,
+            reasonForHpvVaccineUncertainty:
+              studentData?.reasonForHpvVaccineUncertainty.join(', '),
           },
 
           healthHygiene: {
