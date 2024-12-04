@@ -16,7 +16,7 @@ export const HealthServicesHealthMaintenance = ({
   const { customRegister, setValue, watch } = useCustomRegister(studentId)
 
   return (
-    <PageCard title="Nutrition" bodyStyle="px-4">
+    <PageCard title="Health Services and Health Maintenance" bodyStyle="px-4">
       <div className="grid md:grid-cols-[repeat(auto-fill,_minmax(320px,_1fr))] grid-cols-1 gap-6">
         {/* Balanced diet importance */}
 
