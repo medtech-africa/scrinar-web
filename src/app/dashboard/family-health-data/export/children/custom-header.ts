@@ -243,44 +243,6 @@ export const csvHeaders = [
     studentId: 'physicalActivity',
   },
 
-
-
-
-  // {
-  //   label:
-  //     'Do you think the amount of physical activity needed is different for men and women?',
-  //   key: 'physicalActivity.amountOfPhysicalActivityNeededIsDifferentForBoth',
-  //   studentId: 'physicalActivity',
-  // },
-  // {
-  //   label:
-  //     'What common beliefs or practices in your community discourage girls from engaging in physical activities?',
-  //   key: 'physicalActivity.beliefsThatDiscourageGirlFromPhysical',
-  //   studentId: 'physicalActivity',
-  // },
-  // {
-  //   label:
-  //     'In your community, do you think girls have more, less, or the same amount of time for physical activities compared to boys?',
-  //   key: 'physicalActivity.amountOfTimeGirlsHaveForPhysicalThanBoys',
-  //   studentId: 'physicalActivity',
-  // },
-  // {
-  //   label: 'Why do you think so?',
-  //   key: 'physicalActivity.whyAmountOfTimeGirlsHaveForPhysicalThanBoys',
-  //   studentId: 'physicalActivity',
-  // },
-  // {
-  //   label:
-  //     'In your community, do you think girls have more, less, or the same opportunities for physical activities compared to boys?',
-  //   key: 'physicalActivity.amountOfOpportunitiesGirlsHaveForPhysicalThanBoys',
-  //   studentId: 'physicalActivity',
-  // },
-  // {
-  //   label: 'Why do you think so?',
-  //   key: 'physicalActivity.whyAmountOfOpportunitiesGirlsHaveForPhysicalThanBoys',
-  //   studentId: 'physicalActivity',
-  // },
-
   // Health Knowledge
   {
     label: 'Do You Know NCD',
@@ -334,11 +296,6 @@ export const csvHeaders = [
     key: 'ncdRiskFactor.feelingsOfstress',
     studentId: 'ncdRiskFactor',
   },
-  // {
-  //   label: 'Stress Signs',
-  //   key: 'ncdRiskFactor.stressSigns',
-  //   studentId: 'ncdRiskFactor',
-  // },
   {
     label: 'Makes Feel Better',
     key: 'ncdRiskFactor.makesFeelBetter',
@@ -433,27 +390,6 @@ export const csvHeaders = [
     key: 'healthServices.reasonForHpvVaccineUncertainty',
     studentId: 'healthServices',
   },
-  // {
-  //   label: 'HPV Vaccine',
-  //   key: 'healthServices.hpvVaccine',
-  //   studentId: 'healthServices',
-  // },
-  // {
-  //   label: 'Willing to Receive HPV Vaccine',
-  //   key: 'healthServices.willingToReceiveHpvVaccine',
-  //   studentId: 'healthServices',
-  // },
-  // {
-  //   label: 'Health Checkups Importance',
-  //   key: 'healthServices.healthCheckupsImportance',
-  //   studentId: 'healthServices',
-  // },
-  
-  // {
-  //   label: 'Doctor Visit Frequency',
-  //   key: 'healthServices.doctorVisitFrequency',
-  //   studentId: 'healthServices',
-  // },
   
 
   // Water and Hygiene
