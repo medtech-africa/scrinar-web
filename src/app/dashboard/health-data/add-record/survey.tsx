@@ -7,7 +7,6 @@ import * as Tabs from '@radix-ui/react-tabs'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
 import { IconPicker } from '@/components/ui/icon-picker'
-import KAPSurvey from '@/components/student-survey/kapSurvey'
 import {
   useMutateStudentsPostSurvey,
   useStudentsSurvey,
@@ -221,12 +220,6 @@ export const SurveyForm = ({
           </Tabs.Content>
           <Tabs.Content value="health-hygiene">
             <HealthAndHygiene studentId={studentId} />
-          </Tabs.Content>
-          <Tabs.Content value="ncd-risks-family">
-            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
-          </Tabs.Content>
-          <Tabs.Content value="gender-household-roles">
-            <KAPSurvey studentId={studentId} studentSurvey={studentSurvey} />
           </Tabs.Content>
         </Tabs.Root>
         <div className="grid gap-6 py-7 mt-2">

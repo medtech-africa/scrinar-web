@@ -20,7 +20,7 @@ export function deepMerge(
     if (Array.isArray(source[key])) {
       // Handle array concatenation
       if (Array.isArray(target[key])) {
-        target[key] = removeDuplicates([...target[key], ...source[key]])
+        target[key] = removeDuplicates([...(target[key] as any[]), ...(source[key] as any[])] as any[])
       } else {
         target[key] = source[key]
       }
@@ -37,7 +37,7 @@ export function deepMerge(
       if (!target[key]) {
         target[key] = {}
       }
-      deepMerge(target[key] as TargetObj, source[key])
+      deepMerge(target[key] as TargetObj, source[key] as TargetObj)
     } else {
       // Handle primitive values
       target[key] = source[key]

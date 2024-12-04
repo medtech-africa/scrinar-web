@@ -8,10 +8,10 @@ import { persist, createJSONStorage } from 'zustand/middleware'
 type ParentSurveyStoreType = {
   data: {
     id: string
-    formData: object
+    formData: Record<string, any>
   }[]
-  storeParentSurvey: (id: string, data: object) => void
-  getParentSurvey: (id: string, data?: object) => object | null
+  storeParentSurvey: (id: string, data: Record<string, any>) => void
+  getParentSurvey: (id: string, data?: Record<string, any>) => Record<string, any> | null
 }
 
 export const useLocalParentSurveyStore = create(
@@ -50,7 +50,7 @@ export const useLocalParentSurveyStore = create(
       name: 'parents_survey_store', // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage),
       merge: (persistedState, currentState) =>
-        deepMerge(currentState, persistedState),
+        deepMerge(currentState, persistedState as Record<string, any>) as unknown as ParentSurveyStoreType,
     }
   )
 )
@@ -58,10 +58,10 @@ export const useLocalParentSurveyStore = create(
 type StudentSurveyStoreType = {
   data: {
     id: string
-    formData: object
+    formData: Record<string, any>
   }[]
-  storeStudentSurvey: (id: string, data: object) => void
-  getStudentSurvey: (id: string, data?: object) => object | null
+  storeStudentSurvey: (id: string, data: Record<string, any>) => void
+  getStudentSurvey: (id: string, data?: Record<string, any>) => Record<string, any> | null
 }
 
 export const useLocalStudentSurveyStore = create(
@@ -98,7 +98,7 @@ export const useLocalStudentSurveyStore = create(
       name: 'students_survey_store', // name of the item in the storage (must be unique)
       storage: createJSONStorage(() => localStorage),
       merge: (persistedState, currentState) =>
-        deepMerge(currentState, persistedState),
+        deepMerge(currentState, persistedState as Record<string, any>) as unknown as StudentSurveyStoreType ,
     }
   )
 )
@@ -107,7 +107,7 @@ export const useLocalParentSurvey = () => {
   const [survey, setSurvey] = useLocalStorage<
     {
       id: string
-      formData: object
+      formData: Record<string, any>
     }[]
   >(`parents_survey`, [])
 
@@ -164,14 +164,14 @@ export const useLocalStudentSurvey = () => {
   const [survey, setSurvey] = useLocalStorage<
     {
       id: string
-      formData: object
+      formData: Record<string, any>
     }[]
   >(`student_survey`, [])
 
   const getSurvey = useLocalStudentSurveyStore(state=> state.getStudentSurvey)
   const storeSurvey = useLocalStudentSurveyStore(state=> state.storeStudentSurvey)
 
-  const getStudentSurvey = (parentId: string, defaultData?: object) => {
+  const getStudentSurvey = (parentId: string, defaultData?: Record<string, any>) => {
     const parentData = survey.find((surveyData) => surveyData.id === parentId)
 
     if (!parentData && defaultData) {
