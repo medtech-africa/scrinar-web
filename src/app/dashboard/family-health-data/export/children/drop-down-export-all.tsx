@@ -96,17 +96,17 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
               vegetables: studentData?.nutrition?.foodKnowledge?.vegetables,
               fruits: studentData?.nutrition?.foodKnowledge?.fruits,
             },
-            mealFrequncy: {
+            mealFrequency: {
               breakfast_frequency:
-                studentData?.nutrition?.foodKnowledge?.breakfast_frequency,
+                studentData?.nutrition?.mealFrequency?.breakfast_frequency,
               breakfast_time:
-                studentData?.nutrition?.foodKnowledge?.breakfast_time,
+                studentData?.nutrition?.mealFrequency?.breakfast_time,
               breakfast_skipped_reason:
-                studentData?.nutrition?.foodKnowledge?.breakfast_skipped_reason,
+                studentData?.nutrition?.mealFrequency?.breakfast_skipped_reason,
               lunch_frequency:
-                studentData?.nutrition?.foodKnowledge?.lunch_frequency,
+                studentData?.nutrition?.mealFrequency?.lunch_frequency,
               dinner_frequency:
-                studentData?.nutrition?.foodKnowledge?.dinner_frequency,
+                studentData?.nutrition?.mealFrequency?.dinner_frequency,
             },
             numberDailyMeals: studentData?.nutrition?.numberDailyMeals,
             reasonChangeImpactHealth:
