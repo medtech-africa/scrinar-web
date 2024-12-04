@@ -129,7 +129,7 @@ export const csvHeaders = [
   },
   {
     label:
-      "What do you think you could change in your diet to make it healthier?",
+      'What do you think you could change in your diet to make it healthier?',
     key: 'nutrition.changeInDietToBeHealthy',
     studentId: 'nutrition',
   },
@@ -144,60 +144,78 @@ export const csvHeaders = [
     studentId: 'nutrition',
   },
   {
-      label:
-        'In a typical week, how often do you eat breakfast in the morning?',
-      key: 'nutrition.mealFrequency.breakfast_frequency',studentId: 'nutrition',
-    },
-    {
-      label: 'When you eat breakfast, what time do you usually eat it?',
-      key: 'nutrition.mealFrequency.breakfast_time',
-      studentId: 'nutrition',
-    },
-    {
-      label: 'If you do not eat breakfast every morning, why?',
-      key: 'nutrition.mealFrequency.breakfast_skipped_reason',
-      studentId: 'nutrition',
-    },
-    {
-      label: 'In a typical week, how often do you eat lunch?',
-      key: 'nutrition.mealFrequency.lunch_frequency',
-      studentId: 'nutrition',
-    },
-    {
-      label: 'In a typical week, how often do you eat dinner?',
-      key: 'nutrition.mealFrequency.dinner_frequency',
-      studentId: 'nutrition',
+    label: 'In a typical week, how often do you eat breakfast in the morning?',
+    key: 'nutrition.mealFrequency.breakfast_frequency',
+    studentId: 'nutrition',
   },
-    {
-      label:
-        'In a typical week, on how many days do you eat “beans, nuts, meat, fish or milk products”?',
-      key: 'nutrition.foodGroupFrequency.protein_sources_frequency',
-       studentId: 'nutrition',
-    },
-    {
-      label:
-        'In a typical week, on how many days do you eat “a variety of foods from different food groups” (e.g. 4-star diet, 3 food groups)”?',
-      key: 'nutrition.foodGroupFrequency.varied_diet_frequency',
-       studentId: 'nutrition',
-    },
-    {
-      label:
-        'In a typical week, on how many days do you eat “green leafy vegetables”?',
-      key: 'nutrition.foodGroupFrequency.green_leafy_vegetables_frequency',
-       studentId: 'nutrition',
-    },
-    {
-      label:
-        'In a typical week, on how many days do you consume snacks like buns, doughnut, sausage, biscuits, etc?',
-      key: 'nutrition.foodGroupFrequency.unhealthy_snacks_frequency',
-       studentId: 'nutrition',
-    },
-    {
-      label:
-        'In a typical week, on how many days do you drink sugary beverages like coke, fanta etc?',
-      key: 'nutrition.foodGroupFrequency.sugary_drinks_frequency',
-       studentId: 'nutrition',
-    },
+  {
+    label: 'When you eat breakfast, what time do you usually eat it?',
+    key: 'nutrition.mealFrequency.breakfast_time',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'If you do not eat breakfast every morning, why?',
+    key: 'nutrition.mealFrequency.breakfast_skipped_reason',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'In a typical week, how often do you eat lunch?',
+    key: 'nutrition.mealFrequency.lunch_frequency',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'In a typical week, how often do you eat dinner?',
+    key: 'nutrition.mealFrequency.dinner_frequency',
+    studentId: 'nutrition',
+  },
+  {
+    label:
+      'In a typical week, on how many days do you eat “beans, nuts, meat, fish or milk products”?',
+    key: 'nutrition.foodGroupFrequency.protein_sources_frequency',
+    studentId: 'nutrition',
+  },
+  {
+    label:
+      'In a typical week, on how many days do you eat “a variety of foods from different food groups” (e.g. 4-star diet, 3 food groups)”?',
+    key: 'nutrition.foodGroupFrequency.varied_diet_frequency',
+    studentId: 'nutrition',
+  },
+  {
+    label:
+      'In a typical week, on how many days do you eat “green leafy vegetables”?',
+    key: 'nutrition.foodGroupFrequency.green_leafy_vegetables_frequency',
+    studentId: 'nutrition',
+  },
+  {
+    label:
+      'In a typical week, on how many days do you consume snacks like buns, doughnut, sausage, biscuits, etc?',
+    key: 'nutrition.foodGroupFrequency.unhealthy_snacks_frequency',
+    studentId: 'nutrition',
+  },
+  {
+    label:
+      'In a typical week, on how many days do you drink sugary beverages like coke, fanta etc?',
+    key: 'nutrition.foodGroupFrequency.sugary_drinks_frequency',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Cereals (e.g., maize, rice, sorghums)',
+    key: 'nutrition.foodKnowledge.cereals',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Roots (e.g., yam, cassava, potatoes)',
+    key: 'nutrition.foodKnowledge.roots',
+    studentId: 'nutrition',
+  },
+  { label: 'Beans & nuts', key: 'nutrition.foodKnowledge.beans_nuts', studentId: 'nutrition' },
+  {
+    label: 'Meat, fish, egg & milk products',
+    key: 'nutrition.foodKnowledge.meat_fish',
+    studentId: 'nutrition',
+  },
+  { label: 'Vegetables', key: 'nutrition.foodKnowledge.vegetables', studentId: 'nutrition' },
+  { label: 'Fruits', key: 'nutrition.foodKnowledge.fruits', studentId: 'nutrition' },
 
   // mealFrequncy: {
   //             breakfast_frequency:
@@ -216,7 +234,6 @@ export const csvHeaders = [
   //             studentData?.nutrition?.reasonChangeImpactHealth,
   //         }
 
-  
   // Physical Activity
   {
     label: 'Physical Activity',
