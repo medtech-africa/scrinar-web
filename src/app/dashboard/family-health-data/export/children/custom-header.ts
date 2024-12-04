@@ -128,6 +128,12 @@ export const csvHeaders = [
     studentId: 'nutrition',
   },
   {
+    label:
+      'How do you get the  snacks or sugary drinks that you take',
+    key: 'nutrition.foodGroupFrequency.snack_source',
+    studentId: 'nutrition',
+  },
+  {
     label: 'Cereals (e.g., maize, rice, sorghums)',
     key: 'nutrition.foodKnowledge.cereals',
     studentId: 'nutrition',
@@ -282,6 +288,11 @@ export const csvHeaders = [
 
   // Mental Health and Stress
   {
+    label: 'Regular Health Checkups Importance',
+    key: 'ncdRiskFactor.healthCheckupImportance',
+    studentId: 'ncdRiskFactor',
+  },
+  {
     label: 'Mental Health Importance',
     key: 'ncdRiskFactor.mentalHealthImportance',
     studentId: 'ncdRiskFactor',
@@ -306,8 +317,11 @@ export const csvHeaders = [
     key: 'ncdRiskFactor.stressors',
     studentId: 'ncdRiskFactor',
   },
-
-  // Risk Behaviors
+  {
+    label: 'Thoughts on Substances',
+    key: 'ncdRiskFactor.thoughtsOnSubstances',
+    studentId: 'ncdRiskFactor',
+  },
   {
     label: 'Ever Smoked',
     key: 'ncdRiskFactor.everSmoked',
@@ -328,21 +342,7 @@ export const csvHeaders = [
     key: 'ncdRiskFactor.currentAlcohol',
     studentId: 'ncdRiskFactor',
   },
-  {
-    label: 'Smoking Risks',
-    key: 'ncdRiskFactor.smokingRisks',
-    studentId: 'ncdRiskFactor',
-  },
-  {
-    label: 'Alcohol Risks',
-    key: 'ncdRiskFactor.alcoholRisks',
-    studentId: 'ncdRiskFactor',
-  },
-  {
-    label: 'Thoughts on Substances',
-    key: 'ncdRiskFactor.thoughtsOnSubstances',
-    studentId: 'ncdRiskFactor',
-  },
+  
 
   // HPV and Health Services
   {

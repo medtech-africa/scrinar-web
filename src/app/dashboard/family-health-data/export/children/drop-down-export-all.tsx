@@ -87,6 +87,10 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
               vegetable_portion_size:
                 studentData?.nutrition?.foodGroupFrequency
                   ?.vegetable_portion_size,
+              snack_source:
+                studentData?.nutrition?.foodGroupFrequency?.snack_source?.join(
+                  ', '
+                ),
             },
             foodKnowledge: {
               cereals: studentData?.nutrition?.foodKnowledge?.cereals,
@@ -133,7 +137,6 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
           },
 
           // Physical Activity
-
           physicalActivity: {
             amountOfPhysicalActivityDaily:
               studentData?.amountOfPhysicalActivityDaily,
@@ -181,7 +184,9 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
             stressors: studentData?.stressors?.join(', '),
             makesFeelBetter: studentData?.makesFeelBetter?.join(', '),
             thoughtsOnSubstances: studentData?.thoughtsOnSubstances,
-            feelingsOfstress: studentData?.feelingsOfstress,
+            feelingsOfstress:
+              studentData?.feelingsOfstress ||
+              studentData?.feelingsOfstressOther,
             everSmoked: studentData?.everSmoked,
             currentAlcohol: studentData?.currentAlcohol,
             everTakenAlcohol: studentData?.everTakenAlcohol,
