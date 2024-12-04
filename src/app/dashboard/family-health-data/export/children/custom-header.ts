@@ -28,72 +28,195 @@ export const csvHeaders = [
   { label: 'Glucose level', key: 'glucoseLevel' },
 
   // Diet and Nutrition
-  {
-    label: 'Balanced Diet Importance',
-    key: 'nutrition.balancedDietImportance',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Eating Healthy Foods',
-    key: 'nutrition.eatingHealthyFoods',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Snack Preference',
-    key: 'nutrition.snackPreference',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Fruits and Vegetables',
-    key: 'nutrition.fruitsVegetables',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Snacks Consumption',
-    key: 'nutrition.snacksConsumption',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Sugary Beverages',
-    key: 'nutrition.sugaryBeverages',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Diet Consequence',
-    key: 'nutrition.dietConsequence',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Carb Examples',
-    key: 'nutrition.carbExamples',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Protein Examples',
-    key: 'nutrition.proteinExamples',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Fat Examples',
-    key: 'nutrition.fatExamples',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Vitamin Examples',
-    key: 'nutrition.vitaminExamples',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Sweets Effect',
-    key: 'nutrition.sweetsEffect',
-    studentId: 'nutrition',
-  },
-  {
-    label: 'Salty Food Effect',
-    key: 'nutrition.saltyFoodEffect',
-    studentId: 'nutrition',
-  },
+  // {
+  //   label: 'Balanced Diet Importance',
+  //   key: 'nutrition.balancedDietImportance',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Eating Healthy Foods',
+  //   key: 'nutrition.eatingHealthyFoods',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Snack Preference',
+  //   key: 'nutrition.snackPreference',
+  //   studentId: 'nutrition',
+  // },
+  /* The above code appears to be defining a series of objects with properties related to nutrition.
+  Each object represents a specific aspect of nutrition, such as fruits and vegetables, snacks
+  consumption, sugary beverages, diet consequences, examples of different types of nutrients (carbs,
+  protein, fat, vitamins), and the effects of sweets and salty foods. Each object has a label, key,
+  and studentId property associated with it. */
+  // {
+  //   label: 'Fruits and Vegetables',
+  //   key: 'nutrition.fruitsVegetables',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Snacks Consumption',
+  //   key: 'nutrition.snacksConsumption',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Sugary Beverages',
+  //   key: 'nutrition.sugaryBeverages',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Diet Consequence',
+  //   key: 'nutrition.dietConsequence',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Carb Examples',
+  //   key: 'nutrition.carbExamples',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Protein Examples',
+  //   key: 'nutrition.proteinExamples',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Fat Examples',
+  //   key: 'nutrition.fatExamples',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Vitamin Examples',
+  //   key: 'nutrition.vitaminExamples',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Sweets Effect',
+  //   key: 'nutrition.sweetsEffect',
+  //   studentId: 'nutrition',
+  // },
+  // {
+  //   label: 'Salty Food Effect',
+  //   key: 'nutrition.saltyFoodEffect',
+  //   studentId: 'nutrition',
+  // },
 
+  {
+    label:
+      'Do you know that taking a diet with a variety of foods from different food groups is important for your health?',
+    key: 'nutrition.awareImportanceOfFoodVariety',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Do you know that food has 3 different nutritional benefits?',
+    key: 'nutrition.awareFoodHasDiffBenefits',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Can you mention any of them?',
+    key: 'nutrition.foodBenefits',
+    studentId: 'nutrition',
+  },
+  {
+    label:
+      'What do you think can happen if your child eats a lot of sweets and candies?',
+    key: 'nutrition.effectsOfTooMuchSweets',
+    studentId: 'nutrition',
+  },
+  {
+    label:
+      'What do you think can happen if your child eat a lot of salty food or food with a lot of oil?',
+    key: 'nutrition.effectsOfTooMuchSaltAndOil',
+    studentId: 'nutrition',
+  },
+  {
+    label:
+      "What do you think you could change in your diet to make it healthier?",
+    key: 'nutrition.changeInDietToBeHealthy',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'How many meals do you eat daily?',
+    key: 'nutrition.numberDailyMeals',
+    studentId: 'nutrition',
+  },
+  {
+    label: 'Why do you feel that change would help you stay healthy?',
+    key: 'nutrition.reasonChangeImpactHealth',
+    studentId: 'nutrition',
+  },
+  {
+      label:
+        'In a typical week, how often do you eat breakfast in the morning?',
+      key: 'nutrition.mealFrequency.breakfast_frequency',studentId: 'nutrition',
+    },
+    {
+      label: 'When you eat breakfast, what time do you usually eat it?',
+      key: 'nutrition.mealFrequency.breakfast_time',
+      studentId: 'nutrition',
+    },
+    {
+      label: 'If you do not eat breakfast every morning, why?',
+      key: 'nutrition.mealFrequency.breakfast_skipped_reason',
+      studentId: 'nutrition',
+    },
+    {
+      label: 'In a typical week, how often do you eat lunch?',
+      key: 'nutrition.mealFrequency.lunch_frequency',
+      studentId: 'nutrition',
+    },
+    {
+      label: 'In a typical week, how often do you eat dinner?',
+      key: 'nutrition.mealFrequency.dinner_frequency',
+      studentId: 'nutrition',
+  },
+    {
+      label:
+        'In a typical week, on how many days do you eat “beans, nuts, meat, fish or milk products”?',
+      key: 'nutrition.foodGroupFrequency.protein_sources_frequency',
+       studentId: 'nutrition',
+    },
+    {
+      label:
+        'In a typical week, on how many days do you eat “a variety of foods from different food groups” (e.g. 4-star diet, 3 food groups)”?',
+      key: 'nutrition.foodGroupFrequency.varied_diet_frequency',
+       studentId: 'nutrition',
+    },
+    {
+      label:
+        'In a typical week, on how many days do you eat “green leafy vegetables”?',
+      key: 'nutrition.foodGroupFrequency.green_leafy_vegetables_frequency',
+       studentId: 'nutrition',
+    },
+    {
+      label:
+        'In a typical week, on how many days do you consume snacks like buns, doughnut, sausage, biscuits, etc?',
+      key: 'nutrition.foodGroupFrequency.unhealthy_snacks_frequency',
+       studentId: 'nutrition',
+    },
+    {
+      label:
+        'In a typical week, on how many days do you drink sugary beverages like coke, fanta etc?',
+      key: 'nutrition.foodGroupFrequency.sugary_drinks_frequency',
+       studentId: 'nutrition',
+    },
+
+  // mealFrequncy: {
+  //             breakfast_frequency:
+  //               studentData?.nutrition?.foodKnowledge?.breakfast_frequency,
+  //             breakfast_time:
+  //               studentData?.nutrition?.foodKnowledge?.breakfast_time,
+  //             breakfast_skipped_reason:
+  //               studentData?.nutrition?.foodKnowledge?.breakfast_skipped_reason,
+  //             lunch_frequency:
+  //               studentData?.nutrition?.foodKnowledge?.lunch_frequency,
+  //             dinner_frequency:
+  //               studentData?.nutrition?.foodKnowledge?.dinner_frequency,
+  //           },
+  //           numberDailyMeals: studentData?.nutrition?.numberDailyMeals,
+  //           reasonChangeImpactHealth:
+  //             studentData?.nutrition?.reasonChangeImpactHealth,
+  //         }
+
+  
   // Physical Activity
   {
     label: 'Physical Activity',
