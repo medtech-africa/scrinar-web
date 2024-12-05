@@ -37,17 +37,82 @@ export const useHealthDataCompletionAnalytics = () => {
   })
 }
 
-// const data = [
-//   { year: '2014', type: 'Sales', sales: 1000 },
-//   { year: '2015', type: 'Sales', sales: 1170 },
-//   { year: '2016', type: 'Sales', sales: 660 },
-//   { year: '2017', type: 'Sales', sales: 1030 },
-//   { year: '2014', type: 'Expenses', sales: 400 },
-//   { year: '2015', type: 'Expenses', sales: 460 },
-//   { year: '2016', type: 'Expenses', sales: 1120 },
-//   { year: '2017', type: 'Expenses', sales: 540 },
-//   { year: '2014', type: 'Profit', sales: 300 },
-//   { year: '2015', type: 'Profit', sales: 300 },
-//   { year: '2016', type: 'Profit', sales: 300 },
-//   { year: '2017', type: 'Profit', sales: 350 },
-// ]
+export interface NutritionAnalytics {
+  foodKnowledge: FoodKnowledge[];
+}
+
+export interface FoodKnowledge {
+  food:       string;
+  categories: Categories;
+}
+
+export interface Categories {
+  body_building?: number;
+  not_sure:       number;
+  energy:         number;
+  protective?:    number;
+}
+
+
+export const useNutritionAnalytics = () => {
+  return useQuery({
+    queryKey: ['nutrition-analytics'],
+    queryFn: async () => {
+      const { data } = await baseAxios.get<NutritionAnalytics>(API.nutritionAnalytics)
+      return data
+    },
+  })
+}
+
+export const useGeneralAnalytics = () => {
+  return useQuery({
+    queryKey: ['general-analytics'],
+    queryFn: async () => {
+      const { data } = await baseAxios.get<GeneralAnalytics>(API.generalAnalytics)
+      return data
+    },
+  })
+}
+
+export interface GeneralAnalytics {
+  data: Data;
+}
+
+ interface Data {
+  countPerGender:         CountPerGender[];
+  livingSituation:        CountPerGender[];
+  distanceToSchool:       CountPerGender[];
+  doYouKnowHighBloodPressure: CountPerGender[];
+  ageGroupDistribution:   AgeGroupDistribution[];
+  awarenessOfFoodVariety: AwarenessOfFoodVariety[];
+  weightAwareness:        WeightAwareness[];
+  heightAwareness:        HeightAwareness[];
+}
+
+ interface AgeGroupDistribution {
+  count:    number;
+  ageGroup: string;
+}
+
+ interface AwarenessOfFoodVariety {
+  count:     number;
+  awareness: null | string;
+}
+
+ interface CountPerGender {
+  count: number;
+  value: null | string;
+}
+
+ interface HeightAwareness {
+  count:            number;
+  knowsHeight?:     string;
+  isHeightHealthy?: string;
+}
+
+ interface WeightAwareness {
+  count:            number;
+  knowsWeight?:     string;
+  isWeightHealthy?: null | string;
+}
+

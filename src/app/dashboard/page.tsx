@@ -30,6 +30,10 @@ import { AddNewParentContent } from './user-profile/parents/add/add-new-parent-c
 import { AddParentQuestionnaire } from './user-profile/parents/questionnaire/add-questionnaire'
 import { HealthDataBarStats } from '@/components/dashboard/HealthDataBarStats'
 import { HealthDataCompletionStats } from '@/components/dashboard/HealthDataCompletionStats'
+import {
+  GeneralAnalyticsBarChart,
+  NutritionAnalytics,
+} from '@/components/dashboard/NutritionAnalytics'
 
 const dashboardStats = [
   {
@@ -451,6 +455,8 @@ export default function Home() {
       <div className="grid gap-6">
         <HealthDataBarStats />
         <HealthDataCompletionStats />
+        <NutritionAnalytics />
+        <GeneralAnalyticsBarChart />
       </div>
       <Modal
         open={openModal}
