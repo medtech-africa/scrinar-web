@@ -13,23 +13,28 @@ export const ScreeningQuestionsForm = () => {
       >
         <OptionWithRadioField
           label="Do you experience chest pain or discomfort?"
-          options={['Yes', 'No']}
+          options={[
+            'No, I do not experience chest pain or discomfort',
+            'Yes, but only during physical activity or stress, and it goes away with rest or medication',
+            'Yes, sometimes even at rest, and it does not always improve with rest or medication',
+            'Yes, it is severe and persistent',
+          ]}
           form={{ id: 'symptoms.chestPain' }}
         />
         <OptionWithRadioField
           label="Do you experience shortness of breath?"
-          options={['Yes', 'No']}
+          options={[
+            'No difficulty breathing during normal activities',
+            'Mild difficulty breathing during moderate physical activity (e.g., climbing stairs, walking briskly)',
+            'Moderate difficulty breathing with minimal physical activit (e.g., walking short distances, light housework)',
+            'Severe difficulty breathing even at rest',
+          ]}
           form={{ id: 'symptoms.shortnessOfBreath' }}
         />
         <OptionWithRadioField
           label="Do you experience an irregular heartbeat?"
           options={['Yes', 'No']}
           form={{ id: 'symptoms.irregularHeartbeat' }}
-        />
-        <OptionWithRadioField
-          label="Do you experience fatigue or weakness?"
-          options={['Yes', 'No']}
-          form={{ id: 'symptoms.fatigue' }}
         />
 
         {/* Diagnosed Health Conditions */}

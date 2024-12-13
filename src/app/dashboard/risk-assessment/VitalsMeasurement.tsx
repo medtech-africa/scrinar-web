@@ -16,7 +16,9 @@ export const VitalsMeasurement = () => {
   const { control, watch, setValue } = useFormContext()
 
   const { bmi, age, sys, dys, height, weight } = watch('vitals', {})
-  const { gender } = watch('personalInfo', {})
+  const { gender: genderVal } = watch('personalInfo', {})
+
+  const gender = genderVal?.toLowerCase()
 
   useEffect(() => {
     if (isValidNumber(height) && isValidNumber(weight)) {
@@ -197,7 +199,10 @@ export const VitalsMeasurement = () => {
             </div>
           </PageCard>
 
-          <PageCard title="Oxygen & Temperature" bodyStyle="p-4 mt-4">
+          <PageCard
+            title="Oxygen & Temperature (Optional)"
+            bodyStyle="p-4 mt-4"
+          >
             <Controller
               name="vitals.oxygenSaturation"
               control={control}

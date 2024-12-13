@@ -3,6 +3,7 @@ import { PageCard } from '@/components/ui/page-card'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
+import CardiacAssessmentForm from './CardiacAssessmentForm'
 
 export const FamilyHistoryLifestyleForm = () => {
   const { control, watch } = useFormContext()
@@ -10,8 +11,8 @@ export const FamilyHistoryLifestyleForm = () => {
   return (
     <PageCard title="Family History & Lifestyle" bodyStyle="px-4 pb-4">
       <PageCard
-        title="Family History of NCDs"
-        bodyStyle="px-4 pb-4 gap-4 grid grid-cols-2"
+        title="Family History of NCDs (History of NCDs in First Degree relatives eg mother, father, brother or sister.)"
+        bodyStyle="px-4 pb-4 gap-4 grid grid-cols-1"
       >
         <OptionWithRadioField
           label="Cardiovascular Disease (CVD)"
@@ -38,28 +39,33 @@ export const FamilyHistoryLifestyleForm = () => {
           options={['Yes', 'No']}
           form={{ id: 'familyHistory.stroke' }}
         />
-        <Controller
-          name="familyHistory.otherNcds"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              placeholder="Specify"
-              label="Other NCDs (specify)"
-              labelStyle="lg:text-sm text-xs"
+        <div>
+          <OptionWithRadioField
+            label="Other NCDs (specify)"
+            options={['Yes', 'No']}
+            form={{ id: 'familyHistory.otherNcdsOption' }}
+          />
+
+          {watch('familyHistory.otherNcdsOption') === 'Yes' && (
+            <Controller
+              name="familyHistory.otherNcds"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  placeholder="Specify"
+                  label="Other NCDs (specify)"
+                  labelStyle="lg:text-sm text-xs"
+                />
+              )}
             />
           )}
-        />
-        <OptionWithRadioField
-          label="Other NCDs (specify)"
-          options={['Yes', 'No']}
-          form={{ id: 'familyHistory.otherNcds' }}
-        />
+        </div>
       </PageCard>
       {/*  */}
       <PageCard
         title="Lifestyle & Habits"
-        bodyStyle="px-4 mt-4 gap-4 grid grid-cols-2"
+        bodyStyle="px-4 mt-4 gap-4 grid grid-cols-1"
       >
         {/* Tobacco Use */}
         <OptionWithRadioField
@@ -90,10 +96,16 @@ export const FamilyHistoryLifestyleForm = () => {
         {/* Alcohol Consumption */}
         <OptionWithRadioField
           label="Do you consume alcohol?"
-          options={['Never', 'Sober', 'Occasionally', 'Frequently']}
+          options={[
+            'Never',
+            'Seldomly (less than once a week)',
+            'Occasionally (1–2 times a week)',
+            'Regularly (3–5 times a week)',
+            'Frequently (6 or more times a week)',
+          ]}
           form={{ id: 'lifestyle.alcohol.usage' }}
         />
-        {['Occasionally', 'Frequently'].includes(
+        {['Occasionally', 'Frequently', 'Regularly'].includes(
           watch('lifestyle.alcohol.usage')
         ) && (
           <>
@@ -126,8 +138,13 @@ export const FamilyHistoryLifestyleForm = () => {
 
         {/* Diet and Nutrition */}
         <OptionWithRadioField
-          label="Do you consume processed foods frequently (e.g., Corn-beef)?"
-          options={['Yes', 'No']}
+          label="Do you consume processed foods (e.g., Corn-beef)?"
+          options={[
+            'Seldomly (less than once a week)',
+            'Occasionally (1–2 times a week)',
+            'Regularly (3–5 times a week)',
+            'Frequently (6 or more times a week)',
+          ]}
           form={{ id: 'lifestyle.diet.processedFoods' }}
         />
         <OptionWithRadioField
@@ -136,7 +153,7 @@ export const FamilyHistoryLifestyleForm = () => {
           form={{ id: 'lifestyle.diet.addSalt' }}
         />
         <OptionWithRadioField
-          label="How many servings of fruits and vegetables do you consume daily?"
+          label="How many servings of fruits and vegetables do you consume daily? (a serving is about the size of an adult’s closed fist)"
           options={['None', '1-2 servings', '3-4 servings', '5+ servings']}
           form={{ id: 'lifestyle.diet.fruitVegServings' }}
         />
@@ -144,7 +161,12 @@ export const FamilyHistoryLifestyleForm = () => {
         {/* Physical Activity */}
         <OptionWithRadioField
           label="Do you engage in physical activity?"
-          options={['Yes', 'No']}
+          options={[
+            'Seldomly (less than once a week)',
+            'Occasionally (1–2 times a week)',
+            'Regularly (3–5 times a week)',
+            'Frequently (6 or more times a week)',
+          ]}
           form={{ id: 'lifestyle.physicalActivity.engages' }}
         />
         {watch('lifestyle.physicalActivity.engages') === 'Yes' && (
@@ -188,6 +210,8 @@ export const FamilyHistoryLifestyleForm = () => {
           </>
         )}
       </PageCard>
+
+      <CardiacAssessmentForm />
     </PageCard>
   )
 }

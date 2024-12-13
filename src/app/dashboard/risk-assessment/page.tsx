@@ -7,12 +7,16 @@ const RiskAssessment = () => {
     <div className="flex flex-col gap-y-5">
       <div className="flex flex-col gap-y-2">
         <h1 className="text-2xl font-medium">Risk Assessment (WIP)</h1>
-        <p className="">
-          This non-communicable disease (NCD) screening page is designed for use
-          in pharmacies or hospitals to assess a patient&apos;s risk of
-          developing NCDs over a two-year period. The page captures the
-          patient&apos;s vital signs, personal details, family history, and
-          screening responses to provide a comprehensive risk assessment
+        <p>
+          Non communicable Diseases (NCDs) are chronic conditions that are not
+          transmitted from person to person, such as diabetes, cardiovascular
+          disease, cancer, and chronic respiratory diseases.
+        </p>
+        <p>
+          This screening page is designed for use in pharmacies and hospitals to
+          assess a patient’s risk of developing NCDs over a 2 year period, using
+          vital signs, family history, personal lifestyle and screening
+          responses to provide a comprehensive risk assessment.
         </p>
       </div>
       <div className="">

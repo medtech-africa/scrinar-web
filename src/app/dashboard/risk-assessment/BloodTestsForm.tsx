@@ -26,7 +26,7 @@ export const BloodTestsForm = () => {
 
   return (
     <PageCard
-      title="Blood tests (optional)"
+      title="Blood tests (Blood tests are Optional, but they help to give a more complete picture of your overall health)"
       bodyStyle="px-4 pb-4 gap-4 grid grid-cols-2"
     >
       <PageCard title="Blood Sugar Level (mg/dL)" bodyStyle="space-y-1 px-2">
