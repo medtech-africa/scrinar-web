@@ -11,14 +11,16 @@ import {
 import { Label } from '@/components/ui/label'
 import { messageCheck, variantValidityCheck } from './utils'
 import isValidNumber from '@/utils/isValidNumber'
+import calculateAge from '@/utils/calculateAge'
 
 export const VitalsMeasurement = () => {
   const { control, watch, setValue } = useFormContext()
 
-  const { bmi, age, sys, dys, height, weight } = watch('vitals', {})
-  const { gender: genderVal } = watch('personalInfo', {})
+  const { bmi, sys, dys, height, weight } = watch('vitals', {})
+  const { gender: genderVal, dateOfBirth } = watch('personalInfo', {})
 
   const gender = genderVal?.toLowerCase()
+  const age = calculateAge(dateOfBirth)
 
   useEffect(() => {
     if (isValidNumber(height) && isValidNumber(weight)) {
@@ -83,21 +85,7 @@ export const VitalsMeasurement = () => {
               )}
             />
           </div>
-          <div className="px-4 max-w-[50%]">
-            <Controller
-              name="vitals.age"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  label="Age"
-                  labelStyle="flex justify-center items-center"
-                  variant={variantValidityCheck(field.value)}
-                  message={messageCheck(field.value)}
-                />
-              )}
-            />
-          </div>
+
           <div className="mt-4">
             <div className="bg-grey-50 w-full p-4 flex justify-center">
               <Text>BMI Result</Text>
