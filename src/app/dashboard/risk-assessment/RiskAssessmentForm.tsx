@@ -69,6 +69,8 @@ export const RiskAssessmentForm = () => {
     analyzeRisk(data)
   }
 
+  const consentAgreement = formMethods.watch('consentAgreement')
+
   return (
     <FormProvider {...formMethods}>
       <div className="relative">
@@ -96,7 +98,7 @@ export const RiskAssessmentForm = () => {
               value="Generate Assessment"
               leadingIcon={<IconPicker icon="saveAdd" />}
               className="mt-6"
-              disabled={isPending}
+              disabled={isPending || !consentAgreement}
               type="submit"
             />
           </div>

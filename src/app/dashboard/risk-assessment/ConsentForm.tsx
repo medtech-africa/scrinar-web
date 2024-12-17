@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import { Checkbox } from '@/components/ui/checkbox'
 import { Input } from '@/components/ui/input'
 import { PageCard } from '@/components/ui/page-card'
 import { TextArea } from '@/components/ui/textarea'
@@ -21,14 +20,12 @@ export const ConsentForm = ({ assessmentId = '' }) => {
     mutationFn: (data: any) => updateConsent(data, assessmentId),
   })
 
-  const consentAgreement = watch('consentAgreement')
   const consentSignature = watch('consentSignature')
   const reportEmail = watch('reportEmail')
   const providerNotes = watch('providerNotes')
 
   useEffect(() => {
     const data = {
-      consentAgreement,
       consentSignature,
       reportEmail,
       providerNotes,
@@ -40,31 +37,13 @@ export const ConsentForm = ({ assessmentId = '' }) => {
 
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [consentAgreement, consentSignature, reportEmail, providerNotes])
+  }, [consentSignature, reportEmail, providerNotes])
 
   return (
     <PageCard
       title="Consent & Data Use"
       bodyStyle="px-4 pb-4 gap-4 flex flex-col"
     >
-      <div className="flex items-start space-x-2">
-        <Controller
-          name="consentAgreement"
-          control={control}
-          render={({ field }) => (
-            <Checkbox
-              id="consent"
-              checked={field.value}
-              onCheckedChange={field.onChange}
-            />
-          )}
-        />
-        <label htmlFor="consent" className="text-sm">
-          I consent to the collection and use of my health information for
-          screening purposes.
-        </label>
-      </div>
-
       <div className="bg-yellow-50 p-4 rounded-lg text-sm">
         <p className="font-semibold mb-2">Disclaimer:</p>
         <p>
