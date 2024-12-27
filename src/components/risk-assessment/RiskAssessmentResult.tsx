@@ -188,8 +188,6 @@ const RiskAssessmentResult = ({
 
   const activeData = data?.[activeTab] ?? null
 
-  console.log(activeData, '>>')
-
   const recommendations = useMemo(
     () =>
       activeData

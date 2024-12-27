@@ -142,7 +142,6 @@ export function NutritionAnalytics() {
 
 export const WeightAwarenessBarChart = () => {
   const { data } = useGeneralAnalytics()
-  console.log('🚀 ~ WeightAwarenessBarChart ~ data:', data)
   const weightAwarenessData = data?.data.weightAwareness
 
   return (
