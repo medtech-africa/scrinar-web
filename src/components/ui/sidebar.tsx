@@ -111,6 +111,19 @@ const generalData = [
       'jica_researchers',
     ],
   },
+  {
+    title: 'Surveillance',
+    icon: 'calendar',
+    href: 'surveillance',
+    roles: [
+      'school',
+      'instructor',
+      'play4health_admin',
+      'super_admin',
+      'jica_enumerators',
+      'jica_researchers',
+    ],
+  },
   // {
   //   title: 'Training Module',
   //   icon: 'book',
