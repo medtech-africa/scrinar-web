@@ -68,7 +68,7 @@ const generalData = [
   },
   {
     title: 'Interviews',
-    icon: 'grid7',
+    icon: 'HeroiconsOutlineDocumentText',
     href: 'interviews',
     roles: [
       'school',
@@ -81,7 +81,7 @@ const generalData = [
   },
   {
     title: 'Risk assessment',
-    icon: 'grid7',
+    icon: 'IcBaselineAssessment',
     href: 'risk-assessment',
     roles: [
       'school',
@@ -113,7 +113,7 @@ const generalData = [
   },
   {
     title: 'Surveillance',
-    icon: 'calendar',
+    icon: 'ArcticonsNetworksurvey',
     href: 'surveillance',
     roles: [
       'school',
@@ -284,7 +284,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                     layout="position"
                   >
                     <div className="flex gap-2">
-                      <IconPicker icon="profile2User" size="1.5rem" />
+                      <IconPicker icon="healthdata" size="1.5rem" />
                       <Text
                         className="block md:hidden lg:block"
                         variant="text/md"

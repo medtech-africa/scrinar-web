@@ -64,4 +64,8 @@ export const IconMap: Map<string, string> = new Map([
   [Icons.playAudio, 'PlayAudioIcon'],
   [Icons.sortAsc, 'SortAscIcon'],
   [Icons.sortDesc, 'SortDescIcon'],
+  [Icons.ArcticonsNetworksurvey, 'ArcticonsNetworksurvey'],
+  [Icons.IcBaselineAssessment, 'IcBaselineAssessment'],
+  [Icons.HeroiconsOutlineDocumentText, 'HeroiconsOutlineDocumentText'],
+  [Icons.healthdata, 'HealthData'],
 ])
