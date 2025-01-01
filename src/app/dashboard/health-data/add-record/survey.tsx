@@ -24,7 +24,10 @@ import { IdealBody } from '@/components/student-survey/IdealBody'
 import { StudentNutritionSurvey } from '@/components/student-survey/Nutrition'
 import ContentLoader from '@/components/content-loader'
 import { useEffect } from 'react'
-import { useLocalStudentSurvey } from '@/hooks/useLocalParentSurvey'
+import {
+  useLocalStudentSurvey,
+  // useLocalStudentSurveyStore,
+} from '@/hooks/useLocalParentSurvey'
 
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2.2 px-4 transition-all cursor-pointer',
@@ -45,6 +48,13 @@ export const Survey = ({
     })
 
   const { getStudentSurvey, storeStudentSurvey } = useLocalStudentSurvey()
+
+  // const storeStudentSurvey = useLocalStudentSurveyStore(
+  //   (state) => state.storeStudentSurvey
+  // )
+  // const getStudentSurvey = useLocalStudentSurveyStore(
+  //   (state) => state.getStudentSurvey
+  // )
 
   useEffect(() => {
     if (studentSurvey) {

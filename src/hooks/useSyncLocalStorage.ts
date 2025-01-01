@@ -1,6 +1,6 @@
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
-import { useLocalParentSurveyStore, useLocalStudentSurveyStore } from './useLocalParentSurvey'
+import { useLocalParentSurveyStore, useLocalStudentSurvey, useLocalStudentSurveyStore } from './useLocalParentSurvey'
 import { useEffect } from 'react'
 
 export const useSyncParentLocalStorage = () => {
@@ -36,6 +36,7 @@ export const useSyncParentLocalStorage = () => {
 }
 export const useSyncChildrenLocalStorage = () => {
   const allSurvey = useLocalStudentSurveyStore((state) => state.data)
+  const {survey} = useLocalStudentSurvey()
 
   const syncForm = (data: { id: string; formData: object }) => {
     //   @ts-expect-error createdAt
@@ -52,6 +53,14 @@ export const useSyncChildrenLocalStorage = () => {
 
   useEffect(() => {
     if (allSurvey.length > 0) {
+      const allSurveyArray = Object.values(allSurvey)
+      Promise.allSettled(allSurveyArray.map((survey) => syncForm(survey))).then(
+        (results) => {
+          console.log('results', results.map((result) => result.status))
+        }
+      )
+    }
+    if (survey.length > 0) {
       const allSurveyArray = Object.values(allSurvey)
       Promise.allSettled(allSurveyArray.map((survey) => syncForm(survey))).then(
         (results) => {

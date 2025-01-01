@@ -6,12 +6,13 @@ import {
   DashboardCardHeader,
   DashboardCardIcon,
 } from '@/components/ui/dashboard-card'
-import type { Meta } from '@storybook/react'
 import {
-  SchoolLearningTeacherLinear,
-  UsersProfile2UserLinear,
-  BusinessHealthLinear,
-} from 'react-icons-sax'
+  GenderIcon,
+  HealthIcon,
+  Profile2UserIcon,
+  UserEditIcon,
+} from '@/components/ui/icon-picker/icons'
+import type { Meta } from '@storybook/react'
 
 const meta = {
   title: 'Example/DashboardCard',
@@ -26,16 +27,16 @@ export default meta
 
 const dataItems = [
   {
-    icon: <UsersProfile2UserLinear className="text-violet-900" />,
+    icon: <UserEditIcon className="text-violet-900" />,
     subtitle: 'Students',
   },
   {
-    icon: <SchoolLearningTeacherLinear className="text-emerald-900" />,
+    icon: <GenderIcon className="text-emerald-900" />,
     subtitle: 'Instructors',
     className: 'bg-emerald-50 border-emerald-100 ',
   },
   {
-    icon: <BusinessHealthLinear className="text-orange-900" />,
+    icon: <HealthIcon className="text-orange-900" />,
     subtitle: 'Health Data',
     className: 'bg-orange-100 border-orange-200 ',
   },
@@ -49,7 +50,7 @@ export const Base = () => {
         subtitle="Students"
         icon={
           <DashboardCardIcon>
-            <UsersProfile2UserLinear />
+            <Profile2UserIcon />
           </DashboardCardIcon>
         }
       />
