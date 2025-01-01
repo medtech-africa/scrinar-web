@@ -68,7 +68,7 @@ const generalData = [
   },
   {
     title: 'Interviews',
-    icon: 'grid7',
+    icon: 'outlineDocumentText',
     href: 'interviews',
     roles: [
       'school',
@@ -81,7 +81,7 @@ const generalData = [
   },
   {
     title: 'Risk assessment',
-    icon: 'grid7',
+    icon: 'assessment',
     href: 'risk-assessment',
     roles: [
       'school',
@@ -102,6 +102,19 @@ const generalData = [
     title: 'Schedule',
     icon: 'calendar',
     href: 'screening',
+    roles: [
+      'school',
+      'instructor',
+      'play4health_admin',
+      'super_admin',
+      'jica_enumerators',
+      'jica_researchers',
+    ],
+  },
+  {
+    title: 'Surveillance',
+    icon: 'survey',
+    href: 'surveillance',
     roles: [
       'school',
       'instructor',
@@ -271,7 +284,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                     layout="position"
                   >
                     <div className="flex gap-2">
-                      <IconPicker icon="profile2User" size="1.5rem" />
+                      <IconPicker icon="healthdata" size="1.5rem" />
                       <Text
                         className="block md:hidden lg:block"
                         variant="text/md"

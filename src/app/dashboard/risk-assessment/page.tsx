@@ -6,7 +6,7 @@ const RiskAssessment = () => {
   return (
     <div className="flex flex-col gap-y-5">
       <div className="flex flex-col gap-y-2">
-        <h1 className="text-2xl font-medium">Risk Assessment (WIP)</h1>
+        <h1 className="text-2xl font-medium">Risk Assessment</h1>
         <p>
           Non communicable Diseases (NCDs) are chronic conditions that are not
           transmitted from person to person, such as diabetes, cardiovascular
