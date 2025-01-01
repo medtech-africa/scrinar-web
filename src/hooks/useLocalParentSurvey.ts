@@ -103,62 +103,62 @@ export const useLocalStudentSurveyStore = create(
   )
 )
 
-export const useLocalParentSurvey = () => {
-  const [survey, setSurvey] = useLocalStorage<
-    {
-      id: string
-      formData: Record<string, any>
-    }[]
-  >(`parents_survey`, [])
+// export const useLocalParentSurvey = () => {
+//   const [survey, setSurvey] = useLocalStorage<
+//     {
+//       id: string
+//       formData: Record<string, any>
+//     }[]
+//   >(`parents_survey`, [])
 
-  const getParentSurvey = (parentId: string) => {
-    const parentData = survey.find((surveyData) => surveyData.id === parentId)
+//   const getParentSurvey = (parentId: string) => {
+//     const parentData = survey.find((surveyData) => surveyData.id === parentId)
 
-    return parentData?.formData
-  }
+//     return parentData?.formData
+//   }
 
-  const storeParentSurvey = (parentId: string, data: any) => {
-    const dataMap = new Map(survey.map((item) => [item.id, item]))
+//   const storeParentSurvey = (parentId: string, data: any) => {
+//     const dataMap = new Map(survey.map((item) => [item.id, item]))
 
-    const parentData = dataMap.get(parentId)
-    // const parentData = survey.find((surveyData) => surveyData.id === parentId)
+//     const parentData = dataMap.get(parentId)
+//     // const parentData = survey.find((surveyData) => surveyData.id === parentId)
 
-    // Add or update the Map with the new item
-    // dataMap.set(newItem.id, newItem);
+//     // Add or update the Map with the new item
+//     // dataMap.set(newItem.id, newItem);
 
-    if (parentData) {
-      parentData.formData = deepMerge(parentData.formData, data)
+//     if (parentData) {
+//       parentData.formData = deepMerge(parentData.formData, data)
 
-      dataMap.set(parentId, parentData)
+//       dataMap.set(parentId, parentData)
 
-      setSurvey(Array.from(dataMap.values()))
+//       setSurvey(Array.from(dataMap.values()))
 
-      // udpate the array with the updated element
-      // setSurvey((prevData) => {
-      //   const index = prevData.findIndex(
-      //     (surveyData) => surveyData.id === parentId
-      //   )
-      //   prevData[index] = parentData
-      //   return prevData
-      // })
-    } else {
-      dataMap.set(parentId, { id: parentId, formData: data })
+//       // udpate the array with the updated element
+//       // setSurvey((prevData) => {
+//       //   const index = prevData.findIndex(
+//       //     (surveyData) => surveyData.id === parentId
+//       //   )
+//       //   prevData[index] = parentData
+//       //   return prevData
+//       // })
+//     } else {
+//       dataMap.set(parentId, { id: parentId, formData: data })
 
-      setSurvey(Array.from(dataMap.values()))
+//       setSurvey(Array.from(dataMap.values()))
 
-      // setSurvey((prevData) => {
-      //   return [...prevData, { id: parentId, formData: data }]
-      // })
-    }
+//       // setSurvey((prevData) => {
+//       //   return [...prevData, { id: parentId, formData: data }]
+//       // })
+//     }
 
-    return survey
-  }
+//     return survey
+//   }
 
-  return {
-    getParentSurvey,
-    storeParentSurvey,
-  }
-}
+//   return {
+//     getParentSurvey,
+//     storeParentSurvey,
+//   }
+// }
 
 export const useLocalStudentSurvey = () => {
   const [survey, setSurvey] = useLocalStorage<
@@ -213,5 +213,6 @@ export const useLocalStudentSurvey = () => {
   return {
     getStudentSurvey,
     storeStudentSurvey,
+    survey
   }
 }

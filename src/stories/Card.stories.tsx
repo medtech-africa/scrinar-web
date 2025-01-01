@@ -1,6 +1,11 @@
 import { Card } from '@/components/ui/card'
+import {
+  AgeIcon,
+  GenderIcon,
+  HelpCircleIcon,
+  WeightIcon,
+} from '@/components/ui/icon-picker/icons'
 import type { Meta, StoryObj } from '@storybook/react'
-import { TimeCalendarLinear, AstrologyManOutline } from 'react-icons-sax'
 
 const meta = {
   title: 'Example/Card',
@@ -20,7 +25,7 @@ export const Default: Story = {
     description: 'Age',
     iconClassName: 'bg-lust-900',
     className: '',
-    icon: <TimeCalendarLinear size={24} color="white" />,
+    icon: <AgeIcon size={24} color="white" />,
   },
 }
 
@@ -29,19 +34,19 @@ const dataItems = [
     title: 'Gender',
     description: 'Male',
     iconClassName: 'bg-[#1570EF]',
-    icon: <AstrologyManOutline size={24} color="white" />,
+    icon: <GenderIcon size={24} color="white" />,
   },
   {
     title: '180IN',
     description: 'Height',
     iconClassName: 'bg-yellow-orange-900',
-    icon: <AstrologyManOutline size={24} color="white" />,
+    icon: <HelpCircleIcon size={24} color="white" />,
   },
   {
     title: '50KG',
     description: 'Weight',
     iconClassName: 'bg-gray-900',
-    icon: <AstrologyManOutline size={24} color="white" />,
+    icon: <WeightIcon size={24} color="white" />,
   },
 ]
 
