@@ -1,7 +1,7 @@
 import React from 'react'
 import type { SVGProps } from 'react'
 
-export function ArcticonsNetworksurvey(props: SVGProps<SVGSVGElement>) {
+export function Survey(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -25,7 +25,7 @@ export function ArcticonsNetworksurvey(props: SVGProps<SVGSVGElement>) {
   )
 }
 
-export function IcBaselineAssessment(props: SVGProps<SVGSVGElement>) {
+export function Assessment(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -48,7 +48,7 @@ export function IcBaselineAssessment(props: SVGProps<SVGSVGElement>) {
   )
 }
 
-export function HeroiconsOutlineDocumentText(props: SVGProps<SVGSVGElement>) {
+export function OutlineDocumentText(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

@@ -68,7 +68,7 @@ const generalData = [
   },
   {
     title: 'Interviews',
-    icon: 'HeroiconsOutlineDocumentText',
+    icon: 'outlineDocumentText',
     href: 'interviews',
     roles: [
       'school',
@@ -81,7 +81,7 @@ const generalData = [
   },
   {
     title: 'Risk assessment',
-    icon: 'IcBaselineAssessment',
+    icon: 'assessment',
     href: 'risk-assessment',
     roles: [
       'school',
@@ -113,7 +113,7 @@ const generalData = [
   },
   {
     title: 'Surveillance',
-    icon: 'ArcticonsNetworksurvey',
+    icon: 'survey',
     href: 'surveillance',
     roles: [
       'school',

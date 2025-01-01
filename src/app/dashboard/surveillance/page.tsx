@@ -3,6 +3,8 @@ import React from 'react'
 
 import { SurveillanceMap } from './SurveillanceMap'
 import { useUser } from '@/context/user'
+import ContentLoader from '@/components/content-loader'
+import { useSurveillanceAnalytics } from '@/hooks/queries/useAnalytics'
 
 // const SurveillanceMap = dynamic(
 //   () => import('./SurveillanceMap').then((mod) => mod.SurveillanceMap),
@@ -25,12 +27,16 @@ const isValidUser = (roles: string[] = []) => {
 
 export default function SurveillancePage() {
   const user = useUser((state) => state.user)
+  const loading = useUser((state) => state.loading)
+  const { isPending } = useSurveillanceAnalytics()
 
-  console.log(user?.roles)
+  if (isPending || loading) {
+    return <ContentLoader loading={isPending || loading} />
+  }
 
   if (!isValidUser(user?.roles))
     return (
-      <div className="h-screen">
+      <div className="h-[70vh]">
         <div className="flex items-center justify-center h-full">
           <p className="text-2xl font-semibold">Unauthorized Access</p>
         </div>
