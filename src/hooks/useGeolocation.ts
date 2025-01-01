@@ -14,6 +14,7 @@ const useGeolocation = (): GeolocationData => {
     lng: null,
   })
   const [error, setError] = useState<string | null>(null)
+  console.log("🚀 ~ geo locale ~ error:", error)
 
   useEffect(() => {
     if (!navigator.geolocation) {
