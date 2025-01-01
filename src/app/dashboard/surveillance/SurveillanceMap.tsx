@@ -21,7 +21,6 @@ const position = { lat: 9.082, lng: 8.6753 }
 
 export const SurveillanceMap = () => {
   const { lng, lat } = useGeolocation()
-  const coordinates = lat && lng ? { lat, lng } : null
   // const [coordinates, setCoordinates] = React.useState<{
   //   lat: number
   //   lng: number
@@ -38,8 +37,6 @@ export const SurveillanceMap = () => {
 
   const { data: dbData, isPending } = useSurveillanceAnalytics()
 
-  const initialCoordinates = coordinates || position
-
   if (isPending) {
     return <ContentLoader loading={isPending} />
   }
@@ -54,6 +51,10 @@ export const SurveillanceMap = () => {
       }
     }) || []
 
+  const filteredMapData = mapData.filter((data) => data.lat && data.lon)
+
+  const initialCoordinates = lat && lng ? { lat, lng } : position
+
   return (
     <MapContainer
       key={Object.values(initialCoordinates).join(',')}
@@ -67,7 +68,7 @@ export const SurveillanceMap = () => {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         />
-        {mapData.map((location, index) => (
+        {filteredMapData.map((location, index) => (
           <Circle
             key={index}
             center={[location.lat, location.lon]}
