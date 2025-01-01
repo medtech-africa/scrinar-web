@@ -78,7 +78,7 @@ export const SurveillanceMap = () => {
             fillOpacity={0.4}
           >
             <Popup>
-              <strong>{location.name}</strong> <br />
+              <strong className="capitalize">{location.name}</strong> <br />
               Value: {location.value}
             </Popup>
           </Circle>
