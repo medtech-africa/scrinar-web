@@ -1,18 +1,19 @@
 'use client'
 import React from 'react'
 
-import { SurveillanceMap } from './SurveillanceMap'
+// import { SurveillanceMap } from './SurveillanceMap'
 import { useUser } from '@/context/user'
 import ContentLoader from '@/components/content-loader'
 import { useSurveillanceAnalytics } from '@/hooks/queries/useAnalytics'
+import dynamic from 'next/dynamic'
 
-// const SurveillanceMap = dynamic(
-//   () => import('./SurveillanceMap').then((mod) => mod.SurveillanceMap),
-//   {
-//     ssr: false,
-//     loading: () => <p>Loading...</p>,
-//   }
-// )
+const SurveillanceMap = dynamic(
+  () => import('./SurveillanceMap').then((mod) => mod.SurveillanceMap),
+  {
+    ssr: false,
+    loading: () => <ContentLoader loading />,
+  }
+)
 
 const isValidUser = (roles: string[] = []) => {
   const validUsers = [
@@ -31,7 +32,7 @@ export default function SurveillancePage() {
   const { isPending } = useSurveillanceAnalytics()
 
   if (isPending || loading) {
-    return <ContentLoader loading={isPending || loading} />
+    return <ContentLoader loading />
   }
 
   if (!isValidUser(user?.roles))
