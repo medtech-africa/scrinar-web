@@ -225,7 +225,7 @@ export default function Home() {
           Back 😄
         </Text>
         <Text variant="display/xs" weight="medium">
-          Dashboard Overview (Work In Progress)
+          Dashboard Overview
         </Text>
       </section>
       <section className="grid lg:grid-cols-[2.5fr_1fr] gap-6 mt-2.2 py-5">

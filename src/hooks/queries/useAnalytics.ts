@@ -38,27 +38,28 @@ export const useHealthDataCompletionAnalytics = () => {
 }
 
 export interface NutritionAnalytics {
-  foodKnowledge: FoodKnowledge[];
+  foodKnowledge: FoodKnowledge[]
 }
 
 export interface FoodKnowledge {
-  food:       string;
-  categories: Categories;
+  food: string
+  categories: Categories
 }
 
 export interface Categories {
-  body_building?: number;
-  not_sure:       number;
-  energy:         number;
-  protective?:    number;
+  body_building?: number
+  not_sure: number
+  energy: number
+  protective?: number
 }
-
 
 export const useNutritionAnalytics = () => {
   return useQuery({
     queryKey: ['nutrition-analytics'],
     queryFn: async () => {
-      const { data } = await baseAxios.get<NutritionAnalytics>(API.nutritionAnalytics)
+      const { data } = await baseAxios.get<NutritionAnalytics>(
+        API.nutritionAnalytics
+      )
       return data
     },
   })
@@ -68,51 +69,71 @@ export const useGeneralAnalytics = () => {
   return useQuery({
     queryKey: ['general-analytics'],
     queryFn: async () => {
-      const { data } = await baseAxios.get<GeneralAnalytics>(API.generalAnalytics)
+      const { data } = await baseAxios.get<GeneralAnalytics>(
+        API.generalAnalytics
+      )
+      return data
+    },
+  })
+}
+
+export const useSurveillanceAnalytics = () => {
+  return useQuery({
+    queryKey: ['surveillance-analytics'],
+    queryFn: async () => {
+      const { data } = await baseAxios.get<{
+        data: {
+          count: number
+          schoolName: string
+          geo: {
+            latitude: number
+            longitude: number
+          }
+        }[]
+      }>(API.surveillanceAnalytics)
       return data
     },
   })
 }
 
 export interface GeneralAnalytics {
-  data: Data;
+  data: Data
 }
 
- interface Data {
-  countPerGender:         CountPerGender[];
-  livingSituation:        CountPerGender[];
-  distanceToSchool:       CountPerGender[];
-  doYouKnowHighBloodPressure: CountPerGender[];
-  ageGroupDistribution:   AgeGroupDistribution[];
-  awarenessOfFoodVariety: AwarenessOfFoodVariety[];
-  weightAwareness:        WeightAwareness[];
-  heightAwareness:        HeightAwareness[];
+interface Data {
+  countPerGender: CountPerGender[]
+  livingSituation: CountPerGender[]
+  distanceToSchool: CountPerGender[]
+  doYouKnowHighBloodPressure: CountPerGender[]
+  ageGroupDistribution: AgeGroupDistribution[]
+  awarenessOfFoodVariety: AwarenessOfFoodVariety[]
+  weightAwareness: WeightAwareness[]
+  heightAwareness: HeightAwareness[]
 }
 
- interface AgeGroupDistribution {
-  count:    number;
-  ageGroup: string;
+interface AgeGroupDistribution {
+  count: number
+  ageGroup: string
 }
 
- interface AwarenessOfFoodVariety {
-  count:     number;
-  awareness: null | string;
+interface AwarenessOfFoodVariety {
+  count: number
+  awareness: null | string
 }
 
- interface CountPerGender {
-  count: number;
-  value: null | string;
+interface CountPerGender {
+  count: number
+  value: null | string
 }
 
- interface HeightAwareness {
-  count:            number;
-  knowsHeight?:     string;
-  isHeightHealthy?: string;
+interface HeightAwareness {
+  count: number
+  knowsHeight?: string
+  isHeightHealthy?: string
 }
 
- interface WeightAwareness {
-  count:            number;
-  knowsWeight?:     string;
-  isWeightHealthy?: null | string;
+interface WeightAwareness {
+  count: number
+  knowsWeight?: string
+  isWeightHealthy?: null | string
 }
-

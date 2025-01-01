@@ -63,6 +63,10 @@ export enum Icons {
   playAudio = 'playAudio',
   sortAsc = 'sortAsc',
   sortDesc = 'sortDesc',
+  survey = 'survey',
+  assessment = 'assessment',
+  outlineDocumentText = 'outlineDocumentText',
+  healthdata = 'healthdata',
 }
 
 export { Icons as IconNames }
