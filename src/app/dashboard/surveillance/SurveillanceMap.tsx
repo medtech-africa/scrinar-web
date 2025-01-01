@@ -72,7 +72,7 @@ export const SurveillanceMap = () => {
           <Circle
             key={index}
             center={[location.lat, location.lon]}
-            radius={Math.sqrt(location.value) * 100} // Adjust radius based on value
+            radius={Math.sqrt(location.value) * 200} // Adjust radius based on value
             color="red"
             fillColor="red"
             fillOpacity={0.4}
