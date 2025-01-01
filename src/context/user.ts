@@ -77,8 +77,8 @@ const useUser = create<IUserState>((set, get) => ({
     const user = { ...get().user, ...val }
     set({ user, template: user?.template })
   },
-  loadUser: (userData) => {
-    const token = getCookie('token')
+  loadUser: async (userData) => {
+    const token = await getCookie('token')
     if (!isJwtExpired(token ?? '') && userData) {
       try {
         set({ loading: true, user: userData })

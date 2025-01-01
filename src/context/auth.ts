@@ -12,8 +12,8 @@ interface IAuthState {
 const useAuth = create<IAuthState>((set) => ({
   isAuth: false,
   authLoading: false,
-  hydrate: () => {
-    const token = getCookie('token')
+  hydrate: async () => {
+    const token = await getCookie('token')
     const isAuth = !isJwtExpired(token ?? '') ? true : false
     set({ isAuth })
   },
