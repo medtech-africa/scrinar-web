@@ -10,6 +10,7 @@ import 'leaflet-defaulticon-compatibility'
 import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet'
 import { useSurveillanceAnalytics } from '@/hooks/queries/useAnalytics'
 import ContentLoader from '@/components/content-loader'
+import { useGeolocation } from '@/hooks/useGeolocation'
 
 // const data = [
 //   { name: 'Takushara', lat: 8.8824, lon: 7.4564, value: 80945 },
@@ -19,19 +20,21 @@ import ContentLoader from '@/components/content-loader'
 const position = { lat: 9.082, lng: 8.6753 }
 
 export const SurveillanceMap = () => {
-  const [coordinates, setCoordinates] = React.useState<{
-    lat: number
-    lng: number
-  } | null>(null)
+  const { lng, lat } = useGeolocation()
+  const coordinates = lat && lng ? { lat, lng } : null
+  // const [coordinates, setCoordinates] = React.useState<{
+  //   lat: number
+  //   lng: number
+  // } | null>(null)
 
-  React.useEffect(() => {
-    navigator.geolocation.getCurrentPosition(function (position) {
-      setCoordinates({
-        lat: position.coords.latitude,
-        lng: position.coords.longitude,
-      })
-    })
-  }, [])
+  // React.useEffect(() => {
+  //   navigator.geolocation.getCurrentPosition(function (position) {
+  //     setCoordinates({
+  //       lat: position.coords.latitude,
+  //       lng: position.coords.longitude,
+  //     })
+  //   })
+  // }, [])
 
   const { data: dbData, isPending } = useSurveillanceAnalytics()
 
@@ -45,8 +48,8 @@ export const SurveillanceMap = () => {
     dbData?.data.map((data) => {
       return {
         name: data.schoolName,
-        lat: data.geo.latitude,
-        lon: data.geo.longitude,
+        lat: data.geo?.latitude,
+        lon: data.geo?.longitude,
         value: data.count,
       }
     }) || []
