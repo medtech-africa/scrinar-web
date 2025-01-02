@@ -260,7 +260,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                     >
                       <IconPicker icon={item.icon} size="1.5rem" />
                       <Text
-                        className="block md:hidden lg:block"
+                        className="block md:hidden lg:block whitespace-nowrap"
                         variant="text/md"
                       >
                         {item.title}

@@ -17,11 +17,16 @@ import { LoadingAnalysis } from './LoadingAnalysis'
 import { ConsentForm } from './ConsentForm'
 import { RiskAssessmentResult } from '@/components/risk-assessment/RiskAssessmentResult'
 import { ReportActions } from '@/components/risk-assessment/PDFReport'
+import { RiskAssessmentModelRequestData } from '@/hooks/queries/useRiskAssessment'
 
-export const RiskAssessmentForm = () => {
+export const RiskAssessmentForm = ({
+  data,
+}: {
+  data?: RiskAssessmentModelRequestData
+}) => {
   const [progress, setProgress] = useState(0)
   const [showResults, setShowResults] = useState(false)
-  const formMethods = useForm()
+  const formMethods = useForm({ defaultValues: data })
 
   const {
     mutate: analyzeRisk,
