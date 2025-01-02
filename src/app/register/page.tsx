@@ -78,7 +78,6 @@ const Register = () => {
     resolver: validation.register,
     defaultValues: { avatar: true, template: 'jica' },
   })
-  console.log('🚀 ~ Register ~ errors:', errors)
   const inputFile = useRef<HTMLInputElement | null>(null)
   const {
     handleFileChange,

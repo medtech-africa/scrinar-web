@@ -53,10 +53,6 @@ export const QuickActions = () => {
   //   const [modalTypeState, setModalType] = React.useState<string | null>()
   const router = useRouter()
   const searchParams = useSearchParams()
-  console.log(
-    '🚀 ~ QuickActions ~ searchParams:',
-    searchParams.get('modalType')
-  )
   const modalType = searchParams.get('modalType')
   const pathname = usePathname()
 

@@ -19,7 +19,6 @@ const DropDownMenuExportChildren = ({ onClose, className }: IProps) => {
   useClickAway(menuRef, () => (onClose ? onClose() : null))
 
   const { data, isLoading } = useExportStudentQuestionnaire()
-  console.log(data)
   // Formatted Data Structure
   const formattedData = useMemo(
     () =>
