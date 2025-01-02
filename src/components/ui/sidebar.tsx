@@ -80,7 +80,7 @@ const generalData = [
     ],
   },
   {
-    title: 'Risk assessment',
+    title: 'NCD Risk Assessment',
     icon: 'assessment',
     href: 'risk-assessment',
     roles: [
@@ -209,7 +209,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
           exit={{ x: -200, opacity: 0 }}
           transition={{ duration: 0.3 }}
           className={cn(
-            `flex flex-col  w-52 md:w-20.8 lg:w-60  p-4 rounded-lg sidebar-shadow bg-white h-full overflow-y-auto`,
+            `flex flex-col w-52 md:w-20.8 lg:w-64  p-4 rounded-lg sidebar-shadow bg-white h-full overflow-y-auto`,
             sideOpen && 'hidden'
           )}
         >

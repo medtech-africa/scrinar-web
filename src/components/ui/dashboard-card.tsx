@@ -11,7 +11,7 @@ const DashboardCard = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      'w-[230.33px] h-36 p-1 bg-gray-50 rounded-lg border border-gray-100 flex-col justify-start items-start gap-2 inline-flex',
+      'w-[220px] h-36 p-1 bg-gray-50 rounded-lg border border-gray-100 flex-col justify-start items-start gap-2 inline-flex',
       className
     )}
     {...props}
@@ -40,7 +40,7 @@ const DashboardCardHeader = React.forwardRef<
   <div
     ref={ref}
     className={cn(
-      'self-stretch justify-center items-center gap-4 inline-flex',
+      'self-stretch justify-center items-center gap-2 inline-flex',
       className
     )}
     {...props}
@@ -70,8 +70,8 @@ const DashboardCardIcon = React.forwardRef<
     )}
     {...props}
   >
-    <div className="w-6 h-6 justify-center items-center flex">
-      <div className="w-6 h-6 relative">{children}</div>
+    <div className="size-5 justify-center items-center flex">
+      <div className="size-5 relative">{children}</div>
     </div>
   </div>
 ))
