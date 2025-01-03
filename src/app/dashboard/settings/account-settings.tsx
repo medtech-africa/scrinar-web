@@ -115,7 +115,6 @@ const AdminUpdate = ({ selectedImg = null as File | null }) => {
       await mutate(dataToSend, {
         onSuccess: () => {
           refetch().then((res) => {
-            console.log(res.data)
             setUser(res.data?.data)
           })
           toast.success('Successfully updated')
@@ -377,7 +376,6 @@ const InstructorUpdate = ({ selectedImg = null as File | null, id = '' }) => {
       await mutate(dataToSend, {
         onSuccess: () => {
           refetch().then((res) => {
-            console.log(res.data)
             setUser(res.data?.data)
           })
           toast.success('Successfully updated')

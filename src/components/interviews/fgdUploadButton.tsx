@@ -79,7 +79,6 @@ export const FGDUploadButton = ({ refetch }: { refetch: () => void }) => {
   const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.files && event.target.files[0]) {
       const selectedFile = event.target.files[0]
-      console.log('🚀 ~ handleFileChange ~ selectedFile:', selectedFile)
       setUploadedFile(selectedFile)
       setFileName(selectedFile.name?.split('.')[0] || 'Fgd')
     }

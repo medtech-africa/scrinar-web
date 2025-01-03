@@ -154,7 +154,6 @@ export const AddHealthDataRecord = ({
       mounted = false
     }
   }, [resetFields])
-  console.log(studentAddedId, 'studentAddedId')
 
   return (
     <div className="w-full h-full">

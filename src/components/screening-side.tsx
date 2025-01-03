@@ -72,7 +72,6 @@ const ScreeningView = ({
   id,
 }: Iprops & { id: string }) => {
   const { data, isPending: isLoading } = useScreening(id)
-  console.log(data)
 
   return (
     <ViewLayout actionOpened={actionOpened}>

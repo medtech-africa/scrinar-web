@@ -1,24 +1,14 @@
 'use client'
 import ContentLoader from '@/components/content-loader'
-import { useQuery } from '@tanstack/react-query'
-import baseAxios from '@/utils/baseAxios'
-import { API } from '@/utils/api'
 import { RiskAssessmentResult } from '@/components/risk-assessment/RiskAssessmentResult'
 import { ReportActions } from '@/components/risk-assessment/PDFReport'
 import Image from 'next/image'
 import { TextArea } from '@/components/ui/textarea'
 import { Text } from '@/components/ui/text'
+import { useRiskAssessment } from '@/hooks/queries/useRiskAssessment'
 
-const useSingleRiskData = (id: string) => {
-  return useQuery({
-    queryKey: ['single-risk-assessment', id],
-
-    queryFn: () =>
-      baseAxios.get(`${API.riskAssessment}/${id}`).then((res) => res.data),
-  })
-}
 export default function ViewRecord({ params }: { params: { id: string } }) {
-  const { data: riskData, isPending: isLoading } = useSingleRiskData(params?.id)
+  const { data: riskData, isPending: isLoading } = useRiskAssessment(params?.id)
   const data = riskData?.data?.responseData
   const userData = riskData?.data?.personalInfo
   const providerNotes = riskData?.providerNotes
