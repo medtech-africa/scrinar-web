@@ -178,7 +178,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
                       onChange={onChange}
                       onBlur={onBlur}
                       value={value ?? ''}
-                      placeholder="email@play4health.com"
+                      placeholder="email@scrinar.com"
                       label="Email"
                       disabled={!!data?.email}
                       labelStyle="lg:text-sm text-xs"

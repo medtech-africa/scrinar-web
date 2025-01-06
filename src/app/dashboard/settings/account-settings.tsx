@@ -140,7 +140,7 @@ const AdminUpdate = ({ selectedImg = null as File | null }) => {
                 {...field}
                 value={value ?? ''}
                 label="School Email Address"
-                placeholder="e.g dammy@play4health.com"
+                placeholder="e.g dammy@scrinar.com"
                 leadingIcon={<IconPicker icon="mail" />}
                 full
                 variant={errors?.email ? 'destructive' : 'default'}

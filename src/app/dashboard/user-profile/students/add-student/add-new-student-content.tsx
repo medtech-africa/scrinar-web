@@ -245,7 +245,7 @@ export const AddNewStudentContent = () => {
                     onChange={onChange}
                     onBlur={onBlur}
                     value={value ?? ''}
-                    placeholder="email@play4health.com"
+                    placeholder="email@scrinar.com"
                     label="Email"
                     labelStyle="lg:text-sm text-xs"
                     variant={errors?.email ? 'destructive' : 'default'}

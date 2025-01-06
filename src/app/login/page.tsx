@@ -151,7 +151,7 @@ const Login = () => {
                       onBlur={onBlur}
                       value={value ?? ''}
                       label="Email Address"
-                      placeholder="e.g dammy@play4health.com"
+                      placeholder="e.g dammy@Scrinar.com"
                       leadingIcon={<IconPicker icon="mail" />}
                       full
                       variant={errors?.email ? 'destructive' : 'default'}

@@ -150,7 +150,7 @@ const Register = () => {
                 weight="medium"
                 className="flex justify-center"
               >
-                Welcome to Play4Health
+                Welcome to Scrinar
               </Text>
               <Text
                 variant="text/sm"
@@ -219,7 +219,7 @@ const Register = () => {
                     {...field}
                     value={value ?? ''}
                     label="School Email Address"
-                    placeholder="e.g dammy@play4health.com"
+                    placeholder="e.g dammy@scrinar.com"
                     leadingIcon={<IconPicker icon="mail" />}
                     full
                     variant={errors?.email ? 'destructive' : 'default'}

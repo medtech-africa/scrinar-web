@@ -261,7 +261,7 @@ const RegisterNewStudent = () => {
                       onBlur={onBlur}
                       value={value ?? ''}
                       option="(optional)"
-                      placeholder="email@play4health.com"
+                      placeholder="email@scrinar.com"
                       label="Email"
                       labelStyle="lg:text-sm text-xs"
                       variant={errors?.email ? 'destructive' : 'default'}

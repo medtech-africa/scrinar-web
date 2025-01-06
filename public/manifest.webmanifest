@@ -4,9 +4,9 @@
   "display": "standalone",
   "scope": "/",
   "start_url": "/",
-  "name": "Play4health",
+  "name": "Scrinar",
   "short_name": "P4H",
-  "description": "Play4health web portal for adding students and vital uploads",
+  "description": "Scrinar web portal for adding students and vital uploads",
   "icons": [
     {
       "src": "/icons/icon-192x192.png",

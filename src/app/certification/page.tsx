@@ -102,7 +102,7 @@ const Certification = () => {
                   Forcardio{' '}
                 </span>{' '}
                 <span className="text-[#E31B23] font-bold text-sm">
-                  Play4health project 2024.
+                  Scrinar project 2024.
                 </span>
               </Text>
             </div>
@@ -112,7 +112,7 @@ const Certification = () => {
                   Program & Date of Completion
                 </Text>
                 <Text className="font-normal text-[#0E0E2C] text-sm">
-                  Forcardio Play4Health
+                  Forcardio Scrinar
                 </Text>
                 <Text className="font-normal text-[#0E0E2C] text-sm">
                   {formatDate(certificate?.user?.completedAt)}

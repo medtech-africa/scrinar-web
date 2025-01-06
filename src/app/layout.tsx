@@ -8,13 +8,13 @@ import NextTopLoader from 'nextjs-toploader'
 import colors from '@/constants/colors'
 
 export const metadata: Metadata = {
-  title: 'Play4Health Admin',
-  description: 'Play4health admin page',
+  title: 'Scrinar',
+  description: 'Scrinar admin page',
   manifest: '/manifest.webmanifest',
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
-    title: 'Play4Health Admin',
+    title: 'Scrinar Admin',
   },
 }
 
