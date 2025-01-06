@@ -3,12 +3,17 @@ import React from 'react'
 import { RiskAssessmentForm } from '../RiskAssessmentForm'
 import { useRiskAssessment } from '@/hooks/queries/useRiskAssessment'
 import { useParams } from 'next/navigation'
+import ContentLoader from '@/components/content-loader'
 
 const RiskAssessmentDetailsPage = () => {
   const params = useParams<{ id: string }>()
-  const { data } = useRiskAssessment(params.id)
+  const { data, isPending } = useRiskAssessment(params.id)
   // TODO restructure
   console.log('🚀 ~ RiskAssessmentDetailsPage ~ data:', data)
+
+  if (isPending) {
+    return <ContentLoader loading />
+  }
 
   return (
     <div className="flex flex-col gap-y-5">
