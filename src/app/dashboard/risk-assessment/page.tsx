@@ -70,7 +70,7 @@ const RiskAssessment = () => {
   return (
     <div className="flex flex-col gap-y-5">
       <div className="flex flex-col gap-y-2">
-        <h1 className="text-2xl font-medium">NCD Risk Assessment</h1>
+        <h1 className="text-2xl font-medium">AI NCD Risk Assessment</h1>
         <p>
           Non communicable Diseases (NCDs) are chronic conditions that are not
           transmitted from person to person, such as diabetes, cardiovascular
@@ -78,8 +78,8 @@ const RiskAssessment = () => {
         </p>
         <p>
           This screening page is designed for use in pharmacies and hospitals to
-          assess a patient’s risk of developing NCDs over a 2 year period, using
-          vital signs, family history, personal lifestyle and screening
+          assess a patient’s risk of developing NCDs over a 10 year period,
+          using vital signs, family history, personal lifestyle and screening
           responses to provide a comprehensive risk assessment.
         </p>
         <div className="ml-auto mt-4">
