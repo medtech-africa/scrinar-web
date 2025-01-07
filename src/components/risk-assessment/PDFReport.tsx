@@ -14,6 +14,10 @@ import { useFormContext } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
+import {
+  PersonalInfo,
+  RiskAssessmentModelResponseData,
+} from '@/hooks/queries/useRiskAssessment'
 
 const siteUrl =
   process.env.ENV === 'development'
@@ -80,7 +84,12 @@ export const ReportActions = ({
   assessmentData,
   personalInfo,
   assessmentId,
-}: any) => {
+}: {
+  assessmentData: RiskAssessmentModelResponseData
+  personalInfo: PersonalInfo
+  assessmentId?: string
+  isFromEmail?: boolean
+}) => {
   const [isEmailSent, setIsEmailSent] = useState(false)
 
   const formContext = useFormContext()
@@ -135,6 +144,7 @@ export const ReportActions = ({
 
       {assessmentId && (
         <Button
+          type="button"
           variant="secondary"
           onClick={handleEmailReport}
           disabled={isEmailSent || !consentAgreement}

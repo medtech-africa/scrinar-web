@@ -14,19 +14,20 @@ import { API } from '@/utils/api'
 import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { LoadingAnalysis } from './LoadingAnalysis'
-import { ConsentForm } from './ConsentForm'
-import { RiskAssessmentResult } from '@/components/risk-assessment/RiskAssessmentResult'
-import { ReportActions } from '@/components/risk-assessment/PDFReport'
-import { RiskAssessmentModelRequestData } from '@/hooks/queries/useRiskAssessment'
+import {
+  PersonalInfo,
+  RiskAssessmentModel,
+} from '@/hooks/queries/useRiskAssessment'
+import { RiskAssessmentReport } from './RiskAssessmentReport'
 
 export const RiskAssessmentForm = ({
   data,
 }: {
-  data?: RiskAssessmentModelRequestData
+  data?: RiskAssessmentModel
 }) => {
   const [progress, setProgress] = useState(0)
   const [showResults, setShowResults] = useState(false)
-  const formMethods = useForm({ defaultValues: data })
+  const formMethods = useForm({ defaultValues: data?.requestData })
 
   const {
     mutate: analyzeRisk,
@@ -60,6 +61,7 @@ export const RiskAssessmentForm = ({
       setProgress(0)
     },
   })
+  console.log('🚀 ~ resultData:', resultData)
 
   const handleSubmit = async (data: any) => {
     const totalFields = 50
@@ -98,40 +100,80 @@ export const RiskAssessmentForm = ({
               <HistoricalDataCollectionForm />
             </div>
             {/*  */}
-            <Button
-              variant={'primary'}
-              value="Generate Assessment"
-              leadingIcon={<IconPicker icon="saveAdd" />}
-              className="mt-6"
-              disabled={isPending || !consentAgreement}
-              type="submit"
-            />
-          </div>
-        </form>
+            {!data && (
+              <Button
+                variant={'primary'}
+                value="Generate Assessment"
+                leadingIcon={<IconPicker icon="saveAdd" />}
+                className="mt-6"
+                disabled={isPending || !consentAgreement}
+                type="submit"
+              />
+            )}
 
-        {(isPending || showResults) && (
-          <div className="fixed h-full w-full inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            {isPending && <LoadingAnalysis progress={progress} />}
-            {showResults && (
-              <div className="bg-white p-8 rounded-lg w-full max-w-[70%] m-auto max-h-[90vh] overflow-y-auto">
-                <RiskAssessmentResult data={resultData?.data?.data} />
-                <ConsentForm assessmentId={resultData?.data?.data?.id} />
-
-                <ReportActions
-                  assessmentData={resultData?.data}
-                  personalInfo={formMethods.watch('personalInfo')}
-                  assessmentId={resultData?.data?.data?.id}
-                />
-                <div className="mt-8 flex justify-end">
-                  <Button onClick={() => setShowResults(false)}>Close</Button>
-                </div>
+            {isPending ? (
+              <div className="fixed h-full w-full inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                <LoadingAnalysis progress={progress} />
               </div>
+            ) : (
+              <RiskAssessmentGeneratedReport
+                showResults={showResults}
+                resultData={resultData?.data?.data}
+                personalInfo={formMethods.watch('personalInfo')}
+                data={data}
+                setShowResults={setShowResults}
+              />
             )}
           </div>
-        )}
+        </form>
       </div>
     </FormProvider>
   )
+}
+
+const RiskAssessmentGeneratedReport = ({
+  showResults,
+  resultData,
+  data,
+  setShowResults,
+  personalInfo,
+}: {
+  showResults: boolean
+  resultData?: any
+  data?: RiskAssessmentModel
+  personalInfo?: PersonalInfo
+  setShowResults: (showResults: boolean) => void
+}) => {
+  const actionButton = (
+    <div className="mt-8 flex justify-end">
+      <Button onClick={() => setShowResults(false)}>Close</Button>
+    </div>
+  )
+
+  if (showResults) {
+    return (
+      <div className="fixed h-full w-full inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <RiskAssessmentReport
+          className="bg-white p-8 rounded-lg w-full max-w-[70%] m-auto max-h-[90vh] overflow-y-auto"
+          action={actionButton}
+          data={resultData?.data?.data}
+          personalInfo={personalInfo}
+        />
+      </div>
+    )
+  }
+
+  if (data) {
+    return (
+      <RiskAssessmentReport
+        className="w-full"
+        action={actionButton}
+        data={data}
+        personalInfo={data?.requestData.personalInfo}
+        showActionButton={false}
+      />
+    )
+  }
 }
 
 const countFilledFields = (obj: any): number => {

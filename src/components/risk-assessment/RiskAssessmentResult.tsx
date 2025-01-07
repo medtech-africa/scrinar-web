@@ -15,6 +15,7 @@ import {
 import { motion } from 'framer-motion'
 import { IconPicker } from '../ui/icon-picker'
 import { ToastField } from '../ui/toast'
+import { RiskAssessmentModelResponseData } from '@/hooks/queries/useRiskAssessment'
 
 // Color constants based on the guide
 const WHO_COLORS = {
@@ -48,7 +49,7 @@ export interface IWHO {
   status: boolean
 }
 
-export interface Breakdown {
+export type Breakdown = {
   age: number
   bmi: number
   bloodPressure: number
@@ -178,11 +179,7 @@ const CriticalAlerts = ({ alerts }: { alerts: any[] }) => {
 const RiskAssessmentResult = ({
   data,
 }: {
-  data: {
-    who: IWHO
-    findrisc: IWHO
-    criticalAlerts: any[]
-  }
+  data: RiskAssessmentModelResponseData
 }) => {
   const [activeTab, setActiveTab] = useState<'who' | 'findrisc'>('who')
 
@@ -265,6 +262,7 @@ const RiskAssessmentResult = ({
               </h3>
               <FactorBreakdown
                 data={formatRiskFactors(
+                  // @ts-expect-error type mismatch
                   activeData.breakdown,
                   parseInt(activeData.score)
                 )}

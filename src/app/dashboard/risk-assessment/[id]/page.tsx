@@ -27,7 +27,7 @@ const RiskAssessmentDetailsPage = () => {
       </div>
       <div className="">
         <div className="grid">
-          <RiskAssessmentForm data={data.requestData} />
+          <RiskAssessmentForm data={data} />
         </div>
       </div>
     </div>
