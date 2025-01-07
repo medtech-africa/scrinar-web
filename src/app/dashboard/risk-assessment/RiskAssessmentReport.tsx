@@ -14,7 +14,7 @@ export const RiskAssessmentReport = ({
   // TODO whether to hide the buttons
   // showActionButton = true,
 }: {
-  data?: RiskAssessmentModel
+  data?: Partial<RiskAssessmentModel>
   action?: React.ReactElement
   assessmentId?: string
   className?: string

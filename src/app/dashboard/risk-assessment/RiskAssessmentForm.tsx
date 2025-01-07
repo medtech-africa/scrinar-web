@@ -34,7 +34,10 @@ export const RiskAssessmentForm = ({
     isPending,
     data: resultData,
   } = useMutation({
-    mutationFn: (formData) => baseAxios.post(API.riskAssessment, formData),
+    mutationFn: (formData) =>
+      baseAxios
+        .post<{ data: RiskAssessmentModel }>(API.riskAssessment, formData)
+        .then((res) => res.data.data),
     onMutate: () => {
       setProgress(0)
       // Start progress animation
@@ -80,7 +83,7 @@ export const RiskAssessmentForm = ({
 
   return (
     <FormProvider {...formMethods}>
-      <div className="relative">
+      <div className="relative grid gap-y-4">
         <form
           onSubmit={formMethods.handleSubmit(handleSubmit)}
           className="w-full h-full"
@@ -110,22 +113,21 @@ export const RiskAssessmentForm = ({
                 type="submit"
               />
             )}
-
-            {isPending ? (
-              <div className="fixed h-full w-full inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                <LoadingAnalysis progress={progress} />
-              </div>
-            ) : (
-              <RiskAssessmentGeneratedReport
-                showResults={showResults}
-                resultData={resultData?.data?.data}
-                personalInfo={formMethods.watch('personalInfo')}
-                data={data}
-                setShowResults={setShowResults}
-              />
-            )}
           </div>
         </form>
+        {isPending ? (
+          <div className="fixed h-full w-full inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <LoadingAnalysis progress={progress} />
+          </div>
+        ) : (
+          <RiskAssessmentGeneratedReport
+            showResults={showResults}
+            resultData={resultData}
+            personalInfo={formMethods.watch('personalInfo')}
+            data={data}
+            setShowResults={setShowResults}
+          />
+        )}
       </div>
     </FormProvider>
   )
@@ -156,7 +158,7 @@ const RiskAssessmentGeneratedReport = ({
         <RiskAssessmentReport
           className="bg-white p-8 rounded-lg w-full max-w-[70%] m-auto max-h-[90vh] overflow-y-auto"
           action={actionButton}
-          data={resultData?.data?.data}
+          data={{ responseData: resultData }}
           personalInfo={personalInfo}
         />
       </div>
