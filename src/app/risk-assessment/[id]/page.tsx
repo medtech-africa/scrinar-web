@@ -6,12 +6,19 @@ import Image from 'next/image'
 import { TextArea } from '@/components/ui/textarea'
 import { Text } from '@/components/ui/text'
 import { useRiskAssessment } from '@/hooks/queries/useRiskAssessment'
+import { useMemo } from 'react'
 
 export default function ViewRecord({ params }: { params: { id: string } }) {
   const { data: riskData, isPending: isLoading } = useRiskAssessment(params?.id)
-  const data = riskData?.data?.responseData
-  const userData = riskData?.data?.personalInfo
-  const providerNotes = riskData?.providerNotes
+  const providerNotes = riskData?.requestData?.providerNotes
+  const data = useMemo(
+    () =>
+      riskData
+        ? Object.assign(riskData?.responseData, riskData?.requestData, {})
+        : {},
+    [riskData]
+  )
+  const userData = data?.personalInfo
 
   return (
     <div className="max-w-5xl mx-auto">
@@ -29,8 +36,8 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
           >{`${userData?.fullName} Result`}</Text>
         )}
 
-        {data && (
-          <div>
+        {data && userData && (
+          <div className="mb-4">
             <RiskAssessmentResult data={data} />
             {providerNotes && (
               <TextArea
@@ -41,11 +48,13 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
                 label="Provider Notes"
               />
             )}
-            <ReportActions
-              assessmentData={data}
-              personalInfo={userData}
-              isFromEmail
-            />
+            <div className="max-w-4xl mx-auto px-6 pb-6">
+              <ReportActions
+                assessmentData={data}
+                personalInfo={userData}
+                isFromEmail
+              />
+            </div>
           </div>
         )}
       </div>

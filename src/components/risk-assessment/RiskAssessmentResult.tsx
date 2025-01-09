@@ -15,7 +15,10 @@ import {
 import { motion } from 'framer-motion'
 import { IconPicker } from '../ui/icon-picker'
 import { ToastField } from '../ui/toast'
-import { RiskAssessmentModelResponseData } from '@/hooks/queries/useRiskAssessment'
+import {
+  RiskAssessmentModelRequestData,
+  RiskAssessmentModelResponseData,
+} from '@/hooks/queries/useRiskAssessment'
 import ThresholdChart from '../ui/chart'
 import { useFormContext } from 'react-hook-form'
 import calculateAge from '@/utils/calculateAge'
@@ -188,25 +191,33 @@ const CriticalAlerts = ({ alerts }: { alerts: any[] }) => {
 const RiskAssessmentResult = ({
   data,
 }: {
-  data: RiskAssessmentModelResponseData
+  data: RiskAssessmentModelResponseData &
+    Partial<RiskAssessmentModelRequestData>
 }) => {
   const [activeTab, setActiveTab] = useState<'who' | 'findrisc' | 'healthdata'>(
     'who'
   )
-  const { watch } = useFormContext()
+  const formContext = useFormContext()
 
   const activeData = data?.[activeTab] ?? null
-  const { bmi, pulse, height, weight, waist } = watch('vitals', {})
-  const fullname = watch('personalInfo.fullName')
-  const { gender: genderVal, dateOfBirth } = watch('personalInfo', {})
+  const { bmi, pulse, height, weight, waist } = formContext
+    ? formContext.watch('vitals', {})
+    : data?.vitals ?? {}
+
+  const {
+    gender: genderVal,
+    dateOfBirth,
+    fullName,
+  } = formContext
+    ? formContext?.watch('personalInfo', {})
+    : data?.personalInfo ?? {}
 
   const gender = genderVal?.toLowerCase()
   const age = calculateAge(dateOfBirth)
-  console.log(age, gender, bmi, pulse, '😘')
   const dataItems = [
     {
       id: '1',
-      title: fullname,
+      title: fullName,
       description: 'Name',
       icon: <IconPicker icon="primary" size={40} className="text-white" />,
     },

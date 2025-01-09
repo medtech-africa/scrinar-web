@@ -119,7 +119,7 @@ export interface Tobacco {
 export interface PersonalInfo {
   gender: string
   fullName: string
-  dateOfBirth: Date
+  dateOfBirth: string
   occupation: string
   phoneNumber: string
   address: string
@@ -203,3 +203,6 @@ export interface WhoBreakdown {
   diabetes: number
   cholesterol: number
 }
+
+export type RiskData = RiskAssessmentModelResponseData &
+  Partial<RiskAssessmentModelRequestData>
