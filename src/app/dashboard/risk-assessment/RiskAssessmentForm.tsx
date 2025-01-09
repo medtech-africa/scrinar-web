@@ -64,7 +64,7 @@ export const RiskAssessmentForm = ({
       setProgress(0)
     },
   })
-  console.log('🚀 ~ resultData:', resultData)
+  // console.log('🚀 ~ resultData:', resultData)
 
   const handleSubmit = async (data: any) => {
     const totalFields = 50
