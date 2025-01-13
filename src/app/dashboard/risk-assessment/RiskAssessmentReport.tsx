@@ -2,8 +2,12 @@
 import { ConsentForm } from './ConsentForm'
 import { RiskAssessmentResult } from '@/components/risk-assessment/RiskAssessmentResult'
 import { ReportActions } from '@/components/risk-assessment/PDFReport'
-import { RiskAssessmentModel } from '@/hooks/queries/useRiskAssessment'
+import {
+  RiskAssessmentModel,
+  RiskData,
+} from '@/hooks/queries/useRiskAssessment'
 import { cn } from '@/lib/utils'
+import { useMemo } from 'react'
 
 export const RiskAssessmentReport = ({
   data,
@@ -21,14 +25,22 @@ export const RiskAssessmentReport = ({
   personalInfo?: any
   showActionButton?: boolean
 }) => {
+  const riskData = useMemo(
+    () =>
+      data?.responseData
+        ? Object.assign({}, data?.responseData, data?.requestData)
+        : {},
+    [data]
+  ) as RiskData
+
   return (
     <div className={cn('w-full', className)}>
-      {data?.responseData && <RiskAssessmentResult data={data?.responseData} />}
+      {data?.responseData && <RiskAssessmentResult data={riskData} />}
       <ConsentForm assessmentId={assessmentId} />
 
       {data?.responseData && (
         <ReportActions
-          assessmentData={data?.responseData}
+          assessmentData={riskData}
           personalInfo={personalInfo}
           assessmentId={assessmentId}
         />

@@ -15,8 +15,8 @@ import { useMutation } from '@tanstack/react-query'
 import toast from 'react-hot-toast'
 import { LoadingAnalysis } from './LoadingAnalysis'
 import {
-  PersonalInfo,
   RiskAssessmentModel,
+  RiskAssessmentModelRequestData,
 } from '@/hooks/queries/useRiskAssessment'
 import { RiskAssessmentReport } from './RiskAssessmentReport'
 
@@ -64,7 +64,7 @@ export const RiskAssessmentForm = ({
       setProgress(0)
     },
   })
-  console.log('🚀 ~ resultData:', resultData)
+  // console.log('🚀 ~ resultData:', resultData)
 
   const handleSubmit = async (data: any) => {
     const totalFields = 50
@@ -123,7 +123,10 @@ export const RiskAssessmentForm = ({
           <RiskAssessmentGeneratedReport
             showResults={showResults}
             resultData={resultData}
-            personalInfo={formMethods.watch('personalInfo')}
+            formData={{
+              personalInfo: formMethods.watch('personalInfo'),
+              vitals: formMethods.watch('vitals'),
+            }}
             data={data}
             setShowResults={setShowResults}
           />
@@ -138,14 +141,15 @@ const RiskAssessmentGeneratedReport = ({
   resultData,
   data,
   setShowResults,
-  personalInfo,
+  formData,
 }: {
   showResults: boolean
   resultData?: any
   data?: RiskAssessmentModel
-  personalInfo?: PersonalInfo
+  formData?: Partial<RiskAssessmentModelRequestData>
   setShowResults: (showResults: boolean) => void
 }) => {
+  const personalInfo = formData?.personalInfo
   const actionButton = (
     <div className="mt-8 flex justify-end">
       <Button onClick={() => setShowResults(false)}>Close</Button>
@@ -153,12 +157,19 @@ const RiskAssessmentGeneratedReport = ({
   )
 
   if (showResults) {
+    const mergedData = Object.assign(
+      {},
+      { responseData: resultData },
+      {
+        requestData: formData,
+      }
+    ) as RiskAssessmentModel
     return (
       <div className="fixed h-full w-full inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
         <RiskAssessmentReport
           className="bg-white p-8 rounded-lg w-full max-w-[70%] m-auto max-h-[90vh] overflow-y-auto"
           action={actionButton}
-          data={{ responseData: resultData }}
+          data={mergedData}
           personalInfo={personalInfo}
         />
       </div>

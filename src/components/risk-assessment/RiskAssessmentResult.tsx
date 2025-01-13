@@ -15,7 +15,19 @@ import {
 import { motion } from 'framer-motion'
 import { IconPicker } from '../ui/icon-picker'
 import { ToastField } from '../ui/toast'
-import { RiskAssessmentModelResponseData } from '@/hooks/queries/useRiskAssessment'
+import {
+  RiskAssessmentModelRequestData,
+  RiskAssessmentModelResponseData,
+} from '@/hooks/queries/useRiskAssessment'
+import ThresholdChart from '../ui/chart'
+import { useFormContext } from 'react-hook-form'
+import calculateAge from '@/utils/calculateAge'
+import DashboardProgressPattern from '../svg/dashboard-progress-pattern'
+import DashboardProgress from '../svg/dashboard-progess'
+import { categorizeBMIWHO2007 } from '@/utils/vitalCalculations'
+import { BadgeField } from '../ui/badge'
+import { PageCard } from '../ui/page-card'
+import { Card } from '../ui/card'
 
 // Color constants based on the guide
 const WHO_COLORS = {
@@ -34,7 +46,7 @@ const FINDRISC_COLORS = {
 interface IRiskGuage {
   score: number
   title: string
-  type?: 'who' | 'findrisc'
+  type?: 'who' | 'findrisc' | 'healthdata'
   maxScore?: number
   onClick?: () => void
 }
@@ -179,12 +191,67 @@ const CriticalAlerts = ({ alerts }: { alerts: any[] }) => {
 const RiskAssessmentResult = ({
   data,
 }: {
-  data: RiskAssessmentModelResponseData
+  data: RiskAssessmentModelResponseData &
+    Partial<RiskAssessmentModelRequestData>
 }) => {
-  const [activeTab, setActiveTab] = useState<'who' | 'findrisc'>('who')
+  const [activeTab, setActiveTab] = useState<'who' | 'findrisc' | 'healthdata'>(
+    'who'
+  )
+  const formContext = useFormContext()
 
   const activeData = data?.[activeTab] ?? null
+  const { bmi, pulse, height, weight, waist } = formContext
+    ? formContext.watch('vitals', {})
+    : data?.vitals ?? {}
 
+  const {
+    gender: genderVal,
+    dateOfBirth,
+    fullName,
+  } = formContext
+    ? formContext?.watch('personalInfo', {})
+    : data?.personalInfo ?? {}
+
+  const gender = genderVal?.toLowerCase()
+  const age = calculateAge(dateOfBirth)
+  const dataItems = [
+    {
+      id: '1',
+      title: fullName,
+      description: 'Name',
+      icon: <IconPicker icon="primary" size={40} className="text-white" />,
+    },
+    {
+      id: '2',
+      title: height ? height + 'CM' : '-',
+      description: 'Height',
+      icon: <IconPicker icon="measurement" size={40} className="text-white" />,
+    },
+    {
+      id: '3',
+      title: gender ?? '-',
+      description: 'Gender',
+      icon: <IconPicker icon="gender" size={40} className="text-white" />,
+    },
+    {
+      id: '4',
+      title: weight + 'KG' ?? '-',
+      description: 'Weight',
+      icon: <IconPicker icon="weight" size={40} className="text-white" />,
+    },
+    {
+      id: '5',
+      title: age + ' years' ?? '-',
+      description: 'Age',
+      icon: <IconPicker icon="ageIcon" size={40} className="text-white" />,
+    },
+    {
+      id: '6',
+      title: waist + 'CM' ?? '-',
+      description: 'Waist',
+      icon: <IconPicker icon="waist" size={40} className="text-white" />,
+    },
+  ]
   const recommendations = useMemo(
     () =>
       activeData
@@ -237,7 +304,49 @@ const RiskAssessmentResult = ({
         >
           Diabetes Risk (FINDRISC)
         </button>
+        <button
+          className={`px-4 py-2 rounded-lg ${activeTab === 'healthdata' ? 'bg-primary text-white' : 'bg-gray-200'}`}
+          onClick={() => setActiveTab('healthdata')}
+        >
+          Health Data
+        </button>
       </div>
+      {activeTab === 'healthdata' && (
+        <>
+          <div className="grid grid-cols-2 gap-x-3">
+            <div>
+              <ThresholdChart name="BMI" healthData={bmi} units="kg/m2" />
+            </div>
+            <div>
+              <ThresholdChart name="Pulse" healthData={pulse} units="BPM" />
+            </div>
+          </div>
+          <div className="space-y-6 mt-9">
+            <PageCard title="Data Summary" bodyStyle="p-4">
+              <div className="grid md:grid-rows-3 md:grid-cols-2 gap-x-6 gap-y-2 mb-4">
+                {dataItems.slice(0, 6).map((item) => (
+                  <Card key={item.id} {...item} className="w-full capitalize" />
+                ))}
+              </div>
+              <div className="grid md:grid-rows-1 md:grid-cols-2 gap-6 mt-4">
+                <div className="flex flex-col gap-y-4">
+                  <div className="relative justify-center items-center flex">
+                    <DashboardProgressPattern className="absolute right-0 left-0 hidden md:block" />
+                    <DashboardProgress
+                      progress={bmi}
+                      variant={categorizeBMIWHO2007(age, gender, bmi)?.variant}
+                    />
+                  </div>
+                  <BadgeField
+                    variant={categorizeBMIWHO2007(age, gender, bmi)?.variant}
+                    value={categorizeBMIWHO2007(age, gender, bmi)?.message}
+                  />
+                </div>
+              </div>
+            </PageCard>
+          </div>
+        </>
+      )}
 
       {activeData && (
         <>
@@ -246,7 +355,9 @@ const RiskAssessmentResult = ({
               <h3 className="text-xl font-semibold mb-4">
                 {activeTab === 'who'
                   ? 'Cardiovascular Risk Score'
-                  : ' Diabetes Risk Score'}
+                  : activeTab === 'healthdata'
+                    ? 'Health Data'
+                    : ' Diabetes Risk Score'}
               </h3>
               <div className="flex justify-center">
                 <RiskGauge
@@ -262,7 +373,6 @@ const RiskAssessmentResult = ({
               </h3>
               <FactorBreakdown
                 data={formatRiskFactors(
-                  // @ts-expect-error type mismatch
                   activeData.breakdown,
                   parseInt(activeData.score)
                 )}
