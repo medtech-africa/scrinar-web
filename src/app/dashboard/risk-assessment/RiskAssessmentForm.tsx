@@ -64,19 +64,34 @@ export const RiskAssessmentForm = ({
       setProgress(0)
     },
   })
-  // console.log('🚀 ~ resultData:', resultData)
-
-  const handleSubmit = async (data: any) => {
+  const isFormValid = (data: any) => {
     const totalFields = 50
     const filledFields = countFilledFields(data)
 
     const filledPercentage = (filledFields / totalFields) * 100
-    if (filledPercentage < 60) {
-      toast.error('Please fill more data to analyze risk assessment')
+    return (
+      filledPercentage >= 60 && !!formMethods.watch('personalInfo.dateOfBirth')
+    )
+  }
+
+  const handleSubmit = (data: any) => {
+    if (!isFormValid(data)) {
+      toast.error(isFormFilledError(data) ?? 'An error occurred')
       return
     }
 
     analyzeRisk(data)
+  }
+
+  const isFormFilledError = (data: any) => {
+    const filledPercentage = (countFilledFields(data) / 50) * 100
+    if (filledPercentage < 60) {
+      return 'Please fill more data to analyze risk assessment'
+    }
+
+    if (!formMethods.watch('personalInfo.dateOfBirth')) {
+      return 'Please fill the date of birth field'
+    }
   }
 
   const consentAgreement = formMethods.watch('consentAgreement')
