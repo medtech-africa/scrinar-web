@@ -196,7 +196,6 @@ const RiskAssessmentResult = ({
   data: RiskAssessmentModelResponseData &
     Partial<RiskAssessmentModelRequestData>
 }) => {
-  console.log("🚀 ~ data:", data)
   const [activeTab, setActiveTab] = useState<'who' | 'findrisc' | 'healthdata'>(
     'who'
   )
