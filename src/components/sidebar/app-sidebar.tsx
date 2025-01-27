@@ -122,7 +122,7 @@ const othersData = [
   {
     title: 'App Settings',
     icon: 'setting2',
-    url: 'settings',
+    url: '/dashboard/settings',
   },
   // {
   //   title: 'Support',
