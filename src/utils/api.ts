@@ -133,10 +133,13 @@ export const API = {
   nutritionAnalytics: `${BASE_URL}/api/v1/analytics/nutrition`,
   generalAnalytics: `${BASE_URL}/api/v1/analytics/general`,
   surveillanceAnalytics: `${BASE_URL}/api/v1/analytics/surveillance`,
+  parentAnalytics: `${BASE_URL}/api/v1/analytics/all/parents`,
+  childrenAnalytics: `${BASE_URL}/api/v1/analytics/all/children`,
 
   // risk assessment
   riskAssessment: `${BASE_URL}/api/v1/risk-assessment`,
   riskAssessmentData: `${BASE_URL}/api/v1/risk-assessment/user-data`,
-  riskAssessmentDetails: (id:string) => `${BASE_URL}/api/v1/risk-assessment/${id}`,
+  riskAssessmentDetails: (id: string) =>
+    `${BASE_URL}/api/v1/risk-assessment/${id}`,
   sendRiskAssessment: `${BASE_URL}/api/v1/risk-assessment/send`,
 }

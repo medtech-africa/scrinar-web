@@ -6,7 +6,7 @@ import './page.css'
 export const Page: React.FC = () => {
   return (
     <article>
-      <Header sideToggleOpen={() => null} />
+      <Header />
 
       <section className="storybook-page">
         <h2>Pages in Storybook</h2>

@@ -11,14 +11,17 @@ const Table = React.forwardRef<
 >(({ className, hasEmptyData = true, containerClassName, ...props }, ref) => (
   <div
     className={cn(
-      'w-full overflow-auto max-h-[460px]',
+      'w-full overflow-auto max-h-[460px] border rounded-lg',
       !hasEmptyData && 'min-h-[250px]',
       containerClassName
     )}
   >
     <table
       ref={ref}
-      className={cn('w-full caption-bottom text-sm', className)}
+      className={cn(
+        'w-full caption-bottom text-sm border-spacing-0 border-collapse border-hidden',
+        className
+      )}
       {...props}
     />
   </div>
@@ -97,7 +100,10 @@ const TableCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <td
     ref={ref}
-    className={cn('p-4 align-middle [&:has([role=checkbox])]:pr-0', className)}
+    className={cn(
+      'p-4 align-middle [&:has([role=checkbox])]:pr-0 border-r last:border-r-0',
+      className
+    )}
     {...props}
   />
 ))

@@ -91,7 +91,7 @@ const FHDPageContent = ({ type }: Props) => {
 
   return (
     <div>
-      <div>
+      <div className="mb-2">
         <Delete
           open={deleteModal}
           onClose={setDeleteModal}

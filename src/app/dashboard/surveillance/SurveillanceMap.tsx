@@ -11,6 +11,7 @@ import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet'
 import { useSurveillanceAnalytics } from '@/hooks/queries/useAnalytics'
 import ContentLoader from '@/components/content-loader'
 import { useGeolocation } from '@/hooks/useGeolocation'
+import { Text } from '@/components/ui/text'
 
 // const data = [
 //   { name: 'Takushara', lat: 8.8824, lon: 7.4564, value: 80945 },
@@ -56,34 +57,43 @@ export const SurveillanceMap = () => {
   const initialCoordinates = lat && lng ? { lat, lng } : position
 
   return (
-    <MapContainer
-      key={Object.values(initialCoordinates).join(',')}
-      center={initialCoordinates}
-      zoom={6}
-      scrollWheelZoom={true}
-      style={{ height: 'max(600px, 80vh)', width: '100%' }}
-    >
-      <React.Fragment>
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        />
-        {filteredMapData.map((location, index) => (
-          <Circle
-            key={index}
-            center={[location.lat, location.lon]}
-            radius={Math.sqrt(location.value) * 200} // Adjust radius based on value
-            color="red"
-            fillColor="red"
-            fillOpacity={0.4}
-          >
-            <Popup>
-              <strong className="capitalize">{location.name}</strong> <br />
-              Value: {location.value}
-            </Popup>
-          </Circle>
-        ))}
-      </React.Fragment>
-    </MapContainer>
+    <div className="">
+      <Text variant="display/xs" className="">
+        Map
+      </Text>
+      <MapContainer
+        key={Object.values(initialCoordinates).join(',')}
+        center={initialCoordinates}
+        zoom={6}
+        scrollWheelZoom={true}
+        style={{
+          // height: 'max(600px, 80vh)',
+          width: '100%',
+        }}
+        className="w-full rounded-xl h-[30rem]"
+      >
+        <React.Fragment>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+          />
+          {filteredMapData.map((location, index) => (
+            <Circle
+              key={index}
+              center={[location.lat, location.lon]}
+              radius={Math.sqrt(location.value) * 200} // Adjust radius based on value
+              color="red"
+              fillColor="red"
+              fillOpacity={0.4}
+            >
+              <Popup>
+                <strong className="capitalize">{location.name}</strong> <br />
+                Value: {location.value}
+              </Popup>
+            </Circle>
+          ))}
+        </React.Fragment>
+      </MapContainer>
+    </div>
   )
 }

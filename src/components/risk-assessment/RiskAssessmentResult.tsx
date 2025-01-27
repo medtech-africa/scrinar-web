@@ -37,7 +37,7 @@ const WHO_COLORS = {
 }
 
 const FINDRISC_COLORS = {
-  low: ['#D5F5E3', '#82E0AA'],
+  low: ['#6FCF97', '#27AE60'],
   moderate: ['#FCF3CF', '#F7DC6F'],
   high: ['#FAD7A0', '#F39C12'],
   veryHigh: ['#F5B7B1', '#C0392B'],
@@ -70,6 +70,19 @@ export type Breakdown = {
   cholesterol: number
 }
 
+const getColors = (type: string, score: number) => {
+  if (type === 'who') {
+    if (score < 10) return WHO_COLORS.low
+    if (score < 20) return WHO_COLORS.moderate
+    return WHO_COLORS.high
+  } else {
+    if (score < 7) return FINDRISC_COLORS.low
+    if (score < 11) return FINDRISC_COLORS.moderate
+    if (score < 14) return FINDRISC_COLORS.high
+    return FINDRISC_COLORS.veryHigh
+  }
+}
+
 // Risk Gauge Component with enhanced styling and interactions
 const RiskGauge = ({
   score,
@@ -78,18 +91,7 @@ const RiskGauge = ({
   maxScore = 100,
   onClick,
 }: IRiskGuage) => {
-  const getColors = () => {
-    if (type === 'who') {
-      if (score < 10) return WHO_COLORS.low
-      if (score < 20) return WHO_COLORS.moderate
-      return WHO_COLORS.high
-    } else {
-      if (score < 7) return FINDRISC_COLORS.low
-      if (score < 11) return FINDRISC_COLORS.moderate
-      if (score < 14) return FINDRISC_COLORS.high
-      return FINDRISC_COLORS.veryHigh
-    }
-  }
+  const colors = getColors(type, score)
 
   const data = [
     { name: 'Risk', value: score },
@@ -115,7 +117,7 @@ const RiskGauge = ({
             {data.map((entry, index) => (
               <Cell
                 key={`cell-${index}`}
-                fill={index === 0 ? getColors()[0] : '#f3f4f6'}
+                fill={index === 0 ? colors[0] : '#f3f4f6'}
               />
             ))}
           </Pie>
@@ -123,7 +125,7 @@ const RiskGauge = ({
       </ResponsiveContainer>
       <div className="absolute inset-0 flex flex-col items-center justify-center mt-8">
         <span className="text-2xl font-bold">{score}%</span>
-        <p className="text-sm" style={{ color: getColors()[1] }}>
+        <p className="text-sm" style={{ color: colors[1] }}>
           {title}
         </p>
       </div>
@@ -272,6 +274,8 @@ const RiskAssessmentResult = ({
     [activeTab]
   )
 
+  const colors = getColors(activeTab, parseInt(activeData.score))
+
   return (
     <motion.div
       initial={{ scale: 0.9, opacity: 0 }}
@@ -359,12 +363,33 @@ const RiskAssessmentResult = ({
                     ? 'Health Data'
                     : ' Diabetes Risk Score'}
               </h3>
-              <div className="flex justify-center">
+              <div className="flex flex-col justify-center items-center">
                 <RiskGauge
                   score={parseInt(activeData.score)}
                   title={activeData.riskLevel}
                   type={activeTab}
                 />
+                {activeTab !== 'healthdata' && (
+                  <p className="text-center font-medium">
+                    {activeTab === 'findrisc' ? (
+                      <>
+                        Under Diabetes{' '}
+                        <span style={{ color: colors[1] }}>
+                          {activeData.riskLevel}
+                        </span>{' '}
+                        of developing Type II Diabetes
+                      </>
+                    ) : (
+                      <>
+                        Patient at{' '}
+                        <span style={{ color: colors[1] }}>
+                          {activeData.riskLevel}
+                        </span>{' '}
+                        of developing cardiac disease in the next 10yrs
+                      </>
+                    )}
+                  </p>
+                )}
               </div>
             </div>
             <div className="bg-white p-6 rounded-lg shadow">

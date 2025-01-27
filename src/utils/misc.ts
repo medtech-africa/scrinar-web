@@ -1,3 +1,5 @@
+import { IParent, ParentsAnalyticsEnums } from '@/hooks/queries/useAnalytics'
+
 export function on<T extends Window | Document | HTMLElement | EventTarget>(
   obj: T | null,
   ...args:
@@ -22,4 +24,24 @@ export function off<T extends Window | Document | HTMLElement | EventTarget>(
       ...(args as Parameters<HTMLElement['removeEventListener']>)
     )
   }
+}
+export const getTypeDistribution = <T extends ParentsAnalyticsEnums>(
+  data: IParent[],
+  type: keyof typeof ParentsAnalyticsEnums
+) => {
+  const result: Record<T, number> = data.reduce(
+    (acc, obj) => {
+      const returnedType = obj[type]?.trim().toLowerCase() as T
+      acc[returnedType] = (acc[returnedType] || 0) + 1
+      return acc
+    },
+    {} as Record<T, number>
+  )
+
+  return Object.entries(result)
+    .filter(([value]) => value !== 'undefined')
+    .map(([value, count]) => ({
+      value,
+      count,
+    }))
 }

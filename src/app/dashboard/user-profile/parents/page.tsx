@@ -285,6 +285,7 @@ export default function Parents() {
           onNext={handleNext}
           onPrev={handlePrev}
           pageSize={data?.per_page}
+          className="mt-2"
         />
       )}
     </div>

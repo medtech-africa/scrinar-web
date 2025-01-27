@@ -46,7 +46,9 @@ export default function SurveillancePage() {
 
   return (
     <div className="w-full">
-      <SurveillanceMap />
+      <div className="grid grid-cols-2">
+        <SurveillanceMap />
+      </div>
     </div>
   )
 }
