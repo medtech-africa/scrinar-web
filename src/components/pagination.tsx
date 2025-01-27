@@ -3,6 +3,7 @@ import usePagination from '@/hooks/usePagination'
 import React, { useMemo } from 'react'
 import { IconPicker } from './ui/icon-picker'
 import { Button } from './ui/button'
+import { cn } from '@/lib/utils'
 
 /* eslint-disable import/no-unused-modules */
 interface Iprops {
@@ -12,6 +13,7 @@ interface Iprops {
   onNext: (max?: number) => void
   total: number
   pageSize?: number
+  className?: string
 }
 
 const Pagination = ({
@@ -21,8 +23,9 @@ const Pagination = ({
   onNext,
   onPrev,
   pageSize = 10,
+  className,
 }: Iprops) => {
-  const max = useMemo(() => (total ? Math.ceil(total / pageSize) : 0), [total])
+  const max = useMemo(() => (total ? Math.ceil(total / pageSize) : 0), [total, pageSize])
   const pageRange = usePagination({
     totalCount: total,
     pageSize: pageSize,
@@ -31,7 +34,7 @@ const Pagination = ({
   })
 
   return (
-    <div className="flex gap-x-2 justify-end">
+    <div className={cn('flex gap-x-2 justify-end', className)}>
       <Button
         variant="tertiary"
         onClick={onPrev}

@@ -216,6 +216,7 @@ const ScreeningList = ({
           setCurrent={setCurrentPage}
           total={data?.total}
           onNext={handleNext}
+          className="mt-2"
           onPrev={handlePrev}
         />
       )}

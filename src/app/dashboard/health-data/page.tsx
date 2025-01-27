@@ -380,6 +380,7 @@ export default function HealthData() {
           total={healthData?.meta?.total}
           onNext={handleNext}
           onPrev={handlePrev}
+          className="mt-2"
         />
       )}
     </div>

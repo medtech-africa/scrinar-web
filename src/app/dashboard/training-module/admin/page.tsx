@@ -171,6 +171,7 @@ export default function TrainerPage() {
           pageSize={data?.per_page}
           onNext={handleNext}
           onPrev={handlePrev}
+          className="mt-2"
         />
       )}
       <Modal

@@ -67,7 +67,7 @@ export const SortDescIcon: FunctionComponent<IconPickerProp> = ({
           stroke="#000000"
           stroke-width="2"
           stroke-linecap="round"
-          stroke-linejoin="round"
+          strokeLinejoin="round"
         />
       </g>
     </svg>

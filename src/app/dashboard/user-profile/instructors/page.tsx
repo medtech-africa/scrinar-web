@@ -276,6 +276,7 @@ export default function Instructors() {
           total={data?.meta?.total}
           onNext={handleNext}
           onPrev={handlePrev}
+          className="mt-2"
         />
       )}
     </div>
