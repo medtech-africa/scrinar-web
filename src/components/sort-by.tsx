@@ -48,7 +48,7 @@ const SortBy = ({
   }, [by, isAsc])
 
   return (
-    <div className="flex items-center gap-4 mt-2 z-[9999] relative">
+    <div className="flex items-center gap-4 mt-2 z-10 relative">
       <Select
         // label="Sort by"
         full

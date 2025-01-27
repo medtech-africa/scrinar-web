@@ -202,6 +202,7 @@ const RiskAssessmentResult = ({
   const formContext = useFormContext()
 
   const activeData = data?.[activeTab] ?? null
+
   const { bmi, pulse, height, weight, waist } = formContext
     ? formContext.watch('vitals', {})
     : data?.vitals ?? {}
@@ -237,19 +238,19 @@ const RiskAssessmentResult = ({
     },
     {
       id: '4',
-      title: weight + 'KG' ?? '-',
+      title: weight ? weight + 'KG' :  '-',
       description: 'Weight',
       icon: <IconPicker icon="weight" size={40} className="text-white" />,
     },
     {
       id: '5',
-      title: age + ' years' ?? '-',
+      title: age ? age + ' years' : '-',
       description: 'Age',
       icon: <IconPicker icon="ageIcon" size={40} className="text-white" />,
     },
     {
       id: '6',
-      title: waist + 'CM' ?? '-',
+      title: waist ?  waist + 'CM' : '-',
       description: 'Waist',
       icon: <IconPicker icon="waist" size={40} className="text-white" />,
     },
@@ -274,7 +275,7 @@ const RiskAssessmentResult = ({
     [activeTab]
   )
 
-  const colors = getColors(activeTab, parseInt(activeData.score))
+  const colors = activeData ? getColors(activeTab, parseInt(activeData?.score || 0)) : []
 
   return (
     <motion.div

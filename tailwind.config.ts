@@ -1,6 +1,10 @@
 import type { Config } from 'tailwindcss'
 import plugin from 'tailwindcss/plugin'
 
+const isDev = process.env.ENV === 'development'
+const DEV_PRIMARY_COLOR = '#1570EF'
+const primaryColor = isDev ? DEV_PRIMARY_COLOR : '#E31B23'
+
 const config: Config = {
   darkMode: ['class'],
   content: [
@@ -35,7 +39,7 @@ const config: Config = {
         ring: 'var(--ring)',
         background: '#F9FAFB',
         primary: {
-          DEFAULT: process.env.ENV === 'development' ? '#1570EF' : '#E31B23',
+          DEFAULT: primaryColor,
           // foreground: "hsl(var(--primary-foreground))",
         },
         secondary: {
@@ -165,6 +169,16 @@ const config: Config = {
         },
         error: {
           500: '#F04438',
+        },
+        sidebar: {
+          DEFAULT: 'hsl(var(--sidebar-background))',
+          foreground: 'hsl(var(--sidebar-foreground))',
+          primary: 'hsl(var(--sidebar-primary))',
+          'primary-foreground': 'hsl(var(--sidebar-primary-foreground))',
+          accent: isDev ? DEV_PRIMARY_COLOR : 'var(--sidebar-accent)',
+          'accent-foreground': 'var(--sidebar-accent-foreground)',
+          border: 'hsl(var(--sidebar-border))',
+          ring: 'hsl(var(--sidebar-ring))',
         },
       },
       borderRadius: {

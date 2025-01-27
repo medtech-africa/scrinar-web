@@ -14,12 +14,9 @@ import { useUser } from '@/context/user'
 import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 import { Button } from './button'
 import { useQueryClient } from '@tanstack/react-query'
+import { SidebarTrigger } from './sidebar-new'
 
-interface IHeader {
-  sideToggleOpen: React.Dispatch<React.SetStateAction<boolean>>
-}
-
-export const Header = ({ sideToggleOpen }: IHeader) => {
+export const Header = () => {
   const router = useRouter()
   const menuRef = useRef(null)
   const [visible, setVisible] = useState<boolean>(false)
@@ -53,9 +50,7 @@ export const Header = ({ sideToggleOpen }: IHeader) => {
   return (
     <header>
       <div className="flex bg-white justify-between border-b-[1px] border-grey-100 items-center px-4 md:px-8 py-4">
-        <div className="md:hidden" onClick={() => sideToggleOpen((pr) => !pr)}>
-          <IconPicker size={24} icon="hamburger" />
-        </div>
+        <SidebarTrigger />
         <div>
           {/* <Input
             leadingIcon={<IconPicker icon="search" />}

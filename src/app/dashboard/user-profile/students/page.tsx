@@ -289,6 +289,7 @@ export default function Students() {
           onNext={handleNext}
           onPrev={handlePrev}
           pageSize={data?.per_page}
+          className="mt-2"
         />
       )}
     </div>
