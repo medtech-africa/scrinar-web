@@ -18,6 +18,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import TableEmptyState from '@/components/table-empty-state'
 import { Button } from '@/components/ui/button'
+import FormBuilder from '@/components/form-builder'
 
 const NEW_ASSESSMENT_URL = '/dashboard/risk-assessment/new'
 
@@ -89,23 +90,7 @@ const RiskAssessment = () => {
         </div>
       </div>
       <div className="">
-        <Table
-          className={cn('table-auto my-2')}
-          containerClassName="!max-h-fit"
-        >
-          <TableHeader className="bg-grey-100">
-            <TableRow>
-              <TableHead className="">ID</TableHead>
-              <TableHead className="">NCD Score</TableHead>
-              <TableHead className="">Risk Level</TableHead>
-              <TableHead className="">Date</TableHead>
-              <TableHead className=""></TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            <TableBodyContent isLoading={isPending} data={data} />
-          </TableBody>
-        </Table>
+        <FormBuilder />
       </div>
     </div>
   )
