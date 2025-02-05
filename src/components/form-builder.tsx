@@ -13,6 +13,8 @@ import { Input as CustomInput } from '@/components/ui/input'
 import { Select as CustomSelect } from '@/components/ui/select'
 import { Checkbox as CustomCheckbox } from '@/components/ui/checkbox'
 
+import 'react-form-builder2/dist/app.css'
+
 interface FormElement {
   key: string
   element: string
