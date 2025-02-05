@@ -274,6 +274,71 @@ const register = yupResolver(
       .min(1, 'Select at least one educational institution'),
   })
 )
+
+const organizationValidation = yupResolver(
+  yup.object().shape({
+    name: yup
+      .string()
+      .required('Please enter organization name')
+      .typeError('Please enter organization name')
+      .lowercase(),
+
+    website: yup
+      .string()
+      .typeError('Enter a valid web address')
+      .matches(
+        /^(https?:\/\/)?(www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/,
+        'Enter a valid web address'
+      ),
+
+    email: yup
+      .string()
+      .required('Please enter email address')
+      .email('Please enter a valid email address')
+      .typeError('Please enter email address'),
+
+    password: yup
+      .string()
+      .required('Password is required')
+      .min(6, 'Password must be at least 6 characters')
+      .typeError('Please enter a password'),
+
+    state: yup
+      .object()
+      .shape({
+        label: yup.string().required(),
+        value: yup.string().required(),
+      })
+      .required('Please select a state')
+      .typeError('Please select a state'),
+
+    lga: yup
+      .object()
+      .shape({
+        label: yup.string().required(),
+        value: yup.string().required(),
+      })
+      .required('Please select a local government area')
+      .typeError('Please select a local government area'),
+
+    address: yup
+      .string()
+      .required('Address is required')
+      .typeError('Please enter an address'),
+
+    zipCode: yup.string().required('ZIP code is required'),
+
+    type: yup
+      .object()
+      .shape({
+        label: yup.string().required(),
+        value: yup.string().required(),
+      })
+      .required('Please select an organization type')
+      .typeError('Please select an organization type'),
+  })
+)
+
 const exercise = yupResolver(
   yup.object().shape({
     schoolTransportQuestion: yup
@@ -656,6 +721,7 @@ const validation = {
   createMasterLogin,
   updatePasswordSchema,
   register,
+  organizationValidation,
   nutritional,
   exercise,
   survey,

@@ -91,6 +91,9 @@ export const API = {
   getSchools: (search: string, state?: string) =>
     `${BASE_URL}/api/v1/school?search=${search}${state ? `&state=${state}` : ''}`,
 
+  //organization
+  organizationRegister: `${BASE_URL}/api/v1/organization`,
+
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,
 
