@@ -98,6 +98,19 @@ const generalData = [
       'jica_researchers',
     ],
   },
+  {
+    title: 'Forms',
+    icon: 'book',
+    url: 'form',
+    roles: [
+      'school',
+      'instructor',
+      'play4health_admin',
+      'super_admin',
+      'jica_enumerators',
+      'jica_researchers',
+    ],
+  },
   // {
   //   title: 'Training Module',
   //   icon: 'book',

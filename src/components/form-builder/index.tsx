@@ -144,8 +144,12 @@ const SortableField = ({
       case 'checkbox':
         return (
           <div className="flex items-center space-x-2">
-            <Checkbox id={field.id} />
-            <Label htmlFor={field.id}>{field.label}</Label>
+            {field.options?.map((option) => (
+              <div key={option} className="flex items-center space-x-2">
+                <Checkbox id={`${field.id}-${option}`} value={option} />
+                <Label htmlFor={`${field.id}-${option}`}>{option}</Label>
+              </div>
+            ))}
           </div>
         )
       case 'date':
@@ -258,7 +262,7 @@ const FormBuilder: React.FC = () => {
       name: `field_${crypto.randomUUID()}`,
       required: false,
       placeholder: '',
-      ...(['select', 'radio', 'multipleChoice'].includes(type)
+      ...(['select', 'radio', 'checkbox', 'multipleChoice'].includes(type)
         ? { options: ['Option 1', 'Option 2', 'Option 3'] }
         : {}),
     }
@@ -414,7 +418,7 @@ const FormBuilder: React.FC = () => {
                   />
                 </div>
               )}
-              {['select', 'radio', 'multipleChoice'].includes(
+              {['select', 'radio', 'multipleChoice', 'checkbox'].includes(
                 selectedField.type
               ) && (
                 <div>

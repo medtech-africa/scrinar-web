@@ -457,7 +457,6 @@ const SidebarGroupLabel = React.forwardRef<
   const Comp = asChild ? Slot : 'div'
 
   return (
-    // @ts-expect-error type mismatch react vs radix
     <Comp
       ref={ref}
       data-sidebar="group-label"
@@ -479,7 +478,6 @@ const SidebarGroupAction = React.forwardRef<
   const Comp = asChild ? Slot : 'button'
 
   return (
-    // @ts-expect-error type mismatch react vs radix
     <Comp
       ref={ref}
       data-sidebar="group-action"
@@ -581,7 +579,6 @@ const SidebarMenuButton = React.forwardRef<
     const { isMobile, state } = useSidebar()
 
     const button = (
-      // @ts-expect-error type mismatch react vs radix
       <Comp
         ref={ref}
         data-sidebar="menu-button"
@@ -627,7 +624,6 @@ const SidebarMenuAction = React.forwardRef<
   const Comp = asChild ? Slot : 'button'
 
   return (
-    // @ts-expect-error type mismatch react vs radix
     <Comp
       ref={ref}
       data-sidebar="menu-action"
@@ -743,7 +739,6 @@ const SidebarMenuSubButton = React.forwardRef<
 
   return (
     <Comp
-      // @ts-expect-error type mismatch react vs radix
       ref={ref}
       data-sidebar="menu-sub-button"
       data-size={size}
