@@ -18,7 +18,7 @@ import Link from 'next/link'
 // import { format } from 'date-fns'
 // import TableEmptyState from '@/components/table-empty-state'
 import { Button } from '@/components/ui/button'
-// import FormBuilder from '@/components/form-builder'
+import FormBuilder from '@/components/form-builder'
 
 const NEW_ASSESSMENT_URL = '/dashboard/risk-assessment/new'
 
@@ -89,14 +89,14 @@ const RiskAssessment = () => {
           </Link>
         </div>
       </div>
-      {/* <FormBuilder /> */}
-      <div className="w-full h-[600px]">
+      <FormBuilder />
+      {/* <div className="w-full h-[600px]">
         <iframe
           src="http://localhost:3001"
           className="w-full h-full"
           frameBorder="0"
         />
-      </div>
+      </div> */}
     </div>
   )
 }
