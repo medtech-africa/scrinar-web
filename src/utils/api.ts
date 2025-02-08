@@ -94,6 +94,19 @@ export const API = {
   //organization
   organizationRegister: `${BASE_URL}/api/v1/organization`,
 
+  //forms
+  getForms: (page?: number, search?: string) => {
+    const params = new URLSearchParams()
+    if (search) {
+      params.append('search', search)
+    }
+    if (page) {
+      params.append('page', page.toString())
+    }
+    return `${BASE_URL}/api/v1/forms?${params.toString()}`
+  },
+  form: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
+
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,
 

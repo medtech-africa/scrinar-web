@@ -46,8 +46,8 @@ import {
   Minus,
   GripVertical,
 } from 'lucide-react'
-import classNames from 'classnames'
 import { IconPicker } from '../ui/icon-picker'
+import { cn } from '@/lib/utils'
 
 // Types
 type FieldType =
@@ -320,7 +320,7 @@ const FormBuilder: React.FC = () => {
       <div className="grid grid-cols-12 gap-6">
         {!previewMode && (
           <div className="col-span-3 bg-white p-4 rounded-lg shadow">
-            <h3 className="font-semibold mb-4">Form Components</h3>
+            <h3 className="font-semibold mb-4">Form Fields</h3>
             <div className="space-y-2">
               {FIELD_COMPONENTS.map((component) => (
                 <div
@@ -340,7 +340,7 @@ const FormBuilder: React.FC = () => {
         )}
 
         <div
-          className={classNames('bg-white p-6 rounded-lg shadow', {
+          className={cn('bg-white p-6 rounded-lg shadow', {
             'col-span-9': !previewMode,
             'col-span-12': previewMode,
           })}

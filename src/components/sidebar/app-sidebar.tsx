@@ -101,7 +101,7 @@ const generalData = [
   {
     title: 'Forms',
     icon: 'book',
-    url: 'form',
+    url: 'forms',
     roles: [
       'school',
       'instructor',

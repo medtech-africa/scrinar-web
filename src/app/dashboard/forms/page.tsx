@@ -3,7 +3,6 @@ import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
 import { PageHeader } from '@/components/page-header'
 import Pagination from '@/components/pagination'
-import SortBy from '@/components/sort-by'
 import TableLoader from '@/components/table-loader'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -19,7 +18,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import useStudents from '@/hooks/queries/useStudents'
+import useForms from '@/hooks/queries/useForms'
 import { useDebouncedState } from '@/hooks/useDebouncedState'
 import { usePaginate } from '@/hooks/usePagination'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
@@ -68,7 +67,6 @@ type FilterHeaderProps = {
   onSearchChange: (val: string) => void
   searchVal?: string
   loading?: boolean
-  onSortChange: (val: string) => void
 }
 const FilterHeader = ({
   setOpenFilter: _,
@@ -76,7 +74,6 @@ const FilterHeader = ({
   onSearchChange,
   searchVal,
   loading,
-  onSortChange,
 }: FilterHeaderProps) => {
   return (
     <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2 items-center">
@@ -84,30 +81,16 @@ const FilterHeader = ({
         <Input
           leadingIcon={<IconPicker icon="search" />}
           className="rounded-[49px] bg-grey-100 text-sm  md:w-[17.25rem] w-[15rem]"
-          placeholder="Search by Name, Level or Gender...."
+          placeholder="Search by Name...."
           full={false}
           onChange={(e) => onSearchChange(e.target.value)}
           endingIcon={
             loading && searchVal && <IconPicker icon="loader2" size={20} />
           }
         />
-
-        <SortBy onChange={onSortChange} />
       </div>
       <div className="flex gap-x-4 mt-2 md:mt-0">
-        {/* @Todo:not time */}
-        {/* <Button
-          onClick={() => setOpenFilter(!openFilter)}
-          value="Filter Data"
-          className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
-          endingIcon={<IconPicker icon="arrowDown" />}
-        />
-        <Button
-          value="Export Data"
-          className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
-          endingIcon={<IconPicker icon="export" />}
-        /> */}
-        <Link href={`form/add-form`}>
+        <Link href={`forms/add-form`}>
           <Button
             value="New Form"
             variant="primary"
@@ -120,12 +103,11 @@ const FilterHeader = ({
   )
 }
 
-export default function Students() {
+export default function Forms() {
   const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState<string | null>(null)
   const [deleteModal, setDeleteModal] = useState(false)
-  const [sortVal, setSort] = useState('')
 
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
@@ -136,14 +118,14 @@ export default function Students() {
     isPending: isLoading,
     refetch,
     isFetching,
-  } = useStudents(currentPage, '', search, sortVal)
+  } = useForms(currentPage, search)
   useSchoolChangeRefresh(refetch)
 
-  const studentsData = data?.data
+  const formsData = data?.data
 
   const { isPending: deleteLoading, mutate } = useMutation({
     mutationFn: () =>
-      baseAxios.delete(API.student(encodeURIComponent(selectedRow ?? ''))),
+      baseAxios.delete(API.form(encodeURIComponent(selectedRow ?? ''))),
   })
 
   const handleMoreClick = (rowId: string) => {
@@ -155,15 +137,13 @@ export default function Students() {
       title: 'View',
       icon: IconNames.documentText,
       action: () =>
-        router.push(`students/view/${encodeURIComponent(selectedRow ?? '')}`),
+        router.push(`forms/view/${encodeURIComponent(selectedRow ?? '')}`),
     },
     {
       title: 'Edit',
       icon: IconNames.userEdit,
       action: () =>
-        router.push(
-          `students/edit-student/${encodeURIComponent(selectedRow ?? '')}`
-        ),
+        router.push(`forms/edit-form/${encodeURIComponent(selectedRow ?? '')}`),
     },
     {
       title: 'Delete',
@@ -180,7 +160,7 @@ export default function Students() {
         setSelectedRow(null)
         setDeleteModal(false)
         refetch()
-        toast.success('Successfully deleted student')
+        toast.success('Successfully deleted form')
         // toast.success('')
       },
       onError: (err) => {
@@ -202,7 +182,6 @@ export default function Students() {
         onSearchChange={setSearch}
         searchVal={search}
         loading={isFetching}
-        onSortChange={setSort}
       />
       {openFilter && <FilterData />}
       <Delete
@@ -213,7 +192,7 @@ export default function Students() {
       />
 
       <div className="py-3 md:py-8">
-        <Table className="table-auto" hasEmptyData={studentsData?.length === 0}>
+        <Table className="table-auto" hasEmptyData={formsData?.length === 0}>
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Name</TableHead>
@@ -229,7 +208,7 @@ export default function Students() {
             {isLoading ? (
               <TableLoader />
             ) : (
-              studentsData?.map((val: DataType) => (
+              formsData?.map((val: DataType) => (
                 <TableRow
                   key={val.id}
                   className="font-normal text-sm text-grey-600"
@@ -279,9 +258,9 @@ export default function Students() {
             )}
           </TableBody>
         </Table>
-        {studentsData?.length === 0 && <EmptyData />}
+        {formsData?.length === 0 && <EmptyData />}
       </div>
-      {studentsData?.length > 0 && (
+      {formsData?.length > 0 && (
         <Pagination
           current={currentPage}
           setCurrent={setCurrentPage}

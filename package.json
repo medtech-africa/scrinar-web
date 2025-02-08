@@ -45,7 +45,6 @@
     "autoprefixer": "10.4.17",
     "axios": "^1.5.0",
     "class-variance-authority": "^0.7.1",
-    "classnames": "^2.5.1",
     "clsx": "^2.1.1",
     "cookies-next": "^5.0.2",
     "date-fns": "^3.0.6",
@@ -123,5 +122,6 @@
   },
   "engines": {
     "node": ">=18"
-  }
+  },
+  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
 }
