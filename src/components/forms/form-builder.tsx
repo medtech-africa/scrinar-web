@@ -1,4 +1,6 @@
-import React, { useState, useCallback } from 'react'
+'use client'
+
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   DndContext,
   closestCenter,
@@ -45,36 +47,21 @@ import {
   Heading,
   Minus,
   GripVertical,
+  FileDigit,
 } from 'lucide-react'
 import { IconPicker } from '../ui/icon-picker'
 import { cn } from '@/lib/utils'
+import { useMutation } from '@tanstack/react-query'
+import baseAxios from '@/utils/baseAxios'
+import { API } from '@/utils/api'
+import toast from 'react-hot-toast'
+import { FormField, FormModel, FieldType, FormFieldModel } from '@/types/forms'
+import { convertToApiFormField, convertToFormField } from '@/utils/forms'
+import { redirect } from 'next/navigation'
 
-// Types
-type FieldType =
-  | 'text'
-  | 'textarea'
-  | 'select'
-  | 'radio'
-  | 'checkbox'
-  | 'phone'
-  | 'email'
-  | 'website'
-  | 'date'
-  | 'divider'
-  | 'image'
-  | 'header'
-  | 'label'
-  | 'multipleChoice'
-  | 'dropdown'
-
-interface FormField {
-  id: string
-  type: FieldType
-  label: string
-  name: string
-  required?: boolean
-  options?: string[]
-  placeholder?: string
+interface Props {
+  form?: FormModel
+  questions?: FormFieldModel[]
 }
 
 interface FormData {
@@ -86,6 +73,7 @@ interface FormData {
 const FIELD_COMPONENTS = [
   { type: 'text', icon: Type, label: 'Text Input' },
   { type: 'textarea', icon: TextQuote, label: 'Long Text' },
+  { type: 'number', icon: FileDigit, label: 'Number Input' },
   { type: 'select', icon: List, label: 'Select' },
   { type: 'radio', icon: List, label: 'Radio Group' },
   { type: 'checkbox', icon: Check, label: 'Checkbox' },
@@ -97,6 +85,70 @@ const FIELD_COMPONENTS = [
   { type: 'header', icon: Heading, label: 'Header' },
   { type: 'divider', icon: Minus, label: 'Divider' },
 ]
+
+const renderFieldContent = (field: FormField) => {
+  switch (field.type) {
+    case 'number':
+      return (
+        <Input
+          placeholder={field.placeholder}
+          type="number"
+          className="w-full"
+        />
+      )
+    case 'text':
+      return <Input placeholder={field.placeholder} className="w-full" />
+    case 'textarea':
+      return <Textarea placeholder={field.placeholder} className="w-full" />
+    case 'select':
+      return (
+        <Select
+          placeholder={field.placeholder || 'Select an option'}
+          options={field.options?.map((option) => ({
+            label: option,
+            value: option,
+          }))}
+        />
+      )
+    case 'radio':
+      return (
+        <RadioGroup>
+          {field.options?.map((option) => (
+            <div key={option} className="flex items-center space-x-2">
+              <RadioGroupItem value={option} id={`${field.id}-${option}`} />
+              <Label htmlFor={`${field.id}-${option}`}>{option}</Label>
+            </div>
+          ))}
+        </RadioGroup>
+      )
+    case 'checkbox':
+      return (
+        <div className="flex items-center space-x-2">
+          {field.options?.map((option) => (
+            <div key={option} className="flex items-center space-x-2">
+              <Checkbox id={`${field.id}-${option}`} value={option} />
+              <Label htmlFor={`${field.id}-${option}`}>{option}</Label>
+            </div>
+          ))}
+        </div>
+      )
+    case 'date':
+      return <Calendar mode="single" className="rounded-md border" />
+    case 'header':
+      return <h2 className="text-xl font-bold">{field.label}</h2>
+    case 'divider':
+      return <hr className="my-4" />
+    case 'image':
+      return (
+        <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
+          <Image className="mx-auto h-12 w-12 text-gray-400" />
+          <span className="mt-2 block text-sm text-gray-600">Upload Image</span>
+        </div>
+      )
+    default:
+      return <Input placeholder={field.placeholder} className="w-full" />
+  }
+}
 
 const SortableField = ({
   field,
@@ -113,63 +165,6 @@ const SortableField = ({
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
-  }
-  const renderFieldContent = (field: FormField) => {
-    switch (field.type) {
-      case 'text':
-        return <Input placeholder={field.placeholder} className="w-full" />
-      case 'textarea':
-        return <Textarea placeholder={field.placeholder} className="w-full" />
-      case 'select':
-        return (
-          <Select
-            placeholder={field.placeholder || 'Select an option'}
-            options={field.options?.map((option) => ({
-              label: option,
-              value: option,
-            }))}
-          />
-        )
-      case 'radio':
-        return (
-          <RadioGroup>
-            {field.options?.map((option) => (
-              <div key={option} className="flex items-center space-x-2">
-                <RadioGroupItem value={option} id={`${field.id}-${option}`} />
-                <Label htmlFor={`${field.id}-${option}`}>{option}</Label>
-              </div>
-            ))}
-          </RadioGroup>
-        )
-      case 'checkbox':
-        return (
-          <div className="flex items-center space-x-2">
-            {field.options?.map((option) => (
-              <div key={option} className="flex items-center space-x-2">
-                <Checkbox id={`${field.id}-${option}`} value={option} />
-                <Label htmlFor={`${field.id}-${option}`}>{option}</Label>
-              </div>
-            ))}
-          </div>
-        )
-      case 'date':
-        return <Calendar mode="single" className="rounded-md border" />
-      case 'header':
-        return <h2 className="text-xl font-bold">{field.label}</h2>
-      case 'divider':
-        return <hr className="my-4" />
-      case 'image':
-        return (
-          <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-            <Image className="mx-auto h-12 w-12 text-gray-400" />
-            <span className="mt-2 block text-sm text-gray-600">
-              Upload Image
-            </span>
-          </div>
-        )
-      default:
-        return <Input placeholder={field.placeholder} className="w-full" />
-    }
   }
 
   return (
@@ -207,15 +202,31 @@ const SortableField = ({
   )
 }
 
-const FormBuilder: React.FC = () => {
+const FormBuilder = ({ form, questions }: Props) => {
   const [formData, setFormData] = useState<FormData>({
     id: crypto.randomUUID(),
-    name: 'Untitled Form',
+    name: '',
     fields: [],
   })
+
   const [selectedField, setSelectedField] = useState<FormField | null>(null)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [previewMode, setPreviewMode] = useState(false)
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: (data: FormFieldModel[]) =>
+      baseAxios
+        .post<{
+          data: FormFieldModel[]
+        }>(API.formQuestions(form?.id ?? ''), data)
+        .then((res) => res.data.data),
+    onSuccess: () => {
+      //do next
+    },
+    onError: (_err) => {
+      toast.error('Failed to create form questions. Please try again!')
+    },
+  })
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -223,6 +234,17 @@ const FormBuilder: React.FC = () => {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   )
+
+  useEffect(() => {
+    if (form) {
+      setFormData({ ...formData, name: form.title })
+    }
+
+    if (questions?.length) {
+      const fields = convertToFormField(questions)
+      setFormData({ ...formData, fields })
+    }
+  }, [form, questions])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -262,6 +284,7 @@ const FormBuilder: React.FC = () => {
       name: `field_${crypto.randomUUID()}`,
       required: false,
       placeholder: '',
+      unit: '',
       ...(['select', 'radio', 'checkbox', 'multipleChoice'].includes(type)
         ? { options: ['Option 1', 'Option 2', 'Option 3'] }
         : {}),
@@ -296,16 +319,26 @@ const FormBuilder: React.FC = () => {
     setSelectedField(null)
   }, [])
 
+  const handleSave = () => {
+    if (!formData?.fields?.length) {
+      toast.error('Please add some questions to the form!')
+      return
+    }
+
+    if (!form?.id) {
+      redirect('/dashboard/forms')
+    }
+
+    const fields = convertToApiFormField(formData.fields)
+
+    mutate(fields)
+  }
+
   return (
     <div className="w-full max-w-4xl mx-auto p-6">
       <div className="flex justify-between items-center mb-6">
-        <Input
-          value={formData.name}
-          onChange={(e) =>
-            setFormData((prev) => ({ ...prev, name: e.target.value }))
-          }
-          className="text-2xl font-bold w-64"
-        />
+        <h2 className="text-2xl font-bold">{form?.title}</h2>
+
         <div className="space-x-4">
           <Button
             variant="tertiary"
@@ -313,7 +346,9 @@ const FormBuilder: React.FC = () => {
           >
             {previewMode ? 'Edit' : 'Preview'}
           </Button>
-          <Button onClick={() => console.log(formData)}>Save Form</Button>
+          <Button onClick={handleSave} loading={isPending}>
+            Save Questions
+          </Button>
         </div>
       </div>
 
@@ -402,9 +437,26 @@ const FormBuilder: React.FC = () => {
                   }
                 />
               </div>
-              {['text', 'textarea', 'email', 'phone', 'website'].includes(
-                selectedField.type
-              ) && (
+              <div>
+                <Label>Field Description(optional)</Label>
+                <Input
+                  value={selectedField.description}
+                  onChange={(e) =>
+                    setSelectedField({
+                      ...selectedField,
+                      description: e.target.value,
+                    })
+                  }
+                />
+              </div>
+              {[
+                'text',
+                'textarea',
+                'email',
+                'phone',
+                'website',
+                'number',
+              ].includes(selectedField.type) && (
                 <div>
                   <Label>Placeholder</Label>
                   <Input
@@ -413,6 +465,20 @@ const FormBuilder: React.FC = () => {
                       setSelectedField({
                         ...selectedField,
                         placeholder: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+              )}
+              {['number'].includes(selectedField.type) && (
+                <div>
+                  <Label>Unit (e.g, kg, lb, gram, etc)</Label>
+                  <Input
+                    value={selectedField.unit || ''}
+                    onChange={(e) =>
+                      setSelectedField({
+                        ...selectedField,
+                        unit: e.target.value,
                       })
                     }
                   />
