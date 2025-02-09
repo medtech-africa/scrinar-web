@@ -18,6 +18,7 @@ import Link from 'next/link'
 import { format } from 'date-fns'
 import TableEmptyState from '@/components/table-empty-state'
 import { Button } from '@/components/ui/button'
+import { FormBuilder } from '@/components/form-builder'
 
 const NEW_ASSESSMENT_URL = '/dashboard/risk-assessment/new'
 
@@ -107,6 +108,7 @@ const RiskAssessment = () => {
           </TableBody>
         </Table>
       </div>
+      <FormBuilder />
     </div>
   )
 }
