@@ -42,11 +42,8 @@ const FormContent = ({ singleFormData }: { singleFormData?: FormModel }) => {
       },
     }
     if (singleFormData?.id) {
-      console.log('i am updating')
       updateForm(data, mutationOptions)
     } else {
-      console.log('i am creating')
-
       mutate(data, mutationOptions)
     }
   }
