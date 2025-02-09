@@ -67,8 +67,9 @@ const FormContent = ({ singleFormData }: { singleFormData?: FormModel }) => {
           id="title"
           className="input-class"
           defaultValue={singleFormData?.title}
+          variant={errors?.title ? 'destructive' : 'default'}
+          message={errors.title?.message}
         />
-        {errors.title && <p>{errors.title.message}</p>}
       </div>
 
       <div>
@@ -82,8 +83,9 @@ const FormContent = ({ singleFormData }: { singleFormData?: FormModel }) => {
           id="description"
           className="input-class capitalize"
           defaultValue={singleFormData?.description}
+          variant={errors?.description ? 'destructive' : 'default'}
+          message={errors.description?.message}
         />
-        {errors.description && <p>{errors.description.message}</p>}
       </div>
 
       <div className="flex items-center gap-2">
@@ -100,10 +102,8 @@ const FormContent = ({ singleFormData }: { singleFormData?: FormModel }) => {
             />
           )}
         />
-        {errors.locationEnabled && <p>{errors.locationEnabled.message}</p>}
       </div>
 
-      {/* Submit button */}
       <Button type="submit" loading={isPending || updateFormLoading}>
         Proceed to questions
       </Button>
