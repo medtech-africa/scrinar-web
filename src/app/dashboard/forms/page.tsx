@@ -1,4 +1,5 @@
 'use client'
+
 import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
 import { FormContent } from '@/components/forms/form-content'
@@ -141,7 +142,7 @@ export default function Forms() {
       title: 'View',
       icon: IconNames.documentText,
       action: () =>
-        router.push(`forms/view/${encodeURIComponent(selectedRow ?? '')}`),
+        router.push(`forms/${encodeURIComponent(selectedRow ?? '')}`),
     },
     {
       title: 'Edit',

@@ -106,7 +106,10 @@ export const API = {
     return `${BASE_URL}/api/v1/forms?${params.toString()}`
   },
   form: (id: string) => `${BASE_URL}/api/v1/forms/${id}`,
-  formQuestions: `${BASE_URL}/api/v1/form-fields/questions`,
+  formQuestions: (id: string) =>
+    `${BASE_URL}/api/v1/form-fields/${id}/questions`,
+  singleFormQuestions: (id: string, questionId: string) =>
+    `${BASE_URL}/api/v1/form-fields/${id}/questions/${questionId}`,
 
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,

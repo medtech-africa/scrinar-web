@@ -1,8 +1,7 @@
 import { FieldType, FormField, FormFieldModel } from '@/types/forms'
 
 export function convertToApiFormField(
-  formFields: FormField[],
-  form: string
+  formFields: FormField[]
 ): FormFieldModel[] {
   return formFields.map((field, index) => {
     const baseModel: FormFieldModel = {
@@ -12,7 +11,6 @@ export function convertToApiFormField(
       description: field.description,
       hint: field.placeholder,
       order: index + 1,
-      form,
       required: field.required || false,
       unit: field.unit,
     }
@@ -35,7 +33,7 @@ export function convertToFormField(
 ): FormField[] {
   return formFieldModels.map((model) => {
     const baseField: FormField = {
-      id: model.fieldName, // Using fieldName as id since it should be unique
+      id: model?.id ?? model?.fieldName, // Using fieldName as id since it should be unique
       type: model.type as FieldType,
       label: model.title,
       name: model.fieldName,

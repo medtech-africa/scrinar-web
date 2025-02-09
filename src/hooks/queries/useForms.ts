@@ -3,7 +3,7 @@ import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { AxiosError, AxiosResponse } from 'axios'
 import { ICreateForm } from '@/types/form.types'
-import { FormModel } from '@/types/forms'
+import { FormModel, FormFieldModel } from '@/types/forms'
 
 const getForms = (page?: number, search?: string) =>
   baseAxios.get(API.getForms(page, search)).then((res) => res.data)
@@ -36,6 +36,17 @@ const useUpdateForm = (id: string) => {
     mutationKey: ['mutate_update_form', id],
   })
 }
-export { useSingleForm, useCreateForm, useUpdateForm }
+
+const useFormQuestions = (id: string) => {
+  return useQuery({
+    queryKey: ['single-form-questions', id],
+    queryFn: () =>
+      baseAxios
+        .get(API.formQuestions(id))
+        .then((res) => res.data as FormFieldModel[]),
+  })
+}
+
+export { useSingleForm, useCreateForm, useFormQuestions, useUpdateForm }
 
 export default useForms

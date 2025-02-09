@@ -58,6 +58,7 @@ type Relevant = {
 }
 
 export type FormFieldModel = {
+  id?: string
   fieldName: string
   type: string
   title: string
@@ -73,6 +74,5 @@ export type FormFieldModel = {
   constraint?: Constraint
   relevant?: Relevant
   unit?: string
-  form: string
   required: boolean
 }

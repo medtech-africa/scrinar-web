@@ -35,7 +35,11 @@ const FormContent = ({ singleFormData }: { singleFormData?: FormModel }) => {
   const onSubmit = (data: ICreateForm) => {
     const mutationOptions: any = {
       onSuccess: (res: AxiosResponse) => {
-        router.push(`/dashboard/forms/${res.data.id}/new`)
+        router.push(
+          !!singleFormData
+            ? `/dashboard/forms/${res.data.id}`
+            : `/dashboard/forms/${res.data.id}/new`
+        )
       },
       onError: (err: AxiosError) => {
         errorMessage(err)

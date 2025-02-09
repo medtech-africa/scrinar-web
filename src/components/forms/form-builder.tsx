@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import {
   DndContext,
   closestCenter,
@@ -56,11 +56,12 @@ import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import toast from 'react-hot-toast'
 import { FormField, FormModel, FieldType, FormFieldModel } from '@/types/forms'
-import { convertToApiFormField } from '@/utils/forms'
+import { convertToApiFormField, convertToFormField } from '@/utils/forms'
 import { redirect } from 'next/navigation'
 
 interface Props {
   form?: FormModel
+  questions?: FormFieldModel[]
 }
 
 interface FormData {
@@ -201,10 +202,10 @@ const SortableField = ({
   )
 }
 
-const FormBuilder = ({ form }: Props) => {
+const FormBuilder = ({ form, questions }: Props) => {
   const [formData, setFormData] = useState<FormData>({
     id: crypto.randomUUID(),
-    name: form?.title ?? 'Form',
+    name: '',
     fields: [],
   })
 
@@ -215,7 +216,9 @@ const FormBuilder = ({ form }: Props) => {
   const { mutate, isPending } = useMutation({
     mutationFn: (data: FormFieldModel[]) =>
       baseAxios
-        .post<{ data: FormFieldModel[] }>(API.formQuestions, data)
+        .post<{
+          data: FormFieldModel[]
+        }>(API.formQuestions(form?.id ?? ''), data)
         .then((res) => res.data.data),
     onSuccess: () => {
       //do next
@@ -231,6 +234,17 @@ const FormBuilder = ({ form }: Props) => {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   )
+
+  useEffect(() => {
+    if (form) {
+      setFormData({ ...formData, name: form.title })
+    }
+
+    if (questions?.length) {
+      const fields = convertToFormField(questions)
+      setFormData({ ...formData, fields })
+    }
+  }, [form, questions])
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
@@ -315,7 +329,7 @@ const FormBuilder = ({ form }: Props) => {
       redirect('/dashboard/forms')
     }
 
-    const fields = convertToApiFormField(formData.fields, form.id)
+    const fields = convertToApiFormField(formData.fields)
 
     mutate(fields)
   }
