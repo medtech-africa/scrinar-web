@@ -1,6 +1,6 @@
 'use client'
+import { FormBuilder } from '@/components/forms/form-builder'
 import React from 'react'
-import { FormBuilder } from '@/components/form-builder'
 
 const AddForms = () => {
   return <FormBuilder />

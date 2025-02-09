@@ -1,6 +1,7 @@
 'use client'
 import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
+import { NewForm } from '@/components/forms/new-form'
 import { PageHeader } from '@/components/page-header'
 import Pagination from '@/components/pagination'
 import TableLoader from '@/components/table-loader'
@@ -10,6 +11,7 @@ import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
+import Modal from '@/components/ui/modal'
 import {
   Table,
   TableBody,
@@ -108,6 +110,7 @@ export default function Forms() {
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState<string | null>(null)
   const [deleteModal, setDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
 
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
@@ -167,6 +170,10 @@ export default function Forms() {
         errorMessage(err)
       },
     })
+  }
+
+  const closeModal = () => {
+    setOpenModal(false)
   }
 
   return (
@@ -271,6 +278,15 @@ export default function Forms() {
           className="mt-2"
         />
       )}
+
+      <Modal
+        className="sm:w-1/2 sm:h-1/2 flex items-center justify-center"
+        open={openModal}
+        closeModal={closeModal}
+        title="Create a new form"
+      >
+        <NewForm />
+      </Modal>
     </div>
   )
 }
