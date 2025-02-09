@@ -36,7 +36,7 @@ export type FormModel = {
   updatedAt: string
   createdAt: string
   id: string
-  locationEnabled: string
+  locationEnabled: boolean
 }
 
 type Appearance = {

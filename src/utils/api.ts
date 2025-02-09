@@ -159,4 +159,7 @@ export const API = {
   riskAssessmentDetails: (id: string) =>
     `${BASE_URL}/api/v1/risk-assessment/${id}`,
   sendRiskAssessment: `${BASE_URL}/api/v1/risk-assessment/send`,
+
+  //form
+  createForm: `${BASE_URL}/api/v1/forms`,
 }

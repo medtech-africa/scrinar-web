@@ -1,17 +1,16 @@
 'use client'
 import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
-import { NewForm } from '@/components/forms/new-form'
+import { FormContent } from '@/components/forms/form-content'
 import { PageHeader } from '@/components/page-header'
 import Pagination from '@/components/pagination'
+import { SlideOver } from '@/components/slide-over'
 import TableLoader from '@/components/table-loader'
-import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
 import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
-import Modal from '@/components/ui/modal'
 import {
   Table,
   TableBody,
@@ -20,17 +19,16 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import useForms from '@/hooks/queries/useForms'
+import useForms, { useSingleForm } from '@/hooks/queries/useForms'
 import { useDebouncedState } from '@/hooks/useDebouncedState'
 import { usePaginate } from '@/hooks/usePagination'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { errorMessage } from '@/utils/errorMessage'
-import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 import { useMutation } from '@tanstack/react-query'
 import { format } from 'date-fns'
-import Link from 'next/link'
+// import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import toast from 'react-hot-toast'
@@ -64,6 +62,7 @@ const FilterData = () => {
   )
 }
 type FilterHeaderProps = {
+  setOpenModal: (value: boolean) => void
   setOpenFilter: (value: boolean) => void
   openFilter: boolean
   onSearchChange: (val: string) => void
@@ -71,6 +70,7 @@ type FilterHeaderProps = {
   loading?: boolean
 }
 const FilterHeader = ({
+  setOpenModal,
   setOpenFilter: _,
   openFilter: __,
   onSearchChange,
@@ -92,14 +92,15 @@ const FilterHeader = ({
         />
       </div>
       <div className="flex gap-x-4 mt-2 md:mt-0">
-        <Link href={`forms/add-form`}>
-          <Button
-            value="New Form"
-            variant="primary"
-            className="p-2 md:px-4 md:py-2 h-full"
-            leadingIcon={<IconPicker icon="add" />}
-          />
-        </Link>
+        {/* <Link href={`forms/add-form`}> */}
+        <Button
+          value="New Form"
+          variant="primary"
+          onClick={() => setOpenModal(true)}
+          className="p-2 md:px-4 md:py-2 h-full"
+          leadingIcon={<IconPicker icon="add" />}
+        />
+        {/* </Link> */}
       </div>
     </div>
   )
@@ -134,7 +135,7 @@ export default function Forms() {
   const handleMoreClick = (rowId: string) => {
     setSelectedRow(selectedRow === rowId ? null : rowId)
   }
-
+  const { data: singleFormData } = useSingleForm(selectedRow ?? '')
   const menuItems: MenuItemProp[] = [
     {
       title: 'View',
@@ -145,8 +146,9 @@ export default function Forms() {
     {
       title: 'Edit',
       icon: IconNames.userEdit,
-      action: () =>
-        router.push(`forms/edit-form/${encodeURIComponent(selectedRow ?? '')}`),
+      action: () => {
+        setOpenModal(true)
+      },
     },
     {
       title: 'Delete',
@@ -184,6 +186,7 @@ export default function Forms() {
         avatar="avatar"
       />
       <FilterHeader
+        setOpenModal={setOpenModal}
         setOpenFilter={setOpenFilter}
         openFilter={openFilter}
         onSearchChange={setSearch}
@@ -202,11 +205,10 @@ export default function Forms() {
         <Table className="table-auto" hasEmptyData={formsData?.length === 0}>
           <TableHeader className="bg-grey-100">
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Level</TableHead>
-              <TableHead>Gender</TableHead>
-              <TableHead>Age</TableHead>
-              <TableHead>Date Added</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>State</TableHead>
+              <TableHead>Created At</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -221,24 +223,13 @@ export default function Forms() {
                   className="font-normal text-sm text-grey-600"
                 >
                   <TableCell className="flex gap-x-2 items-center">
-                    <Avatar
-                      src={val?.avatarUrl}
-                      fallback={returnJoinedFirstCharacter(
-                        val.firstName,
-                        val.lastName
-                      )}
-                    />
-                    <div className="flex gap-x-[3px]">
-                      <div>{val.firstName}</div>
-                      <div>{val.lastName}</div>
-                    </div>
+                    <div>{val.title}</div>
                   </TableCell>
 
                   <TableCell className="capitalize">
-                    {val.level ?? '-'}
+                    {val.description ?? '-'}
                   </TableCell>
-                  <TableCell className="capitalize">{val.gender}</TableCell>
-                  <TableCell>{val.age}</TableCell>
+                  <TableCell className="capitalize">{val.state}</TableCell>
                   <TableCell>
                     {format(new Date(val.createdAt), 'PPP')}
                   </TableCell>
@@ -253,7 +244,7 @@ export default function Forms() {
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </button>
-                    {selectedRow === val.id && !deleteModal && (
+                    {selectedRow === val.id && !deleteModal && !openModal && (
                       <DropDownMenu
                         menuItems={menuItems}
                         onClose={() => setSelectedRow(null)}
@@ -279,24 +270,21 @@ export default function Forms() {
         />
       )}
 
-      <Modal
-        className="sm:w-1/2 sm:h-1/2 flex items-center justify-center"
+      <SlideOver
+        onClose={closeModal}
         open={openModal}
-        closeModal={closeModal}
-        title="Create a new form"
+        title={singleFormData?.id ? 'Edit Form' : 'New Form'}
+        icon={<IconPicker icon="book" size={'1.25rem'} />}
       >
-        <NewForm />
-      </Modal>
+        <FormContent singleFormData={singleFormData} />
+      </SlideOver>
     </div>
   )
 }
 type DataType = {
   id: string
-  avatarUrl?: string
-  firstName: string
-  lastName: string
-  level: string
-  gender: string
-  age?: string
+  title: string
+  description: string
+  state: string
   createdAt: string
 }
