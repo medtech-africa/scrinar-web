@@ -60,11 +60,14 @@ import {
   convertToFormField,
 } from '@/utils/forms'
 import {
-  useDeleteSingleQuestion,
-  useEditSingleQuestion,
+  // useDeleteSingleQuestion,
+  // useEditSingleQuestion,
   useMutateFormQuestions,
 } from '@/hooks/queries/useForms'
 import { useSearchParams } from 'next/navigation'
+import { useMutation } from '@tanstack/react-query'
+import baseAxios from '@/utils/baseAxios'
+import { API } from '@/utils/api'
 // import { redirect } from 'next/navigation'
 
 interface Props {
@@ -164,14 +167,16 @@ const SortableField = ({
   onDelete,
   deleteLoading,
   isView,
-  setTypeModal,
+  setIsEdit,
+  setSelectedField,
 }: {
   field: FormField
   onEdit: (field: FormField) => void
   onDelete: (field: FormField) => void
   deleteLoading: boolean
   isView: any
-  setTypeModal: (type: string) => void
+  setIsEdit: (val: boolean) => void
+  setSelectedField: (val: FormField) => void
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: field.id })
@@ -203,7 +208,7 @@ const SortableField = ({
                 variant="secondary"
                 size="sm"
                 onClick={() => {
-                  setTypeModal('edit')
+                  setIsEdit(true)
                   onEdit(field)
                 }}
               >
@@ -212,7 +217,10 @@ const SortableField = ({
               <Button
                 variant="primary"
                 className="py-3 px-3"
-                onClick={() => onDelete(field)}
+                onClick={() => {
+                  setSelectedField(field)
+                  onDelete(field)
+                }}
               >
                 {deleteLoading ? (
                   <IconPicker icon="loader2" />
@@ -238,23 +246,36 @@ const FormBuilder = ({ form, questions }: Props) => {
   })
 
   const [selectedField, setSelectedField] = useState<FormField | null>(null)
-  const [typeModal, setTypeModal] = useState('')
+  const [isEdit, setIsEdit] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [previewMode, setPreviewMode] = useState(false)
 
   const { mutate, isPending } = useMutateFormQuestions(form?.id ?? '')
-  const { mutate: editMutate, isPending: editLoading } = useEditSingleQuestion(
-    form?.id ?? '',
-    selectedField?.id ?? ''
-  )
-  const { mutate: deleteMutate, isPending: deleteLoading } =
-    useDeleteSingleQuestion(form?.id ?? '', selectedField?.id ?? '')
+  // const { mutate: editMutate, isPending: editLoading } = useEditSingleQuestion(
+  //   form?.id ?? '',
+  //   selectedField?.id ?? ''
+  // )
+
   const sensors = useSensors(
     useSensor(PointerSensor),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   )
+  const { mutate: editMutate, isPending: editLoading } = useMutation({
+    mutationFn: (data: any) =>
+      baseAxios.patch(
+        API.singleFormQuestions(form?.id ?? '', selectedField?.id ?? ''),
+        data
+      ),
+  })
+  const { mutate: deleteMutate, isPending: deleteLoading } = useMutation({
+    mutationFn: (data: any) =>
+      baseAxios.delete(
+        API.singleFormQuestions(form?.id ?? '', selectedField?.id ?? ''),
+        data
+      ),
+  })
 
   useEffect(() => {
     if (form) {
@@ -311,7 +332,6 @@ const FormBuilder = ({ form, questions }: Props) => {
         ? { options: ['Option 1', 'Option 2', 'Option 3'] }
         : {}),
     }
-    setTypeModal('add')
     handleFieldEdit(newField)
 
     // setFormData((prev) => ({
@@ -326,8 +346,6 @@ const FormBuilder = ({ form, questions }: Props) => {
   }, [])
   const handleFieldDelete = useCallback(
     (field: FormField) => {
-      setSelectedField(field)
-
       deleteMutate(undefined, {
         onSuccess: () => {
           toast.success('Question deleted successfully!')
@@ -335,59 +353,54 @@ const FormBuilder = ({ form, questions }: Props) => {
             ...prev,
             fields: prev.fields.filter((f) => f.id !== field.id),
           }))
+          setSelectedField(null)
         },
       })
     },
     [deleteMutate]
   )
-  console.log(typeModal)
-  const handleFieldUpdate = useCallback((updatedField: FormField) => {
-    const fields = convertSingleToApiFormField(updatedField)
-    {
-      typeModal === 'edit'
-        ? editMutate(fields)
-        : typeModal === 'add'
-          ? mutate(fields, {
-              onSuccess: (res: any) => {
-                console.log('llllll')
-                setFormData((prev) => {
-                  const fieldExists = prev.fields.some(
-                    (field) => field.id === updatedField.id
-                  )
-                  if (fieldExists) {
-                    console.log('kkkk')
-                    return {
-                      ...prev,
-                      fields: prev.fields.map((field) =>
-                        field.id === updatedField.id
-                          ? { ...updatedField, id: res?.data.id }
-                          : field
-                      ),
-                    }
-                  } else {
-                    console.log('kkkk')
+  const handleFieldUpdate = useCallback(
+    (updatedField: FormField) => {
+      const fields = convertSingleToApiFormField(updatedField)
+      const response = {
+        onSuccess: (res: any) => {
+          setFormData((prev) => {
+            const fieldExists = prev.fields.some(
+              (field) => field.id === updatedField.id
+            )
+            if (fieldExists) {
+              return {
+                ...prev,
+                fields: prev.fields.map((field) =>
+                  field.id === updatedField.id
+                    ? { ...updatedField, id: res?.data.id }
+                    : field
+                ),
+              }
+            } else {
+              return {
+                ...prev,
+                fields: [...prev.fields, { ...updatedField, id: res?.data.id }],
+              }
+            }
+          })
 
-                    return {
-                      ...prev,
-                      fields: [
-                        ...prev.fields,
-                        { ...updatedField, id: res?.data.id },
-                      ],
-                    }
-                  }
-                })
-              },
-              onError: () => {
-                toast.error(
-                  'Failed to create form questions. Please try again!'
-                )
-              },
-            })
-          : null
-    }
-    setIsEditModalOpen(false)
-    setSelectedField(null)
-  }, [])
+          setIsEditModalOpen(false)
+          setIsEdit(false)
+          setSelectedField(null)
+        },
+        onError: () => {
+          toast.error('Failed to create form questions. Please try again!')
+        },
+      }
+      if (isEdit) {
+        editMutate(fields, response)
+      } else {
+        mutate(fields, response)
+      }
+    },
+    [editMutate, isEdit, mutate]
+  )
 
   // const handleSave = () => {
   //   if (!formData?.fields?.length) {
@@ -475,7 +488,8 @@ const FormBuilder = ({ form, questions }: Props) => {
                       selectedField?.id === field.id && deleteLoading
                     }
                     isView={isView}
-                    setTypeModal={setTypeModal}
+                    setIsEdit={setIsEdit}
+                    setSelectedField={setSelectedField}
                   />
                 ))}
               </SortableContext>
