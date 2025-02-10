@@ -1,30 +1,28 @@
 import { FieldType, FormField, FormFieldModel } from '@/types/forms'
 
-export function convertToApiFormField(
-  formFields: FormField[]
-): FormFieldModel[] {
-  return formFields.map((field, index) => {
-    const baseModel: FormFieldModel = {
-      fieldName: field.name,
-      type: field.type,
-      title: field.label,
-      description: field.description,
-      hint: field.placeholder,
-      order: index + 1,
-      required: field.required || false,
-      unit: field.unit,
-    }
+export function convertSingleToApiFormField(
+  formField: FormField
+): FormFieldModel {
+  const baseModel: FormFieldModel = {
+    fieldName: formField.name,
+    type: formField.type,
+    title: formField.label,
+    description: formField.description,
+    hint: formField.placeholder,
+    order: 1, // Default order or set dynamically if needed
+    required: formField.required || false,
+    unit: formField.unit,
+  }
 
-    // Add choices if options are present
-    if (field.options && field.options.length > 0) {
-      baseModel.choices = field.options.map((option) => ({
-        name: option.toLowerCase().replace(/\s+/g, '_'),
-        label: option,
-      }))
-    }
+  // Add choices if options are present
+  if (formField.options && formField.options.length > 0) {
+    baseModel.choices = formField.options.map((option) => ({
+      name: option.toLowerCase().replace(/\s+/g, '_'),
+      label: option,
+    }))
+  }
 
-    return baseModel
-  })
+  return baseModel
 }
 
 // Utility function to convert FormFieldModel[] to FormField[]

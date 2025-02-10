@@ -24,6 +24,28 @@ const useSingleForm = (id: string) => {
     enabled: !!id,
   })
 }
+const useEditSingleQuestion = (id: string, questionId: string) => {
+  return useMutation<AxiosResponse, AxiosError['response'], FormFieldModel>({
+    mutationFn: (data: FormFieldModel) =>
+      baseAxios.patch(API.singleFormQuestions(id, questionId), data),
+    mutationKey: ['mutate_edit_single_question', id, questionId],
+  })
+}
+const useDeleteSingleQuestion = (id: string, questionId: string) => {
+  return useMutation<AxiosResponse, AxiosError['response'], void>({
+    mutationFn: () => baseAxios.delete(API.singleFormQuestions(id, questionId)),
+    mutationKey: ['mutate_delete_single_question', id, questionId],
+  })
+}
+const useMutateFormQuestions = (id: string) => {
+  return useMutation({
+    mutationFn: (data: FormFieldModel) =>
+      baseAxios.post<{
+        data: FormFieldModel[]
+      }>(API.formQuestions(id), data),
+    mutationKey: ['mutate_form_questions', id],
+  })
+}
 const useCreateForm = () => {
   return useMutation<AxiosResponse, AxiosError['response'], ICreateForm>({
     mutationFn: (data: ICreateForm) => baseAxios.post(API.createForm, data),
@@ -47,6 +69,14 @@ const useFormQuestions = (id: string) => {
   })
 }
 
-export { useSingleForm, useCreateForm, useFormQuestions, useUpdateForm }
+export {
+  useSingleForm,
+  useCreateForm,
+  useFormQuestions,
+  useUpdateForm,
+  useDeleteSingleQuestion,
+  useMutateFormQuestions,
+  useEditSingleQuestion,
+}
 
 export default useForms

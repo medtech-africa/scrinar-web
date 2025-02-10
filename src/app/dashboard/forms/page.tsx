@@ -142,7 +142,7 @@ export default function Forms() {
       title: 'View',
       icon: IconNames.documentText,
       action: () =>
-        router.push(`forms/${encodeURIComponent(selectedRow ?? '')}`),
+        router.push(`forms/${encodeURIComponent(selectedRow ?? '')}?view=true`),
     },
     {
       title: 'Edit',
