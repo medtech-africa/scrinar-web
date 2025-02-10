@@ -22,6 +22,7 @@ import baseAxios from '@/utils/baseAxios'
 import { errorMessage } from '@/utils/errorMessage'
 import { useMutation } from '@tanstack/react-query'
 import { formatDistance } from 'date-fns'
+import { FilePlus } from 'lucide-react'
 // import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -199,8 +200,9 @@ export default function Forms() {
         <Button
           variant="default"
           onClick={() => setOpenModal(true)}
-          className="group items-center justify-center flex flex-col gap-4"
+          className="group items-center justify-center flex flex-col gap-2"
         >
+          <FilePlus />
           <p className="font-bold text-xl text-white">Create new form</p>
         </Button>
 
@@ -209,17 +211,17 @@ export default function Forms() {
             key={val.id}
             className="font-normal text-sm text-grey-600 flex flex-col p-0 gap-0 border bg-card text-card-foreground border-border"
           >
-            <div className="flex flex-col space-y-1.5 p-6 w-full">
+            <div className="flex flex-col space-y-1.5 p-4 w-full">
               <div className="text-2xl font-semibold leading-none tracking-tight flex justify-between">
                 <span className="truncate font-bold">{val.title}</span>
 
                 {val.state === 'published' && (
-                  <BadgeField className="py-1 px-2 text-sm">
+                  <BadgeField className="py-1 px-2 text-xs" variant={'success'}>
                     Published
                   </BadgeField>
                 )}
                 {val.state === 'draft' && (
-                  <BadgeField variant={'danger'} className="py-1 px-2 text-sm">
+                  <BadgeField variant={'danger'} className="py-1 px-2 text-xs">
                     Draft
                   </BadgeField>
                 )}
@@ -232,11 +234,11 @@ export default function Forms() {
               </div>
             </div>
 
-            <div className="p-6 pt-0 h-5 truncate text-sm w-full">
+            <div className="p-4 pt-0 h-5 truncate text-sm w-full">
               {val.description ?? 'No description'}
             </div>
 
-            <div className="flex flex-row gap-2 w-full items-center p-6 pt-0">
+            <div className="flex flex-row gap-2 w-full items-center p-4 pt-0 flex-wrap">
               {menuItems.map((item) => (
                 <Button
                   variant={'tertiary'}
