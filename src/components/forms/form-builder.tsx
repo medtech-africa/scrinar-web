@@ -263,6 +263,11 @@ const FormBuilder = ({ form, questions }: Props) => {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   )
+  useEffect(() => {
+    if (isView) {
+      setPreviewMode(true)
+    }
+  }, [isView])
   const { mutate: editMutate, isPending: editLoading } = useMutation({
     mutationFn: (data: any) =>
       baseAxios.patch(
@@ -427,12 +432,14 @@ const FormBuilder = ({ form, questions }: Props) => {
         <h2 className="text-2xl font-bold">{form?.title}</h2>
 
         <div className="space-x-4">
-          <Button
-            variant="tertiary"
-            onClick={() => setPreviewMode(!previewMode)}
-          >
-            {previewMode ? 'Edit' : 'Preview'}
-          </Button>
+          {!isView && (
+            <Button
+              variant="tertiary"
+              onClick={() => setPreviewMode(!previewMode)}
+            >
+              {previewMode ? 'Edit' : 'Preview'}
+            </Button>
+          )}
           {/* <Button onClick={handleSave} loading={isPending}>
             Save Questions
           </Button> */}
