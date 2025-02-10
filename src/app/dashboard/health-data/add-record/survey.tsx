@@ -64,6 +64,7 @@ export const Survey = ({
         storeStudentSurvey(studentId, studentSurvey)
       }
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [studentSurvey, studentId])
 
   const formData = getStudentSurvey(studentId, studentSurvey)

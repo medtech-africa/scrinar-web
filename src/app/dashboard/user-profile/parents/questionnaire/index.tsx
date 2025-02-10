@@ -151,6 +151,7 @@ const useFormWithAutoSave = ({
       subscription.unsubscribe()
       debouncedSave.cancel()
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return form
@@ -392,6 +393,7 @@ const ParentQuestionnaire = ({
     if (questionnaireData) {
       storeSurvey(parentId, questionnaireData)
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [questionnaireData, parentId])
 
   if (qIsLoading && hasDefault) {

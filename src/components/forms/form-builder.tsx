@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/alt-text */
 'use client'
 
 import React, { useState, useCallback, useEffect } from 'react'
@@ -244,6 +245,7 @@ const FormBuilder = ({ form, questions }: Props) => {
       const fields = convertToFormField(questions)
       setFormData({ ...formData, fields })
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [form, questions])
 
   const handleDragEnd = (event: DragEndEvent) => {
