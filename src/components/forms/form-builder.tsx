@@ -52,13 +52,24 @@ import {
 } from 'lucide-react'
 import { IconPicker } from '../ui/icon-picker'
 import { cn } from '@/lib/utils'
+import toast from 'react-hot-toast'
+import { FormField, FormModel, FieldType, FormFieldModel } from '@/types/forms'
+import {
+  convertSingleToApiFormField,
+  // convertToApiFormField,
+  convertToFormField,
+} from '@/utils/forms'
+import {
+  // useDeleteSingleQuestion,
+  // useEditSingleQuestion,
+  useMutateFormQuestions,
+  useMutateSortForm,
+} from '@/hooks/queries/useForms'
+import { useSearchParams } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
-import toast from 'react-hot-toast'
-import { FormField, FormModel, FieldType, FormFieldModel } from '@/types/forms'
-import { convertToApiFormField, convertToFormField } from '@/utils/forms'
-import { redirect } from 'next/navigation'
+// import { redirect } from 'next/navigation'
 
 interface Props {
   form?: FormModel
@@ -155,10 +166,18 @@ const SortableField = ({
   field,
   onEdit,
   onDelete,
+  deleteLoading,
+  isView,
+  setIsEdit,
+  setSelectedField,
 }: {
   field: FormField
   onEdit: (field: FormField) => void
   onDelete: (field: FormField) => void
+  deleteLoading: boolean
+  isView: any
+  setIsEdit: (val: boolean) => void
+  setSelectedField: (val: FormField) => void
 }) => {
   const { attributes, listeners, setNodeRef, transform, transition } =
     useSortable({ id: field.id })
@@ -184,18 +203,34 @@ const SortableField = ({
       <div className="ml-6">
         <div className="flex justify-between items-center mb-2">
           <Label>{field.label}</Label>
-          <div className="flex gap-2">
-            <Button variant="secondary" size="sm" onClick={() => onEdit(field)}>
-              Edit
-            </Button>
-            <Button
-              variant="primary"
-              className="py-3 px-3"
-              onClick={() => onDelete(field)}
-            >
-              <IconPicker icon="trash" />
-            </Button>
-          </div>
+          {!isView && (
+            <div className="flex gap-2">
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => {
+                  setIsEdit(true)
+                  onEdit(field)
+                }}
+              >
+                Edit
+              </Button>
+              <Button
+                variant="primary"
+                className="py-3 px-3"
+                onClick={() => {
+                  setSelectedField(field)
+                  onDelete(field)
+                }}
+              >
+                {deleteLoading ? (
+                  <IconPicker icon="loader2" />
+                ) : (
+                  <IconPicker icon="trash" />
+                )}
+              </Button>
+            </div>
+          )}
         </div>
         {renderFieldContent(field)}
       </div>
@@ -204,6 +239,7 @@ const SortableField = ({
 }
 
 const FormBuilder = ({ form, questions }: Props) => {
+  const isView = useSearchParams().get('view')
   const [formData, setFormData] = useState<FormData>({
     id: crypto.randomUUID(),
     name: '',
@@ -211,23 +247,15 @@ const FormBuilder = ({ form, questions }: Props) => {
   })
 
   const [selectedField, setSelectedField] = useState<FormField | null>(null)
+  const [isEdit, setIsEdit] = useState(false)
   const [isEditModalOpen, setIsEditModalOpen] = useState(false)
   const [previewMode, setPreviewMode] = useState(false)
 
-  const { mutate, isPending } = useMutation({
-    mutationFn: (data: FormFieldModel) =>
-      baseAxios
-        .post<{
-          data: FormFieldModel[]
-        }>(API.formQuestions(form?.id ?? ''), data)
-        .then((res) => res.data.data),
-    onSuccess: () => {
-      //do next
-    },
-    onError: (_err) => {
-      toast.error('Failed to create form questions. Please try again!')
-    },
-  })
+  const { mutate, isPending } = useMutateFormQuestions(form?.id ?? '')
+  // const { mutate: editMutate, isPending: editLoading } = useEditSingleQuestion(
+  //   form?.id ?? '',
+  //   selectedField?.id ?? ''
+  // )
 
   const sensors = useSensors(
     useSensor(PointerSensor),
@@ -235,7 +263,26 @@ const FormBuilder = ({ form, questions }: Props) => {
       coordinateGetter: sortableKeyboardCoordinates,
     })
   )
-
+  useEffect(() => {
+    if (isView) {
+      setPreviewMode(true)
+    }
+  }, [isView])
+  const { mutate: editMutate, isPending: editLoading } = useMutation({
+    mutationFn: (data: any) =>
+      baseAxios.patch(
+        API.singleFormQuestions(form?.id ?? '', selectedField?.id ?? ''),
+        data
+      ),
+  })
+  const { mutate: deleteMutate, isPending: deleteLoading } = useMutation({
+    mutationFn: (data: any) =>
+      baseAxios.delete(
+        API.singleFormQuestions(form?.id ?? '', selectedField?.id ?? ''),
+        data
+      ),
+  })
+  const { mutate: mutateSort } = useMutateSortForm(form?.id ?? '')
   useEffect(() => {
     if (form) {
       setFormData({ ...formData, name: form.title })
@@ -250,8 +297,8 @@ const FormBuilder = ({ form, questions }: Props) => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
-
     if (over && active.id !== over.id) {
+      mutateSort({ fields: formData?.fields.map((field) => field.id) })
       setFormData((prev) => {
         const oldIndex = prev.fields.findIndex(
           (field) => field.id === active.id
@@ -291,53 +338,93 @@ const FormBuilder = ({ form, questions }: Props) => {
         ? { options: ['Option 1', 'Option 2', 'Option 3'] }
         : {}),
     }
+    handleFieldEdit(newField)
 
-    setFormData((prev) => ({
-      ...prev,
-      fields: [...prev.fields, newField],
-    }))
+    // setFormData((prev) => ({
+    //   ...prev,
+    //   fields: [...prev.fields, newField],
+    // }))
   }, [])
 
   const handleFieldEdit = useCallback((field: FormField) => {
     setSelectedField(field)
     setIsEditModalOpen(true)
   }, [])
+  const handleFieldDelete = useCallback(
+    (field: FormField) => {
+      deleteMutate(undefined, {
+        onSuccess: () => {
+          toast.success('Question deleted successfully!')
+          setFormData((prev) => ({
+            ...prev,
+            fields: prev.fields.filter((f) => f.id !== field.id),
+          }))
+          setSelectedField(null)
+        },
+      })
+    },
+    [deleteMutate]
+  )
+  const handleFieldUpdate = useCallback(
+    (updatedField: FormField) => {
+      const fields = convertSingleToApiFormField(updatedField)
+      const response = {
+        onSuccess: (res: any) => {
+          setFormData((prev) => {
+            const fieldExists = prev.fields.some(
+              (field) => field.id === updatedField.id
+            )
+            if (fieldExists) {
+              return {
+                ...prev,
+                fields: prev.fields.map((field) =>
+                  field.id === updatedField.id
+                    ? { ...updatedField, id: res?.data.id }
+                    : field
+                ),
+              }
+            } else {
+              return {
+                ...prev,
+                fields: [...prev.fields, { ...updatedField, id: res?.data.id }],
+              }
+            }
+          })
 
-  const handleFieldDelete = useCallback((field: FormField) => {
-    setFormData((prev) => ({
-      ...prev,
-      fields: prev.fields.filter((f) => f.id !== field.id),
-    }))
-  }, [])
+          setIsEditModalOpen(false)
+          setIsEdit(false)
+          setSelectedField(null)
+        },
+        onError: () => {
+          toast.error('Failed to create form questions. Please try again!')
+        },
+      }
+      if (isEdit) {
+        editMutate(fields, response)
+      } else {
+        mutate(fields, response)
+      }
+    },
+    [editMutate, isEdit, mutate]
+  )
 
-  const handleFieldUpdate = useCallback((updatedField: FormField) => {
-    setFormData((prev) => ({
-      ...prev,
-      fields: prev.fields.map((field) =>
-        field.id === updatedField.id ? updatedField : field
-      ),
-    }))
-    setIsEditModalOpen(false)
-    setSelectedField(null)
-  }, [])
+  // const handleSave = () => {
+  //   if (!formData?.fields?.length) {
+  //     toast.error('Please add some questions to the form!')
+  //     return
+  //   }
 
-  const handleSave = () => {
-    if (!formData?.fields?.length) {
-      toast.error('Please add some questions to the form!')
-      return
-    }
+  //   if (!form?.id) {
+  //     redirect('/dashboard/forms')
+  //   }
 
-    if (!form?.id) {
-      redirect('/dashboard/forms')
-    }
+  //   const fields = convertToApiFormField(formData.fields)
+  //   const request = fields.map((field) => mutate(field))
 
-    const fields = convertToApiFormField(formData.fields)
-    const request = fields.map((field) => mutate(field))
-
-    Promise.all(request).then(() => {
-      toast.success('Form saved successfully!')
-    })
-  }
+  //   Promise.all(request).then(() => {
+  //     toast.success('Form saved successfully!')
+  //   })
+  // }
 
   return (
     <div className="w-full max-w-4xl mx-auto p-6">
@@ -345,15 +432,17 @@ const FormBuilder = ({ form, questions }: Props) => {
         <h2 className="text-2xl font-bold">{form?.title}</h2>
 
         <div className="space-x-4">
-          <Button
-            variant="tertiary"
-            onClick={() => setPreviewMode(!previewMode)}
-          >
-            {previewMode ? 'Edit' : 'Preview'}
-          </Button>
-          <Button onClick={handleSave} loading={isPending}>
+          {!isView && (
+            <Button
+              variant="tertiary"
+              onClick={() => setPreviewMode(!previewMode)}
+            >
+              {previewMode ? 'Edit' : 'Preview'}
+            </Button>
+          )}
+          {/* <Button onClick={handleSave} loading={isPending}>
             Save Questions
-          </Button>
+          </Button> */}
         </div>
       </div>
 
@@ -403,6 +492,12 @@ const FormBuilder = ({ form, questions }: Props) => {
                     field={field}
                     onEdit={handleFieldEdit}
                     onDelete={handleFieldDelete}
+                    deleteLoading={
+                      selectedField?.id === field.id && deleteLoading
+                    }
+                    isView={isView}
+                    setIsEdit={setIsEdit}
+                    setSelectedField={setSelectedField}
                   />
                 ))}
               </SortableContext>
@@ -564,7 +659,10 @@ const FormBuilder = ({ form, questions }: Props) => {
                 >
                   Cancel
                 </Button>
-                <Button onClick={() => handleFieldUpdate(selectedField)}>
+                <Button
+                  loading={isPending || editLoading}
+                  onClick={() => handleFieldUpdate(selectedField)}
+                >
                   Save Changes
                 </Button>
               </div>

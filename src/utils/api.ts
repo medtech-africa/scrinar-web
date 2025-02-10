@@ -106,6 +106,7 @@ export const API = {
     return `${BASE_URL}/api/v1/forms?${params.toString()}`
   },
   form: (id: string) => `${BASE_URL}/api/v1/forms/${id}`,
+  sortForm: (id: string) => `${BASE_URL}/api/v1/forms/${id}/submissions/order`,
   formQuestions: (id: string) =>
     `${BASE_URL}/api/v1/form-fields/${id}/questions`,
   singleFormQuestions: (id: string, questionId: string) =>
