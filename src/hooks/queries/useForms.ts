@@ -3,7 +3,7 @@ import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { AxiosError, AxiosResponse } from 'axios'
 import { ICreateForm } from '@/types/form.types'
-import { FormModel, FormFieldModel } from '@/types/forms'
+import { FormModel, FormFieldModel, SortFormModel } from '@/types/forms'
 
 const getForms = (page?: number, search?: string) =>
   baseAxios.get(API.getForms(page, search)).then((res) => res.data)
@@ -24,19 +24,6 @@ const useSingleForm = (id: string) => {
     enabled: !!id,
   })
 }
-const useEditSingleQuestion = (id: string, questionId: string) => {
-  return useMutation<AxiosResponse, AxiosError['response'], FormFieldModel>({
-    mutationFn: (data: FormFieldModel) =>
-      baseAxios.patch(API.singleFormQuestions(id, questionId), data),
-    mutationKey: ['mutate_edit_single_question', id, questionId],
-  })
-}
-const useDeleteSingleQuestion = (id: string, questionId: string) => {
-  return useMutation<AxiosResponse, AxiosError['response'], void>({
-    mutationFn: () => baseAxios.delete(API.singleFormQuestions(id, questionId)),
-    mutationKey: ['mutate_delete_single_question', id, questionId],
-  })
-}
 const useMutateFormQuestions = (id: string) => {
   return useMutation({
     mutationFn: (data: FormFieldModel) =>
@@ -44,6 +31,12 @@ const useMutateFormQuestions = (id: string) => {
         data: FormFieldModel[]
       }>(API.formQuestions(id), data),
     mutationKey: ['mutate_form_questions', id],
+  })
+}
+const useMutateSortForm = (id: string) => {
+  return useMutation({
+    mutationFn: (data: SortFormModel) =>
+      baseAxios.post<SortFormModel>(API.sortForm(id), data),
   })
 }
 const useCreateForm = () => {
@@ -74,9 +67,8 @@ export {
   useCreateForm,
   useFormQuestions,
   useUpdateForm,
-  useDeleteSingleQuestion,
   useMutateFormQuestions,
-  useEditSingleQuestion,
+  useMutateSortForm,
 }
 
 export default useForms

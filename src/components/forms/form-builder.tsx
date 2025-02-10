@@ -63,6 +63,7 @@ import {
   // useDeleteSingleQuestion,
   // useEditSingleQuestion,
   useMutateFormQuestions,
+  useMutateSortForm,
 } from '@/hooks/queries/useForms'
 import { useSearchParams } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
@@ -276,7 +277,7 @@ const FormBuilder = ({ form, questions }: Props) => {
         data
       ),
   })
-
+  const { mutate: mutateSort } = useMutateSortForm(form?.id ?? '')
   useEffect(() => {
     if (form) {
       setFormData({ ...formData, name: form.title })
@@ -291,8 +292,8 @@ const FormBuilder = ({ form, questions }: Props) => {
 
   const handleDragEnd = (event: DragEndEvent) => {
     const { active, over } = event
-
     if (over && active.id !== over.id) {
+      mutateSort({ fields: formData?.fields.map((field) => field.id) })
       setFormData((prev) => {
         const oldIndex = prev.fields.findIndex(
           (field) => field.id === active.id
