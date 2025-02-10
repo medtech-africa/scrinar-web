@@ -1,25 +1,18 @@
 'use client'
 
-import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
+import { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
 import { FormContent } from '@/components/forms/form-content'
 import { PageHeader } from '@/components/page-header'
 import Pagination from '@/components/pagination'
 import { SlideOver } from '@/components/slide-over'
-import TableLoader from '@/components/table-loader'
+import { BadgeField } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import useForms, { useSingleForm } from '@/hooks/queries/useForms'
 import { useDebouncedState } from '@/hooks/useDebouncedState'
 import { usePaginate } from '@/hooks/usePagination'
@@ -28,7 +21,7 @@ import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { errorMessage } from '@/utils/errorMessage'
 import { useMutation } from '@tanstack/react-query'
-import { format } from 'date-fns'
+import { formatDistance } from 'date-fns'
 // import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
@@ -71,7 +64,7 @@ type FilterHeaderProps = {
   loading?: boolean
 }
 const FilterHeader = ({
-  setOpenModal,
+  // setOpenModal,
   setOpenFilter: _,
   openFilter: __,
   onSearchChange,
@@ -94,13 +87,13 @@ const FilterHeader = ({
       </div>
       <div className="flex gap-x-4 mt-2 md:mt-0">
         {/* <Link href={`forms/add-form`}> */}
-        <Button
+        {/* <Button
           value="New Form"
           variant="primary"
           onClick={() => setOpenModal(true)}
           className="p-2 md:px-4 md:py-2 h-full"
           leadingIcon={<IconPicker icon="add" />}
-        />
+        /> */}
         {/* </Link> */}
       </div>
     </div>
@@ -120,7 +113,7 @@ export default function Forms() {
   const [search, setSearch] = useDebouncedState('')
   const {
     data,
-    isPending: isLoading,
+    // isPending: isLoading,
     refetch,
     isFetching,
   } = useForms(currentPage, search)
@@ -141,8 +134,8 @@ export default function Forms() {
     {
       title: 'View',
       icon: IconNames.documentText,
-      action: () =>
-        router.push(`forms/${encodeURIComponent(selectedRow ?? '')}`),
+      action: (row?: string) =>
+        router.push(`forms/${encodeURIComponent((row || selectedRow) ?? '')}`),
     },
     {
       title: 'Edit',
@@ -202,8 +195,71 @@ export default function Forms() {
         actionLoading={deleteLoading}
       />
 
-      <div className="py-3 md:py-8">
-        <Table className="table-auto" hasEmptyData={formsData?.length === 0}>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <Button
+          variant="default"
+          onClick={() => setOpenModal(true)}
+          className="group items-center justify-center flex flex-col gap-4"
+        >
+          <p className="font-bold text-xl text-white">Create new form</p>
+        </Button>
+
+        {formsData?.map((val: DataType) => (
+          <Card
+            key={val.id}
+            className="font-normal text-sm text-grey-600 flex flex-col p-0 gap-0 border bg-card text-card-foreground border-border"
+          >
+            <div className="flex flex-col space-y-1.5 p-6 w-full">
+              <div className="text-2xl font-semibold leading-none tracking-tight flex justify-between">
+                <span className="truncate font-bold">{val.title}</span>
+
+                {val.state === 'published' && (
+                  <BadgeField className="py-1 px-2 text-sm">
+                    Published
+                  </BadgeField>
+                )}
+                {val.state === 'draft' && (
+                  <BadgeField variant={'danger'} className="py-1 px-2 text-sm">
+                    Draft
+                  </BadgeField>
+                )}
+              </div>
+
+              <div className="text-sm">
+                {formatDistance(new Date(val.createdAt), new Date(), {
+                  addSuffix: true,
+                })}
+              </div>
+            </div>
+
+            <div className="p-6 pt-0 h-5 truncate text-sm w-full">
+              {val.description ?? 'No description'}
+            </div>
+
+            <div className="flex flex-row gap-2 w-full items-center p-6 pt-0">
+              {menuItems.map((item) => (
+                <Button
+                  variant={'tertiary'}
+                  key={item.title}
+                  onClick={() => {
+                    handleMoreClick(val.id)
+                    setTimeout(() => {
+                      item.action?.(val.id)
+                    }, 0)
+                  }}
+                  className="flex-1"
+                >
+                  <IconPicker icon={item.icon} size="1rem" />
+                  <span className="ml-2">{item.title}</span>
+                </Button>
+              ))}
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      <div className="">
+        {/* <Table className="table-auto" hasEmptyData={formsData?.length === 0}>
           <TableHeader className="bg-grey-100">
             <TableRow>
               <TableHead>Title</TableHead>
@@ -256,7 +312,7 @@ export default function Forms() {
               ))
             )}
           </TableBody>
-        </Table>
+        </Table> */}
         {formsData?.length === 0 && <EmptyData />}
       </div>
       {formsData?.length > 0 && (

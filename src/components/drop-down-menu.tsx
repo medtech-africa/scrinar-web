@@ -9,7 +9,7 @@ import Link from 'next/link'
 export type MenuItemProp = {
   title: string
   icon: IconNames
-  action?: () => void
+  action?: (rowId?: string) => void
   href?: string
 }
 

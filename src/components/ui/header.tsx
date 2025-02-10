@@ -49,7 +49,7 @@ export const Header = () => {
 
   return (
     <header>
-      <div className="flex bg-white justify-between border-b-[1px] border-grey-100 items-center px-4 md:px-8 py-4">
+      <div className="flex bg-white justify-between border-b-[1px] border-grey-200 items-center px-4 md:px-8 py-3">
         <SidebarTrigger />
         <div>
           {/* <Input
@@ -68,19 +68,19 @@ export const Header = () => {
         </div>
         <div>
           <div className="md:flex flex-row space-x-2 md:space-x-4 items-center hidden">
-            <div className="bg-grey-100 p-3 rounded-full cursor-pointer">
-              <IconPicker icon="notificationBell" size="1.5rem" />
+            <div className="bg-grey-100 p-2 rounded-full cursor-pointer">
+              <IconPicker icon="notificationBell" size="1.2rem" />
             </div>
             <Link
               href="/dashboard/settings"
-              className="bg-grey-100 p-3 rounded-full"
+              className="bg-grey-100 p-2 rounded-full"
             >
-              <IconPicker icon="setting2" size="1.5rem" />
+              <IconPicker icon="setting2" size="1.2rem" />
             </Link>
             <Avatar
               src={user?.user?.avatarUrl}
               fallback={returnJoinedFirstCharacter(user?.fullName)}
-              size="lg"
+              size="md"
               rootClassName="border border-lust-100"
               imgClassName="bg-lust-50"
             />

@@ -7,6 +7,7 @@ import { Button } from './ui/button'
 import { useState } from 'react'
 import DropDownMenu, { MenuItemProp } from './drop-down-menu'
 import Delete from './ui/delete'
+import { cn } from '@/lib/utils'
 export type NavigationItem = {
   label: string
   icon?: IconNames
@@ -20,6 +21,7 @@ type PageHeaderTypes = {
   user?: React.ReactNode
   isAvatar?: boolean
   hasAction?: boolean
+  className?: string
 }
 
 export const PageHeader = ({
@@ -30,6 +32,7 @@ export const PageHeader = ({
   user,
   isAvatar,
   hasAction,
+  className,
 }: PageHeaderTypes) => {
   const router = useRouter()
   const [deleteModal, setDeleteModal] = useState(false)
@@ -51,7 +54,7 @@ export const PageHeader = ({
 
   const [toggle, setToggle] = useState(false)
   return (
-    <div className="flex flex-col gap-y-4 py-4">
+    <div className={cn('flex flex-col gap-y-4 py-4', className)}>
       {navigation && (
         <div className="flex flex-row">
           <div
