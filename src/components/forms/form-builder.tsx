@@ -214,7 +214,7 @@ const FormBuilder = ({ form, questions }: Props) => {
   const [previewMode, setPreviewMode] = useState(false)
 
   const { mutate, isPending } = useMutation({
-    mutationFn: (data: FormFieldModel[]) =>
+    mutationFn: (data: FormFieldModel) =>
       baseAxios
         .post<{
           data: FormFieldModel[]
@@ -330,8 +330,11 @@ const FormBuilder = ({ form, questions }: Props) => {
     }
 
     const fields = convertToApiFormField(formData.fields)
+    const request = fields.map((field) => mutate(field))
 
-    mutate(fields)
+    Promise.all(request).then(() => {
+      toast.success('Form saved successfully!')
+    })
   }
 
   return (

@@ -102,7 +102,7 @@ const ViewForm = ({ params }: { params: { id: string } }) => {
         />
       </div>
 
-      <FormBuilder form={data} questions={formQuestions} />
+      <FormBuilder form={data} questions={formQuestions?.data} />
 
       <Delete
         open={deleteModal}

@@ -43,7 +43,7 @@ const useFormQuestions = (id: string) => {
     queryFn: () =>
       baseAxios
         .get(API.formQuestions(id))
-        .then((res) => res.data as FormFieldModel[]),
+        .then((res) => res.data as { data: FormFieldModel[] }),
   })
 }
 
