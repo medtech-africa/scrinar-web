@@ -76,3 +76,6 @@ export type FormFieldModel = {
   unit?: string
   required: boolean
 }
+export type SortFormModel = {
+  fields: string[]
+}
