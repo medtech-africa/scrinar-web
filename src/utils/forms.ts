@@ -1,4 +1,4 @@
-import { FieldType, FormField, FormFieldModel } from '@/types/forms'
+import { FieldType, FormField, FormFieldModel } from '@/types/forms.types'
 
 export function convertSingleToApiFormField(
   formField: FormField

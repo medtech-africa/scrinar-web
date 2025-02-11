@@ -79,3 +79,9 @@ export type FormFieldModel = {
 export type SortFormModel = {
   fields: string[]
 }
+
+export type ICreateForm = {
+  title: string
+  description: string
+  locationEnabled: boolean
+}

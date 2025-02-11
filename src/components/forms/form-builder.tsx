@@ -53,7 +53,12 @@ import {
 import { IconPicker } from '../ui/icon-picker'
 import { cn } from '@/lib/utils'
 import toast from 'react-hot-toast'
-import { FormField, FormModel, FieldType, FormFieldModel } from '@/types/forms'
+import {
+  FormField,
+  FormModel,
+  FieldType,
+  FormFieldModel,
+} from '@/types/forms.types'
 import {
   convertSingleToApiFormField,
   // convertToApiFormField,

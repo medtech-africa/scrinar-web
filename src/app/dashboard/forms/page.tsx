@@ -13,10 +13,11 @@ import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
-import useForms, { useSingleForm } from '@/hooks/queries/useForms'
+import useForms from '@/hooks/queries/useForms'
 import { useDebouncedState } from '@/hooks/useDebouncedState'
 import { usePaginate } from '@/hooks/usePagination'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
+import { FormModel } from '@/types/forms.types'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { errorMessage } from '@/utils/errorMessage'
@@ -25,7 +26,7 @@ import { formatDistance } from 'date-fns'
 import { FilePlus } from 'lucide-react'
 // import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
 const FilterData = () => {
@@ -127,16 +128,23 @@ export default function Forms() {
       baseAxios.delete(API.form(encodeURIComponent(selectedRow ?? ''))),
   })
 
+  const selectedForm = useMemo(
+    () => formsData?.find((form: FormModel) => form.id === selectedRow),
+    [formsData, selectedRow]
+  )
+
   const handleMoreClick = (rowId: string) => {
-    setSelectedRow(selectedRow === rowId ? null : rowId)
+    setSelectedRow(rowId)
   }
-  const { data: singleFormData } = useSingleForm(selectedRow ?? '')
+
   const menuItems: MenuItemProp[] = [
     {
       title: 'View',
       icon: IconNames.documentText,
       action: (row?: string) =>
-        router.push(`forms/${encodeURIComponent((row || selectedRow) ?? '')}?view=true`),
+        router.push(
+          `forms/${encodeURIComponent((row || selectedRow) ?? '')}?view=true`
+        ),
     },
     {
       title: 'Edit',
@@ -199,7 +207,10 @@ export default function Forms() {
       <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <Button
           variant="default"
-          onClick={() => setOpenModal(true)}
+          onClick={() => {
+            handleMoreClick('')
+            setOpenModal(true)
+          }}
           className="group items-center justify-center flex flex-col gap-2"
         >
           <FilePlus />
@@ -332,10 +343,10 @@ export default function Forms() {
       <SlideOver
         onClose={closeModal}
         open={openModal}
-        title={singleFormData?.id ? 'Edit Form' : 'New Form'}
+        title={selectedForm?.id ? 'Edit Form' : 'New Form'}
         icon={<IconPicker icon="book" size={'1.25rem'} />}
       >
-        <FormContent singleFormData={singleFormData} />
+        <FormContent singleFormData={selectedForm} />
       </SlideOver>
     </div>
   )

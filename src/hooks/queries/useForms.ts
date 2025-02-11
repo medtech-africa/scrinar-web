@@ -2,8 +2,12 @@ import { useQuery, keepPreviousData, useMutation } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { AxiosError, AxiosResponse } from 'axios'
-import { ICreateForm } from '@/types/form.types'
-import { FormModel, FormFieldModel, SortFormModel } from '@/types/forms'
+import {
+  FormModel,
+  FormFieldModel,
+  SortFormModel,
+  ICreateForm,
+} from '@/types/forms.types'
 
 const getForms = (page?: number, search?: string) =>
   baseAxios.get(API.getForms(page, search)).then((res) => res.data)
