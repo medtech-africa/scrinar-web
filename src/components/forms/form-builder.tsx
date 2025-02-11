@@ -19,13 +19,6 @@ import {
   useSortable,
 } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -74,6 +67,7 @@ import { useSearchParams } from 'next/navigation'
 import { useMutation } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
+import { SlideOver } from '../slide-over'
 // import { redirect } from 'next/navigation'
 
 interface Props {
@@ -510,171 +504,168 @@ const FormBuilder = ({ form, questions }: Props) => {
           </DndContext>
         </div>
       </div>
-
-      <Dialog open={isEditModalOpen} onOpenChange={setIsEditModalOpen}>
-        <DialogContent className="sm:max-w-lg">
-          <DialogHeader>
-            <DialogTitle>Edit Field</DialogTitle>
-          </DialogHeader>
-          {selectedField && (
-            <div className="space-y-4">
-              <div>
-                <Label>Field Label</Label>
-                <Input
-                  value={selectedField.label}
-                  onChange={(e) =>
-                    setSelectedField({
-                      ...selectedField,
-                      label: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <Label>Field Name</Label>
-                <Input
-                  value={selectedField.name}
-                  onChange={(e) =>
-                    setSelectedField({
-                      ...selectedField,
-                      name: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              <div>
-                <Label>Field Description(optional)</Label>
-                <Input
-                  value={selectedField.description}
-                  onChange={(e) =>
-                    setSelectedField({
-                      ...selectedField,
-                      description: e.target.value,
-                    })
-                  }
-                />
-              </div>
-              {[
-                'text',
-                'textarea',
-                'email',
-                'phone',
-                'website',
-                'number',
-              ].includes(selectedField.type) && (
-                <div>
-                  <Label>Placeholder</Label>
-                  <Input
-                    value={selectedField.placeholder || ''}
-                    onChange={(e) =>
-                      setSelectedField({
-                        ...selectedField,
-                        placeholder: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              )}
-              {['number'].includes(selectedField.type) && (
-                <div>
-                  <Label>Unit (e.g, kg, lb, gram, etc)</Label>
-                  <Input
-                    value={selectedField.unit || ''}
-                    onChange={(e) =>
-                      setSelectedField({
-                        ...selectedField,
-                        unit: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-              )}
-              {['select', 'radio', 'multipleChoice', 'checkbox'].includes(
-                selectedField.type
-              ) && (
-                <div>
-                  <Label>Options</Label>
-                  <div className="space-y-2">
-                    {selectedField.options?.map((option, index) => (
-                      <div key={index} className="flex space-x-2">
-                        <Input
-                          value={option}
-                          onChange={(e) => {
-                            const newOptions = [
-                              ...(selectedField.options || []),
-                            ]
-                            newOptions[index] = e.target.value
-                            setSelectedField({
-                              ...selectedField,
-                              options: newOptions,
-                            })
-                          }}
-                        />
-                        <Button
-                          variant="tertiary"
-                          size="sm"
-                          onClick={() => {
-                            const newOptions = selectedField.options?.filter(
-                              (_, i) => i !== index
-                            )
-                            setSelectedField({
-                              ...selectedField,
-                              options: newOptions,
-                            })
-                          }}
-                        >
-                          Remove
-                        </Button>
-                      </div>
-                    ))}
-                    <Button
-                      variant="tertiary"
-                      size="sm"
-                      onClick={() => {
-                        setSelectedField({
-                          ...selectedField,
-                          options: [
-                            ...(selectedField.options || []),
-                            `Option ${(selectedField.options?.length || 0) + 1}`,
-                          ],
-                        })
-                      }}
-                    >
-                      Add Option
-                    </Button>
-                  </div>
-                </div>
-              )}
-              <div className="flex items-center space-x-2">
-                <Switch
-                  checked={selectedField.required}
-                  onCheckedChange={(checked) =>
-                    setSelectedField({
-                      ...selectedField,
-                      required: checked,
-                    })
-                  }
-                />
-                <Label>Required</Label>
-              </div>
-              <div className="flex justify-end space-x-2">
-                <Button
-                  variant="tertiary"
-                  onClick={() => setIsEditModalOpen(false)}
-                >
-                  Cancel
-                </Button>
-                <Button
-                  loading={isPending || editLoading}
-                  onClick={() => handleFieldUpdate(selectedField)}
-                >
-                  Save Changes
-                </Button>
-              </div>
+      <SlideOver
+        onClose={() => setIsEditModalOpen(false)}
+        open={isEditModalOpen}
+        title={'Edit Field'}
+        icon={<IconPicker icon="book" size={'1.25rem'} />}
+      >
+        {selectedField && (
+          <div className="space-y-4">
+            <div>
+              <Label>Field Label</Label>
+              <Input
+                value={selectedField.label}
+                onChange={(e) =>
+                  setSelectedField({
+                    ...selectedField,
+                    label: e.target.value,
+                  })
+                }
+              />
             </div>
-          )}
-        </DialogContent>
-      </Dialog>
+            <div>
+              <Label>Field Name</Label>
+              <Input
+                value={selectedField.name}
+                onChange={(e) =>
+                  setSelectedField({
+                    ...selectedField,
+                    name: e.target.value,
+                  })
+                }
+              />
+            </div>
+            <div>
+              <Label>Field Description(optional)</Label>
+              <Input
+                value={selectedField.description}
+                onChange={(e) =>
+                  setSelectedField({
+                    ...selectedField,
+                    description: e.target.value,
+                  })
+                }
+              />
+            </div>
+            {[
+              'text',
+              'textarea',
+              'email',
+              'phone',
+              'website',
+              'number',
+            ].includes(selectedField.type) && (
+              <div>
+                <Label>Placeholder</Label>
+                <Input
+                  value={selectedField.placeholder || ''}
+                  onChange={(e) =>
+                    setSelectedField({
+                      ...selectedField,
+                      placeholder: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            )}
+            {['number'].includes(selectedField.type) && (
+              <div>
+                <Label>Unit (e.g, kg, lb, gram, etc)</Label>
+                <Input
+                  value={selectedField.unit || ''}
+                  onChange={(e) =>
+                    setSelectedField({
+                      ...selectedField,
+                      unit: e.target.value,
+                    })
+                  }
+                />
+              </div>
+            )}
+            {['select', 'radio', 'multipleChoice', 'checkbox'].includes(
+              selectedField.type
+            ) && (
+              <div>
+                <Label>Options</Label>
+                <div className="space-y-2">
+                  {selectedField.options?.map((option, index) => (
+                    <div key={index} className="flex space-x-2">
+                      <Input
+                        value={option}
+                        onChange={(e) => {
+                          const newOptions = [...(selectedField.options || [])]
+                          newOptions[index] = e.target.value
+                          setSelectedField({
+                            ...selectedField,
+                            options: newOptions,
+                          })
+                        }}
+                      />
+                      <Button
+                        variant="tertiary"
+                        size="sm"
+                        onClick={() => {
+                          const newOptions = selectedField.options?.filter(
+                            (_, i) => i !== index
+                          )
+                          setSelectedField({
+                            ...selectedField,
+                            options: newOptions,
+                          })
+                        }}
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  ))}
+                  <Button
+                    variant="tertiary"
+                    size="sm"
+                    onClick={() => {
+                      setSelectedField({
+                        ...selectedField,
+                        options: [
+                          ...(selectedField.options || []),
+                          `Option ${(selectedField.options?.length || 0) + 1}`,
+                        ],
+                      })
+                    }}
+                  >
+                    Add Option
+                  </Button>
+                </div>
+              </div>
+            )}
+            <div className="flex items-center space-x-2">
+              <Switch
+                checked={selectedField.required}
+                onCheckedChange={(checked) =>
+                  setSelectedField({
+                    ...selectedField,
+                    required: checked,
+                  })
+                }
+              />
+              <Label>Required</Label>
+            </div>
+            <div className="flex w-full justify-between">
+              <Button
+                variant="tertiary"
+                onClick={() => setIsEditModalOpen(false)}
+              >
+                Cancel
+              </Button>
+              <Button
+                loading={isPending || editLoading}
+                onClick={() => handleFieldUpdate(selectedField)}
+              >
+                Save Changes
+              </Button>
+            </div>
+          </div>
+        )}
+      </SlideOver>
     </div>
   )
 }
