@@ -102,14 +102,7 @@ const generalData = [
     title: 'Forms',
     icon: 'book',
     url: 'forms',
-    // roles: [
-    //   'school',
-    //   'instructor',
-    //   'play4health_admin',
-    //   'super_admin',
-    //   'jica_enumerators',
-    //   'jica_researchers',
-    // ],
+    roles: ['organization'],
   },
   // {
   //   title: 'Training Module',
