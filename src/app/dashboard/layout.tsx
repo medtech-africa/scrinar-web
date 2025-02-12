@@ -41,10 +41,10 @@ const DashboardLayout = ({ children }: { children: ReactNode }) => {
       <SidebarProvider defaultOpen={true}>
         <div className="w-full bg-grey-100 h-screen md:overflow-hidden flex">
           <AppSidebar />
-          <div className="h-full relative md:grid md:grid-rows-[80px_1fr] md:pl-4 w-full">
+          <div className="h-full relative md:grid md:grid-rows-[auto_1fr] md:pl-4 w-full">
             <Header />
             <AnimatePresence mode="wait">
-              <main className="md:px-8 py-4 px-2 relative md:pb-16 bg-white overflow-auto">
+              <main className="md:px-8 py-3 px-2 relative md:pb-16 bg-white overflow-auto">
                 {children}
               </main>
             </AnimatePresence>

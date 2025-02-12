@@ -1,36 +1,32 @@
 'use client'
-import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
+
+import { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
+import { FormContent } from '@/components/forms/form-content'
 import { PageHeader } from '@/components/page-header'
 import Pagination from '@/components/pagination'
-import TableLoader from '@/components/table-loader'
-import { Avatar } from '@/components/ui/avatar'
+import { SlideOver } from '@/components/slide-over'
+import { BadgeField } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { Card } from '@/components/ui/card'
 import Delete from '@/components/ui/delete'
 import { IconPicker } from '@/components/ui/icon-picker'
 import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { Input } from '@/components/ui/input'
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from '@/components/ui/table'
 import useForms from '@/hooks/queries/useForms'
 import { useDebouncedState } from '@/hooks/useDebouncedState'
 import { usePaginate } from '@/hooks/usePagination'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
+import { FormModel } from '@/types/forms.types'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
 import { errorMessage } from '@/utils/errorMessage'
-import { returnJoinedFirstCharacter } from '@/utils/returnJoinedFirstCharacter'
 import { useMutation } from '@tanstack/react-query'
-import { format } from 'date-fns'
-import Link from 'next/link'
+import { formatDistance } from 'date-fns'
+import { FilePlus } from 'lucide-react'
+// import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import toast from 'react-hot-toast'
 
 const FilterData = () => {
@@ -62,6 +58,7 @@ const FilterData = () => {
   )
 }
 type FilterHeaderProps = {
+  setOpenModal: (value: boolean) => void
   setOpenFilter: (value: boolean) => void
   openFilter: boolean
   onSearchChange: (val: string) => void
@@ -69,6 +66,7 @@ type FilterHeaderProps = {
   loading?: boolean
 }
 const FilterHeader = ({
+  // setOpenModal,
   setOpenFilter: _,
   openFilter: __,
   onSearchChange,
@@ -90,14 +88,15 @@ const FilterHeader = ({
         />
       </div>
       <div className="flex gap-x-4 mt-2 md:mt-0">
-        <Link href={`forms/add-form`}>
-          <Button
-            value="New Form"
-            variant="primary"
-            className="p-2 md:px-4 md:py-2 h-full"
-            leadingIcon={<IconPicker icon="add" />}
-          />
-        </Link>
+        {/* <Link href={`forms/add-form`}> */}
+        {/* <Button
+          value="New Form"
+          variant="primary"
+          onClick={() => setOpenModal(true)}
+          className="p-2 md:px-4 md:py-2 h-full"
+          leadingIcon={<IconPicker icon="add" />}
+        /> */}
+        {/* </Link> */}
       </div>
     </div>
   )
@@ -108,6 +107,7 @@ export default function Forms() {
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState<string | null>(null)
   const [deleteModal, setDeleteModal] = useState(false)
+  const [openModal, setOpenModal] = useState(false)
 
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
@@ -115,7 +115,7 @@ export default function Forms() {
   const [search, setSearch] = useDebouncedState('')
   const {
     data,
-    isPending: isLoading,
+    // isPending: isLoading,
     refetch,
     isFetching,
   } = useForms(currentPage, search)
@@ -128,22 +128,30 @@ export default function Forms() {
       baseAxios.delete(API.form(encodeURIComponent(selectedRow ?? ''))),
   })
 
+  const selectedForm = useMemo(
+    () => formsData?.find((form: FormModel) => form.id === selectedRow),
+    [formsData, selectedRow]
+  )
+
   const handleMoreClick = (rowId: string) => {
-    setSelectedRow(selectedRow === rowId ? null : rowId)
+    setSelectedRow(rowId)
   }
 
   const menuItems: MenuItemProp[] = [
     {
       title: 'View',
       icon: IconNames.documentText,
-      action: () =>
-        router.push(`forms/view/${encodeURIComponent(selectedRow ?? '')}`),
+      action: (row?: string) =>
+        router.push(
+          `forms/${encodeURIComponent((row || selectedRow) ?? '')}?view=true`
+        ),
     },
     {
       title: 'Edit',
       icon: IconNames.userEdit,
-      action: () =>
-        router.push(`forms/edit-form/${encodeURIComponent(selectedRow ?? '')}`),
+      action: () => {
+        setOpenModal(true)
+      },
     },
     {
       title: 'Delete',
@@ -169,6 +177,10 @@ export default function Forms() {
     })
   }
 
+  const closeModal = () => {
+    setOpenModal(false)
+  }
+
   return (
     <div>
       <PageHeader
@@ -177,6 +189,7 @@ export default function Forms() {
         avatar="avatar"
       />
       <FilterHeader
+        setOpenModal={setOpenModal}
         setOpenFilter={setOpenFilter}
         openFilter={openFilter}
         onSearchChange={setSearch}
@@ -191,15 +204,81 @@ export default function Forms() {
         actionLoading={deleteLoading}
       />
 
-      <div className="py-3 md:py-8">
-        <Table className="table-auto" hasEmptyData={formsData?.length === 0}>
+      <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+        <Button
+          variant="default"
+          onClick={() => {
+            handleMoreClick('')
+            setOpenModal(true)
+          }}
+          className="group items-center justify-center flex flex-col gap-2"
+        >
+          <FilePlus />
+          <p className="font-bold text-xl text-white">Create new form</p>
+        </Button>
+
+        {formsData?.map((val: DataType) => (
+          <Card
+            key={val.id}
+            className="font-normal text-sm text-grey-600 flex flex-col p-0 gap-0 border bg-card text-card-foreground border-border"
+          >
+            <div className="flex flex-col space-y-1.5 p-4 w-full">
+              <div className="text-2xl font-semibold leading-none tracking-tight flex justify-between">
+                <span className="truncate font-bold">{val.title}</span>
+
+                {val.state === 'published' && (
+                  <BadgeField className="py-1 px-2 text-xs" variant={'success'}>
+                    Published
+                  </BadgeField>
+                )}
+                {val.state === 'draft' && (
+                  <BadgeField variant={'danger'} className="py-1 px-2 text-xs">
+                    Draft
+                  </BadgeField>
+                )}
+              </div>
+
+              <div className="text-sm">
+                {formatDistance(new Date(val.createdAt), new Date(), {
+                  addSuffix: true,
+                })}
+              </div>
+            </div>
+
+            <div className="p-4 pt-0 h-5 truncate text-sm w-full">
+              {val.description ?? 'No description'}
+            </div>
+
+            <div className="flex flex-row gap-2 w-full items-center p-4 pt-0 flex-wrap">
+              {menuItems.map((item) => (
+                <Button
+                  variant={'tertiary'}
+                  key={item.title}
+                  onClick={() => {
+                    handleMoreClick(val.id)
+                    setTimeout(() => {
+                      item.action?.(val.id)
+                    }, 0)
+                  }}
+                  className="flex-1"
+                >
+                  <IconPicker icon={item.icon} size="1rem" />
+                  <span className="ml-2">{item.title}</span>
+                </Button>
+              ))}
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      <div className="">
+        {/* <Table className="table-auto" hasEmptyData={formsData?.length === 0}>
           <TableHeader className="bg-grey-100">
             <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Level</TableHead>
-              <TableHead>Gender</TableHead>
-              <TableHead>Age</TableHead>
-              <TableHead>Date Added</TableHead>
+              <TableHead>Title</TableHead>
+              <TableHead>Description</TableHead>
+              <TableHead>State</TableHead>
+              <TableHead>Created At</TableHead>
               <TableHead>Action</TableHead>
             </TableRow>
           </TableHeader>
@@ -214,24 +293,13 @@ export default function Forms() {
                   className="font-normal text-sm text-grey-600"
                 >
                   <TableCell className="flex gap-x-2 items-center">
-                    <Avatar
-                      src={val?.avatarUrl}
-                      fallback={returnJoinedFirstCharacter(
-                        val.firstName,
-                        val.lastName
-                      )}
-                    />
-                    <div className="flex gap-x-[3px]">
-                      <div>{val.firstName}</div>
-                      <div>{val.lastName}</div>
-                    </div>
+                    <div>{val.title}</div>
                   </TableCell>
 
                   <TableCell className="capitalize">
-                    {val.level ?? '-'}
+                    {val.description ?? '-'}
                   </TableCell>
-                  <TableCell className="capitalize">{val.gender}</TableCell>
-                  <TableCell>{val.age}</TableCell>
+                  <TableCell className="capitalize">{val.state}</TableCell>
                   <TableCell>
                     {format(new Date(val.createdAt), 'PPP')}
                   </TableCell>
@@ -246,7 +314,7 @@ export default function Forms() {
                     >
                       <IconPicker icon="more" size="1.25rem" />
                     </button>
-                    {selectedRow === val.id && !deleteModal && (
+                    {selectedRow === val.id && !deleteModal && !openModal && (
                       <DropDownMenu
                         menuItems={menuItems}
                         onClose={() => setSelectedRow(null)}
@@ -257,7 +325,7 @@ export default function Forms() {
               ))
             )}
           </TableBody>
-        </Table>
+        </Table> */}
         {formsData?.length === 0 && <EmptyData />}
       </div>
       {formsData?.length > 0 && (
@@ -271,16 +339,22 @@ export default function Forms() {
           className="mt-2"
         />
       )}
+
+      <SlideOver
+        onClose={closeModal}
+        open={openModal}
+        title={selectedForm?.id ? 'Edit Form' : 'New Form'}
+        icon={<IconPicker icon="book" size={'1.25rem'} />}
+      >
+        <FormContent singleFormData={selectedForm} />
+      </SlideOver>
     </div>
   )
 }
 type DataType = {
   id: string
-  avatarUrl?: string
-  firstName: string
-  lastName: string
-  level: string
-  gender: string
-  age?: string
+  title: string
+  description: string
+  state: string
   createdAt: string
 }

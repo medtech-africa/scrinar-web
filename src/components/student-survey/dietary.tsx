@@ -13,6 +13,7 @@ const Dietary = ({ studentSurvey }: { studentSurvey: any }) => {
       setValue(`meals[${index}].foodName`, meal.foodName || '')
       setValue(`meals[${index}].ingredients`, meal.ingredients || '')
     })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (

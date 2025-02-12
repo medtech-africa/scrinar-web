@@ -1,6 +1,11 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
-import { useLocalParentSurveyStore, useLocalStudentSurvey, useLocalStudentSurveyStore } from './useLocalParentSurvey'
+import {
+  useLocalParentSurveyStore,
+  useLocalStudentSurvey,
+  useLocalStudentSurveyStore,
+} from './useLocalParentSurvey'
 import { useEffect } from 'react'
 
 export const useSyncParentLocalStorage = () => {
@@ -28,7 +33,10 @@ export const useSyncParentLocalStorage = () => {
       // use promise.all settled instead
       Promise.allSettled(allSurveyArray.map((survey) => syncForm(survey))).then(
         (results) => {
-          console.log('results', results.map((result) => result.status))
+          console.log(
+            'results',
+            results.map((result) => result.status)
+          )
         }
       )
     }
@@ -36,7 +44,7 @@ export const useSyncParentLocalStorage = () => {
 }
 export const useSyncChildrenLocalStorage = () => {
   const allSurvey = useLocalStudentSurveyStore((state) => state.data)
-  const {survey} = useLocalStudentSurvey()
+  const { survey } = useLocalStudentSurvey()
 
   const syncForm = (data: { id: string; formData: object }) => {
     //   @ts-expect-error createdAt
@@ -56,7 +64,10 @@ export const useSyncChildrenLocalStorage = () => {
       const allSurveyArray = Object.values(allSurvey)
       Promise.allSettled(allSurveyArray.map((survey) => syncForm(survey))).then(
         (results) => {
-          console.log('results', results.map((result) => result.status))
+          console.log(
+            'results',
+            results.map((result) => result.status)
+          )
         }
       )
     }
@@ -64,7 +75,10 @@ export const useSyncChildrenLocalStorage = () => {
       const allSurveyArray = Object.values(allSurvey)
       Promise.allSettled(allSurveyArray.map((survey) => syncForm(survey))).then(
         (results) => {
-          console.log('results', results.map((result) => result.status))
+          console.log(
+            'results',
+            results.map((result) => result.status)
+          )
         }
       )
     }

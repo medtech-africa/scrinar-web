@@ -105,7 +105,12 @@ export const API = {
     }
     return `${BASE_URL}/api/v1/forms?${params.toString()}`
   },
-  form: (id: string) => `${BASE_URL}/api/v1/students/${id}`,
+  form: (id: string) => `${BASE_URL}/api/v1/forms/${id}`,
+  sortForm: (id: string) => `${BASE_URL}/api/v1/forms/${id}/submissions/order`,
+  formQuestions: (id: string) =>
+    `${BASE_URL}/api/v1/form-fields/${id}/questions`,
+  singleFormQuestions: (id: string, questionId: string) =>
+    `${BASE_URL}/api/v1/form-fields/${id}/questions/${questionId}`,
 
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,
@@ -158,4 +163,7 @@ export const API = {
   riskAssessmentDetails: (id: string) =>
     `${BASE_URL}/api/v1/risk-assessment/${id}`,
   sendRiskAssessment: `${BASE_URL}/api/v1/risk-assessment/send`,
+
+  //form
+  createForm: `${BASE_URL}/api/v1/forms`,
 }

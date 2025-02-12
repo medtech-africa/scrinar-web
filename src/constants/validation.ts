@@ -722,6 +722,13 @@ const createParent = yupResolver(
     isGuardian: yup.boolean(),
   })
 )
+const formContentSchema = yupResolver(
+  yup.object().shape({
+    title: yup.string().required('Please enter title'),
+    description: yup.string().required('Please enter description'),
+    locationEnabled: yup.boolean().required('Please select a location'),
+  })
+)
 
 const validation = {
   createPatient,
@@ -737,6 +744,7 @@ const validation = {
   createScreening,
   registerStudent,
   createParent,
+  formContentSchema,
 }
 
 export default validation

@@ -1,12 +1,12 @@
-import withPWAInit from "@ducanh2912/next-pwa";
+import withPWAInit from '@ducanh2912/next-pwa'
 
 const withPWA = withPWAInit({
-// const withPWA = require("@ducanh2912/next-pwa").default({
+  // const withPWA = require("@ducanh2912/next-pwa").default({
   cacheOnFrontEndNav: true,
   aggressiveFrontEndNavCaching: true,
   reloadOnOnline: true,
   swcMinify: true,
-  dest: "public",
+  dest: 'public',
   fallbacks: {
     //image: "/static/images/fallback.png",
     // document: "/offline", // if you want to fallback to a custom page rather than /_offline
@@ -18,10 +18,13 @@ const withPWA = withPWAInit({
     disableDevLogs: true,
   },
   // ... other options you like
-});
+})
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  experimental: {
+    missingSuspenseWithCSRBailout: false,
+  },
   images: {
     remotePatterns: [
       {
