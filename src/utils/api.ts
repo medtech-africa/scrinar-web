@@ -92,7 +92,7 @@ export const API = {
     `${BASE_URL}/api/v1/school?search=${search}${state ? `&state=${state}` : ''}`,
 
   //organization
-  organizationRegister: `${BASE_URL}/api/v1/organization`,
+  organizationRegister: `${BASE_URL}/api/v2/organization`,
 
   //forms
   getForms: (page?: number, search?: string) => {

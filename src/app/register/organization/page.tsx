@@ -14,14 +14,17 @@ import { errorMessage } from '@/utils/errorMessage'
 import Image from 'next/image'
 import validation from '@/constants/validation'
 import useStateLGA from '@/hooks/queries/useStateLGA'
+import countries from '@/constants/countries.json'
 
 interface IFormOrgData {
   name: string
   website?: string
   email: string
   password: string
-  state: { value: string; label: string }
-  lga: { value: string; label: string }
+  country: { value: string; label: string }
+  city?: string
+  state?: { value?: string; label?: string }
+  lga?: { value?: string; label?: string }
   address: string
   zipCode: string
   type: { value: string; label: string }
@@ -32,6 +35,8 @@ const defaultValues = {
   website: '',
   email: '',
   password: '',
+  country: { value: '', label: '' },
+  city: '',
   state: { value: '', label: '' },
   lga: { value: '', label: '' },
   address: '',
@@ -58,6 +63,7 @@ const RegisterNewOrganization = () => {
     handleSubmit,
     resetField,
     getValues,
+    watch,
     formState: { errors },
   } = useForm<IFormOrgData>({
     resolver: validation.organizationValidation,
@@ -72,12 +78,18 @@ const RegisterNewOrganization = () => {
     ?.find((state) => state.name === getValues('state.label'))
     ?.locals.map((local) => ({ value: local.id, label: local.name }))
 
-  const onSubmit = async (data: IFormOrgData) => {
+  const onSubmit = async ({ lga, ...data }: IFormOrgData) => {
     const dataToSend = {
       ...data,
-      state: data.state.value,
-      lga: data.lga.value,
+      country: data.country.value,
+      state: data.state?.value,
+      city: lga?.value || data.city,
       type: data.type.value,
+    }
+
+    if (!lga?.value && !data.city) {
+      toast.error('Please enter a city')
+      return
     }
 
     try {
@@ -96,6 +108,8 @@ const RegisterNewOrganization = () => {
       console.error('Registration error:', error)
     }
   }
+
+  const country = watch('country')
 
   return (
     <div className="grid lg:grid-cols-2 grid-rows-1 lg:h-screen">
@@ -180,10 +194,16 @@ const RegisterNewOrganization = () => {
               control={control}
               render={({ field: { onChange, ...field } }: any) => (
                 <Select
-                  placeholder="Select State"
-                  label="State"
+                  placeholder="Select Country"
+                  label="Country"
                   onChange={(val) => {
                     onChange(val)
+                    resetField('state', {
+                      defaultValue: {
+                        value: '',
+                        label: '',
+                      },
+                    })
                     resetField('lga', {
                       defaultValue: {
                         value: '',
@@ -193,33 +213,80 @@ const RegisterNewOrganization = () => {
                   }}
                   labelStyle="lg:text-sm text-xs"
                   className="capitalize"
-                  isLoading={stateLoading}
                   {...field}
-                  options={stateOptions}
-                  variant={errors?.state ? 'destructive' : 'default'}
-                  message={errors.state?.message}
+                  options={countries}
+                  variant={errors?.country ? 'destructive' : 'default'}
+                  message={errors.country?.message}
                 />
               )}
-              name="state"
+              name="country"
             />
 
-            <Controller
-              control={control}
-              render={({ field: { ...field } }) => (
-                <Select
-                  placeholder="Select City"
-                  label="City"
-                  labelStyle="lg:text-sm text-xs"
-                  isLoading={stateLoading}
-                  {...field}
-                  className="capitalize"
-                  options={lgaOPtions}
-                  variant={errors?.lga ? 'destructive' : 'default'}
-                  message={errors.lga?.message}
+            {country.value === 'nigeria' ? (
+              <>
+                <Controller
+                  control={control}
+                  render={({ field: { onChange, ...field } }: any) => (
+                    <Select
+                      placeholder="Select State"
+                      label="State"
+                      onChange={(val) => {
+                        onChange(val)
+                        resetField('lga', {
+                          defaultValue: {
+                            value: '',
+                            label: '',
+                          },
+                        })
+                      }}
+                      labelStyle="lg:text-sm text-xs"
+                      className="capitalize"
+                      isLoading={stateLoading}
+                      {...field}
+                      options={stateOptions}
+                      variant={errors?.state ? 'destructive' : 'default'}
+                      message={errors.state?.message}
+                    />
+                  )}
+                  name="state"
                 />
-              )}
-              name="lga"
-            />
+
+                <Controller
+                  control={control}
+                  render={({ field: { ...field } }) => (
+                    <Select
+                      placeholder="Select City"
+                      label="City"
+                      labelStyle="lg:text-sm text-xs"
+                      isLoading={stateLoading}
+                      {...field}
+                      className="capitalize"
+                      options={lgaOPtions}
+                      variant={errors?.lga ? 'destructive' : 'default'}
+                      message={errors.lga?.message}
+                    />
+                  )}
+                  name="lga"
+                />
+              </>
+            ) : (
+              <Controller
+                control={control}
+                render={({ field: { onChange, onBlur, value } }) => (
+                  <Input
+                    onChange={onChange}
+                    onBlur={onBlur}
+                    value={value}
+                    placeholder="Enter City"
+                    label="City"
+                    labelStyle="lg:text-sm text-xs"
+                    variant={errors?.city ? 'destructive' : 'default'}
+                    message={errors.city?.message}
+                  />
+                )}
+                name="city"
+              />
+            )}
 
             <Controller
               control={control}
@@ -266,6 +333,7 @@ const RegisterNewOrganization = () => {
                   value={value}
                   onChange={onChange}
                   options={[
+                    { value: 'personal', label: 'Personal' },
                     { value: 'ngo', label: 'NGO' },
                     { value: 'school', label: 'School' },
                     { value: 'company', label: 'Company' },

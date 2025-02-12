@@ -306,20 +306,29 @@ const organizationValidation = yupResolver(
     state: yup
       .object()
       .shape({
-        label: yup.string().required(),
-        value: yup.string().required(),
+        label: yup.string(),
+        value: yup.string(),
       })
-      .required('Please select a state')
-      .typeError('Please select a state'),
+      .optional(),
 
     lga: yup
+      .object()
+      .shape({
+        label: yup.string(),
+        value: yup.string(),
+      })
+      .optional(),
+
+    country: yup
       .object()
       .shape({
         label: yup.string().required(),
         value: yup.string().required(),
       })
-      .required('Please select a local government area')
-      .typeError('Please select a local government area'),
+      .required('Please select a country')
+      .typeError('Please select a country'),
+
+    city: yup.string().typeError('Please select a city'),
 
     address: yup
       .string()
