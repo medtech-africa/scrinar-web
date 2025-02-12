@@ -12,6 +12,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useDesigner } from '../../hooks/useDesigner'
 import { FieldContent } from '@/features/form-builder/components/FieldContent'
 import { Label } from '@/components/ui/label'
+import { Button } from '@/components/ui/button'
 
 type CustomInstance = FormElementInstance & {
   extraAttributes: typeof extraAttributes
@@ -47,6 +48,7 @@ const FormComponent = ({
 
 const propertiesSchema = z.object({
   label: z.string().min(2).max(50),
+  name: z.string().min(2).max(50),
 })
 
 type propertiesFormSchemaType = z.infer<typeof propertiesSchema>
@@ -62,6 +64,7 @@ const PropertiesComponent = ({
     mode: 'onBlur',
     defaultValues: {
       label: element.extraAttributes?.label,
+      name: element.extraAttributes?.name,
     },
   })
 
@@ -78,10 +81,10 @@ const PropertiesComponent = ({
 
   return (
     <form
-      onBlur={form.handleSubmit(applyChanges)}
+      // onBlur={form.handleSubmit(applyChanges)}
       onSubmit={(e) => {
         e.preventDefault()
-        form.handleSubmit(applyChanges)
+        form.handleSubmit(applyChanges)()
         setSelectedElement(null)
       }}
     >
@@ -95,6 +98,18 @@ const PropertiesComponent = ({
           )}
         />
       </div>
+      <div className="flex w-full justify-between">
+        <Button
+          variant="tertiary"
+          onClick={() => setSelectedElement(null)}
+          type="button"
+        >
+          Cancel
+        </Button>
+        <Button type="submit" loading={form.formState.isSubmitting}>
+          Save Changes
+        </Button>
+      </div>
     </form>
   )
 }
@@ -103,7 +118,7 @@ const type = 'header'
 
 const extraAttributes = {
   label: 'Title field',
-  fieldName: `title_${crypto.randomUUID()}`,
+  name: `title_${crypto.randomUUID()}`,
 }
 
 export const TitleFieldFormElement: FormElement = {

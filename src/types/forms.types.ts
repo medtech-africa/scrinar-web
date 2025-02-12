@@ -19,6 +19,11 @@ export type FieldType =
   | 'subtitle'
   | 'spacer'
 
+export const layoutElements = [
+  'divider',
+  'spacer',
+]
+
 export interface FormField {
   id: string
   type: FieldType

@@ -16,8 +16,12 @@ import { useMutation } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import toast from 'react-hot-toast'
-import { useMutateFormQuestions } from '@/hooks/queries/useForms'
+import {
+  useFormQuestions,
+  useMutateFormQuestions,
+} from '@/hooks/queries/useForms'
 import { convertSingleToApiFormField, slugify } from '@/utils/forms'
+import { layoutElements } from '@/types/forms.types'
 
 export const Designer = ({ formId }: { formId: string }) => {
   const {
@@ -27,6 +31,7 @@ export const Designer = ({ formId }: { formId: string }) => {
     setSelectedElement,
     removeElement,
   } = useDesigner()
+  console.log('🚀 ~ Designer ~ selectedElement:', selectedElement)
 
   const { setNodeRef, isOver } = useDroppable({
     id: 'designer-drop-area',
@@ -35,6 +40,7 @@ export const Designer = ({ formId }: { formId: string }) => {
     },
   })
 
+  const { refetch } = useFormQuestions(formId)
   const { mutate } = useMutateFormQuestions(formId ?? '')
 
   useDndMonitor({
@@ -46,16 +52,24 @@ export const Designer = ({ formId }: { formId: string }) => {
         const newElement = FormElements[type].construct(
           `scrinar_${crypto.randomUUID()}`
         )
-        const fields = convertSingleToApiFormField({
-          label: '',
-          name: slugify(newElement.extraAttributes?.label || newElement.type),
-          ...newElement.extraAttributes,
-          id: newElement.id,
-          type: newElement.type,
-        })
-        console.log('>>>>>>>>>>>> I was called here')
-        mutate(fields)
-        addElement(index, newElement)
+        if (layoutElements.includes(newElement.type)) {
+          const fields = convertSingleToApiFormField({
+            label: '',
+            name: slugify(newElement.extraAttributes?.label || newElement.type),
+            ...newElement.extraAttributes,
+            id: newElement.id,
+            type: newElement.type,
+          })
+          console.log('>>>>>>>>>>>> I was called here', newElement.type)
+          mutate(fields, {
+            onSuccess: () => {
+              refetch()
+            },
+          })
+          addElement(index, newElement)
+        } else {
+          setSelectedElement({ ...newElement, index })
+        }
       }
 
       if (over && active.id !== over.id) {
@@ -68,6 +82,8 @@ export const Designer = ({ formId }: { formId: string }) => {
 
         if (droppingSidebarElementOverDesignerDropArea) {
           // dropping sidebar element over drop-zone-area
+          console.log('dropping sidebar element over drop-zone-area')
+
           addActiveElement(elements.length)
           return
         }
@@ -85,6 +101,7 @@ export const Designer = ({ formId }: { formId: string }) => {
           const indexOfDesignerElement = elements.findIndex(
             (element) => element.id === over.data.current?.elementId
           )
+          console.log('dropping sidebar button over designer element')
           if (indexOfDesignerElement > -1) {
             const isTopHalf = over.data.current?.isTopHalfDesignerElement
             const indexOfNewElement = isTopHalf
@@ -101,6 +118,7 @@ export const Designer = ({ formId }: { formId: string }) => {
           isDraggingDesignerElement && isDroppingOverDesignerElement
 
         if (draggingDesignerElementOverDesignerElement) {
+          console.log('dragging an existing designer element over another')
           const overId = over.data.current?.elementId
           const activeId = active.data.current?.elementId
 

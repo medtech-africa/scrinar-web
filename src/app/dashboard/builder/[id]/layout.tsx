@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 
-import { DesignerContextProvider } from '../../../../features/form-builder/context/DesignerContext'
+import { DesignerContextProvider } from '@/features/form-builder/context/DesignerContext'
 
 const BuilderPageLayout = ({ children }: { children: ReactNode }) => {
   return <DesignerContextProvider>{children}</DesignerContextProvider>

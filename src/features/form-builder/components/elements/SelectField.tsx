@@ -5,7 +5,7 @@ import {
   SubmitFunction,
 } from './FormElements'
 import * as z from 'zod'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDesigner } from '../../hooks/useDesigner'
@@ -43,7 +43,7 @@ const propertiesSchema = z.object({
   label: z.string().min(2).max(50),
   description: z.string().max(200).optional(),
   required: z.boolean().default(false),
-  placeholder: z.string().max(50),
+  placeholder: z.string().max(50).optional(),
   options: z.array(z.string()).default([]),
 })
 
@@ -57,7 +57,7 @@ const PropertiesComponent = ({
   const element = elementInstance as CustomInstance
   const form = useForm<propertiesFormSchemaType>({
     resolver: zodResolver(propertiesSchema),
-    mode: 'onBlur',
+    mode: 'onSubmit',
     defaultValues: {
       label: element.extraAttributes?.label,
       description: element.extraAttributes?.description,
@@ -80,14 +80,16 @@ const PropertiesComponent = ({
 
   return (
     <form
-      onBlur={form.handleSubmit(applyChanges)}
+      // onBlur={form.handleSubmit(applyChanges)}
       onSubmit={(e) => {
         e.preventDefault()
-        form.handleSubmit(applyChanges)
+        form.handleSubmit(applyChanges)(e)
         setSelectedElement(null)
       }}
     >
-      <PropertiesForm<propertiesFormSchemaType> control={form.control} />
+      <FormProvider {...form}>
+        <PropertiesForm<propertiesFormSchemaType> control={form.control} />
+      </FormProvider>
     </form>
   )
 }

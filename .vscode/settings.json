@@ -9,5 +9,5 @@
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
-  "cSpell.words": ["Antropometry", "hdlc", "ldlc"]
+  "cSpell.words": ["Antropometry", "hdlc", "ldlc", "scrinar"]
 }

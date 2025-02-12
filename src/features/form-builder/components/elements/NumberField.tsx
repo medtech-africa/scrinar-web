@@ -100,7 +100,7 @@ const PropertiesComponent = ({
       onBlur={form.handleSubmit(applyChanges)}
       onSubmit={(e) => {
         e.preventDefault()
-        form.handleSubmit(applyChanges)
+        form.handleSubmit(applyChanges)()
         setSelectedElement(null)
       }}
     >
