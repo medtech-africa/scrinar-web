@@ -232,7 +232,7 @@ export default function Forms() {
                   </BadgeField>
                 )}
                 {val.state === 'draft' && (
-                  <BadgeField variant={'danger'} className="py-1 px-2 text-xs">
+                  <BadgeField variant={'pending'} className="py-1 px-2 text-xs">
                     Draft
                   </BadgeField>
                 )}

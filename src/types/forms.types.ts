@@ -16,6 +16,8 @@ export type FieldType =
   | 'label'
   | 'multipleChoice'
   | 'dropdown'
+  | 'subtitle'
+  | 'spacer'
 
 export interface FormField {
   id: string

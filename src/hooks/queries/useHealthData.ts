@@ -65,6 +65,7 @@ const useFamilyHealthData = (
     queryFn: () =>
       getHealthData(pageNumber, searchVal, limit, type, true, sort),
     placeholderData: keepPreviousData,
+    retry: (failureCount) => failureCount < 1,
   })
 }
 

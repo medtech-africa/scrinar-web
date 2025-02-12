@@ -166,4 +166,5 @@ export const API = {
 
   //form
   createForm: `${BASE_URL}/api/v1/forms`,
+  submitForm: (formId: string) => `${BASE_URL}/api/v1/forms/${formId}/submit`,
 }
