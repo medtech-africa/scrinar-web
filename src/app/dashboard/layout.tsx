@@ -8,12 +8,12 @@ import ContentLoader from '@/components/content-loader'
 import { useUser } from '@/context/user'
 import SelectSchoolModal from './select-school-modal'
 import { isMasterInstructor } from '@/utils/checkPermission'
-import useHealthData, {
-  useFamilyHealthData,
-} from '@/hooks/queries/useHealthData'
-import useParents from '@/hooks/queries/useParents'
-import useStudents from '@/hooks/queries/useStudents'
-import useScreenings from '@/hooks/queries/useScreenings'
+// import useHealthData, {
+//   useFamilyHealthData,
+// } from '@/hooks/queries/useHealthData'
+// import useParents from '@/hooks/queries/useParents'
+// import useStudents from '@/hooks/queries/useStudents'
+// import useScreenings from '@/hooks/queries/useScreenings'
 import { useSyncLocalStorage } from '@/hooks/useSyncLocalStorage'
 import { SidebarProvider } from '@/components/ui/sidebar-new'
 import { AppSidebar } from '@/components/sidebar/app-sidebar'
@@ -21,17 +21,17 @@ import { AppSidebar } from '@/components/sidebar/app-sidebar'
 const DashboardLayout = ({ children }: { children: ReactNode }) => {
   const { loading, user } = useUser()
 
-  useHealthData()
-  useParents()
-  useFamilyHealthData()
-  useFamilyHealthData(1, '', 'student', 10)
-  useFamilyHealthData(1, '', 'mother', 10)
-  useFamilyHealthData(1, '', 'father', 10)
-  useFamilyHealthData(1, '', 'all', 10)
-  useFamilyHealthData(1, '', 'household', 10)
-  useFamilyHealthData(1, '', 'student', 10)
-  useStudents(1, '', '')
-  useScreenings(1)
+  // useHealthData()
+  // useParents()
+  // useFamilyHealthData()
+  // useFamilyHealthData(1, '', 'student', 10)
+  // useFamilyHealthData(1, '', 'mother', 10)
+  // useFamilyHealthData(1, '', 'father', 10)
+  // useFamilyHealthData(1, '', 'all', 10)
+  // useFamilyHealthData(1, '', 'household', 10)
+  // useFamilyHealthData(1, '', 'student', 10)
+  // useStudents(1, '', '')
+  // useScreenings(1)
 
   useSyncLocalStorage()
 
