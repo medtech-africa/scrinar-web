@@ -36,8 +36,8 @@ const FormContent = ({ singleFormData }: { singleFormData?: FormModel }) => {
       onSuccess: (res: AxiosResponse) => {
         router.push(
           !!singleFormData
-            ? `/dashboard/forms/${res.data.id}`
-            : `/dashboard/forms/${res.data.id}/new`
+            ? `/dashboard/forms/${res.data.id}/builder`
+            : `/dashboard/forms/${res.data.id}/builder`
         )
       },
       onError: (err: AxiosError) => {
