@@ -16,6 +16,13 @@ export type FieldType =
   | 'label'
   | 'multipleChoice'
   | 'dropdown'
+  | 'subtitle'
+  | 'spacer'
+
+export const layoutElements = [
+  'divider',
+  'spacer',
+]
 
 export interface FormField {
   id: string

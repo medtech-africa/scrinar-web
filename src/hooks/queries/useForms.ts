@@ -32,9 +32,10 @@ const useMutateFormQuestions = (id: string) => {
   return useMutation({
     mutationFn: (data: FormFieldModel) =>
       baseAxios.post<{
-        data: FormFieldModel[]
-      }>(API.formQuestions(id), data),
+        data: FormFieldModel
+      }, { data: FormFieldModel }>(API.formQuestions(id), data),
     mutationKey: ['mutate_form_questions', id],
+    retry: 2,
   })
 }
 const useMutateSortForm = (id: string) => {

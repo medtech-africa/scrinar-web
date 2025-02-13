@@ -48,3 +48,9 @@ export function convertToFormField(
     return baseField
   })
 }
+
+
+export function slugify(s: string, maxLength = 25): string {
+  const slug = s.toLowerCase().replace(/[^a-z0-9_]+/g, '_');
+  return maxLength !== undefined ? slug.substring(0, maxLength) : slug;
+}

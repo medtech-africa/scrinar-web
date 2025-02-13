@@ -53,7 +53,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
     ref
   ) => {
     return (
-      <div>
+      <div className={cn(full && 'w-full')}>
         <div className="flex flex-row gap-x-1 items-baseline">
           {!!label && (
             <label
@@ -76,7 +76,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             </label>
           )}
         </div>
-        <div className="relative">
+        <div className={cn('relative', full && 'w-full')}>
           <span className=" absolute flex items-center left-[14px] top-0 bottom-0 text-grey-900">
             {leadingIcon}
           </span>

@@ -37,6 +37,10 @@ export const useSyncParentLocalStorage = () => {
             'results',
             results.map((result) => result.status)
           )
+          const allStatuses = new Set(results.map((result) => result.status))
+          if(allStatuses.size === 1 && allStatuses.has('fulfilled')) {
+            useLocalParentSurveyStore.setState({ data: [] })
+          }
         }
       )
     }
@@ -68,6 +72,10 @@ export const useSyncChildrenLocalStorage = () => {
             'results',
             results.map((result) => result.status)
           )
+          const allStatuses = new Set(results.map((result) => result.status))
+           if(allStatuses.size === 1 && allStatuses.has('fulfilled')) {
+            useLocalStudentSurveyStore.setState({ data: [] })
+          }
         }
       )
     }

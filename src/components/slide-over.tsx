@@ -10,6 +10,7 @@ export const SlideOver = ({
   icon,
   title,
   className,
+  allowDismiss = true,
 }: {
   children: React.ReactNode
   open: boolean
@@ -17,11 +18,12 @@ export const SlideOver = ({
   title: string
   icon?: React.ReactNode
   className?: string
+  allowDismiss?: boolean
 }) => {
   return (
     <DialogOverlay
       isOpen={open}
-      onDismiss={onClose}
+      onDismiss={allowDismiss ? onClose : undefined}
       className="p-0"
       style={{ zIndex: 99, backgroundColor: 'rgba(0,0,0,0.20)' }}
     >

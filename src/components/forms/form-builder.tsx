@@ -267,6 +267,7 @@ const FormBuilder = ({ form, questions }: Props) => {
       setPreviewMode(true)
     }
   }, [isView])
+
   const { mutate: editMutate, isPending: editLoading } = useMutation({
     mutationFn: (data: any) =>
       baseAxios.patch(
@@ -349,6 +350,7 @@ const FormBuilder = ({ form, questions }: Props) => {
     setSelectedField(field)
     setIsEditModalOpen(true)
   }, [])
+
   const handleFieldDelete = useCallback(
     (field: FormField) => {
       deleteMutate(undefined, {
@@ -364,6 +366,7 @@ const FormBuilder = ({ form, questions }: Props) => {
     },
     [deleteMutate]
   )
+
   const handleFieldUpdate = useCallback(
     (updatedField: FormField) => {
       const fields = convertSingleToApiFormField(updatedField)
@@ -504,6 +507,7 @@ const FormBuilder = ({ form, questions }: Props) => {
           </DndContext>
         </div>
       </div>
+
       <SlideOver
         onClose={() => setIsEditModalOpen(false)}
         open={isEditModalOpen}

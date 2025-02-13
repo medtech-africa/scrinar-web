@@ -143,7 +143,7 @@ export default function Forms() {
       icon: IconNames.documentText,
       action: (row?: string) =>
         router.push(
-          `forms/${encodeURIComponent((row || selectedRow) ?? '')}?view=true`
+          `forms/${encodeURIComponent((row || selectedRow) ?? '')}/builder?view=true`
         ),
     },
     {
@@ -206,15 +206,15 @@ export default function Forms() {
 
       <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <Button
-          variant="default"
+          variant="tertiary"
           onClick={() => {
             handleMoreClick('')
             setOpenModal(true)
           }}
-          className="group items-center justify-center flex flex-col gap-2"
+          className="group items-center justify-center flex flex-col gap-2 border-dashed border"
         >
           <FilePlus />
-          <p className="font-bold text-xl text-white">Create new form</p>
+          <p className="font-bold text-xl text-black">Create new form</p>
         </Button>
 
         {formsData?.map((val: DataType) => (
@@ -232,7 +232,7 @@ export default function Forms() {
                   </BadgeField>
                 )}
                 {val.state === 'draft' && (
-                  <BadgeField variant={'danger'} className="py-1 px-2 text-xs">
+                  <BadgeField variant={'pending'} className="py-1 px-2 text-xs">
                     Draft
                   </BadgeField>
                 )}
