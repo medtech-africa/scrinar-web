@@ -59,7 +59,7 @@ const FormBuilder = ({ form }: { form: FormModel }) => {
             {/* {!(form.state === 'published') && ( */}
             <>
               <SaveFormBtn />
-              <PublishDialogBtn />
+              <PublishDialogBtn formId={form.id} />
             </>
             {/* )} */}
           </div>

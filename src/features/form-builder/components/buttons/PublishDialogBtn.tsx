@@ -16,7 +16,7 @@ import React, { useState } from 'react'
 import toast from 'react-hot-toast'
 import Confetti from 'react-confetti'
 
-export const PublishDialogBtn = () => {
+export const PublishDialogBtn = ({ formId = '' }) => {
   const [isOpen, setIsOpen] = useState(false)
   const [success, setSuccess] = useState(false)
 
@@ -27,7 +27,7 @@ export const PublishDialogBtn = () => {
     setSuccess(true) // Close the dialog
   }
 
-  const shareUrl = `${window.location.origin}/dashboard/forms/${window.location.pathname.split('/').pop()}/submit`
+  const shareUrl = `${window.location.origin}/dashboard/forms/${formId}/submit`
 
   if (success) {
     return (
