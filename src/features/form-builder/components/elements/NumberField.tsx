@@ -6,7 +6,7 @@ import {
 } from './FormElements'
 import { Input } from '@/components/ui/input'
 import * as z from 'zod'
-import { useForm } from 'react-hook-form'
+import { FormProvider, useForm } from 'react-hook-form'
 import { useEffect } from 'react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useDesigner } from '../../hooks/useDesigner'
@@ -104,7 +104,9 @@ const PropertiesComponent = ({
         setSelectedElement(null)
       }}
     >
-      <PropertiesForm<propertiesFormSchemaType> control={form.control} />
+      <FormProvider {...form}>
+        <PropertiesForm<propertiesFormSchemaType> control={form.control} />
+      </FormProvider>
     </form>
   )
 }
