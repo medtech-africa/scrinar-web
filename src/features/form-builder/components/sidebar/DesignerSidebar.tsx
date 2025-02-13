@@ -38,10 +38,10 @@ export const DesignerSidebar = () => {
         <SidebarBtnElement formElement={FormElements.text} />
         <SidebarBtnElement formElement={FormElements.textarea} />
         <SidebarBtnElement formElement={FormElements.number} />
-        <SidebarBtnElement formElement={FormElements.checkbox} />
+        {/* <SidebarBtnElement formElement={FormElements.checkbox} /> */}
         <SidebarBtnElement formElement={FormElements.select} />
-        <SidebarBtnElement formElement={FormElements.radio} />
-        <SidebarBtnElement formElement={FormElements.email} />
+        {/* <SidebarBtnElement formElement={FormElements.radio} /> */}
+        {/* <SidebarBtnElement formElement={FormElements.email} /> */}
         <SidebarBtnElement formElement={FormElements.date} />
       </div>
     </div>

@@ -60,6 +60,7 @@ export const Designer = ({ formId }: { formId: string }) => {
             id: newElement.id,
             type: newElement.type,
           })
+          fields.order = index || 1
           console.log('>>>>>>>>>>>> I was called here', newElement.type)
           mutate(fields, {
             onSuccess: () => {

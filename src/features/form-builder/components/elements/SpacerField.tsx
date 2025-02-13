@@ -1,4 +1,4 @@
-import { LucideSeparatorHorizontal, Minus } from 'lucide-react'
+import { LucideSeparatorHorizontal } from 'lucide-react'
 import {
   FormElement,
   FormElementInstance,
@@ -124,7 +124,7 @@ export const SpacerFieldFormElement: FormElement = {
     extraAttributes,
   }),
   designerBtnElement: {
-    icon: Minus,
+    icon: LucideSeparatorHorizontal,
     label: 'Spacer Field',
   },
 }

@@ -24,7 +24,7 @@ export const SidebarBtnElement = ({
     <Button
       ref={setNodeRef}
       className={cn(
-        'flex flex-col gap-2 size-[120px] cursor-grab border-border border !p-2',
+        'flex flex-col gap-2 size-[100px] cursor-grab border-border border !p-2',
         {
           'ring-2 ring-primary z-50': isDragging,
         }
