@@ -111,12 +111,18 @@ export function DesignerContextProvider({
         queryClient.invalidateQueries({
           queryKey: ['single-form-questions', formId],
         })
-        setSelectedElement({
+
+        addElement(res.data.order, {
           id: res.data.id!,
-          index: res.data.order,
           type: res.data.type as FieldType,
           extraAttributes: convertToFormField([res.data])[0],
         })
+        // setSelectedElement({
+        //   id: res.data.id!,
+        //   index: res.data.order,
+        //   type: res.data.type as FieldType,
+        //   extraAttributes: convertToFormField([res.data])[0],
+        // })
       },
       onError: () => {
         toast.error('Failed to create form questions. Please try again!')
@@ -164,7 +170,7 @@ export function DesignerContextProvider({
       const newElements = prevElements.map((element) => {
         if (element.id === id) {
           // handleFieldUpdate(newElement)
-          setSelectedElement(newElement)
+          // setSelectedElement(newElement)
           return newElement
         }
         return element

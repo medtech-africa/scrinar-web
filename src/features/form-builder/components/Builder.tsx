@@ -76,6 +76,7 @@ const FormBuilder = ({ form }: { form: FormModel }) => {
 
 export const Builder = ({ id }: { id: string }) => {
   const { data, isPending: isLoading } = useSingleForm(id)
+  console.log('🚀 ~ Builder ~ data:', data)
 
   const { setElements } = useDesigner()
 

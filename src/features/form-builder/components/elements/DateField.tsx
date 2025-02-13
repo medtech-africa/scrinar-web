@@ -137,7 +137,7 @@ const PropertiesComponent = ({
   const element = elementInstance as CustomInstance
   const form = useForm<propertiesFormSchemaType>({
     resolver: zodResolver(propertiesSchema),
-    mode: 'onBlur',
+    mode: 'onSubmit',
     defaultValues: {
       label: element.extraAttributes?.label,
       description: element.extraAttributes?.description,
@@ -158,7 +158,6 @@ const PropertiesComponent = ({
 
   return (
     <form
-      onBlur={form.handleSubmit(applyChanges)}
       onSubmit={(e) => {
         e.preventDefault()
         form.handleSubmit(applyChanges)(e)

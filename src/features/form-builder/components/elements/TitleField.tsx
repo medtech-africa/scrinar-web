@@ -61,7 +61,7 @@ const PropertiesComponent = ({
   const element = elementInstance as CustomInstance
   const form = useForm<propertiesFormSchemaType>({
     resolver: zodResolver(propertiesSchema),
-    mode: 'onBlur',
+    mode: 'onSubmit',
     defaultValues: {
       label: element.extraAttributes?.label,
       name: element.extraAttributes?.name,
