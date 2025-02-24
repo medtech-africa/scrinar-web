@@ -730,6 +730,48 @@ const formContentSchema = yupResolver(
   })
 )
 
+const projectValidation = yupResolver(
+  yup.object().shape({
+    name: yup
+      .string()
+      .required('Please enter project name')
+      .typeError('Please enter project name')
+      .lowercase(),
+
+    form: yup
+      .object()
+      .shape({
+        label: yup.string().required(),
+        value: yup.string().required(),
+      })
+      .required(),
+
+    description: yup.string().typeError('Please enter a description'),
+
+    address: yup
+      .string()
+      .required('Address is required')
+      .typeError('Please enter an address'),
+
+    type: yup
+      .object()
+      .shape({
+        label: yup.string().required(),
+        value: yup.string().required(),
+      })
+      .required('Please select a project type')
+      .typeError('Please select a project type'),
+
+    coordinates: yup
+      .object()
+      .shape({
+        lat: yup.number(),
+        lng: yup.number(),
+      })
+      .optional(),
+  })
+)
+
 const validation = {
   createPatient,
   createInstructor,
@@ -745,6 +787,7 @@ const validation = {
   registerStudent,
   createParent,
   formContentSchema,
+  projectValidation,
 }
 
 export default validation

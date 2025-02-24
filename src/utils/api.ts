@@ -112,6 +112,20 @@ export const API = {
   singleFormQuestions: (id: string, questionId: string) =>
     `${BASE_URL}/api/v1/form-fields/${id}/questions/${questionId}`,
 
+  //projects
+  getProjects: (page?: number, search?: string) => {
+    const params = new URLSearchParams()
+    if (search) {
+      params.append('search', search)
+    }
+    if (page) {
+      params.append('page', page.toString())
+    }
+    return `${BASE_URL}/api/v1/projects?${params.toString()}`
+  },
+  project: (id: string) => `${BASE_URL}/api/v1/projects/${id}`,
+  projects: `${BASE_URL}/api/v1/projects`,
+
   // misc
   getState: `${BASE_URL}/api/v1/misc/states-with-lga`,
 
