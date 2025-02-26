@@ -104,6 +104,12 @@ const generalData = [
     url: 'forms',
     roles: ['organization'],
   },
+  {
+    title: 'Projects',
+    icon: 'document',
+    url: 'projects',
+    roles: ['organization'],
+  },
   // {
   //   title: 'Training Module',
   //   icon: 'book',
