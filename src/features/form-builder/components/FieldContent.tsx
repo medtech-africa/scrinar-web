@@ -62,10 +62,11 @@ export const FieldContent = ({
             {field?.label} {field.required && '*'}
           </div>
           <Input
-            readOnly
-            disabled
+            // readOnly
+            // disabled
             placeholder={field.placeholder}
             className="w-full"
+            onBlur={(e) => submitValue && submitValue(field.id, e.target.value)}
           />
           {field.description && (
             <div className="text-xs text-grey-500">{field.description}</div>
@@ -91,13 +92,18 @@ export const FieldContent = ({
               label: option,
               value: option,
             }))}
+            onBlur={(e) => submitValue && submitValue(field.id, e.target.value)}
           />
         </Wrapper>
       )
     case 'radio':
       return (
         <Wrapper field={field}>
-          <RadioGroup>
+          <RadioGroup
+            onValueChange={(val) =>
+              submitValue ? submitValue(field.id, val) : undefined
+            }
+          >
             {field.options?.map((option) => (
               <div key={option} className="flex items-center space-x-2">
                 <RadioGroupItem value={option} id={`${field.id}-${option}`} />
@@ -112,7 +118,17 @@ export const FieldContent = ({
         <div className="flex items-center space-x-2">
           {field.options?.map((option) => (
             <div key={option} className="flex items-center space-x-2">
-              <Checkbox id={`${field.id}-${option}`} value={option} />
+              <Checkbox
+                id={`${field.id}-${option}`}
+                value={option}
+                // onCheckedChange={(checked) => {
+                //   return checked
+                //     ? field.onChange([...field.value, item.id])
+                //     : field.onChange(
+                //         field.value?.filter((value) => value !== item.id)
+                //       )
+                // }}
+              />
               <Label htmlFor={`${field.id}-${option}`}>{option}</Label>
             </div>
           ))}
@@ -136,6 +152,12 @@ export const FieldContent = ({
         </div>
       )
     default:
-      return <Input placeholder={field.placeholder} className="w-full" />
+      return (
+        <Input
+          placeholder={field.placeholder}
+          className="w-full"
+          onBlur={(e) => submitValue && submitValue(field.id, e.target.value)}
+        />
+      )
   }
 }
