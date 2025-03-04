@@ -61,6 +61,7 @@ const generalData = [
     roles: [
       'school',
       'instructor',
+      'organization',
       'play4health_admin',
       'super_admin',
       'jica_researchers',
@@ -73,6 +74,7 @@ const generalData = [
     roles: [
       'school',
       'instructor',
+      'organization',
       'play4health_admin',
       'super_admin',
       'jica_enumerators',
@@ -86,6 +88,7 @@ const generalData = [
     roles: [
       'school',
       'instructor',
+      'organization',
       'play4health_admin',
       'super_admin',
       'jica_enumerators',
@@ -105,6 +108,7 @@ const generalData = [
     roles: [
       'school',
       'instructor',
+      'organization',
       'play4health_admin',
       'super_admin',
       'jica_enumerators',
@@ -118,6 +122,7 @@ const generalData = [
     roles: [
       'school',
       'instructor',
+      'organization',
       'play4health_admin',
       'super_admin',
       'jica_enumerators',
