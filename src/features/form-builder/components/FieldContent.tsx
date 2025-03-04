@@ -62,8 +62,8 @@ export const FieldContent = ({
             {field?.label} {field.required && '*'}
           </div>
           <Input
-            readOnly
-            disabled
+            // readOnly
+            // disabled
             placeholder={field.placeholder}
             className="w-full"
           />
