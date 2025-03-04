@@ -79,7 +79,7 @@ const FormComponent = ({
       <Popover>
         <PopoverTrigger asChild>
           <Button
-            variant={'secondary'}
+            variant={'default'}
             className={cn('w-full justify-start text-left font-normal', {
               'border-red-500': error,
             })}
@@ -98,6 +98,7 @@ const FormComponent = ({
           /> */}
           <Calendar
             mode="single"
+            className="rounded-md border bg-white"
             selected={date}
             onSelect={(date) => {
               setDate(date)

@@ -6,9 +6,16 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import { Select } from '@/components/ui/select'
 import { TextArea } from '@/components/ui/textarea'
 import { FormField } from '@/types/forms.types'
-import { Image } from 'lucide-react'
+import { Calendar1, Image } from 'lucide-react'
 import { FormElementInstance, SubmitFunction } from './elements/FormElements'
 import React from 'react'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '@/components/ui/popover'
+import { Button } from '@/components/ui/button'
+import { cn } from '@/lib/utils'
 
 const Wrapper = ({
   children,
@@ -137,7 +144,35 @@ export const FieldContent = ({
     case 'date':
       return (
         <Wrapper field={field}>
-          <Calendar mode="single" className="rounded-md border" />
+          <Popover>
+            <PopoverTrigger asChild>
+              {/* <FormControl> */}
+              <Button
+                variant={'default'}
+                className={cn('w-full justify-start text-left font-normal', {
+                  // 'border-red-500': error,
+                })}
+              >
+                <Calendar1 className="mr-2 h-4 w-4" />
+                {/* <span>{date ? date.toLocaleDateString() : 'Pick a date'}</span> */}
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent className="w-auto p-0" align="start">
+              <Calendar
+                mode="single"
+                onSelect={(date) =>
+                  date &&
+                  submitValue &&
+                  submitValue(field.id, date as unknown as string)
+                }
+                className="rounded-md border"
+                // disabled={(date) =>
+                //   date > new Date() || date < new Date('1900-01-01')
+                // }
+                initialFocus
+              />
+            </PopoverContent>
+          </Popover>
         </Wrapper>
       )
     case 'header':

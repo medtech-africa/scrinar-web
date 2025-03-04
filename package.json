@@ -72,7 +72,7 @@
     "react-charts": "^3.0.0-beta.56",
     "react-confetti": "^6.2.2",
     "react-csv": "^2.2.2",
-    "react-day-picker": "^9.5.0",
+    "react-day-picker": "8.10.1",
     "react-dom": "^18.2.0",
     "react-gauge-chart": "^0.5.1",
     "react-hook-form": "^7.54.2",
