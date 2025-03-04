@@ -40,14 +40,18 @@ export const FormSubmitComponentView = ({
   })
 
   const validateForm = useCallback(() => {
-    for (const field of questions) {
-      const actualValue = formValues.current[field.id] || ''
-      const valid = FormElements[field.type].validate?.(field, actualValue)
-      if (!valid) {
-        formErrors.current[field.id] = true
-      }
-    }
+    // for (const field of questions) {
+    // const actualValue = formValues.current[field.id] || ''
+    // const valid = FormElements[field.type].validate?.(field, actualValue)
+    // if (!valid) {
+    //   formErrors.current[field.id] = true
+    // }
+    // }
 
+    console.log(
+      '🚀 ~ validateForm ~ Object.keys(formErrors.current):',
+      Object.keys(formErrors.current)
+    )
     if (Object.keys(formErrors.current).length > 0) {
       return false
     }
