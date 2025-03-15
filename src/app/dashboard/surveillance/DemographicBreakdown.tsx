@@ -184,10 +184,10 @@ const DemographicBreakdown: React.FC = () => {
         <div>
           <h3 className="font-bold text-gray-700">Age</h3>
           {renderRadialChart((demographicData as any)[selectedDisease]?.age)}
-          <p className="text-gray-500 text-sm mt-2">
+          {/* <p className="text-gray-500 text-sm mt-2">
             Lorem ipsum dolor sit amet consectetur. Magnis id velit integer urna
             nibh ut imperdiet urna sed turpis.
-          </p>
+          </p> */}
         </div>
 
         {/* Education - Male */}
@@ -196,10 +196,10 @@ const DemographicBreakdown: React.FC = () => {
           {renderRadialChart(
             (demographicData as any)[selectedDisease]?.educationMale
           )}
-          <p className="text-gray-500 text-sm mt-2">
+          {/* <p className="text-gray-500 text-sm mt-2">
             Lorem ipsum dolor sit amet consectetur. Magnis id velit integer urna
             nibh ut imperdiet urna sed turpis.
-          </p>
+          </p> */}
         </div>
 
         {/* Education - Female */}
@@ -208,10 +208,10 @@ const DemographicBreakdown: React.FC = () => {
           {renderRadialChart(
             (demographicData as any)[selectedDisease]?.educationFemale
           )}
-          <p className="text-gray-500 text-sm mt-2">
+          {/* <p className="text-gray-500 text-sm mt-2">
             Lorem ipsum dolor sit amet consectetur. Magnis id velit integer urna
             nibh ut imperdiet urna sed turpis.
-          </p>
+          </p> */}
         </div>
 
         {/* Occupation - Male */}
@@ -220,10 +220,10 @@ const DemographicBreakdown: React.FC = () => {
           {renderRadialChart(
             (demographicData as any)[selectedDisease]?.occupationMale
           )}
-          <p className="text-gray-500 text-sm mt-2">
+          {/* <p className="text-gray-500 text-sm mt-2">
             Lorem ipsum dolor sit amet consectetur. Magnis id velit integer urna
             nibh ut imperdiet urna sed turpis.
-          </p>
+          </p> */}
         </div>
 
         {/* Occupation - Female */}
@@ -232,10 +232,10 @@ const DemographicBreakdown: React.FC = () => {
           {renderRadialChart(
             (demographicData as any)[selectedDisease]?.occupationFemale
           )}
-          <p className="text-gray-500 text-sm mt-2">
+          {/* <p className="text-gray-500 text-sm mt-2">
             Lorem ipsum dolor sit amet consectetur. Magnis id velit integer urna
             nibh ut imperdiet urna sed turpis.
-          </p>
+          </p> */}
         </div>
       </div>
     </SurveillanceCard>
