@@ -6,8 +6,9 @@ import { FormProvider, useForm } from 'react-hook-form'
 import { VitalsMeasurement } from './VitalsMeasurement'
 import { BloodTestsForm } from './BloodTestsForm'
 import { FamilyHistoryLifestyleForm } from './FamilyHistoryLifestyleForm'
-import { ScreeningQuestionsForm } from './ScreeningQuestionsForm'
 import { HistoricalDataCollectionForm } from './HistoricalDataCollectionForm'
+// import { TimeSeriesDataForm } from './TimeSeriesDataForm'
+// import { MedicalHistoryForm } from './MedicalHistoryForm'
 import { useState } from 'react'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
@@ -19,6 +20,20 @@ import {
   RiskAssessmentModelRequestData,
 } from '@/hooks/queries/useRiskAssessment'
 import { RiskAssessmentReport } from './RiskAssessmentReport'
+import * as Tabs from '@radix-ui/react-tabs'
+import { cn } from '@/lib/utils'
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from '@/components/ui/collapsible'
+import { Text } from '@/components/ui/text'
+import { ScreeningQuestionsForm } from './ScreeningQuestionsForm'
+
+const triggerClassName = cn(
+  'text-sm text-grey-700 py-2 px-4 transition-all cursor-pointer block w-full text-left',
+  'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium rounded-md my-1'
+)
 
 export const RiskAssessmentForm = ({
   data,
@@ -27,6 +42,7 @@ export const RiskAssessmentForm = ({
 }) => {
   const [progress, setProgress] = useState(0)
   const [showResults, setShowResults] = useState(false)
+  const [activeTab, setActiveTab] = useState('bio')
   const formMethods = useForm({ defaultValues: data?.requestData })
 
   const {
@@ -34,10 +50,26 @@ export const RiskAssessmentForm = ({
     isPending,
     data: resultData,
   } = useMutation({
-    mutationFn: (formData) =>
-      baseAxios
-        .post<{ data: RiskAssessmentModel }>(API.riskAssessment, formData)
-        .then((res) => res.data.data),
+    mutationFn: async (formData) => {
+      const [cvdResponse, diabetesResponse] = await Promise.all([
+        baseAxios
+          .post<{
+            data: any
+          }>(`${API.riskAssessment}/cvd`, formData)
+          .then((res) => res.data.data),
+        baseAxios
+          .post<{
+            data: any
+          }>(`${API.riskAssessment}/diabetes`, formData)
+          .then((res) => res.data.data),
+      ])
+
+      // Return combined data object
+      return {
+        cvd: cvdResponse,
+        diabetes: diabetesResponse,
+      }
+    },
     onMutate: () => {
       setProgress(0)
       // Start progress animation
@@ -64,6 +96,7 @@ export const RiskAssessmentForm = ({
       setProgress(0)
     },
   })
+
   const isFormValid = (data: any) => {
     const totalFields = 50
     const filledFields = countFilledFields(data)
@@ -96,56 +129,229 @@ export const RiskAssessmentForm = ({
 
   const consentAgreement = formMethods.watch('consentAgreement')
 
+  const handleTabChange = (value: string) => {
+    setActiveTab(value)
+  }
+
+  const handleNext = () => {
+    const tabOrder = [
+      'bio',
+      'vitals',
+      'labs',
+      'lifestyle',
+      'medical',
+      'historical',
+      'timeseries',
+    ]
+    const currentIndex = tabOrder.indexOf(activeTab)
+    if (currentIndex < tabOrder.length - 1) {
+      setActiveTab(tabOrder[currentIndex + 1])
+    }
+  }
+
+  const handlePrevious = () => {
+    const tabOrder = [
+      'bio',
+      'vitals',
+      'labs',
+      'lifestyle',
+      'medical',
+      'historical',
+      'timeseries',
+    ]
+    const currentIndex = tabOrder.indexOf(activeTab)
+    if (currentIndex > 0) {
+      setActiveTab(tabOrder[currentIndex - 1])
+    }
+  }
+
+  // Calculate current step
+  const getCurrentStep = () => {
+    const tabOrder = [
+      'bio',
+      'vitals',
+      'labs',
+      'lifestyle',
+      'medical',
+      'historical',
+      'timeseries',
+    ]
+    return tabOrder.indexOf(activeTab) + 1
+  }
+
   return (
     <FormProvider {...formMethods}>
-      <div className="relative grid gap-y-4">
-        <form
-          onSubmit={formMethods.handleSubmit(handleSubmit)}
-          className="w-full h-full"
-        >
-          <div className="w-full h-full">
-            <div className="flex flex-col gap-y-5">
-              <PersonalInfoForm />
-              {/* Vitals Measurement */}
-              <VitalsMeasurement />
-              {/* Blood test */}
-              <BloodTestsForm />
-              {/* family history */}
-              <FamilyHistoryLifestyleForm />
-              {/* Screening Questions*/}
-              <ScreeningQuestionsForm />
-              {/* Historical Data Collection */}
-              <HistoricalDataCollectionForm />
+      <div className="relative">
+        <div className="container mx-auto px-4 py-6">
+          <form
+            onSubmit={formMethods.handleSubmit(handleSubmit)}
+            className="w-full h-full"
+          >
+            <Tabs.Root value={activeTab} onValueChange={handleTabChange}>
+              <div className="flex gap-8">
+                <div className="w-full md:w-3/4 order-2 md:order-1">
+                  <div className="items-center gap-2 mb-4 hidden md:flex justify-end">
+                    <button
+                      type="button"
+                      onClick={handlePrevious}
+                      disabled={getCurrentStep() === 1}
+                      className="p-2 rounded-md border disabled:opacity-50"
+                    >
+                      <IconPicker icon="arrowLeft" />
+                    </button>
+                    <span className="text-sm">{getCurrentStep()} of 6</span>
+                    <button
+                      type="button"
+                      onClick={handleNext}
+                      disabled={getCurrentStep() === 6}
+                      className="p-2 rounded-md border disabled:opacity-50"
+                    >
+                      <IconPicker icon="arrowRight" />
+                    </button>
+                  </div>
+                  <div className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100">
+                    <Tabs.Content value="bio">
+                      <PersonalInfoForm onNext={handleNext} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="vitals">
+                      <VitalsMeasurement onNext={handleNext} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="labs">
+                      <BloodTestsForm onNext={handleNext} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="lifestyle">
+                      <FamilyHistoryLifestyleForm onNext={handleNext} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="medical">
+                      <ScreeningQuestionsForm onNext={handleNext} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="historical">
+                      <HistoricalDataCollectionForm />
+                      <div className="flex justify-end mt-6">
+                        {!data && (
+                          <Button
+                            variant="primary"
+                            className="bg-red-600 hover:bg-red-700 text-white"
+                            leadingIcon={<IconPicker icon="saveAdd" />}
+                            disabled={isPending || !consentAgreement}
+                            type="submit"
+                          >
+                            Generate Assessment
+                          </Button>
+                        )}
+                      </div>
+                    </Tabs.Content>
+                  </div>
+                </div>
+
+                <div className="w-1/4 order-1 md:order-2 hidden md:block">
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                    <Collapsible defaultOpen>
+                      <CollapsibleTrigger className="flex items-center justify-between w-full mb-2">
+                        <Text variant="text/md" className="font-medium">
+                          Assessment Sections
+                        </Text>
+                        <IconPicker
+                          icon="arrowDown"
+                          className="transition-transform duration-200 group-data-[state=open]:rotate-180"
+                        />
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <Tabs.List
+                          className="flex flex-col space-y-1"
+                          aria-label="Risk Assessment Sections"
+                        >
+                          <Tabs.Trigger
+                            className={cn(
+                              triggerClassName,
+                              activeTab === 'bio' &&
+                                'bg-red-600 text-white font-medium'
+                            )}
+                            value="bio"
+                          >
+                            Patients bio-data
+                          </Tabs.Trigger>
+                          <Tabs.Trigger
+                            className={cn(
+                              triggerClassName,
+                              activeTab === 'vitals' &&
+                                'bg-red-600 text-white font-medium'
+                            )}
+                            value="vitals"
+                          >
+                            Vital & Anthropometrics
+                          </Tabs.Trigger>
+                          <Tabs.Trigger
+                            className={cn(
+                              triggerClassName,
+                              activeTab === 'labs' &&
+                                'bg-red-600 text-white font-medium'
+                            )}
+                            value="labs"
+                          >
+                            Labs
+                          </Tabs.Trigger>
+                          <Tabs.Trigger
+                            className={cn(
+                              triggerClassName,
+                              activeTab === 'lifestyle' &&
+                                'bg-red-600 text-white font-medium'
+                            )}
+                            value="lifestyle"
+                          >
+                            Lifestyle/Behavioral Factors
+                          </Tabs.Trigger>
+                          <Tabs.Trigger
+                            className={cn(
+                              triggerClassName,
+                              activeTab === 'medical' &&
+                                'bg-red-600 text-white font-medium'
+                            )}
+                            value="medical"
+                          >
+                            Medical History
+                          </Tabs.Trigger>
+                          <Tabs.Trigger
+                            className={cn(
+                              triggerClassName,
+                              activeTab === 'historical' &&
+                                'bg-red-600 text-white font-medium'
+                            )}
+                            value="historical"
+                          >
+                            Historical Data Collection
+                          </Tabs.Trigger>
+                        </Tabs.List>
+                      </CollapsibleContent>
+                    </Collapsible>
+                  </div>
+                </div>
+              </div>
+            </Tabs.Root>
+          </form>
+
+          {isPending ? (
+            <div className="fixed h-full w-full inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+              <LoadingAnalysis progress={progress} />
             </div>
-            {/*  */}
-            {!data && (
-              <Button
-                variant={'primary'}
-                value="Generate Assessment"
-                leadingIcon={<IconPicker icon="saveAdd" />}
-                className="mt-6"
-                disabled={isPending || !consentAgreement}
-                type="submit"
-              />
-            )}
-          </div>
-        </form>
-        {isPending ? (
-          <div className="fixed h-full w-full inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-            <LoadingAnalysis progress={progress} />
-          </div>
-        ) : (
-          <RiskAssessmentGeneratedReport
-            showResults={showResults}
-            resultData={resultData}
-            formData={{
-              personalInfo: formMethods.watch('personalInfo'),
-              vitals: formMethods.watch('vitals'),
-            }}
-            data={data}
-            setShowResults={setShowResults}
-          />
-        )}
+          ) : (
+            <RiskAssessmentGeneratedReport
+              showResults={showResults}
+              resultData={resultData}
+              formData={{
+                personalInfo: formMethods.watch('personalInfo'),
+                vitals: formMethods.watch('vitals'),
+              }}
+              data={data}
+              setShowResults={setShowResults}
+            />
+          )}
+        </div>
       </div>
     </FormProvider>
   )
