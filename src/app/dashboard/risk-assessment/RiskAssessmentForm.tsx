@@ -192,6 +192,7 @@ export const RiskAssessmentForm = ({
                 <div className="w-full md:w-3/4 order-2 md:order-1">
                   <div className="items-center gap-2 mb-4 hidden md:flex justify-end">
                     <button
+                      title="arrow-left"
                       type="button"
                       onClick={handlePrevious}
                       disabled={getCurrentStep() === 1}
@@ -201,6 +202,7 @@ export const RiskAssessmentForm = ({
                     </button>
                     <span className="text-sm">{getCurrentStep()} of 6</span>
                     <button
+                      title="arrow-right"
                       type="button"
                       onClick={handleNext}
                       disabled={getCurrentStep() === 6}
@@ -400,7 +402,7 @@ const RiskAssessmentGeneratedReport = ({
   if (data) {
     return (
       <RiskAssessmentReport
-        className="w-full"
+        className="w-full max-w-3xl mx-auto mt-10"
         action={actionButton}
         data={data}
         personalInfo={data?.requestData.personalInfo}

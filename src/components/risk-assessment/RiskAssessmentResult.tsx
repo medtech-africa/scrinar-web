@@ -335,6 +335,7 @@ export const RiskAssessmentResult: React.FC<{
   data?: RiskData
   isLoading?: boolean
 }> = ({ data, isLoading = false }) => {
+  console.log('🚀 ~ data:', data)
   const [activeTab, setActiveTab] = useState<RiskType>('who')
   // const formContext = useFormContext()
 
@@ -359,6 +360,7 @@ export const RiskAssessmentResult: React.FC<{
     activeTab,
     data
   )
+  console.log('🚀 ~ activeData:', activeData)
 
   if (isLoading) {
     return (
@@ -429,7 +431,7 @@ export const RiskAssessmentResult: React.FC<{
             />
 
             <div className="mt-6">
-              <PreventionTips />
+              <PreventionTips score={Number(activeData?.score)} />
             </div>
           </div>
 
@@ -469,7 +471,9 @@ export const useActiveRiskData = (activeTab: RiskType, data?: RiskData) => {
   // Get the active tab data from real data or fallback to mock
 
   return {
-    activeData: data?.[tabDataField]?.[activeTab] || null,
+    // TODO: Fix this
+    // @ts-expect-error Please check this as the types are mismatched
+    activeData: data?.[tabDataField]?.[activeTab] || data?.[activeTab] || null,
     criticalAlerts: data?.[tabDataField]?.criticalAlerts || null,
     predictions: data?.[tabDataField]?.predictions || null,
   }

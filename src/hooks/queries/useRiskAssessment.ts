@@ -206,6 +206,12 @@ export interface Who {
   riskLevel: string
   breakdown: WhoBreakdown
   status: boolean
+  predictions?: {
+    high: number
+    low: number
+    moderate: number
+    month: number
+  }[]
 }
 
 export interface WhoBreakdown {
