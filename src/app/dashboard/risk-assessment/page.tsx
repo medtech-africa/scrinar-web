@@ -50,8 +50,8 @@ const TableBodyContent = ({
       className="font-normal text-sm text-grey-600"
     >
       <TableCell>{riskAssessment?.id}</TableCell>
-      <TableCell>{riskAssessment?.responseData.who.score}</TableCell>
-      <TableCell>{riskAssessment?.responseData.who.riskLevel}</TableCell>
+      <TableCell>{riskAssessment?.responseData?.cvd?.who?.score}</TableCell>
+      <TableCell>{riskAssessment?.responseData?.cvd?.who?.riskLevel}</TableCell>
       <TableCell>{format(riskAssessment?.createdAt, 'PPP')}</TableCell>
       <TableCell>
         <Link

@@ -15,7 +15,7 @@ import colors from '@/constants/colors'
 import CreatableSelect from 'react-select/creatable'
 
 const inputVariants = cva(
-  'py-[10px] px-[14px] !rounded-lg border !border-grey-300 !bg-white !placeholder:text-grey-500 !text-grey-900',
+  'py-[10px] px-2 text-xs !rounded-lg border !border-grey-300 !bg-white !placeholder:text-grey-500 !text-grey-900',
   {
     variants: {
       variant: {
@@ -145,7 +145,7 @@ const Select = React.forwardRef<typeof RectSelect, SelectProps>(
           <label
             htmlFor={props.name}
             className={cn(
-              'text-grey-700 font-medium text-sm mb-[6px]',
+              'text-grey-900 lg:text-sm text-xs mb-2 block',
               labelStyle
             )}
           >

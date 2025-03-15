@@ -6,7 +6,7 @@ import { Text } from './text'
 import { IconPicker } from './icon-picker'
 
 const inputVariants = cva(
-  'py-[10px] px-[14px] rounded-lg border border-grey-300 bg-white placeholder:text-grey-500 text-grey-900 utils-focus-outset disabled:bg-grey-50 disabled:text-grey-500',
+  'py-[14px] px-2 rounded-lg text-xs border border-grey-300 bg-white placeholder:text-grey-500 text-grey-900 utils-focus-outset disabled:bg-grey-50 disabled:text-grey-500',
   {
     variants: {
       variant: {
@@ -58,10 +58,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {!!label && (
             <label
               htmlFor={props.name}
-              className={cn(
-                'text-grey-700 font-medium text-sm mb-[6px]',
-                labelStyle
-              )}
+              className={cn('text-grey-900 text-xs mb-2', labelStyle)}
             >
               {label}
               {helperText && <span className="block">{helperText}</span>}
