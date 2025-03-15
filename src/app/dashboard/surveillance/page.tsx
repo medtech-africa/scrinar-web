@@ -6,6 +6,19 @@ import { useUser } from '@/context/user'
 import ContentLoader from '@/components/content-loader'
 import { useSurveillanceAnalytics } from '@/hooks/queries/useAnalytics'
 import dynamic from 'next/dynamic'
+import { Text } from '@/components/ui/text'
+import DiseaseTrend from './DiseaseTrend'
+import DiseasePrevalence from './DiseasePrevalence'
+import RiskGroup from './RiskGroup'
+import YearsAssessment from './YearsAssessment'
+import DemographicBreakdown from './DemographicBreakdown'
+import ComparativeAnalysis from './ComparativeAnalysis'
+import ImpactMeasure from './ImpactMeasure'
+import MortalityTrend from './MortalityTrend'
+import TreatmentAdherence from './TreatmentAdherance'
+import FacilityPerformance from './FacilityPerformance'
+import HealthCost from './HealthCost'
+import BehaviouralRisk from './BehaviouralRisk'
 
 const SurveillanceMap = dynamic(
   () => import('./SurveillanceMap').then((mod) => mod.SurveillanceMap),
@@ -46,8 +59,32 @@ export default function SurveillancePage() {
 
   return (
     <div className="w-full">
-      <div className="grid grid-cols-2">
-        <SurveillanceMap />
+      <Text variant="display/xs" className="">
+        Surveillance Analysis
+      </Text>
+      <Text variant="text/sm" className="text-grey-20">
+         An analytical overview of all projects
+      </Text>
+      <div className="grid grid-cols-2 mt-9 lg:gap-6 gap-4">
+        <div className="flex flex-col lg:gap-6 gap-4">
+          <DiseaseTrend />
+          <SurveillanceMap />
+          <RiskGroup />
+          <ComparativeAnalysis />
+          <ImpactMeasure />
+          <MortalityTrend />
+          <FacilityPerformance />
+          <BehaviouralRisk />
+          {/* <SocialDeterminant /> */}
+        </div>
+        <div className="flex flex-col lg:gap-6 gap-4">
+          <DiseasePrevalence />
+          <DiseaseTrend />
+          <YearsAssessment />
+          <DemographicBreakdown />
+          <TreatmentAdherence />
+          <HealthCost />
+        </div>
       </div>
     </div>
   )
