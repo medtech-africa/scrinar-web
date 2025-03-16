@@ -9,8 +9,18 @@ const RiskGaugeBar = ({
   riskLevel: string
   maxScore?: number
 }) => {
+  console.log('🚀 ~ riskLevel:', riskLevel)
   // Calculate score percentage (capped at 100%)
   const scorePercent = Math.min((score / maxScore) * 100, 100)
+
+  const risk = riskLevel.toLowerCase().includes('low')
+    ? 'low'
+    : riskLevel.toLowerCase().includes('moderate') ||
+        riskLevel.toLowerCase().includes('medium')
+      ? 'moderate'
+      : riskLevel.toLowerCase().includes('high')
+        ? 'high'
+        : 'low'
 
   return (
     <div className="w-full" data-testid="risk-gauge">
@@ -56,8 +66,8 @@ const RiskGaugeBar = ({
           className={cn(
             'absolute w-4 h-4 bg-red-500 rotate-45 -mt-2 mx-auto left-0 right-0',
             {
-              'bg-green-800': riskLevel === 'low',
-              'bg-yellow-600': riskLevel === 'moderate',
+              'bg-green-800': risk === 'low',
+              'bg-yellow-600': risk === 'moderate',
             }
           )}
         ></div>
@@ -65,8 +75,8 @@ const RiskGaugeBar = ({
           className={cn(
             'bg-red-500 text-white px-4 py-2 rounded-md text-center w-fit mx-auto',
             {
-              'bg-green-800': riskLevel === 'low',
-              'bg-yellow-600': riskLevel === 'moderate',
+              'bg-green-800': risk === 'low',
+              'bg-yellow-600': risk === 'moderate',
             }
           )}
         >
