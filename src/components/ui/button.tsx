@@ -25,7 +25,7 @@ const buttonVariants = cva(
         xl: 'px-4 py-4',
       },
       disabled: {
-        true: 'cursor-not-allowed',
+        true: 'cursor-not-allowed opacity-45',
         false: '',
       },
     },

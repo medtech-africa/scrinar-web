@@ -43,15 +43,15 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
       <Text as="h2" className="font-medium mb-2">
         Vital & Anthropometrics
       </Text>
-      <Text variant="text/xs" className="text-gray-500 mb-6 md:mb-8">
-        Votals records
+      <Text variant="text/sm" className="text-gray-500 mb-2 md:mb-4">
+        Vitals records
       </Text>
       <div className="grid md:grid-cols-2 gap-6 mt-6">
         <div>
-          <Text as="h3" variant="text/sm" className="font-medium mb-2">
+          <Text as="h3" variant="text/md" className="font-medium mb-2">
             Antropometry
           </Text>
-          <Text variant="text/xs" className="text-gray-500 mb-6 md:mb-8">
+          <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
             To measure height, stand upright using a flat ruler or measuring
             tape and mark the highest point of your head. For weight, use a
             calibrated scale while standing barefoot. For waist size, wrap a

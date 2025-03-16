@@ -29,11 +29,25 @@ import {
 } from '@/components/ui/collapsible'
 import { Text } from '@/components/ui/text'
 import { ScreeningQuestionsForm } from './ScreeningQuestionsForm'
+import { FamilyHistoryForm } from './FamilyHistoryForm'
+import CardiacAssessmentForm from './CardiacAssessmentForm'
 
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2 px-4 transition-all cursor-pointer block w-full text-left',
   'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium rounded-md my-1'
 )
+
+const tabOrder = [
+  'bio',
+  'vitals',
+  'labs',
+  'lifestyle',
+  'familyHistory',
+  'cardiacAssessment',
+  'medical',
+  'historical',
+  'timeseries',
+]
 
 export const RiskAssessmentForm = ({
   data,
@@ -144,15 +158,6 @@ export const RiskAssessmentForm = ({
   }
 
   const handleNext = () => {
-    const tabOrder = [
-      'bio',
-      'vitals',
-      'labs',
-      'lifestyle',
-      'medical',
-      'historical',
-      'timeseries',
-    ]
     const currentIndex = tabOrder.indexOf(activeTab)
     if (currentIndex < tabOrder.length - 1) {
       setActiveTab(tabOrder[currentIndex + 1])
@@ -160,15 +165,6 @@ export const RiskAssessmentForm = ({
   }
 
   const handlePrevious = () => {
-    const tabOrder = [
-      'bio',
-      'vitals',
-      'labs',
-      'lifestyle',
-      'medical',
-      'historical',
-      'timeseries',
-    ]
     const currentIndex = tabOrder.indexOf(activeTab)
     if (currentIndex > 0) {
       setActiveTab(tabOrder[currentIndex - 1])
@@ -177,17 +173,10 @@ export const RiskAssessmentForm = ({
 
   // Calculate current step
   const getCurrentStep = () => {
-    const tabOrder = [
-      'bio',
-      'vitals',
-      'labs',
-      'lifestyle',
-      'medical',
-      'historical',
-      'timeseries',
-    ]
     return tabOrder.indexOf(activeTab) + 1
   }
+
+  const tabsLength = tabOrder.length - 1
 
   return (
     <FormProvider {...formMethods}>
@@ -210,12 +199,14 @@ export const RiskAssessmentForm = ({
                     >
                       <IconPicker icon="arrowLeft" />
                     </button>
-                    <span className="text-sm">{getCurrentStep()} of 6</span>
+                    <span className="text-sm">
+                      {getCurrentStep()} of {tabsLength}
+                    </span>
                     <button
                       title="arrow-right"
                       type="button"
                       onClick={handleNext}
-                      disabled={getCurrentStep() === 6}
+                      disabled={getCurrentStep() === tabsLength}
                       className="p-2 rounded-md border disabled:opacity-50"
                     >
                       <IconPicker icon="arrowRight" />
@@ -236,6 +227,12 @@ export const RiskAssessmentForm = ({
 
                     <Tabs.Content value="lifestyle">
                       <FamilyHistoryLifestyleForm onNext={handleNext} />
+                    </Tabs.Content>
+                    <Tabs.Content value="familyHistory">
+                      <FamilyHistoryForm onNext={handleNext} />
+                    </Tabs.Content>
+                    <Tabs.Content value="cardiacAssessment">
+                      <CardiacAssessmentForm onNext={handleNext} />
                     </Tabs.Content>
 
                     <Tabs.Content value="medical">
@@ -316,7 +313,27 @@ export const RiskAssessmentForm = ({
                             )}
                             value="lifestyle"
                           >
-                            Lifestyle/Behavioral Factors
+                            Patient Lifestyle & Habit
+                          </Tabs.Trigger>
+                          <Tabs.Trigger
+                            className={cn(
+                              triggerClassName,
+                              activeTab === 'familyHistory' &&
+                                'bg-red-600 text-white font-medium'
+                            )}
+                            value="familyHistory"
+                          >
+                            Family History
+                          </Tabs.Trigger>
+                          <Tabs.Trigger
+                            className={cn(
+                              triggerClassName,
+                              activeTab === 'cardiacAssessment' &&
+                                'bg-red-600 text-white font-medium'
+                            )}
+                            value="cardiacAssessment"
+                          >
+                            Cardiac Assessment
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(

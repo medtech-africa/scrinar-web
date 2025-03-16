@@ -17,11 +17,8 @@ export const PersonalInfoForm = ({ onNext }: Props) => {
       <Text as="h2" className="font-medium mb-2">
         Patient Bio-data
       </Text>
-      <Text variant="text/xs" className="text-gray-500 mb-6 md:mb-8">
+      <Text variant="text/sm" className="text-gray-500 mb-2 md:mb-4">
         Patient personal data
-        {/* Ipsum dolor sit amet consectetur. Libero elit volutpat tortor at sit
-        cras venenatis enim. At massa vel integer mollis dui in ipsum ut vitae.
-        Varius eu fusce elementum pulvinar viverra. */}
       </Text>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
         <Controller

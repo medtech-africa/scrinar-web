@@ -33,7 +33,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
       <Text as="h2" className="font-medium mb-2">
         Patients Lab Test
       </Text>
-      <Text variant="text/xs" className="text-gray-500 mb-6 md:mb-8">
+      <Text variant="text/sm" className="text-gray-500 mb-2 md:mb-4">
         Blood tests (Blood tests are Optional, but they help to give a more
         complete picture of your overall health)
       </Text>
@@ -43,7 +43,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
           <Text as="h3" variant="text/sm" className="font-medium mb-2">
             Blood Sugar Level (mg/dL)
           </Text>
-          <Text variant="text/xs" className="text-gray-500 mb-6 md:mb-8">
+          <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
             Optional but recommended, especially for people with Diabetes
           </Text>
           <div className="grid grid-cols-[2fr_1fr] items-center">
@@ -99,7 +99,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
             Blood Cholesterol Level{' '}
             <span className="font-normal">(Most Recent Lipid Profile)</span>
           </Text>
-          <Text variant="text/xs" className="text-gray-500 mb-6 md:mb-8">
+          <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
             To measure blood cholesterol levels, a blood sample is taken using a
             cholesterol test (lipid panel). This can be done with a fingerstick
             test using a portable device or through a lab test with a venous

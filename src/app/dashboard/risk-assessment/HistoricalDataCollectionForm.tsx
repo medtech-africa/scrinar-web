@@ -14,7 +14,7 @@ export const HistoricalDataCollectionForm = () => {
         <Text as="h2" className="font-medium mb-2">
           Historical Data Collection
         </Text>
-        <Text variant="text/xs" className="text-gray-500 mb-6 md:mb-8">
+        <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
           Family History of NCDs (History of NCDs in First Degree relatives eg
           mother, father, brother or sister.)
         </Text>
@@ -137,7 +137,7 @@ export const HistoricalDataCollectionForm = () => {
           </label>
         </div>
       </div>
-      <div className="flex items-start space-x-2">
+      <div className="flex items-start space-x-2 mt-6">
         <Controller
           name="consentAgreement"
           control={control}

@@ -2,7 +2,6 @@ import { Input } from '@/components/ui/input'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
-import CardiacAssessmentForm from './CardiacAssessmentForm'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
 
@@ -18,14 +17,10 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
       <Text as="h2" className="font-medium mb-2">
         Lifestyle/Behavioral Factors
       </Text>
-      <Text variant="text/xs" className="text-gray-500 mb-6 md:mb-8">
-        Family History of NCDs (History of NCDs in First Degree relatives eg
-        mother, father, brother or sister.)
-      </Text>
 
       <div className="space-y-6">
         <div>
-          <Text as="h3" variant="text/sm" className="font-medium mb-6 md:mb-8">
+          <Text as="h3" variant="text/sm" className="font-medium mb-3 md:mb-5">
             Lifestyle & Habits
           </Text>
           <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
@@ -173,8 +168,6 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             )}
           </div>
         </div>
-
-        <CardiacAssessmentForm />
       </div>
 
       <div className="flex justify-end mt-6">

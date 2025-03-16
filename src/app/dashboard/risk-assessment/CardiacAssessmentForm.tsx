@@ -1,24 +1,33 @@
 import React from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
+import { useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
 import { Text } from '@/components/ui/text'
-import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
 
-export const CardiacAssessmentForm = () => {
-  const { control, watch } = useFormContext()
+type Props = {
+  onNext: () => void
+}
+
+export const CardiacAssessmentForm = ({ onNext }: Props) => {
+  const { watch } = useFormContext()
 
   const hasChestPain = watch('cardiac.chestPain') === 'Yes'
   const hasChestPainLocation = watch('cardiac.chestPainLocation') === 'Yes'
 
   return (
     <div className="">
-      <Text as="h3" variant="text/sm" className="font-medium mb-6 md:mb-8">
+      <Text as="h2" className="font-medium mb-6 md:mb-8">
         Cardiac Assessment Questionnaire
       </Text>
       <div>
-        <Text as="h4" variant="text/sm" className="font-medium mb-2">
+        <Text
+          as="h4"
+          variant="text/sm"
+          className="font-medium mb-2 text-grey-700"
+        >
           Angina or Heart Attack Assessment
         </Text>
+
         <OptionWithRadioField
           label="Have you ever had any pain or discomfort or any pressure or heaviness in your chest?"
           options={['Yes', 'No']}
@@ -104,54 +113,15 @@ export const CardiacAssessmentForm = () => {
         </div>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        <OptionWithRadioField
-          label="Cardiovascular Disease (CVD)"
-          options={['Yes', 'No']}
-          form={{ id: 'familyHistory.cvd' }}
-        />
-        <OptionWithRadioField
-          label="Diabetes"
-          options={['Yes', 'No']}
-          form={{ id: 'familyHistory.diabetes' }}
-        />
-        <OptionWithRadioField
-          label="Hypertension"
-          options={['Yes', 'No']}
-          form={{ id: 'familyHistory.hypertension' }}
-        />
-        <OptionWithRadioField
-          label="Cancer"
-          options={['Yes', 'No']}
-          form={{ id: 'familyHistory.cancer' }}
-        />
-        <OptionWithRadioField
-          label="Stroke"
-          options={['Yes', 'No']}
-          form={{ id: 'familyHistory.stroke' }}
-        />
-        <div>
-          <OptionWithRadioField
-            label="Other NCDs (specify)"
-            options={['Yes', 'No']}
-            form={{ id: 'familyHistory.otherNcdsOption' }}
-          />
-
-          {watch('familyHistory.otherNcdsOption') === 'Yes' && (
-            <Controller
-              name="familyHistory.otherNcds"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="Specify"
-                  label="Other NCDs (specify)"
-                  labelStyle="lg:text-sm text-xs"
-                />
-              )}
-            />
-          )}
-        </div>
+      <div className="flex justify-end mt-6">
+        <Button
+          variant="primary"
+          className="bg-red-600 hover:bg-red-700 text-white px-8"
+          onClick={onNext}
+          type="button"
+        >
+          Next
+        </Button>
       </div>
     </div>
   )

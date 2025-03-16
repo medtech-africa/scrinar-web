@@ -12,7 +12,7 @@ export const ScreeningQuestionsForm = ({ onNext }: Props) => {
       <Text as="h2" className="font-medium mb-2">
         Medical History
       </Text>
-      <Text variant="text/xs" className="text-gray-500 mb-6 md:mb-8">
+      <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
         Medical, symptoms and health conditions screening questions
       </Text>
       <div>
