@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils'
+
 const RiskGaugeBar = ({
   score,
   riskLevel,
@@ -42,21 +44,37 @@ const RiskGaugeBar = ({
       </div>
 
       {/* High risk alert bubble */}
-      {riskLevel === 'high' && (
+      {/* {riskLevel === 'high' && ( */}
+      <div
+        className="relative mt-4"
+        style={{
+          left: `${scorePercent}%`,
+          transform: 'translateX(-50%)',
+        }}
+      >
         <div
-          className="relative mt-4"
-          style={{
-            left: `${scorePercent}%`,
-            transform: 'translateX(-50%)',
-          }}
+          className={cn(
+            'absolute w-4 h-4 bg-red-500 rotate-45 -mt-2 mx-auto left-0 right-0',
+            {
+              'bg-green-500': riskLevel === 'low',
+              'bg-yellow-500': riskLevel === 'moderate',
+            }
+          )}
+        ></div>
+        <div
+          className={cn(
+            'bg-red-500 text-white px-4 py-2 rounded-md text-center w-fit mx-auto',
+            {
+              'bg-green-500': riskLevel === 'low',
+              'bg-yellow-500': riskLevel === 'moderate',
+            }
+          )}
         >
-          <div className="absolute w-4 h-4 bg-red-500 rotate-45 -mt-2 mx-auto left-0 right-0"></div>
-          <div className="bg-red-500 text-white px-4 py-2 rounded-md text-center">
-            <div className="font-bold">High risk!!!</div>
-            <div className="text-sm">Your risk of CVD is {score}%</div>
-          </div>
+          <div className="font-bold">{riskLevel}!!!</div>
+          <div className="text-sm">Your risk of CVD is {score}%</div>
         </div>
-      )}
+      </div>
+      {/* )} */}
     </div>
   )
 }

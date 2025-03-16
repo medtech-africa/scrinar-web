@@ -31,6 +31,7 @@ import { RiskGaugeBar } from './RiskGaugeBar'
 import PreventionTips from './PreventionTips'
 import Link from 'next/link'
 import DiseaseBreakdown from './DiseaseBreakdown'
+import RiskSummary from './RiskSummary'
 
 // Types
 export type RiskType = 'who' | 'findrisc'
@@ -324,7 +325,6 @@ export const RiskAssessmentResult: React.FC<{
   data?: RiskData
   isLoading?: boolean
 }> = ({ data, isLoading = false }) => {
-  console.log('🚀 ~ data:', data)
   const [activeTab, setActiveTab] = useState<RiskType>('who')
 
   const isWHO = activeTab === 'who'
@@ -423,12 +423,15 @@ export const RiskAssessmentResult: React.FC<{
               riskLevel={activeData?.riskLevel ?? ''}
             />
 
+            <RiskSummary
+              score={Number(activeData?.score)}
+              level={riskLevel}
+              type={isWHO ? 'cvd' : 'diabetes'}
+            />
+
             {isWHO && (
               <div className="mt-6">
-                <PreventionTips
-                  score={Number(activeData?.score)}
-                  level={riskLevel}
-                />
+                <PreventionTips />
               </div>
             )}
           </div>
