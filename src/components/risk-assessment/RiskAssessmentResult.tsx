@@ -13,8 +13,10 @@ import { motion } from 'framer-motion'
 import { IconPicker } from '../ui/icon-picker'
 import { ToastField } from '../ui/toast'
 import {
+  Findrisc,
   FindriscBreakdown,
   RiskData,
+  Who,
   WhoBreakdown,
 } from '@/hooks/queries/useRiskAssessment'
 // import { useFormContext } from 'react-hook-form'
@@ -28,6 +30,7 @@ import { RiskTrendGraph } from './RiskTrendGraph'
 import { RiskGaugeBar } from './RiskGaugeBar'
 import PreventionTips from './PreventionTips'
 import Link from 'next/link'
+import DiseaseBreakdown from './DiseaseBreakdown'
 
 // Types
 export type RiskType = 'who' | 'findrisc'
@@ -112,37 +115,31 @@ const FactorBreakdown = ({
       </p>
 
       <div className="mb-8 p-4 border rounded-2xl border-grey-400">
-        <Text variant="text/sm" className="font-medium text-grey-400 mb-2">
+        <Text className="font-medium text-grey-400 mb-2">
           Here are some conditions that cannot be altered; they contribute to an
           individual&apos;s baseline risk of cardiovascular diseases
         </Text>
 
         <div className="space-y-4">
           <div className="flex">
-            <Text variant="text/sm" className="font-medium">
-              Age:
-            </Text>
-            <Text variant="text/xs" className="flex-1">
+            <Text className="font-medium">Age:</Text>
+            <Text variant="text/sm" className="flex-1">
               The risk of CVD goes up as you get older. This is because blood
               vessels can stiffen, and arteries may build up plaque over time.
             </Text>
           </div>
 
           <div className="flex">
-            <Text variant="text/sm" className="font-medium">
-              Gender:
-            </Text>
-            <Text variant="text/xs" className="flex-1">
+            <Text className="font-medium">Gender:</Text>
+            <Text variant="text/sm" className="flex-1">
               Men are generally at higher risk earlier in life, though risk for
               women increases post-menopause.
             </Text>
           </div>
 
           <div className="flex">
-            <Text variant="text/sm" className="font-medium">
-              Family history:
-            </Text>
-            <Text variant="text/xs" className="flex-1">
+            <Text className="font-medium">Family history:</Text>
+            <Text variant="text/sm" className="flex-1">
               Some people are more likely to have heart diseases because it runs
               in their family.
             </Text>
@@ -175,9 +172,10 @@ const FactorBreakdown = ({
 
 // Clinical summary component
 const ClinicalSummary = ({
+  data,
   isLoading = false,
 }: {
-  data: any
+  data: Who | Findrisc | null
   isLoading?: boolean
 }) => {
   if (isLoading) {
@@ -190,21 +188,17 @@ const ClinicalSummary = ({
         AI-Generated Clinical Summary
       </Text>
 
-      <Text variant="text/sm" className="text-sm text-gray-600 mb-4">
+      <Text className="text-sm text-gray-600 mb-4">
         AI-Generated Summary gives clinicians a concise patient overview,
         highlighting key diagnoses, risk levels, and recommended actions.
       </Text>
 
       <div className="mb-4">
         <h4 className="font-medium">Patient Overview</h4>
-        <p className="text-sm">
-          Patient currently presents with prediabetes (HbA1c of 6.0%), mild
-          hypertension (BP averaging 140/90), and a history suggestive of angina
-          episodes.
-        </p>
+        <p className="text-sm">{data?.personalizedAdvice}</p>
       </div>
 
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <div className="flex items-center mb-2">
           <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
             <IconPicker icon="health" className="text-red-500" size={16} />
@@ -216,7 +210,7 @@ const ClinicalSummary = ({
           <li>Mild Hypertension (BP: 140/90)</li>
           <li>Angina Episodes (History Suggests Ischemia)</li>
         </ul>
-      </div>
+      </div> */}
 
       <div className="mb-4">
         <div className="flex items-center mb-2">
@@ -225,29 +219,30 @@ const ClinicalSummary = ({
           </div>
           <h4 className="font-medium">Recommended</h4>
         </div>
-        <ul className="list-disc ml-8 text-sm space-y-1">
-          <li>Repeat fasting blood glucose test (2 weeks)</li>
-          <li>Referral: Stress Test for Ischemic Heart Disease</li>
-          <li>Lifestyle Counseling (Diet & Exercise)</li>
+        <ul className="list-disc ml-8 text-xs space-y-1">
+          {data?.lifestyleModification
+            ?.split('.')
+            .map((rec) => rec && <li key={rec}>{rec}</li>)}
         </ul>
       </div>
 
-      <div className="mb-4">
+      {/* <div className="mb-4">
         <div className="flex items-center mb-2">
           <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
             <IconPicker icon="alertCircle" className="text-red-500" size={16} />
           </div>
           <h4 className="font-medium">Stroke Risk Alert: 12% over 6 months</h4>
         </div>
-      </div>
+      </div> */}
 
       <div className="mb-4">
         <div className="flex items-center mb-2">
           <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
             <IconPicker icon="calendar" className="text-purple-500" size={16} />
           </div>
-          <h4 className="font-medium">Follow-up in 4 weeks recommended</h4>
+          <Text variant="text/sm">{data?.followUpAction}</Text>
         </div>
+        rec
       </div>
 
       <div className="mt-6">
@@ -295,12 +290,12 @@ const RecommendationList = () => {
 
   return (
     <div className="mt-4">
-      <Text variant="text/sm" className="font-medium mb-2">
+      <Text className="font-medium mb-2">
         Recommendations based on risk trend
       </Text>
       <ul className="space-y-2">
         {recommendations.map((rec) => (
-          <Text variant="text/xs" key={rec}>
+          <Text variant="text/sm" key={rec}>
             {rec}
           </Text>
         ))}
@@ -458,6 +453,9 @@ export const RiskAssessmentResult: React.FC<{
               isLoading={isLoading}
             />
           </PageCard>
+          <div>
+            <DiseaseBreakdown data={activeData?.heartDiseaseBreakdown} />
+          </div>
         </>
       </div>
     </motion.div>

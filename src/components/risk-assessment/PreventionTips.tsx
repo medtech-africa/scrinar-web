@@ -69,7 +69,7 @@ const PreventionTips = ({ score = 1, level = '' }) => {
               />
             </svg>
           </div>
-          <Text variant="text/sm">Prevention tips</Text>
+          <Text>Prevention tips</Text>
         </div>
 
         <div className="space-y-6">
@@ -78,7 +78,7 @@ const PreventionTips = ({ score = 1, level = '' }) => {
             <div className="flex-shrink-0 w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
               <span>🥗</span>
             </div>
-            <Text variant="text/xs">
+            <Text variant="text/sm">
               Eat heart-healthy foods like fruits, veggies, whole grains, and
               lean proteins while limiting salt, sugar, and saturated fats.
             </Text>
@@ -89,7 +89,7 @@ const PreventionTips = ({ score = 1, level = '' }) => {
             <div className="flex-shrink-0 w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
               <span>🏃‍♂</span>
             </div>
-            <Text variant="text/xs">
+            <Text variant="text/sm">
               Exercise at least 150 minutes weekly with activities like walking
               or cycling. Eat a heart-healthy diet with fruits, veggies, whole
               grains, and lean proteins.
@@ -101,7 +101,7 @@ const PreventionTips = ({ score = 1, level = '' }) => {
             <div className="flex-shrink-0 w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
               <span>🚬</span>
             </div>
-            <Text variant="text/xs">
+            <Text variant="text/sm">
               Avoiding tobacco protects blood vessels, lowers blood pressure,
               and improves circulation, reducing heart disease risk.
             </Text>
@@ -112,7 +112,7 @@ const PreventionTips = ({ score = 1, level = '' }) => {
             <div className="flex-shrink-0 w-8 h-8 bg-red-100 rounded-lg flex items-center justify-center">
               <span>🩺</span>
             </div>
-            <Text variant="text/xs">
+            <Text variant="text/sm">
               Regular checkups detect early CVD signs and help manage risk
               factors like blood pressure and cholesterol.
             </Text>
