@@ -56,8 +56,8 @@ const RiskGaugeBar = ({
           className={cn(
             'absolute w-4 h-4 bg-red-500 rotate-45 -mt-2 mx-auto left-0 right-0',
             {
-              'bg-green-500': riskLevel === 'low',
-              'bg-yellow-500': riskLevel === 'moderate',
+              'bg-green-800': riskLevel === 'low',
+              'bg-yellow-600': riskLevel === 'moderate',
             }
           )}
         ></div>
@@ -65,8 +65,8 @@ const RiskGaugeBar = ({
           className={cn(
             'bg-red-500 text-white px-4 py-2 rounded-md text-center w-fit mx-auto',
             {
-              'bg-green-500': riskLevel === 'low',
-              'bg-yellow-500': riskLevel === 'moderate',
+              'bg-green-800': riskLevel === 'low',
+              'bg-yellow-600': riskLevel === 'moderate',
             }
           )}
         >
