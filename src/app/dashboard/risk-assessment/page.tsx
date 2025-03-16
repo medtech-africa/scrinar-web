@@ -50,9 +50,7 @@ const TableBodyContent = ({
       className="font-normal text-sm text-grey-600"
     >
       <TableCell>{riskAssessment?.id}</TableCell>
-      {/* TODO */}
       <TableCell>{riskAssessment?.responseData?.who?.score}</TableCell>
-      {/* TODO */}
       <TableCell>{riskAssessment?.responseData?.who?.riskLevel}</TableCell>
       <TableCell>{format(riskAssessment?.createdAt, 'PPPp')}</TableCell>
       <TableCell>
