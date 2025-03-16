@@ -4,12 +4,17 @@ import { RiskAssessmentForm } from '../RiskAssessmentForm'
 import { useRiskAssessment } from '@/hooks/queries/useRiskAssessment'
 import { useParams } from 'next/navigation'
 import ContentLoader from '@/components/content-loader'
+import { RiskAssessmentReport } from '../RiskAssessmentReport'
+import { FormProvider, useForm } from 'react-hook-form'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const RiskAssessmentDetailsPage = () => {
   const params = useParams<{ id: string }>()
   const { data, isPending } = useRiskAssessment(params.id)
   // TODO restructure
   console.log('🚀 ~ RiskAssessmentDetailsPage ~ data:', data)
+
+  const formMethods = useForm({ defaultValues: data?.requestData })
 
   if (isPending) {
     return <ContentLoader loading />
@@ -27,7 +32,25 @@ const RiskAssessmentDetailsPage = () => {
       </div>
       <div className="">
         <div className="grid">
-          <RiskAssessmentForm data={data} />
+          <Tabs defaultValue="result" className="w-full">
+            <TabsList>
+              <TabsTrigger value="result">Result</TabsTrigger>
+              <TabsTrigger value="form">Form</TabsTrigger>
+            </TabsList>
+            <TabsContent value="result">
+              <FormProvider {...formMethods}>
+                <RiskAssessmentReport
+                  className="w-full max-w-3xl mx-auto mt-10"
+                  data={data}
+                  personalInfo={data?.requestData.personalInfo}
+                  showActionButton={false}
+                />
+              </FormProvider>
+            </TabsContent>
+            <TabsContent value="form">
+              <RiskAssessmentForm displayOnly data={data} />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </div>

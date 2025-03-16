@@ -37,8 +37,10 @@ const triggerClassName = cn(
 
 export const RiskAssessmentForm = ({
   data,
+  displayOnly = false,
 }: {
   data?: RiskAssessmentModel
+  displayOnly?: boolean
 }) => {
   const [progress, setProgress] = useState(0)
   const [showResults, setShowResults] = useState(false)
@@ -234,7 +236,7 @@ export const RiskAssessmentForm = ({
                     <Tabs.Content value="historical">
                       <HistoricalDataCollectionForm />
                       <div className="flex justify-end mt-6">
-                        {!data && (
+                        {!displayOnly && (
                           <Button
                             variant="primary"
                             className="bg-red-600 hover:bg-red-700 text-white"
@@ -348,7 +350,7 @@ export const RiskAssessmentForm = ({
                 personalInfo: formMethods.watch('personalInfo'),
                 vitals: formMethods.watch('vitals'),
               }}
-              data={data}
+              // data={data}
               setShowResults={setShowResults}
             />
           )}
@@ -361,13 +363,13 @@ export const RiskAssessmentForm = ({
 const RiskAssessmentGeneratedReport = ({
   showResults,
   resultData,
-  data,
+  // data,
   setShowResults,
   formData,
 }: {
   showResults: boolean
   resultData?: any
-  data?: RiskAssessmentModel
+  // data?: RiskAssessmentModel
   formData?: Partial<RiskAssessmentModelRequestData>
   setShowResults: (showResults: boolean) => void
 }) => {
@@ -398,17 +400,17 @@ const RiskAssessmentGeneratedReport = ({
     )
   }
 
-  if (data) {
-    return (
-      <RiskAssessmentReport
-        className="w-full max-w-3xl mx-auto mt-10"
-        action={actionButton}
-        data={data}
-        personalInfo={data?.requestData.personalInfo}
-        showActionButton={false}
-      />
-    )
-  }
+  // if (data) {
+  //   return (
+  //     <RiskAssessmentReport
+  //       className="w-full max-w-3xl mx-auto mt-10"
+  //       action={actionButton}
+  //       data={data}
+  //       personalInfo={data?.requestData.personalInfo}
+  //       showActionButton={false}
+  //     />
+  //   )
+  // }
 }
 
 const countFilledFields = (obj: any): number => {

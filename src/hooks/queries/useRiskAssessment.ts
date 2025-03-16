@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
-debugger
+
 const getData = (params: { page: number; limit: number }) =>
   baseAxios
     .get<{
