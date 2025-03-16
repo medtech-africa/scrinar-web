@@ -27,6 +27,7 @@ import { Text } from '../ui/text'
 import { RiskTrendGraph } from './RiskTrendGraph'
 import { RiskGaugeBar } from './RiskGaugeBar'
 import PreventionTips from './PreventionTips'
+import Link from 'next/link'
 
 // Types
 export type RiskType = 'who' | 'findrisc'
@@ -110,7 +111,7 @@ const FactorBreakdown = ({
         cardiovascular diseases
       </p>
 
-      <div className="mb-8 p-4 border rounded-2xl border-grey-600">
+      <div className="mb-8 p-4 border rounded-2xl border-grey-400">
         <Text variant="text/sm" className="font-medium text-grey-400 mb-2">
           Here are some conditions that cannot be altered; they contribute to an
           individual&apos;s baseline risk of cardiovascular diseases
@@ -118,27 +119,33 @@ const FactorBreakdown = ({
 
         <div className="space-y-4">
           <div className="flex">
-            <div className=" font-medium">Age:</div>
-            <div className="flex-1">
+            <Text variant="text/sm" className="font-medium">
+              Age:
+            </Text>
+            <Text variant="text/xs" className="flex-1">
               The risk of CVD goes up as you get older. This is because blood
               vessels can stiffen, and arteries may build up plaque over time.
-            </div>
+            </Text>
           </div>
 
           <div className="flex">
-            <div className=" font-medium">Gender:</div>
-            <div className="flex-1">
+            <Text variant="text/sm" className="font-medium">
+              Gender:
+            </Text>
+            <Text variant="text/xs" className="flex-1">
               Men are generally at higher risk earlier in life, though risk for
               women increases post-menopause.
-            </div>
+            </Text>
           </div>
 
           <div className="flex">
-            <div className=" font-medium">Family history:</div>
-            <div className="flex-1">
+            <Text variant="text/sm" className="font-medium">
+              Family history:
+            </Text>
+            <Text variant="text/xs" className="flex-1">
               Some people are more likely to have heart diseases because it runs
               in their family.
-            </div>
+            </Text>
           </div>
         </div>
       </div>
@@ -270,47 +277,37 @@ const ClinicalSummary = ({
           </Button>
 
           <div className="flex-1" />
-
-          <Button className="ml-auto">Schedule consultation</Button>
+          <Link target="_blank" href="https://forcardio.app">
+            <Button className="ml-auto">Schedule consultation</Button>
+          </Link>
         </div>
       </div>
     </div>
   )
 }
 
-// // Recommendations component
-// const RecommendationList = ({
-//   recommendations = [],
-// }: {
-//   recommendations: IRiskRecommendation[]
-// }) => {
-//   if (!recommendations || recommendations.length === 0) {
-//     return null
-//   }
+const RecommendationList = () => {
+  const recommendations = [
+    '🩺  Schedule cardiology consult" (if stroke/CVD risk rises)',
+    '💊  Adjust antihypertensive meds" (if BP is consistently high)',
+    '‍♂️  Encourage exercise & weight management" (if metabolic risk worsens)',
+  ]
 
-//   return (
-//     <div className="mt-4">
-//       <h4 className="font-medium mb-2">Recommendations based on risk trend</h4>
-//       <ul className="space-y-2">
-//         {recommendations.map((rec, index) => (
-//           <li key={index} className="flex items-center">
-//             <span
-//               className={cn(
-//                 'inline-block w-4 h-4 rounded-full mr-2',
-//                 rec.title.toLowerCase().includes('stroke')
-//                   ? 'bg-red-500'
-//                   : rec.title.toLowerCase().includes('bp')
-//                     ? 'bg-yellow-500'
-//                     : 'bg-green-500'
-//               )}
-//             ></span>
-//             <span>{rec.title}</span>
-//           </li>
-//         ))}
-//       </ul>
-//     </div>
-//   )
-// }
+  return (
+    <div className="mt-4">
+      <Text variant="text/sm" className="font-medium mb-2">
+        Recommendations based on risk trend
+      </Text>
+      <ul className="space-y-2">
+        {recommendations.map((rec) => (
+          <Text variant="text/xs" key={rec}>
+            {rec}
+          </Text>
+        ))}
+      </ul>
+    </div>
+  )
+}
 
 // Critical alerts component
 const CriticalAlerts = ({ alerts }: { alerts?: IClinicalAlert[] }) => {
@@ -335,8 +332,8 @@ export const RiskAssessmentResult: React.FC<{
   data?: RiskData
   isLoading?: boolean
 }> = ({ data, isLoading = false }) => {
-  console.log('🚀 ~ data:', data)
   const [activeTab, setActiveTab] = useState<RiskType>('who')
+
   // const formContext = useFormContext()
 
   // const vitals = formContext
@@ -360,7 +357,8 @@ export const RiskAssessmentResult: React.FC<{
     activeTab,
     data
   )
-  console.log('🚀 ~ activeData:', activeData)
+
+  const riskLevel = getRiskLevel(Number(activeData?.score) ?? 0)
 
   if (isLoading) {
     return (
@@ -431,18 +429,22 @@ export const RiskAssessmentResult: React.FC<{
             />
 
             <div className="mt-6">
-              <PreventionTips score={Number(activeData?.score)} />
+              <PreventionTips
+                score={Number(activeData?.score)}
+                level={riskLevel}
+              />
             </div>
           </div>
 
           <ClinicalSummary data={activeData} isLoading={isLoading} />
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            <PageCard title="Short-term Prediction">
-              <RiskTrendGraph riskData={predictions ?? []} />
-              {/* <RecommendationList recommendations={recommendations} /> */}
-            </PageCard>
-          </div>
+          <PageCard
+            className="p-4 md:p-6 border-[0.2px] border-grey-300 rounded-lg"
+            title="Short-term & Mid-term Prediction"
+          >
+            <RiskTrendGraph predictions={predictions ?? []} level={riskLevel} />
+            <RecommendationList />
+          </PageCard>
 
           <PageCard
             title="Contributing Factors"
@@ -466,20 +468,16 @@ export const RiskAssessmentResult: React.FC<{
 
 // src/hooks/useActiveRiskData.ts
 export const useActiveRiskData = (activeTab: RiskType, data?: RiskData) => {
-  const tabDataField = activeTab === 'who' ? 'cvd' : 'diabetes'
-
   // Get the active tab data from real data or fallback to mock
 
+  const activeData = data?.[activeTab] || null
   return {
-    // TODO: Fix this
-    // @ts-expect-error Please check this as the types are mismatched
-    activeData: data?.[tabDataField]?.[activeTab] || data?.[activeTab] || null,
-    criticalAlerts: data?.[tabDataField]?.criticalAlerts || null,
-    predictions: data?.[tabDataField]?.predictions || null,
+    activeData,
+    criticalAlerts: data?.criticalAlerts || null,
+    predictions: activeData?.predictions || [],
   }
 }
 
-// src/utils/riskAssessment.ts
 export const getRiskLevel = (score: number): RiskLevel => {
   if (score >= 15) return 'high'
   if (score >= 5) return 'moderate'

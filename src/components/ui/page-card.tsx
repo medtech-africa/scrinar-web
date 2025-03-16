@@ -14,13 +14,7 @@ const PageCard = React.forwardRef<HTMLDivElement, PageCardProps>(
     { className, title, subtitle, bodyStyle, textContainerClassName, ...props },
     ref
   ) => (
-    <div
-      ref={ref}
-      className={cn(
-        'w-full bg-white border border-gray-100 rounded-lg',
-        className
-      )}
-    >
+    <div ref={ref} className={cn('w-full bg-white', className)}>
       <div className={cn('mb-6 md:mb-8', textContainerClassName)}>
         <Text weight="medium" className="text-grey-900">
           {title}

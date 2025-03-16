@@ -64,10 +64,9 @@ export const RiskAssessmentForm = ({
           .then((res) => res.data.data),
       ])
 
-      // Return combined data object
       return {
-        cvd: cvdResponse,
-        diabetes: diabetesResponse,
+        ...(cvdResponse || {}),
+        ...(diabetesResponse || {}),
       }
     },
     onMutate: () => {

@@ -28,7 +28,7 @@ export interface RiskAssessmentModel {
   user: string
   school: string
   requestData: RiskAssessmentModelRequestData
-  responseData: IRiskData
+  responseData: RiskAssessmentModelResponseData
   createdAt: Date
   updatedAt: Date
   id: string
@@ -46,6 +46,13 @@ export interface RiskAssessmentModelRequestData {
   sleepPatterns: SleepPatterns
   previousHealthScreening: PreviousHealthScreening
   consentAgreement: boolean
+}
+
+interface Prediction {
+  high: number
+  low: number
+  moderate: number
+  month: number
 }
 
 export interface BloodTest {
@@ -164,19 +171,7 @@ export interface RiskAssessmentModelResponseData {
   findrisc?: Findrisc
   healthdata?: any
   criticalAlerts: any[]
-  predictions?: {
-    high: number
-    low: number
-    moderate: number
-    month: number
-  }[]
-}
-
-export interface IRiskData {
-  cvd: RiskAssessmentModelResponseData
-  diabetes: RiskAssessmentModelResponseData
-  vitals?: RiskAssessmentModelRequestData['vitals']
-  personalInfo?: RiskAssessmentModelRequestData['personalInfo']
+  predictions?: Prediction[]
 }
 
 export interface Findrisc {
@@ -187,6 +182,7 @@ export interface Findrisc {
   riskLevel: string
   breakdown: FindriscBreakdown
   status: boolean
+  predictions?: Prediction[]
 }
 
 export interface FindriscBreakdown {
@@ -206,12 +202,7 @@ export interface Who {
   riskLevel: string
   breakdown: WhoBreakdown
   status: boolean
-  predictions?: {
-    high: number
-    low: number
-    moderate: number
-    month: number
-  }[]
+  predictions?: Prediction[]
 }
 
 export interface WhoBreakdown {
@@ -223,4 +214,5 @@ export interface WhoBreakdown {
   cholesterol: number
 }
 
-export type RiskData = IRiskData
+export type RiskData = RiskAssessmentModelResponseData &
+  Partial<RiskAssessmentModelRequestData>

@@ -51,10 +51,8 @@ const TableBodyContent = ({
     >
       <TableCell>{riskAssessment?.id}</TableCell>
       {/* TODO */}
-      {/* @ts-expect-error wrong type */}
       <TableCell>{riskAssessment?.responseData?.who?.score}</TableCell>
       {/* TODO */}
-      {/* @ts-expect-error wrong type */}
       <TableCell>{riskAssessment?.responseData?.who?.riskLevel}</TableCell>
       <TableCell>{format(riskAssessment?.createdAt, 'PPPp')}</TableCell>
       <TableCell>

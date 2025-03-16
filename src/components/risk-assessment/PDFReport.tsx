@@ -209,43 +209,39 @@ const PDFReport = ({
         )}
 
         {/* WHO Risk Assessment */}
-        {data?.cvd?.who && (
+        {data?.who && (
           <View style={styles.section}>
             <Text style={styles.subtitle}>
               Cardiovascular Risk Assessment (WHO)
             </Text>
             <View style={styles.riskIndicator}>
+              <Text style={styles.text}>Risk Score: {data?.who.score}%</Text>
               <Text style={styles.text}>
-                Risk Score: {data?.cvd?.who.score}%
-              </Text>
-              <Text style={styles.text}>
-                Risk Level: {data?.cvd?.who?.riskLevel}
+                Risk Level: {data?.who?.riskLevel}
               </Text>
             </View>
 
             <Text style={styles.subtitle}>Risk Factors</Text>
-            {Object.entries(data?.cvd?.who?.breakdown).map(
-              ([factor, value]) => (
-                <Text key={factor} style={styles.text}>
-                  • {factor.charAt(0).toUpperCase() + factor.slice(1)}: {value}
-                </Text>
-              )
-            )}
+            {Object.entries(data?.who?.breakdown).map(([factor, value]) => (
+              <Text key={factor} style={styles.text}>
+                • {factor.charAt(0).toUpperCase() + factor.slice(1)}: {value}
+              </Text>
+            ))}
           </View>
         )}
 
         {/* FINDRISC Assessment */}
-        {data.diabetes?.findrisc && (
+        {data?.findrisc && (
           <View style={styles.section}>
             <Text style={styles.subtitle}>
               Diabetes Risk Assessment (FINDRISC)
             </Text>
             <View style={styles.riskIndicator}>
               <Text style={styles.text}>
-                Risk Score: {data.diabetes?.findrisc?.score}%
+                Risk Score: {data?.findrisc?.score}%
               </Text>
               <Text style={styles.text}>
-                Risk Level: {data.diabetes?.findrisc?.riskLevel}
+                Risk Level: {data?.findrisc?.riskLevel}
               </Text>
             </View>
           </View>
@@ -254,26 +250,26 @@ const PDFReport = ({
         {/* Recommendations */}
         <View style={styles.section}>
           <Text style={styles.subtitle}>Medical Recommendations</Text>
-          {data?.cvd?.who && (
+          {data?.who && (
             <>
               <Text style={styles.text}>
-                Follow-up Action: {data?.cvd?.who.followUpAction}
+                Follow-up Action: {data?.who.followUpAction}
               </Text>
               <Text style={styles.text}>
-                Lifestyle Modifications: {data?.cvd?.who.lifestyleModification}
+                Lifestyle Modifications: {data?.who.lifestyleModification}
               </Text>
               <Text style={styles.text}>
-                Personal Advice: {data?.cvd?.who.personalizedAdvice}
+                Personal Advice: {data?.who.personalizedAdvice}
               </Text>
             </>
           )}
         </View>
 
         {/* Critical Alerts */}
-        {data?.cvd?.criticalAlerts && data?.cvd?.criticalAlerts.length > 0 && (
+        {data?.criticalAlerts && data?.criticalAlerts.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.subtitle}>Important Health Alerts</Text>
-            {data?.cvd?.criticalAlerts.map((alert, index) => (
+            {data?.criticalAlerts.map((alert, index) => (
               <View key={index} style={styles.riskIndicator}>
                 <Text style={styles.text}>{alert.title}</Text>
                 <Text style={styles.text}>{alert.description}</Text>
@@ -282,18 +278,17 @@ const PDFReport = ({
           </View>
         )}
 
-        {data?.diabetes?.criticalAlerts &&
-          data?.diabetes?.criticalAlerts.length > 0 && (
-            <View style={styles.section}>
-              <Text style={styles.subtitle}>Important Health Alerts</Text>
-              {data?.diabetes?.criticalAlerts.map((alert, index) => (
-                <View key={index} style={styles.riskIndicator}>
-                  <Text style={styles.text}>{alert.title}</Text>
-                  <Text style={styles.text}>{alert.description}</Text>
-                </View>
-              ))}
-            </View>
-          )}
+        {data?.criticalAlerts && data?.criticalAlerts.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.subtitle}>Important Health Alerts</Text>
+            {data?.criticalAlerts.map((alert, index) => (
+              <View key={index} style={styles.riskIndicator}>
+                <Text style={styles.text}>{alert.title}</Text>
+                <Text style={styles.text}>{alert.description}</Text>
+              </View>
+            ))}
+          </View>
+        )}
 
         {/* Footer */}
         <View style={styles.section}>

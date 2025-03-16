@@ -8,56 +8,47 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from 'recharts'
-
-// Convert month number to month name
-const getMonthName = (month: number) => {
-  const monthNames = [
-    'Jan',
-    'Feb',
-    'Mar',
-    'Apr',
-    'May',
-    'Jun',
-    'Jul',
-    'Aug',
-    'Sep',
-    'Oct',
-    'Nov',
-    'Dec',
-  ]
-  return monthNames[month - 1] // Adjusting for 0-based array
-}
+import { Text } from '../ui/text'
 
 // Custom tooltip component
 const CustomTooltip = ({
   active,
   payload,
+  label,
+  level,
 }: {
   active?: boolean
   payload?: any[]
   label?: string
+  level: string
 }) => {
   if (active && payload && payload.length) {
-    const risks = [
-      { name: 'Low risk', value: payload[0]?.value || 0, color: '#4ade80' },
-      {
-        name: 'Moderate risk',
-        value: payload[1]?.value || 0,
-        color: '#f97316',
-      },
-      { name: 'High risk', value: payload[2]?.value || 0, color: '#ef4444' },
-    ]
-
-    const highestRisk = risks.reduce((prev, current) =>
-      current.value > prev.value ? current : prev
-    )
+    // Find the highest risk category
+    let highestRisk = payload[0]
+    payload.forEach((item) => {
+      if (item.value > highestRisk.value) {
+        highestRisk = item
+      }
+    })
 
     return (
       <div className="bg-white p-4 shadow-md rounded-md border border-gray-200">
-        <p className="font-semibold text-gray-700">{highestRisk.name}</p>
-        <p className="text-sm text-gray-600">
-          BP increased by 20% over last 3 readings, raising stroke risk by 8%
+        <p className="font-semibold text-gray-700 capitalize">
+          Risk Prediction: {level}
         </p>
+        <p className="text-sm text-gray-600">{label} month prediction</p>
+        <div className="mt-2">
+          {payload.map((entry, index) => (
+            <p
+              key={`item-${index}`}
+              style={{ color: entry.color }}
+              className="text-xs"
+            >
+              {entry.name.charAt(0).toUpperCase() + entry.name.slice(1)}:{' '}
+              {entry.value.toFixed(1)}%
+            </p>
+          ))}
+        </div>
       </div>
     )
   }
@@ -65,44 +56,64 @@ const CustomTooltip = ({
   return null
 }
 
-const RiskTrendGraph = ({ riskData = [] }: { riskData?: any[] }) => {
-  const exactChartData = riskData
-    .map((item) => ({
-      month: item.month,
-      monthName: getMonthName(item.month),
-      low: item.low * 100,
-      moderate: item.moderate * 100,
-      high: item.high * 100,
-    }))
-    .sort((a, b) => a.month - b.month)
+const RiskTrendGraph = ({
+  predictions = [],
+  level,
+}: {
+  predictions?: any[]
+  level: string
+}) => {
+  // Convert probabilities to percentages for better readability on the chart
+  const chartData = predictions.map((item) => ({
+    month: item.month,
+    low: Math.round(item.low * 100 * 10) / 10, // Convert to percentage with 1 decimal place
+    moderate: Math.round(item.moderate * 100 * 10) / 10,
+    high: Math.round(item.high * 100 * 10) / 10,
+  }))
+
+  // Sort by month
+  chartData.sort((a, b) => a.month - b.month)
+
+  // Create a complete array of months for the x-axis ticks
+  const allMonths = Array.from({ length: 12 }, (_, i) => i + 1)
 
   return (
-    <div className="w-full py-6">
-      <h1 className="text-2xl font-bold text-gray-800 mb-4">
+    <div className="w-full">
+      <Text as="h3" variant="text/md" className="font-medium mb-4">
         Risk Trend Graph
-      </h1>
+      </Text>
+
+      <Text variant="text/sm" className="text-gray-500 mb-4">
+        Probability of developing heart disease in the next 3, 6, and 12 months
+      </Text>
 
       {/* Legend */}
-      <div className="flex gap-6 mb-6">
+      <div className="flex gap-6 mb-4">
         <div className="flex items-center">
-          <div className="w-4 h-4 rounded-full bg-green-400 mr-2"></div>
-          <span className="text-gray-700">Low risk</span>
+          <div className="w-3 h-2 rounded bg-green-500 mr-1"></div>
+          <Text variant="text/xs" className="text-gray-600">
+            Low risk
+          </Text>
         </div>
         <div className="flex items-center">
-          <div className="w-4 h-4 rounded-full bg-orange-500 mr-2"></div>
-          <span className="text-gray-700">Moderate risk</span>
+          <div className="w-3 h-2 rounded bg-orange-500 mr-1"></div>
+          <Text variant="text/xs" className="text-gray-600">
+            Moderate risk
+          </Text>
         </div>
         <div className="flex items-center">
-          <div className="w-4 h-4 rounded-full bg-red-500 mr-2"></div>
-          <span className="text-gray-700">High risk</span>
+          <div className="w-3 h-2 rounded bg-red-500 mr-1"></div>
+          <Text variant="text/xs" className="text-gray-600">
+            High risk
+          </Text>
         </div>
       </div>
 
       {/* Chart */}
-      <div className="w-full h-96">
+      <div className="w-full h-80">
         <ResponsiveContainer width="100%" height="100%">
           <LineChart
-            data={exactChartData}
+            data={chartData}
             margin={{ top: 10, right: 30, left: 0, bottom: 10 }}
           >
             <CartesianGrid
@@ -111,7 +122,14 @@ const RiskTrendGraph = ({ riskData = [] }: { riskData?: any[] }) => {
               stroke="#e5e7eb"
             />
             <XAxis
-              dataKey="monthName"
+              dataKey="month"
+              ticks={allMonths}
+              tickFormatter={(value) => {
+                const currentDate = new Date()
+                const futureDate = new Date()
+                futureDate.setMonth(currentDate.getMonth() + value - 1) // Adjust to make month 1 = current month
+                return futureDate.toLocaleString('default', { month: 'short' })
+              }}
               tick={{ fill: '#6b7280' }}
               axisLine={{ stroke: '#e5e7eb' }}
               tickLine={false}
@@ -121,19 +139,20 @@ const RiskTrendGraph = ({ riskData = [] }: { riskData?: any[] }) => {
               tick={{ fill: '#6b7280' }}
               axisLine={{ stroke: '#e5e7eb' }}
               tickLine={false}
-              domain={[0, 100]}
-              ticks={[0, 20, 40, 60, 80, 100]}
+              domain={[0, 60]}
+              ticks={[0, 10, 20, 30, 40, 50, 60]}
             />
-            <Tooltip content={<CustomTooltip />} />
+            <Tooltip content={<CustomTooltip level={level} />} />
             <Line
               type="monotone"
+              name="low"
               dataKey="low"
-              stroke="#4ade80"
-              strokeWidth={3}
-              dot={{ r: 4, fill: '#4ade80', stroke: 'white', strokeWidth: 2 }}
+              stroke="#22c55e"
+              strokeWidth={2}
+              dot={{ r: 5, fill: '#22c55e', stroke: 'white', strokeWidth: 2 }}
               activeDot={{
-                r: 8,
-                fill: '#4ade80',
+                r: 7,
+                fill: '#22c55e',
                 stroke: 'white',
                 strokeWidth: 2,
               }}
@@ -141,12 +160,13 @@ const RiskTrendGraph = ({ riskData = [] }: { riskData?: any[] }) => {
             />
             <Line
               type="monotone"
+              name="moderate"
               dataKey="moderate"
               stroke="#f97316"
-              strokeWidth={3}
-              dot={{ r: 4, fill: '#f97316', stroke: 'white', strokeWidth: 2 }}
+              strokeWidth={2}
+              dot={{ r: 5, fill: '#f97316', stroke: 'white', strokeWidth: 2 }}
               activeDot={{
-                r: 8,
+                r: 7,
                 fill: '#f97316',
                 stroke: 'white',
                 strokeWidth: 2,
@@ -155,12 +175,13 @@ const RiskTrendGraph = ({ riskData = [] }: { riskData?: any[] }) => {
             />
             <Line
               type="monotone"
+              name="high"
               dataKey="high"
               stroke="#ef4444"
-              strokeWidth={3}
-              dot={{ r: 4, fill: '#ef4444', stroke: 'white', strokeWidth: 2 }}
+              strokeWidth={2}
+              dot={{ r: 5, fill: '#ef4444', stroke: 'white', strokeWidth: 2 }}
               activeDot={{
-                r: 8,
+                r: 7,
                 fill: '#ef4444',
                 stroke: 'white',
                 strokeWidth: 2,
