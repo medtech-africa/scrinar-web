@@ -235,8 +235,11 @@ const ClinicalSummary = ({
           <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
             <IconPicker icon="calendar" className="text-purple-500" size={16} />
           </div>
-          <Text variant="text/sm">{data?.followUpAction}</Text>
+          <Text variant="text/sm">Follow up Action</Text>
         </div>
+        <Text variant="text/sm" className="ml-4">
+          {data?.followUpAction}
+        </Text>
       </div>
 
       <div className="mt-6">

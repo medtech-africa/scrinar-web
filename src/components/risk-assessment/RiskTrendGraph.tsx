@@ -84,7 +84,8 @@ const RiskTrendGraph = ({
       </Text>
 
       <Text variant="text/sm" className="text-gray-500 mb-4">
-        Probability of developing heart disease in the next 3, 6, and 12 months
+        Predictions of the probability of risk score changes in the next 3, 6,
+        and 12 months
       </Text>
 
       {/* Legend */}
@@ -128,7 +129,10 @@ const RiskTrendGraph = ({
                 const currentDate = new Date()
                 const futureDate = new Date()
                 futureDate.setMonth(currentDate.getMonth() + value - 1) // Adjust to make month 1 = current month
-                return futureDate.toLocaleString('default', { month: 'short' })
+                return futureDate.toLocaleString('default', {
+                  month: 'short',
+                  year: 'numeric',
+                })
               }}
               tick={{ fill: '#6b7280' }}
               axisLine={{ stroke: '#e5e7eb' }}
