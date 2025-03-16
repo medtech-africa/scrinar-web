@@ -109,19 +109,14 @@ const FactorBreakdown = ({
 
   return (
     <div className="w-full">
-      <p className="text-sm text-gray-600 mb-4">
-        These are some conditions and behaviors that increase the risk of
-        cardiovascular diseases
-      </p>
-
       <div className="mb-8 p-4 border rounded-2xl border-grey-400">
-        <Text className="font-medium text-grey-400 mb-2">
+        <Text className="font-medium text-grey-700 mb-2">
           Here are some conditions that cannot be altered; they contribute to an
           individual&apos;s baseline risk of cardiovascular diseases
         </Text>
 
         <div className="space-y-4">
-          <div className="flex">
+          <div className="flex items-center gap-1">
             <Text className="font-medium">Age:</Text>
             <Text variant="text/sm" className="flex-1">
               The risk of CVD goes up as you get older. This is because blood
@@ -129,7 +124,7 @@ const FactorBreakdown = ({
             </Text>
           </div>
 
-          <div className="flex">
+          <div className="flex items-center gap-1">
             <Text className="font-medium">Gender:</Text>
             <Text variant="text/sm" className="flex-1">
               Men are generally at higher risk earlier in life, though risk for
@@ -137,7 +132,7 @@ const FactorBreakdown = ({
             </Text>
           </div>
 
-          <div className="flex">
+          <div className="flex items-center gap-1">
             <Text className="font-medium">Family history:</Text>
             <Text variant="text/sm" className="flex-1">
               Some people are more likely to have heart diseases because it runs
@@ -183,7 +178,7 @@ const ClinicalSummary = ({
   }
 
   return (
-    <div className="w-full bg-white p-6 rounded-lg shadow">
+    <div className="w-full bg-white p-6 rounded-lg border">
       <Text as="h3" className="text-base font-medium">
         AI-Generated Clinical Summary
       </Text>
@@ -219,7 +214,7 @@ const ClinicalSummary = ({
           </div>
           <h4 className="font-medium">Recommended</h4>
         </div>
-        <ul className="list-disc ml-8 text-xs space-y-1">
+        <ul className="list-disc ml-8 text-sm space-y-1">
           {data?.lifestyleModification
             ?.split('.')
             .map((rec) => rec && <li key={rec}>{rec}</li>)}
@@ -242,7 +237,6 @@ const ClinicalSummary = ({
           </div>
           <Text variant="text/sm">{data?.followUpAction}</Text>
         </div>
-        rec
       </div>
 
       <div className="mt-6">
@@ -327,7 +321,10 @@ export const RiskAssessmentResult: React.FC<{
   data?: RiskData
   isLoading?: boolean
 }> = ({ data, isLoading = false }) => {
+  console.log('🚀 ~ data:', data)
   const [activeTab, setActiveTab] = useState<RiskType>('who')
+
+  const isWHO = activeTab === 'who'
 
   // const formContext = useFormContext()
 
@@ -423,12 +420,14 @@ export const RiskAssessmentResult: React.FC<{
               riskLevel={activeData?.riskLevel ?? ''}
             />
 
-            <div className="mt-6">
-              <PreventionTips
-                score={Number(activeData?.score)}
-                level={riskLevel}
-              />
-            </div>
+            {isWHO && (
+              <div className="mt-6">
+                <PreventionTips
+                  score={Number(activeData?.score)}
+                  level={riskLevel}
+                />
+              </div>
+            )}
           </div>
 
           <ClinicalSummary data={activeData} isLoading={isLoading} />
@@ -453,9 +452,11 @@ export const RiskAssessmentResult: React.FC<{
               isLoading={isLoading}
             />
           </PageCard>
-          <div>
-            <DiseaseBreakdown data={activeData?.heartDiseaseBreakdown} />
-          </div>
+          {!!activeData?.diseaseBreakdown && (
+            <div className="w-full bg-white p-6 rounded-lg border mb-4">
+              <DiseaseBreakdown data={activeData?.diseaseBreakdown} />
+            </div>
+          )}
         </>
       </div>
     </motion.div>

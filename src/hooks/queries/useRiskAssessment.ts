@@ -182,7 +182,7 @@ export interface Findrisc {
   riskLevel: string
   breakdown: FindriscBreakdown
   status: boolean
-  heartDiseaseBreakdown: { [key: string]: number }
+  diseaseBreakdown: { [key: string]: number }
   predictions?: Prediction[]
 }
 
@@ -199,7 +199,7 @@ export interface Who {
   followUpAction: string
   lifestyleModification: string
   personalizedAdvice: string
-  heartDiseaseBreakdown: { [key: string]: number }
+  diseaseBreakdown: { [key: string]: number }
   score: string
   riskLevel: string
   breakdown: WhoBreakdown

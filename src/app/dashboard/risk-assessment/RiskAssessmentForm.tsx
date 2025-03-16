@@ -53,22 +53,31 @@ export const RiskAssessmentForm = ({
     data: resultData,
   } = useMutation({
     mutationFn: async (formData) => {
-      const [cvdResponse, diabetesResponse] = await Promise.all([
+      const [response] = await Promise.all([
         baseAxios
           .post<{
             data: any
-          }>(`${API.riskAssessment}/cvd`, formData)
-          .then((res) => res.data.data),
-        baseAxios
-          .post<{
-            data: any
-          }>(`${API.riskAssessment}/diabetes`, formData)
+          }>(`${API.riskAssessment}`, formData)
           .then((res) => res.data.data),
       ])
 
+      // const [cvdResponse, diabetesResponse] = await Promise.all([
+      //   baseAxios
+      //     .post<{
+      //       data: any
+      //     }>(`${API.riskAssessment}/cvd`, formData)
+      //     .then((res) => res.data.data),
+      //   baseAxios
+      //     .post<{
+      //       data: any
+      //     }>(`${API.riskAssessment}/diabetes`, formData)
+      //     .then((res) => res.data.data),
+      // ])
+
       return {
-        ...(cvdResponse || {}),
-        ...(diabetesResponse || {}),
+        ...response,
+        // ...(cvdResponse || {}),
+        // ...(diabetesResponse || {}),
       }
     },
     onMutate: () => {
