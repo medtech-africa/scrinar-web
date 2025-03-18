@@ -244,8 +244,7 @@ export const RiskAssessmentForm = ({
                       <div className="flex justify-end mt-6">
                         {!displayOnly && (
                           <Button
-                            variant="primary"
-                            className="bg-red-600 hover:bg-red-700 text-white"
+                            className="px-8"
                             leadingIcon={<IconPicker icon="saveAdd" />}
                             disabled={isPending || !consentAgreement}
                             type="submit"

@@ -238,11 +238,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
       </div>
 
       <div className="flex justify-end mt-6">
-        <Button
-          variant="primary"
-          className="bg-red-600 hover:bg-red-700 text-white px-8"
-          onClick={onNext}
-        >
+        <Button className="px-8" onClick={onNext}>
           Next
         </Button>
       </div>
