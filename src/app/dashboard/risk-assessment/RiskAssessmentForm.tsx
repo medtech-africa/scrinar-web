@@ -55,7 +55,7 @@ export const RiskAssessmentForm = ({
   data,
   displayOnly = false,
 }: {
-  data?: RiskAssessmentModel
+  data?: Pick<RiskAssessmentModel, 'requestData'>
   displayOnly?: boolean
 }) => {
   const [progress, setProgress] = useState(0)

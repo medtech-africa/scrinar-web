@@ -1,9 +1,11 @@
 import { Input } from '@/components/ui/input'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
+import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
+import { slugify } from '@/utils/slugify'
 
 type Props = {
   onNext: () => void
@@ -11,6 +13,16 @@ type Props = {
 
 export const FamilyHistoryForm = ({ onNext }: Props) => {
   const { control, watch } = useFormContext()
+  const formData = watch()
+  const storeRiskAssessment = useRiskAssessmentStorage((store) => store.store)
+
+  useEffect(() => {
+    console.group('I ran')
+    storeRiskAssessment(
+      slugify(formData.personalInfo.fullName + formData.personalInfo.gender),
+      formData
+    )
+  }, [formData, storeRiskAssessment])
 
   return (
     <div title="Family History & Lifestyle">

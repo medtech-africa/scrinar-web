@@ -1,8 +1,18 @@
 'use client'
 import React from 'react'
 import { RiskAssessmentForm } from '../RiskAssessmentForm'
+import { useSearchParams } from 'next/navigation'
+import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
+import { RiskAssessmentModelRequestData } from '@/hooks/queries/useRiskAssessment'
 
 const RiskAssessment = () => {
+  const searchParams = useSearchParams()
+
+  const getStorageData = useRiskAssessmentStorage((store) => store.get)
+  const storedData = getStorageData(
+    searchParams.get('storageId') || ''
+  ) as unknown as RiskAssessmentModelRequestData | null
+
   return (
     <div className="flex flex-col gap-y-5">
       <div className="flex flex-col gap-y-2">
@@ -21,7 +31,15 @@ const RiskAssessment = () => {
       </div>
       <div className="">
         <div className="grid">
-          <RiskAssessmentForm />
+          <RiskAssessmentForm
+            data={
+              storedData
+                ? {
+                    requestData: storedData as RiskAssessmentModelRequestData,
+                  }
+                : undefined
+            }
+          />
         </div>
       </div>
     </div>
