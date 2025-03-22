@@ -189,7 +189,7 @@ export const RiskAssessmentForm = ({
   return (
     <FormProvider {...formMethods}>
       <div className="relative">
-        <div className="container mx-auto px-4 py-6">
+        <div className="container mx-auto px-0 md:px-4 py-6">
           <form
             onSubmit={formMethods.handleSubmit(handleSubmit)}
             className="w-full h-full"
@@ -197,7 +197,7 @@ export const RiskAssessmentForm = ({
             <Tabs.Root value={activeTab} onValueChange={handleTabChange}>
               <div className="flex gap-8">
                 <div className="w-full md:w-3/4 order-2 md:order-1">
-                  <div className="items-center gap-2 mb-4 hidden md:flex justify-end">
+                  <div className="items-center gap-2 mb-4 flex justify-end">
                     <button
                       title="arrow-left"
                       type="button"

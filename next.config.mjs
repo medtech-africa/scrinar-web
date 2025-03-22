@@ -63,6 +63,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'play4health.s3.amazonaws.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+      },
     ],
   },
 }
