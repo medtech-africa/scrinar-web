@@ -31,6 +31,8 @@ import { Text } from '@/components/ui/text'
 import { ScreeningQuestionsForm } from './ScreeningQuestionsForm'
 import { FamilyHistoryForm } from './FamilyHistoryForm'
 import CardiacAssessmentForm from './CardiacAssessmentForm'
+import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
+import { slugify } from '@/utils/slugify'
 
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2 px-4 transition-all cursor-pointer block w-full text-left',
@@ -60,6 +62,8 @@ export const RiskAssessmentForm = ({
   const [showResults, setShowResults] = useState(false)
   const [activeTab, setActiveTab] = useState('bio')
   const formMethods = useForm({ defaultValues: data?.requestData })
+
+  const storeRiskAssessment = useRiskAssessmentStorage((store) => store.store)
 
   const {
     mutate: analyzeRisk,
@@ -131,13 +135,17 @@ export const RiskAssessmentForm = ({
     )
   }
 
-  const handleSubmit = (data: any) => {
+  const handleSubmit = (data: RiskAssessmentModelRequestData) => {
     if (!isFormValid(data)) {
       toast.error(isFormFilledError(data) ?? 'An error occurred')
       return
     }
+    storeRiskAssessment(
+      slugify(data.personalInfo.fullName + data.personalInfo.gender),
+      data
+    )
 
-    analyzeRisk(data)
+    analyzeRisk(data as any)
   }
 
   const isFormFilledError = (data: any) => {
