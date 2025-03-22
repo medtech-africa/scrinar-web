@@ -27,6 +27,7 @@ import {
 } from '@/components/dashboard/NutritionAnalytics'
 import { QuickActions } from '@/components/dashboard/QuickActions'
 import ParentAnalytics from '@/components/dashboard/ParentAnalytics'
+import ChildrenAnalytics from '@/components/dashboard/ChildrenAnalytics'
 
 const dashboardStats = [
   {
@@ -344,6 +345,7 @@ export default function Home() {
         <NutritionAnalytics />
         <GeneralAnalyticsBarChart />
         <ParentAnalytics />
+        <ChildrenAnalytics />
       </div>
       <ContentLoader loading={isLoading} />
     </div>

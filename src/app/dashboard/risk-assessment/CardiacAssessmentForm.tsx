@@ -1,23 +1,33 @@
 import React from 'react'
-import { PageCard } from '@/components/ui/page-card'
 import { useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
+import { Text } from '@/components/ui/text'
+import { Button } from '@/components/ui/button'
 
-export const CardiacAssessmentForm = () => {
+type Props = {
+  onNext: () => void
+}
+
+export const CardiacAssessmentForm = ({ onNext }: Props) => {
   const { watch } = useFormContext()
 
   const hasChestPain = watch('cardiac.chestPain') === 'Yes'
   const hasChestPainLocation = watch('cardiac.chestPainLocation') === 'Yes'
 
   return (
-    <PageCard
-      title="Cardiac Assessment Questionnaire"
-      bodyStyle="px-4 pb-4 mt-4"
-    >
-      <PageCard
-        title="Angina or Heart Attack Assessment"
-        bodyStyle="px-4 pb-4 gap-4 grid grid-cols-1"
-      >
+    <div className="">
+      <Text as="h2" className="font-medium mb-6 md:mb-8">
+        Cardiac Assessment Questionnaire
+      </Text>
+      <div>
+        <Text
+          as="h4"
+          variant="text/sm"
+          className="font-medium mb-2 text-grey-700"
+        >
+          Angina or Heart Attack Assessment
+        </Text>
+
         <OptionWithRadioField
           label="Have you ever had any pain or discomfort or any pressure or heaviness in your chest?"
           options={['Yes', 'No']}
@@ -67,18 +77,18 @@ export const CardiacAssessmentForm = () => {
             )}
           </>
         )}
-      </PageCard>
+      </div>
 
-      <PageCard
-        title="Stroke and TIA Assessment"
-        bodyStyle="px-4 mt-4 pb-4 gap-4 grid grid-cols-1"
-      >
+      <div className="mt-4">
+        <Text as="h4" variant="text/sm" className="font-medium mb-2">
+          Stroke and TIA Assessment
+        </Text>
         <OptionWithRadioField
           label="Have you ever had any of the following: difficulty in talking, weakness of arm and/or leg on one side of the body or numbness on one side of the body?"
           options={['Yes', 'No']}
           form={{ id: 'cardiac.strokeSymptoms' }}
         />
-      </PageCard>
+      </div>
 
       {/* Alert section for referral conditions */}
       {(watch('cardiac.painOnExertion') === 'Yes' ||
@@ -102,7 +112,13 @@ export const CardiacAssessmentForm = () => {
           </p>
         </div>
       )}
-    </PageCard>
+
+      <div className="flex justify-end mt-6">
+        <Button className="px-8" onClick={onNext} type="button">
+          Next
+        </Button>
+      </div>
+    </div>
   )
 }
 

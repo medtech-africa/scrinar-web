@@ -11,7 +11,7 @@ import { MapContainer, TileLayer, Circle, Popup } from 'react-leaflet'
 import { useSurveillanceAnalytics } from '@/hooks/queries/useAnalytics'
 import ContentLoader from '@/components/content-loader'
 import { useGeolocation } from '@/hooks/useGeolocation'
-import { Text } from '@/components/ui/text'
+import SurveillanceCard from '@/components/SurveillanceCard'
 
 // const data = [
 //   { name: 'Takushara', lat: 8.8824, lon: 7.4564, value: 80945 },
@@ -57,16 +57,20 @@ export const SurveillanceMap = () => {
   const initialCoordinates = lat && lng ? { lat, lng } : position
 
   return (
-    <div className="">
-      <Text variant="display/xs" className="">
-        Map
-      </Text>
+    <SurveillanceCard
+      onChange={() => {}}
+      options={[]}
+      value={''}
+      subtitle="Track and visualize disease hotspots and trends across regions in real time."
+      title="Map"
+    >
       <MapContainer
         key={Object.values(initialCoordinates).join(',')}
         center={initialCoordinates}
         zoom={6}
         scrollWheelZoom={true}
         style={{
+          zIndex: 1,
           // height: 'max(600px, 80vh)',
           width: '100%',
         }}
@@ -94,6 +98,6 @@ export const SurveillanceMap = () => {
           ))}
         </React.Fragment>
       </MapContainer>
-    </div>
+    </SurveillanceCard>
   )
 }

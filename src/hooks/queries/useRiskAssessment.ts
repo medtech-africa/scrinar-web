@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
-debugger
+
 const getData = (params: { page: number; limit: number }) =>
   baseAxios
     .get<{
@@ -46,6 +46,13 @@ export interface RiskAssessmentModelRequestData {
   sleepPatterns: SleepPatterns
   previousHealthScreening: PreviousHealthScreening
   consentAgreement: boolean
+}
+
+interface Prediction {
+  high: number
+  low: number
+  moderate: number
+  month: number
 }
 
 export interface BloodTest {
@@ -160,10 +167,11 @@ export interface Vitals {
 }
 
 export interface RiskAssessmentModelResponseData {
-  who: Who
-  findrisc: Findrisc
+  who?: Who
+  findrisc?: Findrisc
   healthdata?: any
   criticalAlerts: any[]
+  predictions?: Prediction[]
 }
 
 export interface Findrisc {
@@ -174,6 +182,8 @@ export interface Findrisc {
   riskLevel: string
   breakdown: FindriscBreakdown
   status: boolean
+  diseaseBreakdown: { [key: string]: number }
+  predictions?: Prediction[]
 }
 
 export interface FindriscBreakdown {
@@ -189,10 +199,12 @@ export interface Who {
   followUpAction: string
   lifestyleModification: string
   personalizedAdvice: string
+  diseaseBreakdown: { [key: string]: number }
   score: string
   riskLevel: string
   breakdown: WhoBreakdown
   status: boolean
+  predictions?: Prediction[]
 }
 
 export interface WhoBreakdown {

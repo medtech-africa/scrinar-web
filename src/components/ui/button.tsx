@@ -14,6 +14,8 @@ const buttonVariants = cva(
         secondary:
           'bg-secondary text-grey-900 hover:bg-sunglow-800 focus-visible:ring-sunglow-200',
         tertiary: 'bg-grey-50 text-grey-900 hover:bg-grey-100',
+        outline:
+          'bg-white text-grey-900 hover:bg-grey-50 border border-grey-900 ',
       },
 
       size: {
@@ -23,7 +25,7 @@ const buttonVariants = cva(
         xl: 'px-4 py-4',
       },
       disabled: {
-        true: 'cursor-not-allowed',
+        true: 'cursor-not-allowed opacity-45',
         false: '',
       },
     },
