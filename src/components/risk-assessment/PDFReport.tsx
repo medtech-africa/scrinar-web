@@ -14,12 +14,7 @@ import { useFormContext } from 'react-hook-form'
 import { useMutation } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
-import {
-  PersonalInfo,
-  RiskAssessmentModelRequestData,
-  RiskAssessmentModelResponseData,
-  RiskData,
-} from '@/hooks/queries/useRiskAssessment'
+import { PersonalInfo, RiskData } from '@/hooks/queries/useRiskAssessment'
 import calculateAge from '@/utils/calculateAge'
 import { categorizeBMIWHO2007 } from '@/utils/vitalCalculations'
 
@@ -94,8 +89,7 @@ const PDFReport = ({
   data,
   personalInfo,
 }: {
-  data: RiskAssessmentModelResponseData &
-    Partial<RiskAssessmentModelRequestData>
+  data: RiskData
   personalInfo: PersonalInfo
 }) => {
   const formatDate = (date: Date) => {
@@ -215,18 +209,20 @@ const PDFReport = ({
         )}
 
         {/* WHO Risk Assessment */}
-        {data.who && (
+        {data?.who && (
           <View style={styles.section}>
             <Text style={styles.subtitle}>
               Cardiovascular Risk Assessment (WHO)
             </Text>
             <View style={styles.riskIndicator}>
-              <Text style={styles.text}>Risk Score: {data.who.score}%</Text>
-              <Text style={styles.text}>Risk Level: {data.who.riskLevel}</Text>
+              <Text style={styles.text}>Risk Score: {data?.who.score}%</Text>
+              <Text style={styles.text}>
+                Risk Level: {data?.who?.riskLevel}
+              </Text>
             </View>
 
             <Text style={styles.subtitle}>Risk Factors</Text>
-            {Object.entries(data.who.breakdown).map(([factor, value]) => (
+            {Object.entries(data?.who?.breakdown).map(([factor, value]) => (
               <Text key={factor} style={styles.text}>
                 • {factor.charAt(0).toUpperCase() + factor.slice(1)}: {value}
               </Text>
@@ -235,17 +231,17 @@ const PDFReport = ({
         )}
 
         {/* FINDRISC Assessment */}
-        {data.findrisc && (
+        {data?.findrisc && (
           <View style={styles.section}>
             <Text style={styles.subtitle}>
               Diabetes Risk Assessment (FINDRISC)
             </Text>
             <View style={styles.riskIndicator}>
               <Text style={styles.text}>
-                Risk Score: {data.findrisc.score}%
+                Risk Score: {data?.findrisc?.score}%
               </Text>
               <Text style={styles.text}>
-                Risk Level: {data.findrisc.riskLevel}
+                Risk Level: {data?.findrisc?.riskLevel}
               </Text>
             </View>
           </View>
@@ -254,26 +250,38 @@ const PDFReport = ({
         {/* Recommendations */}
         <View style={styles.section}>
           <Text style={styles.subtitle}>Medical Recommendations</Text>
-          {data.who && (
+          {data?.who && (
             <>
               <Text style={styles.text}>
-                Follow-up Action: {data.who.followUpAction}
+                Follow-up Action: {data?.who.followUpAction}
               </Text>
               <Text style={styles.text}>
-                Lifestyle Modifications: {data.who.lifestyleModification}
+                Lifestyle Modifications: {data?.who.lifestyleModification}
               </Text>
               <Text style={styles.text}>
-                Personal Advice: {data.who.personalizedAdvice}
+                Personal Advice: {data?.who.personalizedAdvice}
               </Text>
             </>
           )}
         </View>
 
         {/* Critical Alerts */}
-        {data.criticalAlerts && data.criticalAlerts.length > 0 && (
+        {data?.criticalAlerts && data?.criticalAlerts.length > 0 && (
           <View style={styles.section}>
             <Text style={styles.subtitle}>Important Health Alerts</Text>
-            {data.criticalAlerts.map((alert, index) => (
+            {data?.criticalAlerts.map((alert, index) => (
+              <View key={index} style={styles.riskIndicator}>
+                <Text style={styles.text}>{alert.title}</Text>
+                <Text style={styles.text}>{alert.description}</Text>
+              </View>
+            ))}
+          </View>
+        )}
+
+        {data?.criticalAlerts && data?.criticalAlerts.length > 0 && (
+          <View style={styles.section}>
+            <Text style={styles.subtitle}>Important Health Alerts</Text>
+            {data?.criticalAlerts.map((alert, index) => (
               <View key={index} style={styles.riskIndicator}>
                 <Text style={styles.text}>{alert.title}</Text>
                 <Text style={styles.text}>{alert.description}</Text>

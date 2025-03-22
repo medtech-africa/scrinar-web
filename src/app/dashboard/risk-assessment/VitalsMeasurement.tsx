@@ -1,6 +1,5 @@
 import { BadgeField } from '@/components/ui/badge'
 import { Input } from '@/components/ui/input'
-import { PageCard } from '@/components/ui/page-card'
 import { Text } from '@/components/ui/text'
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
@@ -12,8 +11,13 @@ import { Label } from '@/components/ui/label'
 import { messageCheck, variantValidityCheck } from './utils'
 import isValidNumber from '@/utils/isValidNumber'
 import calculateAge from '@/utils/calculateAge'
+import { Button } from '@/components/ui/button'
 
-export const VitalsMeasurement = () => {
+type Props = {
+  onNext: () => void
+}
+
+export const VitalsMeasurement = ({ onNext }: Props) => {
   const { control, watch, setValue } = useFormContext()
 
   const { bmi, sys, dys, height, weight } = watch('vitals', {})
@@ -35,12 +39,24 @@ export const VitalsMeasurement = () => {
   }, [height, weight])
 
   return (
-    <div className="py-7">
-      <Text variant="text/md" weight="medium">
-        Vital Measurement
+    <div>
+      <Text as="h2" className="font-medium mb-2">
+        Vital & Anthropometrics
+      </Text>
+      <Text variant="text/sm" className="text-gray-500 mb-2 md:mb-4">
+        Vitals records
       </Text>
       <div className="grid md:grid-cols-2 gap-6 mt-6">
-        <PageCard title="Antropometry">
+        <div>
+          <Text as="h3" variant="text/md" className="font-medium mb-2">
+            Antropometry
+          </Text>
+          <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
+            To measure height, stand upright using a flat ruler or measuring
+            tape and mark the highest point of your head. For weight, use a
+            calibrated scale while standing barefoot. For waist size, wrap a
+            tape around the narrowest part, keeping it snug and level.
+          </Text>
           <div className="flex gap-3 w-full p-4">
             <Controller
               name="vitals.height"
@@ -117,80 +133,81 @@ export const VitalsMeasurement = () => {
               * BMI automatically generated
             </Label>
           </div>
-        </PageCard>
+        </div>
 
-        <div className="h-full">
-          <PageCard title="Blood Pressure" bodyStyle="p-4">
-            <div className="grid grid-cols-[2fr_1fr] items-center">
-              <div className="flex">
-                <Controller
-                  name="vitals.sys"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="000"
-                      label="Sys"
-                      labelStyle="lg:text-sm text-xs"
-                      variant={variantValidityCheck(field.value)}
-                      message={messageCheck(field.value)}
-                    />
-                  )}
-                />
-                <Text className="mt-6 mx-2" variant="display/sm">
-                  /
-                </Text>
-                <Controller
-                  name="vitals.dys"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="00"
-                      label="Dys"
-                      labelStyle="lg:text-sm text-xs"
-                      variant={variantValidityCheck(field.value)}
-                      message={messageCheck(field.value)}
-                    />
-                  )}
-                />
-              </div>
-              {sys && dys && (
-                <BadgeField
-                  variant={
-                    calculateBloodPressureRisk(Number(sys), Number(dys)).variant
-                  }
-                  value={
-                    calculateBloodPressureRisk(Number(sys), Number(dys)).message
-                  }
-                  className="ml-2 mt-6"
-                />
-              )}
+        <div>
+          <Text as="h3" variant="text/sm" className="font-medium mb-2">
+            Blood Pressure
+          </Text>
+          <div className="grid grid-cols-[2fr_1fr] items-center">
+            <div className="flex">
+              <Controller
+                name="vitals.sys"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder="000"
+                    label="Sys"
+                    labelStyle="lg:text-sm text-xs"
+                    variant={variantValidityCheck(field.value)}
+                    message={messageCheck(field.value)}
+                  />
+                )}
+              />
+              <Text className="mt-6 mx-2" variant="display/sm">
+                /
+              </Text>
+              <Controller
+                name="vitals.dys"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder="00"
+                    label="Dys"
+                    labelStyle="lg:text-sm text-xs"
+                    variant={variantValidityCheck(field.value)}
+                    message={messageCheck(field.value)}
+                  />
+                )}
+              />
             </div>
-            <div>
-              <div className="flex mt-4">
-                <Controller
-                  name="vitals.pulse"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="00"
-                      label="Pulse/Heart Rate"
-                      labelStyle="lg:text-sm text-xs"
-                      variant={variantValidityCheck(field.value)}
-                      message={messageCheck(field.value)}
-                    />
-                  )}
-                />
-              </div>
+            {sys && dys && (
+              <BadgeField
+                variant={
+                  calculateBloodPressureRisk(Number(sys), Number(dys)).variant
+                }
+                value={
+                  calculateBloodPressureRisk(Number(sys), Number(dys)).message
+                }
+                className="ml-2 mt-6"
+              />
+            )}
+          </div>
+          <div>
+            <div className="flex mt-4">
+              <Controller
+                name="vitals.pulse"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    placeholder="00"
+                    label="Pulse/Heart Rate"
+                    labelStyle="lg:text-sm text-xs"
+                    variant={variantValidityCheck(field.value)}
+                    message={messageCheck(field.value)}
+                  />
+                )}
+              />
             </div>
-          </PageCard>
+          </div>
 
-          <PageCard
-            title="Oxygen & Temperature (Optional)"
-            bodyStyle="p-4 mt-4"
-          >
+          <div className="mt-4">
+            <Text as="h3" variant="text/sm" className="font-medium mb-2">
+              Oxygen & Temperature (Optional)
+            </Text>
             <Controller
               name="vitals.oxygenSaturation"
               control={control}
@@ -222,8 +239,14 @@ export const VitalsMeasurement = () => {
                 )}
               />
             </div>
-          </PageCard>
+          </div>
         </div>
+      </div>
+
+      <div className="flex justify-end mt-6">
+        <Button className="px-8" onClick={onNext}>
+          Next
+        </Button>
       </div>
     </div>
   )

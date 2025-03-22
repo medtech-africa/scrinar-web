@@ -34,6 +34,7 @@ const config: Config = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
+        secBorder: '#E9E9E9',
         border: 'var(--border)',
         input: 'var(--input)',
         ring: 'var(--ring)',
@@ -71,7 +72,7 @@ const config: Config = {
           50: '#FEFAEB',
         },
         grey: {
-          900: '#101828',
+          900: '#212121',
           800: '#1D2939',
           700: '#344054',
           600: '#475467',
@@ -81,6 +82,7 @@ const config: Config = {
           200: '#E4E7EC',
           100: '#F2F4F7',
           50: '#F9FAFB',
+          20: '#767676',
         },
         'spanish-violet': {
           900: '#42307D',
