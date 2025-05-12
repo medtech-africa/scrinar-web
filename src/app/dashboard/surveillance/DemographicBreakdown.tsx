@@ -17,110 +17,110 @@ const diseaseOptions = [
 const demographicData = {
   hypertension: {
     age: [
-      { name: '60+', value: 80, fill: '#B53D3D' }, // High risk
-      { name: '40-60', value: 50, fill: '#D78A39' }, // Low risk
-      { name: '20-40', value: 30, fill: '#418B4A' }, // Healthy
-    ],
-    educationMale: [
-      { name: 'None', value: 70, fill: '#B53D3D' },
-      { name: 'SSCE', value: 50, fill: '#D78A39' },
-      { name: 'BSC', value: 40, fill: '#418B4A' },
-    ],
-    educationFemale: [
-      { name: 'None', value: 75, fill: '#B53D3D' },
-      { name: 'SSCE', value: 55, fill: '#D78A39' },
-      { name: 'BSC', value: 35, fill: '#418B4A' },
-    ],
-    occupationMale: [
-      { name: 'Unemployed', value: 85, fill: '#B53D3D' },
-      { name: 'Blue-Collar', value: 60, fill: '#D78A39' },
-      { name: 'Service & Healthcare', value: 40, fill: '#418B4A' },
-    ],
-    occupationFemale: [
-      { name: 'Unemployed', value: 80, fill: '#B53D3D' },
-      { name: 'Blue-Collar', value: 55, fill: '#D78A39' },
-      { name: 'Service & Healthcare', value: 45, fill: '#418B4A' },
-    ],
-  },
-  cancer: {
-    age: [
-      { name: '60+', value: 70, fill: '#B53D3D' }, // High risk
-      { name: '40-60', value: 40, fill: '#D78A39' }, // Low risk
-      { name: '20-40', value: 20, fill: '#418B4A' }, // Healthy
-    ],
-    educationMale: [
-      { name: 'None', value: 65, fill: '#B53D3D' },
-      { name: 'SSCE', value: 45, fill: '#D78A39' },
-      { name: 'BSC', value: 35, fill: '#418B4A' },
-    ],
-    educationFemale: [
-      { name: 'None', value: 70, fill: '#B53D3D' },
-      { name: 'SSCE', value: 50, fill: '#D78A39' },
-      { name: 'BSC', value: 30, fill: '#418B4A' },
-    ],
-    occupationMale: [
-      { name: 'Unemployed', value: 75, fill: '#B53D3D' },
-      { name: 'Blue-Collar', value: 55, fill: '#D78A39' },
-      { name: 'Service & Healthcare', value: 35, fill: '#418B4A' },
-    ],
-    occupationFemale: [
-      { name: 'Unemployed', value: 70, fill: '#B53D3D' },
-      { name: 'Blue-Collar', value: 50, fill: '#D78A39' },
-      { name: 'Service & Healthcare', value: 40, fill: '#418B4A' },
-    ],
-  },
-  stroke: {
-    age: [
-      { name: '60+', value: 75, fill: '#B53D3D' }, // High risk
-      { name: '40-60', value: 45, fill: '#D78A39' }, // Low risk
-      { name: '20-40', value: 25, fill: '#418B4A' }, // Healthy
-    ],
-    educationMale: [
-      { name: 'None', value: 68, fill: '#B53D3D' },
-      { name: 'SSCE', value: 48, fill: '#D78A39' },
-      { name: 'BSC', value: 38, fill: '#418B4A' },
-    ],
-    educationFemale: [
-      { name: 'None', value: 72, fill: '#B53D3D' },
-      { name: 'SSCE', value: 52, fill: '#D78A39' },
-      { name: 'BSC', value: 32, fill: '#418B4A' },
-    ],
-    occupationMale: [
-      { name: 'Unemployed', value: 78, fill: '#B53D3D' },
-      { name: 'Blue-Collar', value: 58, fill: '#D78A39' },
-      { name: 'Service & Healthcare', value: 38, fill: '#418B4A' },
-    ],
-    occupationFemale: [
-      { name: 'Unemployed', value: 75, fill: '#B53D3D' },
-      { name: 'Blue-Collar', value: 53, fill: '#D78A39' },
-      { name: 'Service & Healthcare', value: 43, fill: '#418B4A' },
-    ],
-  },
-  diabetes: {
-    age: [
       { name: '60+', value: 65, fill: '#B53D3D' }, // High risk
       { name: '40-60', value: 35, fill: '#D78A39' }, // Low risk
       { name: '20-40', value: 15, fill: '#418B4A' }, // Healthy
     ],
     educationMale: [
-      { name: 'None', value: 60, fill: '#B53D3D' },
-      { name: 'SSCE', value: 40, fill: '#D78A39' },
-      { name: 'BSC', value: 30, fill: '#418B4A' },
+      { name: 'None', value: 45, fill: '#B53D3D' },
+      { name: 'SSCE', value: 30, fill: '#D78A39' },
+      { name: 'BSC', value: 20, fill: '#418B4A' },
     ],
     educationFemale: [
-      { name: 'None', value: 65, fill: '#B53D3D' },
-      { name: 'SSCE', value: 45, fill: '#D78A39' },
-      { name: 'BSC', value: 25, fill: '#418B4A' },
+      { name: 'None', value: 42, fill: '#B53D3D' },
+      { name: 'SSCE', value: 28, fill: '#D78A39' },
+      { name: 'BSC', value: 18, fill: '#418B4A' },
     ],
     occupationMale: [
-      { name: 'Unemployed', value: 70, fill: '#B53D3D' },
-      { name: 'Blue-Collar', value: 50, fill: '#D78A39' },
-      { name: 'Service & Healthcare', value: 30, fill: '#418B4A' },
+      { name: 'Unemployed', value: 38, fill: '#B53D3D' },
+      { name: 'Blue-Collar', value: 32, fill: '#D78A39' },
+      { name: 'Service & Healthcare', value: 25, fill: '#418B4A' },
     ],
     occupationFemale: [
-      { name: 'Unemployed', value: 68, fill: '#B53D3D' },
-      { name: 'Blue-Collar', value: 48, fill: '#D78A39' },
-      { name: 'Service & Healthcare', value: 38, fill: '#418B4A' },
+      { name: 'Unemployed', value: 35, fill: '#B53D3D' },
+      { name: 'Blue-Collar', value: 30, fill: '#D78A39' },
+      { name: 'Service & Healthcare', value: 22, fill: '#418B4A' },
+    ],
+  },
+  cancer: {
+    age: [
+      { name: '60+', value: 55, fill: '#B53D3D' }, // High risk
+      { name: '40-60', value: 30, fill: '#D78A39' }, // Low risk
+      { name: '20-40', value: 12, fill: '#418B4A' }, // Healthy
+    ],
+    educationMale: [
+      { name: 'None', value: 40, fill: '#B53D3D' },
+      { name: 'SSCE', value: 28, fill: '#D78A39' },
+      { name: 'BSC', value: 18, fill: '#418B4A' },
+    ],
+    educationFemale: [
+      { name: 'None', value: 38, fill: '#B53D3D' },
+      { name: 'SSCE', value: 25, fill: '#D78A39' },
+      { name: 'BSC', value: 15, fill: '#418B4A' },
+    ],
+    occupationMale: [
+      { name: 'Unemployed', value: 35, fill: '#B53D3D' },
+      { name: 'Blue-Collar', value: 30, fill: '#D78A39' },
+      { name: 'Service & Healthcare', value: 22, fill: '#418B4A' },
+    ],
+    occupationFemale: [
+      { name: 'Unemployed', value: 32, fill: '#B53D3D' },
+      { name: 'Blue-Collar', value: 28, fill: '#D78A39' },
+      { name: 'Service & Healthcare', value: 20, fill: '#418B4A' },
+    ],
+  },
+  stroke: {
+    age: [
+      { name: '60+', value: 60, fill: '#B53D3D' }, // High risk
+      { name: '40-60', value: 28, fill: '#D78A39' }, // Low risk
+      { name: '20-40', value: 8, fill: '#418B4A' }, // Healthy
+    ],
+    educationMale: [
+      { name: 'None', value: 42, fill: '#B53D3D' },
+      { name: 'SSCE', value: 25, fill: '#D78A39' },
+      { name: 'BSC', value: 15, fill: '#418B4A' },
+    ],
+    educationFemale: [
+      { name: 'None', value: 38, fill: '#B53D3D' },
+      { name: 'SSCE', value: 22, fill: '#D78A39' },
+      { name: 'BSC', value: 12, fill: '#418B4A' },
+    ],
+    occupationMale: [
+      { name: 'Unemployed', value: 35, fill: '#B53D3D' },
+      { name: 'Blue-Collar', value: 28, fill: '#D78A39' },
+      { name: 'Service & Healthcare', value: 18, fill: '#418B4A' },
+    ],
+    occupationFemale: [
+      { name: 'Unemployed', value: 32, fill: '#B53D3D' },
+      { name: 'Blue-Collar', value: 25, fill: '#D78A39' },
+      { name: 'Service & Healthcare', value: 15, fill: '#418B4A' },
+    ],
+  },
+  diabetes: {
+    age: [
+      { name: '60+', value: 50, fill: '#B53D3D' }, // High risk
+      { name: '40-60', value: 25, fill: '#D78A39' }, // Low risk
+      { name: '20-40', value: 10, fill: '#418B4A' }, // Healthy
+    ],
+    educationMale: [
+      { name: 'None', value: 38, fill: '#B53D3D' },
+      { name: 'SSCE', value: 25, fill: '#D78A39' },
+      { name: 'BSC', value: 15, fill: '#418B4A' },
+    ],
+    educationFemale: [
+      { name: 'None', value: 35, fill: '#B53D3D' },
+      { name: 'SSCE', value: 22, fill: '#D78A39' },
+      { name: 'BSC', value: 12, fill: '#418B4A' },
+    ],
+    occupationMale: [
+      { name: 'Unemployed', value: 32, fill: '#B53D3D' },
+      { name: 'Blue-Collar', value: 28, fill: '#D78A39' },
+      { name: 'Service & Healthcare', value: 18, fill: '#418B4A' },
+    ],
+    occupationFemale: [
+      { name: 'Unemployed', value: 30, fill: '#B53D3D' },
+      { name: 'Blue-Collar', value: 25, fill: '#D78A39' },
+      { name: 'Service & Healthcare', value: 15, fill: '#418B4A' },
     ],
   },
 }

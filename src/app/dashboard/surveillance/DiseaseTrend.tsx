@@ -20,44 +20,40 @@ const diseaseOptions = [
 
 const diseaseData = {
   cancer: [
-    { year: 2000, male: 10, female: 12 },
-    { year: 2002, male: 20, female: 22 },
-    { year: 2004, male: 35, female: 30 },
-    { year: 2006, male: 50, female: 45 },
-    { year: 2008, male: 55, female: 60 },
-    { year: 2010, male: 70, female: 65 },
-    { year: 2012, male: 80, female: 78 },
-    { year: 2014, male: 90, female: 85 },
+    { year: 2000, male: 4.2, female: 4.8 },
+    { year: 2004, male: 4.5, female: 5.1 },
+    { year: 2008, male: 4.8, female: 5.4 },
+    { year: 2012, male: 5.1, female: 5.7 },
+    { year: 2016, male: 5.4, female: 6.0 },
+    { year: 2020, male: 5.7, female: 6.3 },
+    { year: 2022, male: 5.9, female: 6.5 },
   ],
   diabetes: [
-    { year: 2000, male: 5, female: 8 },
-    { year: 2002, male: 12, female: 15 },
-    { year: 2004, male: 18, female: 20 },
-    { year: 2006, male: 25, female: 28 },
-    { year: 2008, male: 33, female: 35 },
-    { year: 2010, male: 45, female: 48 },
-    { year: 2012, male: 60, female: 58 },
-    { year: 2014, male: 75, female: 70 },
+    { year: 2000, male: 6.2, female: 5.8 },
+    { year: 2004, male: 7.1, female: 6.5 },
+    { year: 2008, male: 8.3, female: 7.4 },
+    { year: 2012, male: 9.5, female: 8.2 },
+    { year: 2016, male: 10.8, female: 9.1 },
+    { year: 2020, male: 11.9, female: 9.8 },
+    { year: 2022, male: 12.5, female: 10.2 },
   ],
   hypertension: [
-    { year: 2000, male: 15, female: 18 },
-    { year: 2002, male: 25, female: 28 },
-    { year: 2004, male: 40, female: 42 },
-    { year: 2006, male: 55, female: 50 },
-    { year: 2008, male: 65, female: 68 },
-    { year: 2010, male: 78, female: 75 },
-    { year: 2012, male: 85, female: 82 },
-    { year: 2014, male: 95, female: 90 },
+    { year: 2000, male: 28.5, female: 26.8 },
+    { year: 2004, male: 30.2, female: 28.4 },
+    { year: 2008, male: 32.1, female: 30.2 },
+    { year: 2012, male: 33.8, female: 31.9 },
+    { year: 2016, male: 35.4, female: 33.5 },
+    { year: 2020, male: 36.9, female: 34.8 },
+    { year: 2022, male: 37.5, female: 35.2 },
   ],
   stroke: [
-    { year: 2000, male: 8, female: 10 },
-    { year: 2002, male: 18, female: 20 },
-    { year: 2004, male: 30, female: 32 },
-    { year: 2006, male: 45, female: 48 },
-    { year: 2008, male: 55, female: 58 },
-    { year: 2010, male: 65, female: 62 },
-    { year: 2012, male: 78, female: 75 },
-    { year: 2014, male: 88, female: 85 },
+    { year: 2000, male: 2.8, female: 2.5 },
+    { year: 2004, male: 2.9, female: 2.6 },
+    { year: 2008, male: 3.1, female: 2.8 },
+    { year: 2012, male: 3.2, female: 2.9 },
+    { year: 2016, male: 3.4, female: 3.1 },
+    { year: 2020, male: 3.5, female: 3.2 },
+    { year: 2022, male: 3.6, female: 3.3 },
   ],
 }
 
@@ -80,7 +76,7 @@ const DiseaseTrend: React.FC = () => {
           <CartesianGrid strokeOpacity={0} />
           <XAxis dataKey="year" padding="no-gap" axisLine={false} />
           <YAxis
-            domain={[0, 100]}
+            domain={[0, 50]}
             tickFormatter={(tick) => `${tick}%`}
             // axisLine={false}
           />
