@@ -23,18 +23,15 @@ export const calculateBloodPressureRisk: IBP = (
       variant: TVariantEnum.Success,
     }
   } else if (
-    systolic >= 120 &&
-    systolic <= 139 &&
-    diastolic >= 80 &&
-    diastolic <= 89
+    (systolic >= 120 && systolic <= 139) ||
+    (diastolic >= 80 && diastolic <= 89)
   ) {
     return {
       level: 'Prehypertension',
       message: 'Prehypertension',
       variant: TVariantEnum.Warning,
     }
-  } else systolic >= 140 && diastolic >= 90
-  {
+  } else {
     return {
       level: 'Hypertension',
       message: 'Hypertension',

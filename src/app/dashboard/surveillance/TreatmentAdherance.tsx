@@ -11,16 +11,16 @@ const diseaseOptions = [
 
 // Data for Adherence vs. Non-Adherence
 const adherenceData = [
-  { name: 'Non-adherent Patients', value: 59.2, color: '#B54436' },
-  { name: 'Adherent Patients', value: 40.8, color: '#4CAF50' },
+  { name: 'Non-adherent Patients', value: 45.3, color: '#B54436' },
+  { name: 'Adherent Patients', value: 54.7, color: '#4CAF50' },
 ]
 
 // Data for Reasons for Non-Adherence
 const nonAdherenceReasons = [
-  { name: 'Medication cost', value: 40.8, color: '#2A63F5' },
-  { name: 'Limited access to healthcare', value: 25, color: '#68D8D6' },
-  { name: 'Side effects', value: 20, color: '#001065' },
-  { name: 'Lack of awareness', value: 15, color: '#2649D9' },
+  { name: 'Medication cost', value: 32.5, color: '#2A63F5' },
+  { name: 'Side effects', value: 28.4, color: '#68D8D6' },
+  { name: 'Complex medication schedule', value: 22.1, color: '#001065' },
+  { name: 'Limited access to healthcare', value: 17.0, color: '#2649D9' },
 ]
 
 const CustomTooltip = ({ active, payload }: any) => {

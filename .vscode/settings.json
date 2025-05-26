@@ -9,5 +9,25 @@
     ["cva\\(([^)]*)\\)", "[\"'`]([^\"'`]*).*?[\"'`]"],
     ["cx\\(([^)]*)\\)", "(?:'|\"|`)([^']*)(?:'|\"|`)"]
   ],
-  "cSpell.words": ["Antropometry", "hdlc", "ldlc", "scrinar"]
+  "cSpell.words": ["Antropometry", "hdlc", "ldlc"],
+  "workbench.colorCustomizations": {
+    "activityBar.activeBackground": "#e9484e",
+    "activityBar.background": "#e9484e",
+    "activityBar.foreground": "#e7e7e7",
+    "activityBar.inactiveForeground": "#e7e7e799",
+    "activityBarBadge.background": "#23e41b",
+    "activityBarBadge.foreground": "#15202b",
+    "commandCenter.border": "#e7e7e799",
+    "sash.hoverBorder": "#e9484e",
+    "statusBar.background": "#e31b23",
+    "statusBar.foreground": "#e7e7e7",
+    "statusBarItem.hoverBackground": "#e9484e",
+    "statusBarItem.remoteBackground": "#e31b23",
+    "statusBarItem.remoteForeground": "#e7e7e7",
+    "titleBar.activeBackground": "#e31b23",
+    "titleBar.activeForeground": "#e7e7e7",
+    "titleBar.inactiveBackground": "#e31b2399",
+    "titleBar.inactiveForeground": "#e7e7e799"
+  },
+  "peacock.color": "#E31B23"
 }

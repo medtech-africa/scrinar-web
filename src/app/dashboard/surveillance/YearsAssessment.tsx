@@ -19,96 +19,56 @@ const diseaseOptions = [
 
 const diseaseData = {
   hypertension: [
-    { year: 2015, value: 5 },
-    { year: 2016, value: 7 },
-    { year: 2017, value: 9 },
-    { year: 2018, value: 12 },
-    { year: 2019, value: 18 },
-    { year: 2020, value: 25 },
-    { year: 2021, value: 30 },
-    { year: 2022, value: 35 },
-    { year: 2023, value: 32 },
-    { year: 2024, value: 40 },
-    { year: 2025, value: 45 },
-    { year: 2026, value: 50 },
-    { year: 2027, value: 60 },
-    { year: 2028, value: 65 },
-    { year: 2029, value: 70 },
-    { year: 2030, value: 68 },
-    { year: 2031, value: 75 },
-    { year: 2032, value: 80 },
-    { year: 2033, value: 85 },
-    { year: 2034, value: 90 },
-    { year: 2035, value: 95 },
+    { year: 2025, value: 34.8 },
+    { year: 2026, value: 35.2 },
+    { year: 2027, value: 35.6 },
+    { year: 2028, value: 36.0 },
+    { year: 2029, value: 36.4 },
+    { year: 2030, value: 36.8 },
+    { year: 2031, value: 37.2 },
+    { year: 2032, value: 37.6 },
+    { year: 2033, value: 38.0 },
+    { year: 2034, value: 38.4 },
+    { year: 2035, value: 38.8 },
   ],
   cancer: [
-    { year: 2015, value: 10 },
-    { year: 2016, value: 12 },
-    { year: 2017, value: 15 },
-    { year: 2018, value: 18 },
-    { year: 2019, value: 22 },
-    { year: 2020, value: 28 },
-    { year: 2021, value: 32 },
-    { year: 2022, value: 38 },
-    { year: 2023, value: 42 },
-    { year: 2024, value: 48 },
-    { year: 2025, value: 52 },
-    { year: 2026, value: 58 },
-    { year: 2027, value: 62 },
-    { year: 2028, value: 68 },
-    { year: 2029, value: 72 },
-    { year: 2030, value: 78 },
-    { year: 2031, value: 82 },
-    { year: 2032, value: 88 },
-    { year: 2033, value: 92 },
-    { year: 2034, value: 96 },
-    { year: 2035, value: 98 },
+    { year: 2025, value: 5.2 },
+    { year: 2026, value: 5.3 },
+    { year: 2027, value: 5.4 },
+    { year: 2028, value: 5.5 },
+    { year: 2029, value: 5.6 },
+    { year: 2030, value: 5.7 },
+    { year: 2031, value: 5.8 },
+    { year: 2032, value: 5.9 },
+    { year: 2033, value: 6.0 },
+    { year: 2034, value: 6.1 },
+    { year: 2035, value: 6.2 },
   ],
   stroke: [
-    { year: 2015, value: 8 },
-    { year: 2016, value: 10 },
-    { year: 2017, value: 13 },
-    { year: 2018, value: 16 },
-    { year: 2019, value: 20 },
-    { year: 2020, value: 24 },
-    { year: 2021, value: 28 },
-    { year: 2022, value: 33 },
-    { year: 2023, value: 36 },
-    { year: 2024, value: 40 },
-    { year: 2025, value: 44 },
-    { year: 2026, value: 48 },
-    { year: 2027, value: 52 },
-    { year: 2028, value: 56 },
-    { year: 2029, value: 60 },
-    { year: 2030, value: 64 },
-    { year: 2031, value: 68 },
-    { year: 2032, value: 72 },
-    { year: 2033, value: 76 },
-    { year: 2034, value: 80 },
-    { year: 2035, value: 84 },
+    { year: 2025, value: 3.3 },
+    { year: 2026, value: 3.3 },
+    { year: 2027, value: 3.4 },
+    { year: 2028, value: 3.4 },
+    { year: 2029, value: 3.5 },
+    { year: 2030, value: 3.5 },
+    { year: 2031, value: 3.6 },
+    { year: 2032, value: 3.6 },
+    { year: 2033, value: 3.7 },
+    { year: 2034, value: 3.7 },
+    { year: 2035, value: 3.8 },
   ],
   diabetes: [
-    { year: 2015, value: 15 },
-    { year: 2016, value: 18 },
-    { year: 2017, value: 22 },
-    { year: 2018, value: 26 },
-    { year: 2019, value: 30 },
-    { year: 2020, value: 35 },
-    { year: 2021, value: 40 },
-    { year: 2022, value: 45 },
-    { year: 2023, value: 50 },
-    { year: 2024, value: 55 },
-    { year: 2025, value: 60 },
-    { year: 2026, value: 65 },
-    { year: 2027, value: 70 },
-    { year: 2028, value: 75 },
-    { year: 2029, value: 80 },
-    { year: 2030, value: 85 },
-    { year: 2031, value: 88 },
-    { year: 2032, value: 91 },
-    { year: 2033, value: 94 },
-    { year: 2034, value: 97 },
-    { year: 2035, value: 99 },
+    { year: 2025, value: 9.2 },
+    { year: 2026, value: 9.5 },
+    { year: 2027, value: 9.8 },
+    { year: 2028, value: 10.1 },
+    { year: 2029, value: 10.4 },
+    { year: 2030, value: 10.7 },
+    { year: 2031, value: 11.0 },
+    { year: 2032, value: 11.3 },
+    { year: 2033, value: 11.6 },
+    { year: 2034, value: 11.9 },
+    { year: 2035, value: 12.2 },
   ],
 }
 
@@ -139,11 +99,19 @@ const YearsAssessment: React.FC = () => {
           <Tooltip
             content={({ payload }) => {
               if (!payload || payload.length === 0) return null
-              const value = payload[0].value
+              const value = payload[0].value as number
+              const startValue = (diseaseData as any)[selectedDisease][0]
+                .value as number
+              const percentageChange = (
+                ((value - startValue) / startValue) *
+                100
+              ).toFixed(1)
               return (
                 <div className="bg-white p-2 rounded shadow-md">
-                  <p className="font-bold text-gray-800">{value}</p>
-                  <p className="text-red-500 text-sm">📈 43%</p>
+                  <p className="font-bold text-gray-800">{value}%</p>
+                  <p className="text-red-500 text-sm">
+                    📈 {percentageChange}% change since 2025
+                  </p>
                 </div>
               )
             }}
