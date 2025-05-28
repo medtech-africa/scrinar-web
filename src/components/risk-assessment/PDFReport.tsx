@@ -222,11 +222,13 @@ const PDFReport = ({
             </View>
 
             <Text style={styles.subtitle}>Risk Factors</Text>
-            {Object.entries(data?.who?.breakdown).map(([factor, value]) => (
-              <Text key={factor} style={styles.text}>
-                • {factor.charAt(0).toUpperCase() + factor.slice(1)}: {value}
-              </Text>
-            ))}
+            {Object.entries(data?.who?.breakdown ?? []).map(
+              ([factor, value]) => (
+                <Text key={factor} style={styles.text}>
+                  • {factor.charAt(0).toUpperCase() + factor.slice(1)}: {value}
+                </Text>
+              )
+            )}
           </View>
         )}
 

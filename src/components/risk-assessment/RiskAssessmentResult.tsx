@@ -32,6 +32,7 @@ import PreventionTips from './PreventionTips'
 import Link from 'next/link'
 import DiseaseBreakdown from './DiseaseBreakdown'
 import RiskSummary from './RiskSummary'
+import { NCD } from '@/types/riskAssessment.types'
 
 // Types
 export type RiskType = 'who' | 'findrisc'
@@ -60,11 +61,6 @@ interface IClinicalAlert {
 //   moderate: '#F2C94C',
 //   high: '#EB5757',
 // }
-
-const RISK_TABS: { id: RiskType; label: string }[] = [
-  { id: 'who', label: 'Cardiovascular risk (WHO)' },
-  { id: 'findrisc', label: 'Diabetes risk (FINDRISC)' },
-]
 
 const FACTOR_LABELS: { [key: string]: string } = {
   age: 'Age',
@@ -144,16 +140,20 @@ const FactorBreakdown = ({
       </div>
 
       <div className="w-full h-64">
-        <ResponsiveContainer>
-          <BarChart data={data} layout="vertical">
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" />
-            <YAxis dataKey="name" type="category" width={150} />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="value" className="fill-primary" />
-          </BarChart>
-        </ResponsiveContainer>
+        {data === undefined ? (
+          <Skeleton className="w-full h-full" />
+        ) : (
+          <ResponsiveContainer>
+            <BarChart data={data} layout="vertical">
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis type="number" />
+              <YAxis dataKey="name" type="category" width={150} />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="value" className="fill-primary" />
+            </BarChart>
+          </ResponsiveContainer>
+        )}
       </div>
 
       <p className="mt-6 text-sm">
@@ -191,7 +191,11 @@ const ClinicalSummary = ({
 
       <div className="mb-4">
         <h4 className="font-medium">Patient Overview</h4>
-        <p className="text-sm">{data?.personalizedAdvice}</p>
+        {data?.personalizedAdvice === undefined ? (
+          <Skeleton className="h-6 w-full" />
+        ) : (
+          <p className="text-sm">{data?.personalizedAdvice}</p>
+        )}
       </div>
 
       {/* <div className="mb-4">
@@ -215,11 +219,19 @@ const ClinicalSummary = ({
           </div>
           <h4 className="font-medium">Recommended</h4>
         </div>
-        <ul className="list-disc ml-8 text-sm space-y-1">
-          {data?.lifestyleModification
-            ?.split('.')
-            .map((rec) => rec && <li key={rec}>{rec}</li>)}
-        </ul>
+        {data?.lifestyleModification === undefined ? (
+          <div className="space-y-2">
+            <Skeleton className="h-4 w-full" />
+            <Skeleton className="h-4 w-3/4" />
+            <Skeleton className="h-4 w-2/3" />
+          </div>
+        ) : (
+          <ul className="list-disc ml-8 text-sm space-y-1">
+            {data?.lifestyleModification
+              ?.split('.')
+              .map((rec) => rec && <li key={rec}>{rec}</li>)}
+          </ul>
+        )}
       </div>
 
       {/* <div className="mb-4">
@@ -238,9 +250,13 @@ const ClinicalSummary = ({
           </div>
           <Text variant="text/sm">Follow up Action</Text>
         </div>
-        <Text variant="text/sm" className="ml-4">
-          {data?.followUpAction}
-        </Text>
+        {data?.followUpAction === undefined ? (
+          <Skeleton className="h-6 w-full" />
+        ) : (
+          <Text variant="text/sm" className="ml-4">
+            {data?.followUpAction}
+          </Text>
+        )}
       </div>
 
       <div className="mt-6">
@@ -324,8 +340,24 @@ const CriticalAlerts = ({ alerts }: { alerts?: IClinicalAlert[] }) => {
 export const RiskAssessmentResult: React.FC<{
   data?: RiskData
   isLoading?: boolean
-}> = ({ data, isLoading = false }) => {
-  const [activeTab, setActiveTab] = useState<RiskType>('who')
+  ncdType?: string
+}> = ({ data, isLoading = false, ncdType }) => {
+  const RISK_TABS: { id: RiskType; label: string; show: boolean }[] = [
+    {
+      id: 'who',
+      label: 'Cardiovascular risk (WHO)',
+      show: ncdType ? ncdType === 'all' || ncdType === NCD.CVD : true,
+    },
+    {
+      id: 'findrisc',
+      label: 'Diabetes risk (FINDRISC)',
+      show: ncdType ? ncdType === 'all' || ncdType === NCD.DIABETES : true,
+    },
+  ]
+
+  const [activeTab, setActiveTab] = useState<RiskType>(
+    ncdType !== NCD.DIABETES ? 'who' : 'findrisc'
+  )
 
   const isWHO = activeTab === 'who'
 
@@ -395,16 +427,19 @@ export const RiskAssessmentResult: React.FC<{
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
-        {RISK_TABS.map((tab) => (
-          <Button
-            key={tab.id}
-            variant={activeTab === tab.id ? 'primary' : 'tertiary'}
-            onClick={() => setActiveTab(tab.id)}
-            data-testid={`tab-${tab.id}`}
-          >
-            {tab.label}
-          </Button>
-        ))}
+        {RISK_TABS.map(
+          (tab) =>
+            tab.show && (
+              <Button
+                key={tab.id}
+                variant={activeTab === tab.id ? 'primary' : 'tertiary'}
+                onClick={() => setActiveTab(tab.id)}
+                data-testid={`tab-${tab.id}`}
+              >
+                {tab.label}
+              </Button>
+            )
+        )}
       </div>
 
       <div className="space-y-8">
@@ -419,12 +454,13 @@ export const RiskAssessmentResult: React.FC<{
             </p>
 
             <RiskGaugeBar
-              score={Number(activeData?.score)}
+              score={parseFloat(activeData?.score ?? '0')}
               riskLevel={activeData?.riskLevel ?? ''}
+              type={isWHO ? 'CVD' : 'Diabetes'}
             />
 
             <RiskSummary
-              score={Number(activeData?.score)}
+              score={parseFloat(activeData?.score ?? '0')}
               level={riskLevel}
               type={isWHO ? 'cvd' : 'diabetes'}
             />
@@ -458,10 +494,21 @@ export const RiskAssessmentResult: React.FC<{
               isLoading={isLoading}
             />
           </PageCard>
-          {!!activeData?.diseaseBreakdown && (
+          {activeData?.diseaseBreakdown === undefined ? (
             <div className="w-full bg-white p-6 rounded-lg border mb-4">
-              <DiseaseBreakdown data={activeData?.diseaseBreakdown} />
+              <Skeleton className="h-8 w-48 mb-4" />
+              <div className="space-y-4">
+                <Skeleton className="h-6 w-full" />
+                <Skeleton className="h-6 w-5/6" />
+                <Skeleton className="h-6 w-4/6" />
+              </div>
             </div>
+          ) : (
+            activeData?.diseaseBreakdown && (
+              <div className="w-full bg-white p-6 rounded-lg border mb-4">
+                <DiseaseBreakdown data={activeData?.diseaseBreakdown} />
+              </div>
+            )
           )}
         </>
       </div>

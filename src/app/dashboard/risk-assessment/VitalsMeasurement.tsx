@@ -13,6 +13,8 @@ import isValidNumber from '@/utils/isValidNumber'
 import calculateAge from '@/utils/calculateAge'
 import { Button } from '@/components/ui/button'
 import MeasurementGuides from '@/components/risk-assessment/MeasurementGuides'
+import { useNcdFilter } from './NcdFilterContext'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
@@ -20,6 +22,7 @@ type Props = {
 
 export const VitalsMeasurement = ({ onNext }: Props) => {
   const { control, watch, setValue } = useFormContext()
+  const { selectedNcd } = useNcdFilter()
 
   const { bmi, sys, dys, height, weight } = watch('vitals', {})
   const { gender: genderVal, dateOfBirth } = watch('personalInfo', {})
@@ -88,55 +91,59 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                   />
                 )}
               />
-              <Controller
-                name="vitals.waist"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    placeholder="0"
-                    label="Waist(cm)"
-                    labelStyle="flex justify-center items-center"
-                    variant={variantValidityCheck(field.value)}
-                    message={messageCheck(field.value)}
-                  />
-                )}
-              />
+              {(selectedNcd === 'all' || selectedNcd === NCD.CVD) && (
+                <Controller
+                  name="vitals.waist"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="0"
+                      label="Waist(cm)"
+                      labelStyle="flex justify-center items-center"
+                      variant={variantValidityCheck(field.value)}
+                      message={messageCheck(field.value)}
+                    />
+                  )}
+                />
+              )}
             </div>
 
-            <div className="mt-4">
-              <div className="bg-grey-50 w-full p-4 flex justify-center">
-                <Text>BMI Result</Text>
+            {(selectedNcd === 'all' || selectedNcd === NCD.CVD) && (
+              <div className="mt-4">
+                <div className="bg-grey-50 w-full p-4 flex justify-center">
+                  <Text>BMI Result</Text>
+                </div>
+                <div className="flex flex-col justify-center items-center gap-y-4 p-4">
+                  <Text
+                    variant="display/sm"
+                    weight="bold"
+                    className="text-grey-700"
+                  >
+                    {!!bmi ? bmi : '-'}
+                  </Text>
+                  {!!bmi && (
+                    <BadgeField
+                      variant={
+                        gender
+                          ? categorizeBMIWHO2007(Number(age), gender, bmi)
+                              ?.variant
+                          : undefined
+                      }
+                      value={
+                        gender
+                          ? categorizeBMIWHO2007(Number(age), gender, bmi)
+                              ?.message
+                          : undefined
+                      }
+                    />
+                  )}
+                </div>
+                <Label className="px-4 flex justify-center">
+                  * BMI automatically generated
+                </Label>
               </div>
-              <div className="flex flex-col justify-center items-center gap-y-4 p-4">
-                <Text
-                  variant="display/sm"
-                  weight="bold"
-                  className="text-grey-700"
-                >
-                  {!!bmi ? bmi : '-'}
-                </Text>
-                {!!bmi && (
-                  <BadgeField
-                    variant={
-                      gender
-                        ? categorizeBMIWHO2007(Number(age), gender, bmi)
-                            ?.variant
-                        : undefined
-                    }
-                    value={
-                      gender
-                        ? categorizeBMIWHO2007(Number(age), gender, bmi)
-                            ?.message
-                        : undefined
-                    }
-                  />
-                )}
-              </div>
-              <Label className="px-4 flex justify-center">
-                * BMI automatically generated
-              </Label>
-            </div>
+            )}
           </div>
 
           <div>
@@ -208,42 +215,44 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
               </div>
             </div>
 
-            <div className="mt-4">
-              <Text as="h3" variant="text/sm" className="font-medium mb-2">
-                Oxygen & Temperature (Optional)
-              </Text>
-              <Controller
-                name="vitals.oxygenSaturation"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    placeholder="170"
-                    label="Oxygen Saturation(SpO2)"
-                    labelStyle="lg:text-sm text-xs"
-                    variant={variantValidityCheck(field.value)}
-                    message={messageCheck(field.value)}
-                  />
-                )}
-              />
-
+            {(selectedNcd === 'all' || selectedNcd === NCD.CVD) && (
               <div className="mt-4">
+                <Text as="h3" variant="text/sm" className="font-medium mb-2">
+                  Oxygen & Temperature (Optional)
+                </Text>
                 <Controller
-                  name="vitals.temperature"
+                  name="vitals.oxygenSaturation"
                   control={control}
                   render={({ field }) => (
                     <Input
                       {...field}
-                      placeholder="00"
-                      label="Temperature (°C)"
+                      placeholder="170"
+                      label="Oxygen Saturation(SpO2)"
                       labelStyle="lg:text-sm text-xs"
                       variant={variantValidityCheck(field.value)}
                       message={messageCheck(field.value)}
                     />
                   )}
                 />
+
+                <div className="mt-4">
+                  <Controller
+                    name="vitals.temperature"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        placeholder="00"
+                        label="Temperature (°C)"
+                        labelStyle="lg:text-sm text-xs"
+                        variant={variantValidityCheck(field.value)}
+                        message={messageCheck(field.value)}
+                      />
+                    )}
+                  />
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
 

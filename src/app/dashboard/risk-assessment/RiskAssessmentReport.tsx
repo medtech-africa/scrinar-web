@@ -35,7 +35,12 @@ export const RiskAssessmentReport = ({
 
   return (
     <div className={cn('w-full', className)}>
-      {data?.responseData && <RiskAssessmentResult data={riskData} />}
+      {data?.responseData && (
+        <RiskAssessmentResult
+          data={riskData}
+          ncdType={data?.requestData?.ncdType}
+        />
+      )}
       <ConsentForm assessmentId={assessmentId} />
 
       {data?.responseData && (
