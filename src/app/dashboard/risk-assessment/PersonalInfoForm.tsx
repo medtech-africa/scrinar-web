@@ -6,12 +6,16 @@ import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import countries from '@/constants/countries.json'
+import { useNcdFilter } from './NcdFilterContext'
 
 type Props = {
   onNext: () => void
 }
+
 export const PersonalInfoForm = ({ onNext }: Props) => {
   const { control, register, watch, setValue } = useFormContext()
+  const { isFieldRequired } = useNcdFilter()
+
   return (
     <div>
       <Text as="h2" className="font-medium mb-2">
@@ -31,8 +35,41 @@ export const PersonalInfoForm = ({ onNext }: Props) => {
               placeholder="Enter Full Name"
               label="Full Name"
               labelStyle="lg:text-sm text-xs"
+              required={isFieldRequired('personalInfo.fullName')}
             />
           )}
+        />
+
+        <Controller
+          name="personalInfo.dateOfBirth"
+          control={control}
+          render={({ field }) => (
+            <Input
+              {...field}
+              type="date"
+              placeholder="Date of Birth"
+              label="Date of Birth"
+              labelStyle="lg:text-sm text-xs"
+              required={isFieldRequired('personalInfo.dateOfBirth')}
+            />
+          )}
+        />
+
+        <Select
+          {...register('personalInfo.gender', {
+            required: isFieldRequired('personalInfo.gender'),
+          })}
+          label="Select Gender"
+          placeholder="Select Gender"
+          options={convertStringsToOptionArray(['Male', 'Female'])}
+          value={{
+            value: watch('personalInfo.gender'),
+            label: watch('personalInfo.gender'),
+          }}
+          onChange={(selectedOption: any) => {
+            const value = selectedOption.value
+            setValue('personalInfo.gender', value)
+          }}
         />
 
         <Select
@@ -60,20 +97,6 @@ export const PersonalInfoForm = ({ onNext }: Props) => {
           }}
         />
 
-        <Controller
-          name="personalInfo.dateOfBirth"
-          control={control}
-          render={({ field }) => (
-            <Input
-              {...field}
-              type="date"
-              placeholder="Date of Birth"
-              label="Date of Birth"
-              labelStyle="lg:text-sm text-xs"
-            />
-          )}
-        />
-
         <Select
           {...register('personalInfo.country')}
           label="Country of Origin"
@@ -84,23 +107,8 @@ export const PersonalInfoForm = ({ onNext }: Props) => {
             label: watch('personalInfo.country'),
           }}
           onChange={(selectedOption: any) => {
-            const value = selectedOption.value
+            const value = selectedOption.label
             setValue('personalInfo.country', value)
-          }}
-        />
-
-        <Select
-          {...register('personalInfo.gender')}
-          label="Select Gender"
-          placeholder="Select Gender"
-          options={convertStringsToOptionArray(['Male', 'Female'])}
-          value={{
-            value: watch('personalInfo.gender'),
-            label: watch('personalInfo.gender'),
-          }}
-          onChange={(selectedOption: any) => {
-            const value = selectedOption.value
-            setValue('personalInfo.gender', value)
           }}
         />
 

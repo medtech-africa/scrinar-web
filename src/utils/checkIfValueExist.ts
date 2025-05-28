@@ -6,7 +6,7 @@ export function checkIfValueExists<T extends { value: string }>(
 ): string {
   if (searchTerm !== undefined && searchTerm !== '') {
     const foundOption = arr.find((option) =>
-      option?.value.toLowerCase().includes(searchTerm?.toLowerCase())
+      option?.value?.toLowerCase().includes(searchTerm?.toLowerCase())
     )
 
     if (foundOption) {

@@ -4,6 +4,8 @@ import { Controller, useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
+import { useNcdFilter } from './NcdFilterContext'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
@@ -11,6 +13,7 @@ type Props = {
 
 export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
   const { control, watch } = useFormContext()
+  const { selectedNcd } = useNcdFilter()
 
   return (
     <div title="Family History & Lifestyle">
@@ -34,6 +37,10 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
               <Controller
                 name="lifestyle.tobacco.dailyUnits"
                 control={control}
+                rules={{
+                  required:
+                    selectedNcd === NCD.CVD || selectedNcd === NCD.DIABETES,
+                }}
                 render={({ field }) => (
                   <Input
                     {...field}
@@ -110,7 +117,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
               form={{ id: 'lifestyle.diet.addSalt' }}
             />
             <OptionWithRadioField
-              label="How many servings of fruits and vegetables do you consume daily? (a serving is about the size of an adult’s closed fist)"
+              label="How many servings of fruits and vegetables do you consume daily? (a serving is about the size of an adult's closed fist)"
               options={['None', '1-2 servings', '3-4 servings', '5+ servings']}
               form={{ id: 'lifestyle.diet.fruitVegServings' }}
             />
@@ -131,6 +138,10 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 <Controller
                   name="lifestyle.physicalActivity.type"
                   control={control}
+                  rules={{
+                    required:
+                      selectedNcd === NCD.CVD || selectedNcd === NCD.DIABETES,
+                  }}
                   render={({ field }) => (
                     <Input
                       {...field}
@@ -143,6 +154,10 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 <Controller
                   name="lifestyle.physicalActivity.duration"
                   control={control}
+                  rules={{
+                    required:
+                      selectedNcd === NCD.CVD || selectedNcd === NCD.DIABETES,
+                  }}
                   render={({ field }) => (
                     <Input
                       {...field}
@@ -155,6 +170,10 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 <Controller
                   name="lifestyle.physicalActivity.frequency"
                   control={control}
+                  rules={{
+                    required:
+                      selectedNcd === NCD.CVD || selectedNcd === NCD.DIABETES,
+                  }}
                   render={({ field }) => (
                     <Input
                       {...field}

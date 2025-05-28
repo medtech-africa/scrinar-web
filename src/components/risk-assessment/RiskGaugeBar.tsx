@@ -4,10 +4,12 @@ const RiskGaugeBar = ({
   score,
   riskLevel,
   maxScore = 15,
+  type = 'CVD',
 }: {
   score: number
   riskLevel: string
   maxScore?: number
+  type?: string
 }) => {
   console.log('🚀 ~ riskLevel:', riskLevel)
   // Calculate score percentage (capped at 100%)
@@ -81,7 +83,9 @@ const RiskGaugeBar = ({
           )}
         >
           <div className="font-bold">{riskLevel}!!!</div>
-          <div className="text-sm">Your risk of CVD is {score}%</div>
+          <div className="text-sm">
+            Your risk of {type} is {score}%
+          </div>
         </div>
       </div>
       {/* )} */}

@@ -33,6 +33,9 @@ import { FamilyHistoryForm } from './FamilyHistoryForm'
 import CardiacAssessmentForm from './CardiacAssessmentForm'
 import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
 import { slugify } from '@/utils/slugify'
+import { NcdFilterProvider, useNcdFilter } from './NcdFilterContext'
+import { NCD } from '@/types/riskAssessment.types'
+import { useRiskAssessmentPolling } from '@/hooks/queries/useRiskAssessment'
 
 const triggerClassName = cn(
   'text-sm text-grey-700 py-2 px-4 transition-all cursor-pointer block w-full text-left',
@@ -51,7 +54,7 @@ const tabOrder = [
   'timeseries',
 ]
 
-export const RiskAssessmentForm = ({
+const RiskAssessmentFormContent = ({
   data,
   displayOnly = false,
 }: {
@@ -61,6 +64,7 @@ export const RiskAssessmentForm = ({
   const [progress, setProgress] = useState(0)
   const [showResults, setShowResults] = useState(false)
   const [activeTab, setActiveTab] = useState('bio')
+  const { selectedNcd, setSelectedNcd, getRequiredFields } = useNcdFilter()
   const formMethods = useForm({ defaultValues: data?.requestData })
 
   const storeRiskAssessment = useRiskAssessmentStorage((store) => store.store)
@@ -120,19 +124,56 @@ export const RiskAssessmentForm = ({
       return data
     },
     onError: (_err) => {
-      toast.error('Failed to analyze risk assessment data')
+      toast.error(_err?.message || 'Failed to analyze risk assessment data')
       setProgress(0)
     },
   })
 
   const isFormValid = (data: any) => {
-    const totalFields = 50
-    const filledFields = countFilledFields(data)
+    if (selectedNcd === 'all') {
+      const totalFields = 30
+      const filledFields = countFilledFields(data)
+      const filledPercentage = (filledFields / totalFields) * 100
+      return (
+        filledPercentage >= 60 &&
+        !!formMethods.watch('personalInfo.dateOfBirth')
+      )
+    }
 
-    const filledPercentage = (filledFields / totalFields) * 100
-    return (
-      filledPercentage >= 60 && !!formMethods.watch('personalInfo.dateOfBirth')
+    const requiredFields = getRequiredFields(selectedNcd)
+    if (!requiredFields) return false
+
+    const formData = formMethods.watch()
+
+    // Check if all required fields are filled
+    const isAllFieldsFilled = Object.entries(requiredFields).every(
+      ([field, isRequired]) => {
+        if (!isRequired) return true
+
+        // Map form fields to required fields
+        const fieldMap: Record<string, string> = {
+          dateOfBirth: 'personalInfo.dateOfBirth',
+          gender: 'personalInfo.gender',
+          systolicBP: 'vitals.sys',
+          bmi: 'vitals.bmi',
+          height: 'vitals.height',
+          weight: 'vitals.weight',
+          diabetes: 'diagnosedConditions.diabetes',
+          cholesterol: 'bloodTest.cholesterol.total',
+          smoking: 'lifestyle.tobacco.currentlyUses',
+          hasQuitSmoking: 'lifestyle.tobacco.quit',
+        }
+
+        const formField = fieldMap[field]
+        const fieldValue = formField
+          .split('.')
+          .reduce((obj, key) => obj?.[key], formData as any)
+
+        return !!fieldValue
+      }
     )
+
+    return isAllFieldsFilled
   }
 
   const handleSubmit = (data: RiskAssessmentModelRequestData) => {
@@ -145,13 +186,54 @@ export const RiskAssessmentForm = ({
       data
     )
 
-    analyzeRisk(data as any)
+    // Add NCD type to the request data
+    const requestData = {
+      ...data,
+      ncdType: selectedNcd,
+    }
+
+    analyzeRisk(requestData as any)
   }
 
   const isFormFilledError = (data: any) => {
-    const filledPercentage = (countFilledFields(data) / 50) * 100
-    if (filledPercentage < 60) {
-      return 'Please fill more data to analyze risk assessment'
+    if (selectedNcd === 'all') {
+      const filledPercentage = (countFilledFields(data) / 50) * 100
+      if (filledPercentage < 60) {
+        return 'Please fill more data to analyze risk assessment'
+      }
+    } else {
+      const requiredFields = getRequiredFields(selectedNcd)
+      if (!requiredFields) return 'Invalid NCD type selected'
+
+      const missingFields = Object.entries(requiredFields)
+        .filter(([field, isRequired]) => {
+          if (!isRequired) return false
+
+          const fieldMap: Record<string, string> = {
+            age: 'personalInfo.age',
+            gender: 'personalInfo.gender',
+            systolicBP: 'vitals.systolicBP',
+            bmi: 'vitals.bmi',
+            height: 'vitals.height',
+            weight: 'vitals.weight',
+            diabetes: 'diagnosedConditions.diabetes',
+            cholesterol: 'vitals.totalCholesterol',
+            smoking: 'lifestyle.tobacco.currentlyUses',
+            hasQuitSmoking: 'lifestyle.tobacco.quit',
+            dateOfBirth: 'personalInfo.dateOfBirth',
+          }
+
+          const formField = fieldMap[field]
+          const fieldValue = formField
+            .split('.')
+            .reduce((obj, key) => obj?.[key], data as any)
+          return !fieldValue
+        })
+        .map(([field]) => field)
+
+      if (missingFields.length > 0) {
+        return `Please fill in the following required fields: ${missingFields.join(', ')}`
+      }
     }
 
     if (!formMethods.watch('personalInfo.dateOfBirth')) {
@@ -197,29 +279,57 @@ export const RiskAssessmentForm = ({
             <Tabs.Root value={activeTab} onValueChange={handleTabChange}>
               <div className="flex gap-8">
                 <div className="w-full md:w-3/4 order-2 md:order-1">
-                  <div className="items-center gap-2 mb-4 flex justify-end">
-                    <button
-                      title="arrow-left"
-                      type="button"
-                      onClick={handlePrevious}
-                      disabled={getCurrentStep() === 1}
-                      className="p-2 rounded-md border disabled:opacity-50"
-                    >
-                      <IconPicker icon="arrowLeft" />
-                    </button>
-                    <span className="text-sm">
-                      {getCurrentStep()} of {tabsLength}
-                    </span>
-                    <button
-                      title="arrow-right"
-                      type="button"
-                      onClick={handleNext}
-                      disabled={getCurrentStep() === tabsLength}
-                      className="p-2 rounded-md border disabled:opacity-50"
-                    >
-                      <IconPicker icon="arrowRight" />
-                    </button>
+                  <div className="flex justify-between">
+                    <div className="flex gap-2 mb-4">
+                      <Button
+                        variant={selectedNcd === 'all' ? 'default' : 'outline'}
+                        onClick={() => setSelectedNcd('all')}
+                        type="button"
+                      >
+                        All NCDs
+                      </Button>
+                      <Button
+                        variant={selectedNcd === 'cvd' ? 'default' : 'outline'}
+                        onClick={() => setSelectedNcd('cvd')}
+                        type="button"
+                      >
+                        CVD
+                      </Button>
+                      <Button
+                        variant={
+                          selectedNcd === 'diabetes' ? 'default' : 'outline'
+                        }
+                        onClick={() => setSelectedNcd('diabetes')}
+                        type="button"
+                      >
+                        Diabetes
+                      </Button>
+                    </div>
+                    <div className="items-center gap-2 mb-4 flex justify-end">
+                      <button
+                        title="arrow-left"
+                        type="button"
+                        onClick={handlePrevious}
+                        disabled={getCurrentStep() === 1}
+                        className="p-2 rounded-md border disabled:opacity-50"
+                      >
+                        <IconPicker icon="arrowLeft" />
+                      </button>
+                      <span className="text-sm">
+                        {getCurrentStep()} of {tabsLength}
+                      </span>
+                      <button
+                        title="arrow-right"
+                        type="button"
+                        onClick={handleNext}
+                        disabled={getCurrentStep() === tabsLength}
+                        className="p-2 rounded-md border disabled:opacity-50"
+                      >
+                        <IconPicker icon="arrowRight" />
+                      </button>
+                    </div>
                   </div>
+
                   <div className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100">
                     <Tabs.Content value="bio">
                       <PersonalInfoForm onNext={handleNext} />
@@ -332,16 +442,18 @@ export const RiskAssessmentForm = ({
                           >
                             Family History
                           </Tabs.Trigger>
-                          <Tabs.Trigger
-                            className={cn(
-                              triggerClassName,
-                              activeTab === 'cardiacAssessment' &&
-                                'bg-red-600 text-white font-medium'
-                            )}
-                            value="cardiacAssessment"
-                          >
-                            Cardiac Assessment
-                          </Tabs.Trigger>
+                          {selectedNcd !== NCD.DIABETES && (
+                            <Tabs.Trigger
+                              className={cn(
+                                triggerClassName,
+                                activeTab === 'cardiacAssessment' &&
+                                  'bg-red-600 text-white font-medium'
+                              )}
+                              value="cardiacAssessment"
+                            >
+                              Cardiac Assessment
+                            </Tabs.Trigger>
+                          )}
                           <Tabs.Trigger
                             className={cn(
                               triggerClassName,
@@ -407,6 +519,9 @@ const RiskAssessmentGeneratedReport = ({
   setShowResults: (showResults: boolean) => void
 }) => {
   const personalInfo = formData?.personalInfo
+
+  const { data: polledData } = useRiskAssessmentPolling(resultData?.id)
+
   const actionButton = (
     <div className="mt-8 flex justify-end">
       <Button onClick={() => setShowResults(false)}>Close</Button>
@@ -416,7 +531,7 @@ const RiskAssessmentGeneratedReport = ({
   if (showResults) {
     const mergedData = Object.assign(
       {},
-      { responseData: resultData },
+      { responseData: polledData?.responseData || resultData },
       {
         requestData: formData,
       }
@@ -465,4 +580,15 @@ const countFilledFields = (obj: any): number => {
 
   traverse(obj)
   return count
+}
+
+export const RiskAssessmentForm = (props: {
+  data?: RiskAssessmentModel
+  displayOnly?: boolean
+}) => {
+  return (
+    <NcdFilterProvider>
+      <RiskAssessmentFormContent {...props} />
+    </NcdFilterProvider>
+  )
 }

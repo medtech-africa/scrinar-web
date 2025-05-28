@@ -1,6 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { API } from '@/utils/api'
 import baseAxios from '@/utils/baseAxios'
+import React from 'react'
 
 const getData = (params: { page: number; limit: number }) =>
   baseAxios
@@ -24,6 +25,40 @@ export const useRiskAssessment = (id: string) => {
   })
 }
 
+export const useRiskAssessmentPolling = (id: string) => {
+  const startTime = React.useRef(Date.now())
+
+  return useQuery({
+    queryKey: ['risk-assessment-polling', id],
+    queryFn: () =>
+      baseAxios.get(API.riskAssessmentDetails(id)).then((res) => res.data.data),
+    enabled: !!id,
+    refetchInterval: (query) => {
+      const data = query.state.data as RiskAssessmentModel | undefined
+      const elapsedTime = Date.now() - startTime.current
+
+      // Stop polling if we've exceeded 10 seconds
+      if (elapsedTime >= 10000) {
+        return false
+      }
+
+      // Check if we have the required fields
+      const hasRequiredFields =
+        data?.responseData?.findrisc?.lifestyleModification !== undefined &&
+        data?.responseData?.findrisc?.followUpAction !== undefined &&
+        data?.responseData?.findrisc?.breakdown !== undefined &&
+        data?.responseData?.findrisc?.diseaseBreakdown !== undefined &&
+        data?.responseData?.who?.lifestyleModification !== undefined &&
+        data?.responseData?.who?.followUpAction !== undefined &&
+        data?.responseData?.who?.breakdown !== undefined &&
+        data?.responseData?.who?.diseaseBreakdown !== undefined
+
+      // Stop polling if we have the fields, otherwise poll every 3 seconds
+      return hasRequiredFields ? false : 3000
+    },
+  })
+}
+
 export interface RiskAssessmentModel {
   user: string
   school: string
@@ -35,6 +70,7 @@ export interface RiskAssessmentModel {
 }
 
 export interface RiskAssessmentModelRequestData {
+  ncdType: string
   personalInfo: PersonalInfo
   vitals: Vitals
   bloodTest: BloodTest
