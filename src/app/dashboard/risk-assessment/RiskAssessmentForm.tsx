@@ -583,7 +583,7 @@ const countFilledFields = (obj: any): number => {
 }
 
 export const RiskAssessmentForm = (props: {
-  data?: RiskAssessmentModel
+  data?: Pick<RiskAssessmentModel, 'requestData'>
   displayOnly?: boolean
 }) => {
   return (
