@@ -277,13 +277,13 @@ const ClinicalSummary = ({
           >
             <IconPicker icon="userEdit" size={16} /> Edit
           </Button>
-          <Button
+          {/* <Button
             variant="outline"
             size="sm"
             className="flex items-center gap-1 border-primary"
           >
             <IconPicker icon="saveAdd" size={16} /> Save to EHR
-          </Button>
+          </Button> */}
 
           <div className="flex-1" />
           <Link target="_blank" href="https://forcardio.app">
@@ -345,12 +345,12 @@ export const RiskAssessmentResult: React.FC<{
   const RISK_TABS: { id: RiskType; label: string; show: boolean }[] = [
     {
       id: 'who',
-      label: 'Cardiovascular risk (WHO)',
+      label: 'Cardiovascular risk',
       show: ncdType ? ncdType === 'all' || ncdType === NCD.CVD : true,
     },
     {
       id: 'findrisc',
-      label: 'Diabetes risk (FINDRISC)',
+      label: 'Diabetes risk',
       show: ncdType ? ncdType === 'all' || ncdType === NCD.DIABETES : true,
     },
   ]

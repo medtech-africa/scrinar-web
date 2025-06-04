@@ -211,9 +211,7 @@ const PDFReport = ({
         {/* WHO Risk Assessment */}
         {data?.who && (
           <View style={styles.section}>
-            <Text style={styles.subtitle}>
-              Cardiovascular Risk Assessment (WHO)
-            </Text>
+            <Text style={styles.subtitle}>Cardiovascular Risk Assessment</Text>
             <View style={styles.riskIndicator}>
               <Text style={styles.text}>Risk Score: {data?.who.score}%</Text>
               <Text style={styles.text}>
@@ -235,9 +233,7 @@ const PDFReport = ({
         {/* FINDRISC Assessment */}
         {data?.findrisc && (
           <View style={styles.section}>
-            <Text style={styles.subtitle}>
-              Diabetes Risk Assessment (FINDRISC)
-            </Text>
+            <Text style={styles.subtitle}>Diabetes Risk Assessment</Text>
             <View style={styles.riskIndicator}>
               <Text style={styles.text}>
                 Risk Score: {data?.findrisc?.score}%

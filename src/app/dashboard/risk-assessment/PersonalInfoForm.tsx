@@ -120,7 +120,7 @@ export const PersonalInfoForm = ({ onNext }: Props) => {
               {...field}
               type="text"
               placeholder="Enter Occupation"
-              label="Occupation"
+              label="Occupation (optional)"
               labelStyle="lg:text-sm text-xs"
             />
           )}
@@ -176,7 +176,7 @@ export const PersonalInfoForm = ({ onNext }: Props) => {
               {...field}
               type="tel"
               placeholder="Enter Emergency Contact"
-              label="Emergency Contact"
+              label="Emergency Contact (optional)"
               labelStyle="lg:text-sm text-xs"
             />
           )}
