@@ -53,6 +53,26 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
             form={{ id: 'familyHistory.cancer' }}
           />
           <OptionWithRadioField
+            label="Breast Cancer"
+            options={['Yes', 'No']}
+            form={{ id: 'familyHistory.breastCancer' }}
+          />
+          <OptionWithRadioField
+            label="Ovarian Cancer"
+            options={['Yes', 'No']}
+            form={{ id: 'familyHistory.ovarianCancer' }}
+          />
+          <OptionWithRadioField
+            label="Prostate Cancer"
+            options={['Yes', 'No']}
+            form={{ id: 'familyHistory.prostateCancer' }}
+          />
+          <OptionWithRadioField
+            label="Colorectal Cancer"
+            options={['Yes', 'No']}
+            form={{ id: 'familyHistory.colorectalCancer' }}
+          />
+          <OptionWithRadioField
             label="Stroke"
             options={['Yes', 'No']}
             form={{ id: 'familyHistory.stroke' }}

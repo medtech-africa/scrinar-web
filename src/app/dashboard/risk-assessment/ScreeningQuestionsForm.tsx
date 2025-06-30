@@ -103,6 +103,37 @@ export const ScreeningQuestionsForm = ({ onNext }: Props) => {
               />
             </>
           )}
+
+          {/* COPD-specific symptoms */}
+          {(selectedNcd === 'all' || selectedNcd === NCD.COPD) && (
+            <>
+              <OptionWithRadioField
+                label="Do you experience chronic cough with sputum production?"
+                options={['Yes', 'No']}
+                form={{ id: 'symptoms.chronicCough' }}
+              />
+              <OptionWithRadioField
+                label="Do you experience wheezing or chest tightness?"
+                options={['Yes', 'No']}
+                form={{ id: 'symptoms.wheezing' }}
+              />
+              <OptionWithRadioField
+                label="Do you experience frequent respiratory infections?"
+                options={['Yes', 'No']}
+                form={{ id: 'symptoms.frequentInfections' }}
+              />
+              <OptionWithRadioField
+                label="Do you experience morning headaches?"
+                options={['Yes', 'No']}
+                form={{ id: 'symptoms.morningHeadaches' }}
+              />
+              <OptionWithRadioField
+                label="Do you experience swelling in your ankles or feet?"
+                options={['Yes', 'No']}
+                form={{ id: 'symptoms.swelling' }}
+              />
+            </>
+          )}
         </div>
       </div>
 

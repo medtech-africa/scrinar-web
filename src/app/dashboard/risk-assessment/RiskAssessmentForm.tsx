@@ -31,16 +31,16 @@ import { Text } from '@/components/ui/text'
 import { ScreeningQuestionsForm } from './ScreeningQuestionsForm'
 import { FamilyHistoryForm } from './FamilyHistoryForm'
 import CardiacAssessmentForm from './CardiacAssessmentForm'
+import { COPDAssessmentForm } from './COPDAssessmentForm'
+import { BreastCancerAssessmentForm } from './BreastCancerAssessmentForm'
+import { ProstateCancerAssessmentForm } from './ProstateCancerAssessmentForm'
+import { ColorectalCancerAssessmentForm } from './ColorectalCancerAssessmentForm'
+import { CKDAssessmentForm } from './CKDAssessmentForm'
 import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
 import { slugify } from '@/utils/slugify'
 import { NcdFilterProvider, useNcdFilter } from './NcdFilterContext'
 import { NCD } from '@/types/riskAssessment.types'
 import { useRiskAssessmentPolling } from '@/hooks/queries/useRiskAssessment'
-
-const triggerClassName = cn(
-  'text-sm text-grey-700 py-2 px-4 transition-all cursor-pointer block w-full text-left',
-  'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium rounded-md my-1'
-)
 
 const tabOrder = [
   'bio',
@@ -49,6 +49,11 @@ const tabOrder = [
   'lifestyle',
   'familyHistory',
   'cardiacAssessment',
+  'copdAssessment',
+  'breastCancerAssessment',
+  'prostateCancerAssessment',
+  'colorectalCancerAssessment',
+  'ckdAssessment',
   'medical',
   'historical',
   'timeseries',
@@ -162,6 +167,30 @@ const RiskAssessmentFormContent = ({
           cholesterol: 'bloodTest.cholesterol.total',
           smoking: 'lifestyle.tobacco.currentlyUses',
           hasQuitSmoking: 'lifestyle.tobacco.quit',
+          // COPD fields
+          coughDuration: 'copd.coughDuration',
+          shortnessOfBreath: 'copd.shortnessOfBreath',
+          activityLimitations: 'copd.activityLimitations',
+          exposureToDust: 'copd.exposureToDust',
+          // Breast Cancer fields
+          ageAtMenarche: 'breastCancer.ageAtMenarche',
+          ageAtFirstBirth: 'breastCancer.ageAtFirstBirth',
+          ageAtMenopause: 'breastCancer.ageAtMenopause',
+          hormoneReplacementTherapy: 'breastCancer.hormoneReplacementTherapy',
+          benignBreastDisease: 'breastCancer.benignBreastDisease',
+          familyHistoryBreastCancer: 'familyHistory.breastCancer',
+          familyHistoryOvarianCancer: 'familyHistory.ovarianCancer',
+          brcaMutationStatus: 'breastCancer.brcaMutationStatus',
+          breastDensity: 'breastCancer.breastDensity',
+          // Prostate Cancer fields
+          psaLevel: 'prostateCancer.psaLevel',
+          digitalRectalExam: 'prostateCancer.digitalRectalExam',
+          prostateVolume: 'prostateCancer.prostateVolume',
+          familyHistoryProstateCancer: 'familyHistory.prostateCancer',
+          previousBiopsy: 'prostateCancer.previousBiopsy',
+          freeToTotalPsaRatio: 'prostateCancer.freeToTotalPsaRatio',
+          ethnicity: 'prostateCancer.ethnicity',
+          urinarySymptoms: 'prostateCancer.urinarySymptoms',
         }
 
         const formField = fieldMap[field]
@@ -221,6 +250,30 @@ const RiskAssessmentFormContent = ({
             smoking: 'lifestyle.tobacco.currentlyUses',
             hasQuitSmoking: 'lifestyle.tobacco.quit',
             dateOfBirth: 'personalInfo.dateOfBirth',
+            // COPD fields
+            coughDuration: 'copd.coughDuration',
+            shortnessOfBreath: 'copd.shortnessOfBreath',
+            activityLimitations: 'copd.activityLimitations',
+            exposureToDust: 'copd.exposureToDust',
+            // Breast Cancer fields
+            ageAtMenarche: 'breastCancer.ageAtMenarche',
+            ageAtFirstBirth: 'breastCancer.ageAtFirstBirth',
+            ageAtMenopause: 'breastCancer.ageAtMenopause',
+            hormoneReplacementTherapy: 'breastCancer.hormoneReplacementTherapy',
+            benignBreastDisease: 'breastCancer.benignBreastDisease',
+            familyHistoryBreastCancer: 'familyHistory.breastCancer',
+            familyHistoryOvarianCancer: 'familyHistory.ovarianCancer',
+            brcaMutationStatus: 'breastCancer.brcaMutationStatus',
+            breastDensity: 'breastCancer.breastDensity',
+            // Prostate Cancer fields
+            psaLevel: 'prostateCancer.psaLevel',
+            digitalRectalExam: 'prostateCancer.digitalRectalExam',
+            prostateVolume: 'prostateCancer.prostateVolume',
+            familyHistoryProstateCancer: 'familyHistory.prostateCancer',
+            previousBiopsy: 'prostateCancer.previousBiopsy',
+            freeToTotalPsaRatio: 'prostateCancer.freeToTotalPsaRatio',
+            ethnicity: 'prostateCancer.ethnicity',
+            urinarySymptoms: 'prostateCancer.urinarySymptoms',
           }
 
           const formField = fieldMap[field]
@@ -266,6 +319,11 @@ const RiskAssessmentFormContent = ({
     return tabOrder.indexOf(activeTab) + 1
   }
 
+  // Get step number for a specific tab
+  const getStepNumber = (tabValue: string) => {
+    return tabOrder.indexOf(tabValue) + 1
+  }
+
   const tabsLength = tabOrder.length - 1
 
   return (
@@ -279,54 +337,144 @@ const RiskAssessmentFormContent = ({
             <Tabs.Root value={activeTab} onValueChange={handleTabChange}>
               <div className="flex gap-8">
                 <div className="w-full md:w-3/4 order-2 md:order-1">
-                  <div className="flex justify-between">
-                    <div className="flex gap-2 mb-4">
-                      <Button
-                        variant={selectedNcd === 'all' ? 'default' : 'outline'}
-                        onClick={() => setSelectedNcd('all')}
-                        type="button"
-                      >
-                        All NCDs
-                      </Button>
-                      <Button
-                        variant={selectedNcd === 'cvd' ? 'default' : 'outline'}
-                        onClick={() => setSelectedNcd('cvd')}
-                        type="button"
-                      >
-                        CVD
-                      </Button>
-                      <Button
-                        variant={
-                          selectedNcd === 'diabetes' ? 'default' : 'outline'
-                        }
-                        onClick={() => setSelectedNcd('diabetes')}
-                        type="button"
-                      >
-                        Diabetes
-                      </Button>
+                  <div className="mb-6">
+                    <div className="flex items-center justify-between mb-4">
+                      <div>
+                        <Text as="h2" className="font-semibold text-xl mb-1">
+                          NCD Risk Assessment
+                        </Text>
+                        <Text variant="text/sm" className="text-gray-600">
+                          Select the type of assessment you want to perform
+                        </Text>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <button
+                          title="arrow-left"
+                          type="button"
+                          onClick={handlePrevious}
+                          disabled={getCurrentStep() === 1}
+                          className="p-2 rounded-md border disabled:opacity-50 hover:bg-gray-50"
+                        >
+                          <IconPicker icon="arrowLeft" />
+                        </button>
+                        <span className="text-sm font-medium bg-gray-100 px-3 py-1 rounded-full">
+                          {getCurrentStep()} of {tabsLength}
+                        </span>
+                        <button
+                          title="arrow-right"
+                          type="button"
+                          onClick={handleNext}
+                          disabled={getCurrentStep() === tabsLength}
+                          className="p-2 rounded-md border disabled:opacity-50 hover:bg-gray-50"
+                        >
+                          <IconPicker icon="arrowRight" />
+                        </button>
+                      </div>
                     </div>
-                    <div className="items-center gap-2 mb-4 flex justify-end">
-                      <button
-                        title="arrow-left"
-                        type="button"
-                        onClick={handlePrevious}
-                        disabled={getCurrentStep() === 1}
-                        className="p-2 rounded-md border disabled:opacity-50"
-                      >
-                        <IconPicker icon="arrowLeft" />
-                      </button>
-                      <span className="text-sm">
-                        {getCurrentStep()} of {tabsLength}
-                      </span>
-                      <button
-                        title="arrow-right"
-                        type="button"
-                        onClick={handleNext}
-                        disabled={getCurrentStep() === tabsLength}
-                        className="p-2 rounded-md border disabled:opacity-50"
-                      >
-                        <IconPicker icon="arrowRight" />
-                      </button>
+
+                    {/* NCD Type Selection */}
+                    <div className="bg-white rounded-lg border border-gray-200 p-4">
+                      <Text as="h3" className="font-medium mb-3">
+                        Assessment Type
+                      </Text>
+                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
+                        <button
+                          type="button"
+                          onClick={() => setSelectedNcd('all')}
+                          className={cn(
+                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                            selectedNcd === 'all'
+                              ? 'bg-primary text-white border-primary shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                          )}
+                        >
+                          All NCDs
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedNcd('cvd')}
+                          className={cn(
+                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                            selectedNcd === 'cvd'
+                              ? 'bg-primary text-white border-primary shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                          )}
+                        >
+                          CVD
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedNcd('diabetes')}
+                          className={cn(
+                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                            selectedNcd === 'diabetes'
+                              ? 'bg-primary text-white border-primary shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                          )}
+                        >
+                          Diabetes
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedNcd('copd')}
+                          className={cn(
+                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                            selectedNcd === 'copd'
+                              ? 'bg-primary text-white border-primary shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                          )}
+                        >
+                          COPD
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedNcd('breastCancer')}
+                          className={cn(
+                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                            selectedNcd === 'breastCancer'
+                              ? 'bg-primary text-white border-primary shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                          )}
+                        >
+                          Breast Cancer
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedNcd('prostateCancer')}
+                          className={cn(
+                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                            selectedNcd === 'prostateCancer'
+                              ? 'bg-primary text-white border-primary shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                          )}
+                        >
+                          Prostate Cancer
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedNcd('colorectalCancer')}
+                          className={cn(
+                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                            selectedNcd === 'colorectalCancer'
+                              ? 'bg-primary text-white border-primary shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                          )}
+                        >
+                          Colorectal Cancer
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSelectedNcd('ckd')}
+                          className={cn(
+                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                            selectedNcd === 'ckd'
+                              ? 'bg-primary text-white border-primary shadow-sm'
+                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                          )}
+                        >
+                          CKD
+                        </button>
+                      </div>
                     </div>
                   </div>
 
@@ -353,6 +501,26 @@ const RiskAssessmentFormContent = ({
                       <CardiacAssessmentForm onNext={handleNext} />
                     </Tabs.Content>
 
+                    <Tabs.Content value="copdAssessment">
+                      <COPDAssessmentForm onNext={handleNext} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="breastCancerAssessment">
+                      <BreastCancerAssessmentForm onNext={handleNext} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="prostateCancerAssessment">
+                      <ProstateCancerAssessmentForm onNext={handleNext} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="colorectalCancerAssessment">
+                      <ColorectalCancerAssessmentForm onNext={handleNext} />
+                    </Tabs.Content>
+
+                    <Tabs.Content value="ckdAssessment">
+                      <CKDAssessmentForm onNext={handleNext} />
+                    </Tabs.Content>
+
                     <Tabs.Content value="medical">
                       <ScreeningQuestionsForm onNext={handleNext} />
                     </Tabs.Content>
@@ -376,11 +544,11 @@ const RiskAssessmentFormContent = ({
                 </div>
 
                 <div className="w-1/4 order-1 md:order-2 hidden md:block">
-                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100">
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 sticky top-4">
                     <Collapsible defaultOpen>
-                      <CollapsibleTrigger className="flex items-center justify-between w-full mb-2">
-                        <Text variant="text/md" className="font-medium">
-                          Assessment Sections
+                      <CollapsibleTrigger className="flex items-center justify-between w-full mb-3">
+                        <Text variant="text/md" className="font-semibold">
+                          Assessment Progress
                         </Text>
                         <IconPicker
                           icon="arrowDown"
@@ -394,85 +562,153 @@ const RiskAssessmentFormContent = ({
                         >
                           <Tabs.Trigger
                             className={cn(
-                              triggerClassName,
-                              activeTab === 'bio' &&
-                                'bg-red-600 text-white font-medium'
+                              'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                              'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
                             )}
                             value="bio"
                           >
-                            Patients bio-data
+                            1. Patient Bio-data
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(
-                              triggerClassName,
-                              activeTab === 'vitals' &&
-                                'bg-red-600 text-white font-medium'
+                              'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                              'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
                             )}
                             value="vitals"
                           >
-                            Vital & Anthropometrics
+                            2. Vitals & Measurements
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(
-                              triggerClassName,
-                              activeTab === 'labs' &&
-                                'bg-red-600 text-white font-medium'
+                              'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                              'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
                             )}
                             value="labs"
                           >
-                            Labs
+                            3. Laboratory Tests
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(
-                              triggerClassName,
-                              activeTab === 'lifestyle' &&
-                                'bg-red-600 text-white font-medium'
+                              'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                              'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
                             )}
                             value="lifestyle"
                           >
-                            Patient Lifestyle & Habit
+                            4. Lifestyle & Habits
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(
-                              triggerClassName,
-                              activeTab === 'familyHistory' &&
-                                'bg-red-600 text-white font-medium'
+                              'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                              'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
                             )}
                             value="familyHistory"
                           >
-                            Family History
+                            5. Family History
                           </Tabs.Trigger>
                           {selectedNcd !== NCD.DIABETES && (
                             <Tabs.Trigger
                               className={cn(
-                                triggerClassName,
-                                activeTab === 'cardiacAssessment' &&
-                                  'bg-red-600 text-white font-medium'
+                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
                               )}
                               value="cardiacAssessment"
                             >
-                              Cardiac Assessment
+                              6. Cardiac Assessment
+                            </Tabs.Trigger>
+                          )}
+                          {(selectedNcd === 'all' ||
+                            selectedNcd === NCD.COPD) && (
+                            <Tabs.Trigger
+                              className={cn(
+                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
+                              )}
+                              value="copdAssessment"
+                            >
+                              {getStepNumber('copdAssessment')}. COPD Assessment
+                            </Tabs.Trigger>
+                          )}
+                          {(selectedNcd === 'all' ||
+                            selectedNcd === NCD.BREAST_CANCER) && (
+                            <Tabs.Trigger
+                              className={cn(
+                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
+                              )}
+                              value="breastCancerAssessment"
+                            >
+                              {getStepNumber('breastCancerAssessment')}. Breast
+                              Cancer
+                            </Tabs.Trigger>
+                          )}
+                          {(selectedNcd === 'all' ||
+                            selectedNcd === NCD.PROSTATE_CANCER) && (
+                            <Tabs.Trigger
+                              className={cn(
+                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
+                              )}
+                              value="prostateCancerAssessment"
+                            >
+                              {getStepNumber('prostateCancerAssessment')}.
+                              Prostate Cancer
+                            </Tabs.Trigger>
+                          )}
+                          {(selectedNcd === 'all' ||
+                            selectedNcd === NCD.COLORECTAL_CANCER) && (
+                            <Tabs.Trigger
+                              className={cn(
+                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
+                              )}
+                              value="colorectalCancerAssessment"
+                            >
+                              {getStepNumber('colorectalCancerAssessment')}.
+                              Colorectal Cancer
+                            </Tabs.Trigger>
+                          )}
+                          {(selectedNcd === 'all' ||
+                            selectedNcd === NCD.CKD) && (
+                            <Tabs.Trigger
+                              className={cn(
+                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
+                              )}
+                              value="ckdAssessment"
+                            >
+                              {getStepNumber('ckdAssessment')}. CKD Assessment
                             </Tabs.Trigger>
                           )}
                           <Tabs.Trigger
                             className={cn(
-                              triggerClassName,
-                              activeTab === 'medical' &&
-                                'bg-red-600 text-white font-medium'
+                              'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                              'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
                             )}
                             value="medical"
                           >
-                            Medical History
+                            {getStepNumber('medical')}. Medical History
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(
-                              triggerClassName,
-                              activeTab === 'historical' &&
-                                'bg-red-600 text-white font-medium'
+                              'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
+                              'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
+                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
                             )}
                             value="historical"
                           >
-                            Historical Data Collection
+                            {getStepNumber('historical')}. Historical Data
                           </Tabs.Trigger>
                         </Tabs.List>
                       </CollapsibleContent>
