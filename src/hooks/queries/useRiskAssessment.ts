@@ -42,16 +42,45 @@ export const useRiskAssessmentPolling = (id: string) => {
         return false
       }
 
-      // Check if we have the required fields
+      // Check if we have the required fields for all models
       const hasRequiredFields =
+        // CVD (WHO) model
+        data?.responseData?.who?.lifestyleModification !== undefined &&
+        data?.responseData?.who?.followUpAction !== undefined &&
+        data?.responseData?.who?.breakdown !== undefined &&
+        data?.responseData?.who?.diseaseBreakdown !== undefined &&
+        // Diabetes (FINDRISC) model
         data?.responseData?.findrisc?.lifestyleModification !== undefined &&
         data?.responseData?.findrisc?.followUpAction !== undefined &&
         data?.responseData?.findrisc?.breakdown !== undefined &&
         data?.responseData?.findrisc?.diseaseBreakdown !== undefined &&
-        data?.responseData?.who?.lifestyleModification !== undefined &&
-        data?.responseData?.who?.followUpAction !== undefined &&
-        data?.responseData?.who?.breakdown !== undefined &&
-        data?.responseData?.who?.diseaseBreakdown !== undefined
+        // COPD model
+        data?.responseData?.copd?.lifestyleModification !== undefined &&
+        data?.responseData?.copd?.followUpAction !== undefined &&
+        data?.responseData?.copd?.breakdown !== undefined &&
+        data?.responseData?.copd?.diseaseBreakdown !== undefined &&
+        // Breast Cancer model
+        data?.responseData?.breastCancer?.lifestyleModification !== undefined &&
+        data?.responseData?.breastCancer?.followUpAction !== undefined &&
+        data?.responseData?.breastCancer?.breakdown !== undefined &&
+        data?.responseData?.breastCancer?.diseaseBreakdown !== undefined &&
+        // Prostate Cancer model
+        data?.responseData?.prostateCancer?.lifestyleModification !==
+          undefined &&
+        data?.responseData?.prostateCancer?.followUpAction !== undefined &&
+        data?.responseData?.prostateCancer?.breakdown !== undefined &&
+        data?.responseData?.prostateCancer?.diseaseBreakdown !== undefined &&
+        // Colorectal Cancer model
+        data?.responseData?.colorectalCancer?.lifestyleModification !==
+          undefined &&
+        data?.responseData?.colorectalCancer?.followUpAction !== undefined &&
+        data?.responseData?.colorectalCancer?.breakdown !== undefined &&
+        data?.responseData?.colorectalCancer?.diseaseBreakdown !== undefined &&
+        // CKD model
+        data?.responseData?.ckd?.lifestyleModification !== undefined &&
+        data?.responseData?.ckd?.followUpAction !== undefined &&
+        data?.responseData?.ckd?.breakdown !== undefined &&
+        data?.responseData?.ckd?.diseaseBreakdown !== undefined
 
       // Stop polling if we have the fields, otherwise poll every 3 seconds
       return hasRequiredFields ? false : 3000
@@ -205,6 +234,11 @@ export interface Vitals {
 export interface RiskAssessmentModelResponseData {
   who?: Who
   findrisc?: Findrisc
+  copd?: COPD
+  breastCancer?: BreastCancer
+  prostateCancer?: ProstateCancer
+  colorectalCancer?: ColorectalCancer
+  ckd?: CKD
   healthdata?: any
   criticalAlerts: any[]
   predictions?: Prediction[]
@@ -254,3 +288,119 @@ export interface WhoBreakdown {
 
 export type RiskData = RiskAssessmentModelResponseData &
   Partial<RiskAssessmentModelRequestData>
+
+// New NCD Model Interfaces
+export interface COPD {
+  followUpAction: string
+  lifestyleModification: string
+  personalizedAdvice: string
+  score: string
+  riskLevel: string
+  breakdown: COPDBreakdown
+  status: boolean
+  diseaseBreakdown: { [key: string]: number }
+  predictions?: Prediction[]
+}
+
+export interface COPDBreakdown {
+  coughDuration: number
+  shortnessOfBreath: number
+  activityLimitations: number
+  exposureToDust: number
+  smokingHistory: number
+}
+
+export interface BreastCancer {
+  followUpAction: string
+  lifestyleModification: string
+  personalizedAdvice: string
+  score: string
+  riskLevel: string
+  breakdown: BreastCancerBreakdown
+  status: boolean
+  diseaseBreakdown: { [key: string]: number }
+  predictions?: Prediction[]
+}
+
+export interface BreastCancerBreakdown {
+  age: number
+  ageAtMenarche: number
+  ageAtFirstBirth: number
+  ageAtMenopause: number
+  hormoneReplacementTherapy: number
+  benignBreastDisease: number
+  familyHistory: number
+  brcaMutationStatus: number
+  breastDensity: number
+}
+
+export interface ProstateCancer {
+  followUpAction: string
+  lifestyleModification: string
+  personalizedAdvice: string
+  score: string
+  riskLevel: string
+  breakdown: ProstateCancerBreakdown
+  status: boolean
+  diseaseBreakdown: { [key: string]: number }
+  predictions?: Prediction[]
+}
+
+export interface ProstateCancerBreakdown {
+  age: number
+  familyHistory: number
+  psaLevel: number
+  digitalRectalExam: number
+  prostateVolume: number
+  previousBiopsy: number
+  freeToTotalPsaRatio: number
+  ethnicity: number
+  urinarySymptoms: number
+}
+
+export interface ColorectalCancer {
+  followUpAction: string
+  lifestyleModification: string
+  personalizedAdvice: string
+  score: string
+  riskLevel: string
+  breakdown: ColorectalCancerBreakdown
+  status: boolean
+  diseaseBreakdown: { [key: string]: number }
+  predictions?: Prediction[]
+}
+
+export interface ColorectalCancerBreakdown {
+  age: number
+  personalHistory: number
+  familyHistory: number
+  smokingStatus: number
+  diet: number
+  physicalActivity: number
+  medicalHistory: number
+  medicationUse: number
+}
+
+export interface CKD {
+  followUpAction: string
+  lifestyleModification: string
+  personalizedAdvice: string
+  score: string
+  riskLevel: string
+  breakdown: CKDBreakdown
+  status: boolean
+  diseaseBreakdown: { [key: string]: number }
+  predictions?: Prediction[]
+}
+
+export interface CKDBreakdown {
+  age: number
+  serumCreatinine: number
+  diabetes: number
+  hypertension: number
+  familyHistory: number
+  cardiovascularDisease: number
+  medications: number
+  symptoms: number
+  lifestyle: number
+}

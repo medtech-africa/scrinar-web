@@ -5,6 +5,7 @@ const getRiskLevelLikelihood = (score: number) => {
   if (score < 10) return 'moderate'
   return 'strong'
 }
+
 const RiskSummary = ({
   score = 1,
   level = '',
@@ -12,19 +13,38 @@ const RiskSummary = ({
 }: {
   score: number
   level: string
-  type: 'cvd' | 'diabetes'
+  type:
+    | 'cvd'
+    | 'diabetes'
+    | 'copd'
+    | 'breastCancer'
+    | 'prostateCancer'
+    | 'colorectalCancer'
+    | 'ckd'
 }) => {
   const likelihood = getRiskLevelLikelihood(score)
 
   const getText = () => {
-    if (type === 'cvd') {
-      return `A ${score}% risk means a ${level} chance of developing a stroke in 10 years and a ${likelihood} likelihood of heart disease.`
+    switch (type) {
+      case 'cvd':
+        return `A ${score}% risk means a ${level} chance of developing a stroke in 10 years and a ${likelihood} likelihood of heart disease.`
+      case 'diabetes':
+        return `A ${score}% risk means a ${level} chance of developing type II diabetes in 10 years and a ${likelihood} likelihood.`
+      case 'copd':
+        return `A ${score}% risk means a ${level} chance of developing COPD and a ${likelihood} likelihood of respiratory complications.`
+      case 'breastCancer':
+        return `A ${score}% risk means a ${level} chance of developing breast cancer in 10 years and a ${likelihood} likelihood.`
+      case 'prostateCancer':
+        return `A ${score}% risk means a ${level} chance of developing prostate cancer and a ${likelihood} likelihood of aggressive disease.`
+      case 'colorectalCancer':
+        return `A ${score}% risk means a ${level} chance of developing colorectal cancer in 5 years and a ${likelihood} likelihood.`
+      case 'ckd':
+        return `A ${score}% risk means a ${level} chance of developing chronic kidney disease and a ${likelihood} likelihood of progression.`
+      default:
+        return `A ${score}% risk means a ${level} chance of developing the condition and a ${likelihood} likelihood.`
     }
-    if (type === 'diabetes') {
-      return `A ${score}% risk means a ${level} chance of developing type II diabetes in 10 years and a ${likelihood} likelihood.`
-    }
-    return ''
   }
+
   return (
     <div className="w-full max-w-3xl mx-auto">
       {/* Warning Box */}
