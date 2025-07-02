@@ -26,8 +26,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
         Prostate Cancer Risk Assessment
       </Text>
       <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
-        SWOP Prostate Cancer Risk Calculator - Estimates risk of prostate cancer
-        and likelihood of aggressive disease
+        Estimates risk of prostate cancer and likelihood of aggressive disease
       </Text>
 
       <div className="space-y-6">

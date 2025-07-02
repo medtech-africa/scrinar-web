@@ -26,16 +26,15 @@ export const CKDAssessmentForm = ({ onNext }: Props) => {
         Chronic Kidney Disease (CKD) Assessment
       </Text>
       <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
-        CKD-EPI 2021 Equation - Estimates glomerular filtration rate (eGFR) to
-        assess kidney function
+        Estimates glomerular filtration rate (eGFR) to assess kidney function
       </Text>
 
-      <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+      {/* <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
         <Text variant="text/sm" className="text-blue-800">
           <strong>Note:</strong> The 2021 CKD-EPI equation has removed race as a
           factor, providing more accurate estimates for all populations.
         </Text>
-      </div>
+      </div> */}
 
       <div className="space-y-6">
         {/* Serum Creatinine */}

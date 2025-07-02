@@ -33,8 +33,7 @@ export const ColorectalCancerAssessmentForm = ({ onNext }: Props) => {
           Colorectal Cancer Risk Assessment
         </Text>
         <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
-          NCI Colorectal Cancer Risk Assessment Tool (CCRAT) - Not validated for
-          patients with prior colorectal cancer diagnosis
+          Not validated for patients with prior colorectal cancer diagnosis
         </Text>
 
         <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
@@ -59,8 +58,7 @@ export const ColorectalCancerAssessmentForm = ({ onNext }: Props) => {
         Colorectal Cancer Risk Assessment
       </Text>
       <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
-        NCI Colorectal Cancer Risk Assessment Tool (CCRAT) - Estimates 5-year
-        and lifetime risk
+        Estimates 5-year and lifetime risk
       </Text>
 
       <div className="space-y-6">
