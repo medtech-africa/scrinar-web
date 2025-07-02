@@ -14,7 +14,6 @@ import { Text } from './text'
 import { usePathname } from 'next/navigation'
 import { IconPicker } from './icon-picker'
 import { IconNames } from './icon-picker/icon-names'
-import { isTrainer } from '@/utils/checkPermission'
 import { useUser } from '@/context/user'
 
 interface NavLinkProps {
@@ -172,7 +171,6 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
   const user = useUser((state) => state.user)
 
   const [isHealthDataOpen, setHealthDataOpen] = useState(false)
-  const [isUserProfileOpen, setUserProfileOpen] = useState(false)
 
   const sidebarRef = useRef(null)
   const windowSize = useWindowSize()
@@ -186,8 +184,6 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
   useClickAway(sidebarRef, () => sideToggleOpen(true))
 
   useEffect(() => {
-    const isRoute = new RegExp(/^\/patients|^\/staff/)
-    if (isRoute.test(pathname)) setUserProfileOpen(true)
     if (!isLargeScreen) {
       sideToggleOpen(true)
     }
@@ -202,8 +198,6 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
       return true
     })
   }, [user?.roles])
-
-  const showUserProfileTab = !isTrainer(user?.roles)
 
   return (
     <AnimatePresence initial={false}>
@@ -410,125 +404,6 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                               Mothers
                             </span>
                             <span className="hidden md:block lg:hidden">M</span>
-                          </Text>
-                        </NavLink>
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </motion.div>
-
-                <motion.div
-                  key="user"
-                  // animate={{ height: open ? 'auto' : '40px' }}
-                  layout
-                  transition={{ layout: { duration: 0.5, type: 'spring' } }}
-                >
-                  {showUserProfileTab && (
-                    <motion.button
-                      className={cn(
-                        'flex items-center justify-between text-grey-600 py-3 px-4 rounded-lg hover:opacity-80 w-full',
-                        {
-                          'bg-primary text-white':
-                            pathname.includes('/user-profile'),
-                          'opacity-95': !pathname.includes('/user-profile'),
-                        }
-                      )}
-                      onClick={() => setUserProfileOpen(!isUserProfileOpen)}
-                      layout="position"
-                    >
-                      <div className="flex gap-2">
-                        <IconPicker icon="profile2User" size="1.5rem" />
-                        <Text
-                          className="block md:hidden lg:block"
-                          variant="text/md"
-                        >
-                          User Profile
-                        </Text>
-                      </div>
-                      <motion.div
-                        key="arrow"
-                        animate={{ rotate: isUserProfileOpen ? 0 : -90 }}
-                        transition={{
-                          type: 'spring',
-                          stiffness: 500,
-                          damping: 50,
-                        }}
-                      >
-                        <IconPicker icon="arrowDown" />
-                      </motion.div>
-                    </motion.button>
-                  )}
-                  <AnimatePresence initial={false}>
-                    {isUserProfileOpen && (
-                      <motion.div
-                        key="content"
-                        initial="collapsed"
-                        animate="open"
-                        exit="collapsed"
-                        className="mt-2"
-                        variants={{
-                          open: {
-                            opacity: 1,
-                            height: 'auto',
-                          },
-                          collapsed: {
-                            opacity: 0,
-                            height: 0,
-                          },
-                        }}
-                      >
-                        {/* {!isMasterInstructor(user?.roles) && (
-                          <NavLink
-                            href={'/dashboard/user-profile/instructors'}
-                            className={cn(
-                              'pl-11',
-                              pathname.includes('/user-profile/instructors') &&
-                                'bg-grey-100'
-                            )}
-                          >
-                            <DotIcon />
-                            <Text variant="text/md">
-                              <span className="block md:hidden lg:block">
-                                Instructors
-                              </span>
-                              <span className="hidden md:block lg:hidden">
-                                I
-                              </span>
-                            </Text>
-                          </NavLink>
-                        )} */}
-
-                        <NavLink
-                          href="/dashboard/user-profile/students"
-                          className={cn(
-                            'pl-11',
-                            pathname.includes('/user-profile/students') &&
-                              'bg-grey-100'
-                          )}
-                        >
-                          <DotIcon />
-                          <Text variant="text/md">
-                            <span className="block md:hidden lg:block">
-                              Children
-                            </span>
-                            <span className="hidden md:block lg:hidden">C</span>
-                          </Text>
-                        </NavLink>
-
-                        <NavLink
-                          href="/dashboard/user-profile/parents"
-                          className={cn(
-                            'pl-11',
-                            pathname.includes('/user-profile/parents') &&
-                              'bg-grey-100'
-                          )}
-                        >
-                          <DotIcon />
-                          <Text variant="text/md">
-                            <span className="block md:hidden lg:block">
-                              Parents
-                            </span>
-                            <span className="hidden md:block lg:hidden">P</span>
                           </Text>
                         </NavLink>
                       </motion.div>

@@ -17,6 +17,19 @@ export const API = {
   students: `${BASE_URL}/api/v1/students`,
   registerStudents: `${BASE_URL}/api/v1/students/createByPublic`,
   parents: `${BASE_URL}/api/v1/parents`,
+  //patients
+  getPatients: (page?: number, searchVal = '') => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: '15',
+      per_page: '15',
+      search: searchVal,
+    })
+    return `${BASE_URL}/api/v1/patients?${params.toString()}`
+  },
+  patients: `${BASE_URL}/api/v1/parents`,
+
+  patient: (id: string) => `${BASE_URL}/api/v1/patients/${id}`,
   exportParentQuestionnaire: `${BASE_URL}/api/v1/parents/questionnaire/export`,
   parentQuestionnaire: (id: string) =>
     `${BASE_URL}/api/v1/parents/${id}/questionnaire`,
