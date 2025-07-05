@@ -50,10 +50,20 @@ baseAxios.interceptors.response.use(
   }
 )
 
+// Flag to prevent multiple toasts and redirects
+let isRedirecting = false
+
 function redirectToLoginAndDeleteToken() {
+  // Prevent multiple executions
+  if (isRedirecting) {
+    return
+  }
+
+  isRedirecting = true
+
   if (window.location.href.includes('dashboard')) {
     toast.error('Token expired! Please login')
-    window.location.href = '/login' // Redirect to the login pag
+    window.location.href = '/login' // Redirect to the login page
   }
   deleteCookie('token') // Delete the token from cookies
 }
