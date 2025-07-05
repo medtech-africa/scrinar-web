@@ -190,7 +190,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 'about 2 times in 3',
                 'almost always',
               ]}
-              form={{ id: 'prostateCancer.urinarySymptoms.incompleteEmptying' }}
+              form={{ id: 'prostateCancer.urinarySymptomsIncompleteEmptying' }}
             />
 
             <OptionWithRadioField
@@ -203,7 +203,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 'about 2 times in 3',
                 'almost always',
               ]}
-              form={{ id: 'prostateCancer.urinarySymptoms.frequency' }}
+              form={{ id: 'prostateCancer.urinarySymptomsFrequency' }}
             />
 
             <OptionWithRadioField
@@ -216,7 +216,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 'about 2 times in 3',
                 'almost always',
               ]}
-              form={{ id: 'prostateCancer.urinarySymptoms.intermittency' }}
+              form={{ id: 'prostateCancer.urinarySymptomsIntermittency' }}
             />
 
             <OptionWithRadioField
@@ -229,7 +229,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 'about 2 times in 3',
                 'almost always',
               ]}
-              form={{ id: 'prostateCancer.urinarySymptoms.urgency' }}
+              form={{ id: 'prostateCancer.urinarySymptomsUrgency' }}
             />
 
             <OptionWithRadioField
@@ -242,7 +242,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 'about 2 times in 3',
                 'almost always',
               ]}
-              form={{ id: 'prostateCancer.urinarySymptoms.weakStream' }}
+              form={{ id: 'prostateCancer.urinarySymptomsWeakStream' }}
             />
 
             <OptionWithRadioField
@@ -255,7 +255,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 'about 2 times in 3',
                 'almost always',
               ]}
-              form={{ id: 'prostateCancer.urinarySymptoms.straining' }}
+              form={{ id: 'prostateCancer.urinarySymptomsStraining' }}
             />
 
             <OptionWithRadioField
@@ -268,7 +268,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 'four times',
                 'five times or more',
               ]}
-              form={{ id: 'prostateCancer.urinarySymptoms.nocturia' }}
+              form={{ id: 'prostateCancer.urinarySymptomsNocturia' }}
             />
           </div>
         </div>
@@ -276,7 +276,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
 
       <div className="flex justify-end mt-6">
         <Button className="px-8" onClick={onNext} type="button">
-          Next
+          Save & continue
         </Button>
       </div>
     </div>

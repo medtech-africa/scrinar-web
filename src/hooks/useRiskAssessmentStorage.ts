@@ -20,19 +20,20 @@ export const useRiskAssessmentStorage = create(
       data: [],
       store: (parentId: string, newData) => {
         const survey = get().data
-        console.log("🚀 ~ survey:", survey)
         const dataMap = new Map(survey.map((item) => [item.id, item]))
 
-        console.log("🚀 ~ dataMap.values():", dataMap.values())
         const parentData = dataMap.get(parentId)
-        
+
         if (parentData) {
-            parentData.formData = deepMerge(parentData.formData, newData)
-            dataMap.set(parentId, parentData)
-            set({ data: Array.from(dataMap.values()) })
-          } else {
-            dataMap.set(parentId, { id: parentId, formData: newData, createdAt: new Date().toISOString() })
-            console.log("🚀 ~ dataMap 2:", dataMap.values())
+          parentData.formData = deepMerge(parentData.formData, newData)
+          dataMap.set(parentId, parentData)
+          set({ data: Array.from(dataMap.values()) })
+        } else {
+          dataMap.set(parentId, {
+            id: parentId,
+            formData: newData,
+            createdAt: new Date().toISOString(),
+          })
           set({ data: Array.from(dataMap.values()) })
         }
       },

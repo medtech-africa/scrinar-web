@@ -153,6 +153,10 @@ export default function Patients() {
     },
   ]
 
+  const handleMoreClick = (rowId: string) => {
+    setSelectedRow(selectedRow === rowId ? null : rowId)
+  }
+
   const handleDelete = async () => {
     await mutate(undefined, {
       onSuccess: () => {
@@ -222,7 +226,7 @@ export default function Patients() {
                       </div>
                     </TableCell>
                     <TableCell>
-                      <div className="text-base">{patient.age}</div>
+                      <div className="text-base">{patient.gender}</div>
                     </TableCell>
 
                     <TableCell>
@@ -235,11 +239,23 @@ export default function Patients() {
                         {format(new Date(patient.createdAt), 'MMM dd, yyyy')}
                       </div>
                     </TableCell>
-                    <TableCell className="text-right">
-                      <DropDownMenu
-                        menuItems={menuItems}
-                        onClose={() => setSelectedRow(null)}
-                      />
+                    <TableCell className="text-right relative">
+                      <button
+                        title="Icon picker"
+                        onClick={() => handleMoreClick(patient.id)}
+                        className="p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
+                        id="menu-button"
+                        aria-expanded="true"
+                        aria-haspopup="true"
+                      >
+                        <IconPicker icon="more" size="1.25rem" />
+                      </button>
+                      {selectedRow === patient.id && !deleteModal && (
+                        <DropDownMenu
+                          menuItems={menuItems}
+                          onClose={() => setSelectedRow(null)}
+                        />
+                      )}
                     </TableCell>
                   </TableRow>
                 ))

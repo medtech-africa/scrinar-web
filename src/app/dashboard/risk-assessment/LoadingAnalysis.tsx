@@ -2,14 +2,22 @@ import { Text } from '@/components/ui/text'
 import { motion } from 'framer-motion'
 
 const LoadingAnalysis = ({ progress }: { progress: number }) => {
+  const getPhaseMessage = () => {
+    if (progress < 45) {
+      return 'Generating risk assessment...'
+    } else if (progress < 90) {
+      return 'Fetching analysis results...'
+    } else {
+      return 'Finalizing results...'
+    }
+  }
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
       <div className="bg-white p-8 rounded-lg w-96">
         <div className="text-center mb-4">
           <h3 className="text-xl font-semibold mb-2">Analyzing Data</h3>
-          <p className="text-gray-600">
-            Please wait while we process your information
-          </p>
+          <p className="text-gray-600">{getPhaseMessage()}</p>
         </div>
 
         <div className="relative pt-1">

@@ -60,17 +60,17 @@ export const ScreeningQuestionsForm = ({ onNext }: Props) => {
           <OptionWithRadioField
             label="Do you have hypertension?"
             options={['Yes', 'No']}
-            form={{ id: 'diagnosedConditions.hypertension' }}
+            form={{ id: 'symptoms.hypertension' }}
           />
           <OptionWithRadioField
             label="Do you have diabetes?"
             options={['Yes', 'No']}
-            form={{ id: 'diagnosedConditions.diabetes' }}
+            form={{ id: 'symptoms.diabetes' }}
           />
           <OptionWithRadioField
             label="Do you have high cholesterol?"
             options={['Yes', 'No']}
-            form={{ id: 'diagnosedConditions.highCholesterol' }}
+            form={{ id: 'symptoms.highCholesterol' }}
           />
 
           {/* Diabetes-specific symptoms */}
@@ -150,13 +150,13 @@ export const ScreeningQuestionsForm = ({ onNext }: Props) => {
             '7-9 hours',
             'More than 9 hours',
           ]}
-          form={{ id: 'sleepPatterns.hoursPerNight' }}
+          form={{ id: 'sleepPattern' }}
         />
       </div>
 
       <div className="flex justify-end mt-6">
         <Button className="px-8" onClick={onNext} type="button">
-          Next
+          Save & continue
         </Button>
       </div>
     </div>

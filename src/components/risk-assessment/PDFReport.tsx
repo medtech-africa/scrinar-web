@@ -119,7 +119,11 @@ const PDFReport = ({
                 <Text>Full Name</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text>{personalInfo.fullName}</Text>
+                <Text>
+                  {personalInfo.firstName} {personalInfo.middleName}
+                  {personalInfo.middleName && ' '}
+                  {personalInfo.lastName}
+                </Text>
               </View>
             </View>
             <View style={styles.tableRow}>
@@ -356,7 +360,7 @@ export const ReportActions = ({
         document={
           <PDFReport data={assessmentData} personalInfo={personalInfo} />
         }
-        fileName={`${personalInfo?.fullName}-health-risk-assessment.pdf`}
+        fileName={`${personalInfo?.firstName}-${personalInfo?.lastName}-health-risk-assessment.pdf`}
       >
         {
           (({ loading = false }) => (

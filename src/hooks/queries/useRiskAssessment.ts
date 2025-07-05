@@ -25,13 +25,25 @@ export const useRiskAssessment = (id: string) => {
   })
 }
 
+export const useGeneratedRiskAssessment = (id: string) => {
+  return useQuery({
+    queryKey: ['generated-risk-assessment', id],
+    queryFn: () =>
+      baseAxios
+        .get(API.generateRiskAssessment(id))
+        .then((res) => res.data.data),
+  })
+}
+
 export const useRiskAssessmentPolling = (id: string) => {
   const startTime = React.useRef(Date.now())
 
   return useQuery({
     queryKey: ['risk-assessment-polling', id],
     queryFn: () =>
-      baseAxios.get(API.riskAssessmentDetails(id)).then((res) => res.data.data),
+      baseAxios
+        .get(API.generateRiskAssessment(id))
+        .then((res) => res.data.data),
     enabled: !!id,
     refetchInterval: (query) => {
       const data = query.state.data as RiskAssessmentModel | undefined
@@ -89,7 +101,13 @@ export const useRiskAssessmentPolling = (id: string) => {
 }
 
 export interface RiskAssessmentModel {
-  user: string
+  user: {
+    firstName: string
+    middleName: string
+    lastName: string
+    id: string
+  }
+  status: string
   school: string
   requestData: RiskAssessmentModelRequestData
   responseData: RiskAssessmentModelResponseData
@@ -100,17 +118,25 @@ export interface RiskAssessmentModel {
 
 export interface RiskAssessmentModelRequestData {
   ncdType: string
-  personalInfo: PersonalInfo
-  vitals: Vitals
-  bloodTest: BloodTest
-  familyHistory: FamilyHistory
-  lifestyle: Lifestyle
-  cardiac: Cardiac
-  symptoms: Symptoms
-  diagnosedConditions: DiagnosedConditions
-  sleepPatterns: SleepPatterns
-  previousHealthScreening: PreviousHealthScreening
-  consentAgreement: boolean
+  personalInfo?: PersonalInfo
+  vitals?: Vitals
+  bloodTest?: BloodTest
+  familyHistory?: FamilyHistory
+  lifestyle?: Lifestyle
+  cardiac?: Cardiac
+  symptoms?: Symptoms
+  diagnosedConditions?: DiagnosedConditions
+  sleepPattern?: string
+  previousHealthScreening?: PreviousHealthScreening
+  consentAgreement?: boolean
+  reportEmail?: string
+  providerNote?: string
+  consentSignature?: string
+  copd?: COPD
+  breastCancer?: BreastCancer
+  prostateCancer?: ProstateCancerRequest
+  colorectalCancer?: ColorectalCancer
+  ckd?: CKDRequest
 }
 
 interface Prediction {
@@ -121,25 +147,13 @@ interface Prediction {
 }
 
 export interface BloodTest {
-  bloodSugar: BloodSugar
-  cholesterol: Cholesterol
-  hba1c: Hba1C
-}
-
-export interface BloodSugar {
-  random: string
-  fasting: string
-}
-
-export interface Cholesterol {
-  total: string
-  ldl: string
-  hdl: string
-  triglycerides: string
-}
-
-export interface Hba1C {
-  level: string
+  bloodSugarRandom?: string
+  bloodSugarFasting?: string
+  cholesterolTotal?: string
+  cholesterolLdl?: string
+  cholesterolHdl?: string
+  cholesterolTriglycerides?: string
+  hba1cLevel?: string
 }
 
 export interface Cardiac {
@@ -163,35 +177,29 @@ export interface FamilyHistory {
 }
 
 export interface Lifestyle {
-  tobacco: Tobacco
-  alcohol: Alcohol
-  diet: Diet
-  physicalActivity: PhysicalActivity
-}
-
-export interface Alcohol {
-  usage: string
-}
-
-export interface Diet {
-  processedFoods: string
-  addSalt: string
-  fruitVegServings: string
-}
-
-export interface PhysicalActivity {
-  engages: string
-}
-
-export interface Tobacco {
-  currentlyUses: string
-  quit: string
+  tobaccoCurrentlyUses: string
+  tobaccoQuit?: string
+  tobaccoDailyUnits?: string
+  alcoholUsage: string
+  alcoholDaysPerWeek?: string
+  alcoholDrinksPerDay?: string
+  dietProcessedFoods: string
+  dietAddSalt: string
+  dietFruitVegServings: string
+  physicalActivityEngages: string
+  physicalActivityType?: string
+  physicalActivityDuration?: string
+  physicalActivityFrequency?: string
 }
 
 export interface PersonalInfo {
   gender: string
-  fullName: string
+  firstName: string
+  middleName?: string
+  lastName: string
   dateOfBirth: string
+  ethnicity?: string
+  country?: string
   occupation: string
   phoneNumber: string
   address: string
@@ -200,13 +208,14 @@ export interface PersonalInfo {
 }
 
 export interface PreviousHealthScreening {
-  bloodPressure: BloodPressure
-  bloodSugar: BloodPressure
-  bmi: BloodPressure
-}
-
-export interface BloodPressure {
-  available: string
+  date?: string
+  bloodPressureAvailable?: string
+  bloodPressureSystolic?: string
+  bloodPressureDiastolic?: string
+  bloodSugarAvailable?: string
+  bloodSugarLevel?: string
+  bmiAvailable?: string
+  bmiLevel?: string
 }
 
 export interface SleepPatterns {
@@ -334,6 +343,23 @@ export interface BreastCancerBreakdown {
   breastDensity: number
 }
 
+export interface ProstateCancerRequest {
+  ageGroup?: string
+  psaLevel?: string
+  digitalRectalExam?: string
+  prostateVolume?: string
+  previousBiopsy?: string
+  freeToTotalPsaRatio?: string
+  ethnicity?: string
+  urinarySymptomsIncompleteEmptying?: string
+  urinarySymptomsFrequency?: string
+  urinarySymptomsIntermittency?: string
+  urinarySymptomsUrgency?: string
+  urinarySymptomsWeakStream?: string
+  urinarySymptomsStraining?: string
+  urinarySymptomsNocturia?: string
+}
+
 export interface ProstateCancer {
   followUpAction: string
   lifestyleModification: string
@@ -379,6 +405,25 @@ export interface ColorectalCancerBreakdown {
   physicalActivity: number
   medicalHistory: number
   medicationUse: number
+}
+
+export interface CKDRequest {
+  serumCreatinine?: string
+  diabetes?: string
+  hypertension?: string
+  familyHistory?: string
+  cardiovascularDisease?: string
+  medications?: string
+  symptomsFatigue?: string
+  symptomsSwelling?: string
+  symptomsShortnessOfBreath?: string
+  symptomsUrinationChanges?: string
+  symptomsNausea?: string
+  symptomsMuscleCramps?: string
+  smoking?: string
+  alcohol?: string
+  lowSodiumDiet?: string
+  exercise?: string
 }
 
 export interface CKD {

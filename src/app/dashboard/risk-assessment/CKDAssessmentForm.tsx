@@ -113,37 +113,37 @@ export const CKDAssessmentForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label="Do you experience fatigue or weakness?"
               options={['Yes', 'No']}
-              form={{ id: 'ckd.symptoms.fatigue' }}
+              form={{ id: 'ckd.symptomsFatigue' }}
             />
 
             <OptionWithRadioField
               label="Do you experience swelling in your feet, ankles, or hands?"
               options={['Yes', 'No']}
-              form={{ id: 'ckd.symptoms.swelling' }}
+              form={{ id: 'ckd.symptomsSwelling' }}
             />
 
             <OptionWithRadioField
               label="Do you experience shortness of breath?"
               options={['Yes', 'No']}
-              form={{ id: 'ckd.symptoms.shortnessOfBreath' }}
+              form={{ id: 'ckd.symptomsShortnessOfBreath' }}
             />
 
             <OptionWithRadioField
               label="Do you experience changes in urination (frequency, color, or amount)?"
               options={['Yes', 'No']}
-              form={{ id: 'ckd.symptoms.urinationChanges' }}
+              form={{ id: 'ckd.symptomsUrinationChanges' }}
             />
 
             <OptionWithRadioField
               label="Do you experience nausea or loss of appetite?"
               options={['Yes', 'No']}
-              form={{ id: 'ckd.symptoms.nausea' }}
+              form={{ id: 'ckd.symptomsNausea' }}
             />
 
             <OptionWithRadioField
               label="Do you experience muscle cramps or twitches?"
               options={['Yes', 'No']}
-              form={{ id: 'ckd.symptoms.muscleCramps' }}
+              form={{ id: 'ckd.symptomsMuscleCramps' }}
             />
           </div>
         </div>
@@ -183,7 +183,7 @@ export const CKDAssessmentForm = ({ onNext }: Props) => {
 
       <div className="flex justify-end mt-6">
         <Button className="px-8" onClick={onNext} type="button">
-          Next
+          Save & continue
         </Button>
       </div>
     </div>

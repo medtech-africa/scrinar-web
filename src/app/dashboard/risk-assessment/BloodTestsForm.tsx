@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { messageCheck, variantValidityCheck } from './utils'
 import { BadgeField } from '@/components/ui/badge'
@@ -12,37 +12,88 @@ import {
 } from '@/utils/vitalCalculations'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
-import { useNcdFilter } from './NcdFilterContext'
-import { NCD } from '@/types/riskAssessment.types'
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from '@/components/ui/tooltip'
+import { HelpCircleIcon } from '@/components/ui/icon-picker/icons/help-circle'
 
 type Props = {
   onNext: () => void
 }
 
+// Validation functions
+const validateCholesterol = (total: string, hdl: string, ldl: string) => {
+  if (!total) return { isValid: true, message: '' }
+
+  const totalNum = Number(total)
+  const hdlNum = Number(hdl)
+  const ldlNum = Number(ldl)
+
+  if (hdl && totalNum <= hdlNum) {
+    return {
+      isValid: false,
+      message: 'Total Cholesterol must be greater than HDL',
+    }
+  }
+
+  if (ldl && totalNum <= ldlNum) {
+    return {
+      isValid: false,
+      message: 'Total Cholesterol must be greater than LDL',
+    }
+  }
+
+  return { isValid: true, message: '' }
+}
+
 export const BloodTestsForm = ({ onNext }: Props) => {
   const { control, watch } = useFormContext()
-  const { selectedNcd } = useNcdFilter()
+  const [validationErrors, setValidationErrors] = useState<
+    Record<string, string>
+  >({})
 
-  const bloodSugar1 = watch('bloodTest.bloodSugar.random')
-  const bloodSugar2 = watch('bloodTest.bloodSugar.fasting')
+  const bloodSugar1 = watch('bloodTest.bloodSugarRandom')
+  const bloodSugar2 = watch('bloodTest.bloodSugarFasting')
 
-  const tg = watch('bloodTest.cholesterol.triglycerides')
-  const hdlc = watch('bloodTest.cholesterol.hdl')
-  const ldlc = watch('bloodTest.cholesterol.ldl')
-  const totalCholesterol = watch('bloodTest.cholesterol.total')
+  const tg = watch('bloodTest.cholesterolTriglycerides')
+  const hdlc = watch('bloodTest.cholesterolHdl')
+  const ldlc = watch('bloodTest.cholesterolLdl')
+  const totalCholesterol = watch('bloodTest.cholesterolTotal')
+
+  // Validate cholesterol values
+  useEffect(() => {
+    const errors: Record<string, string> = {}
+
+    const cholesterolValidation = validateCholesterol(
+      totalCholesterol,
+      hdlc,
+      ldlc
+    )
+    if (!cholesterolValidation.isValid) {
+      errors.cholesterol = cholesterolValidation.message
+    }
+
+    setValidationErrors(errors)
+  }, [totalCholesterol, hdlc, ldlc])
+
+  const hasValidationErrors = Object.keys(validationErrors).length > 0
+  const hasFastingBloodSugar = !!bloodSugar2
 
   return (
-    <div>
-      <Text as="h2" className="font-medium mb-2">
-        Patients Lab Test
-      </Text>
-      <Text variant="text/sm" className="text-gray-500 mb-2 md:mb-4">
-        Blood tests (Blood tests are Optional, but they help to give a more
-        complete picture of your overall health)
-      </Text>
+    <TooltipProvider>
+      <div>
+        <Text as="h2" className="font-medium mb-2">
+          Patients Lab Test
+        </Text>
+        <Text variant="text/sm" className="text-gray-500 mb-2 md:mb-4">
+          Blood tests (Blood tests are Optional, but they help to give a more
+          complete picture of your overall health)
+        </Text>
 
-      <div className="space-y-4 mt-6">
-        {(selectedNcd === 'all' || selectedNcd === NCD.DIABETES) && (
+        <div className="space-y-4 mt-6">
           <div>
             <Text as="h3" variant="text/sm" className="font-medium mb-2">
               Blood Sugar Level (mg/dL)
@@ -50,34 +101,11 @@ export const BloodTestsForm = ({ onNext }: Props) => {
             <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
               Optional but recommended, especially for people with Diabetes
             </Text>
-            <div className="grid grid-cols-[2fr_1fr] items-center">
+
+            {/* Fasting Blood Sugar - Primary */}
+            <div className="grid grid-cols-[2fr_1fr] items-center mb-4">
               <Controller
-                name="bloodTest.bloodSugar.random"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    placeholder="Enter Random Blood Sugar Level"
-                    label="Random Blood Sugar"
-                    labelStyle="lg:text-sm text-xs"
-                    variant={variantValidityCheck(field.value)}
-                    message={messageCheck(field.value)}
-                  />
-                )}
-              />
-              {bloodSugar1 && (
-                <BadgeField
-                  variant={
-                    categorizeBloodSugarLevel(Number(bloodSugar1)).variant
-                  }
-                  value={categorizeBloodSugarLevel(Number(bloodSugar1)).message}
-                  className="ml-2 mt-6"
-                />
-              )}
-            </div>
-            <div className="grid grid-cols-[2fr_1fr] items-center">
-              <Controller
-                name="bloodTest.bloodSugar.fasting"
+                name="bloodTest.bloodSugarFasting"
                 control={control}
                 render={({ field }) => (
                   <Input
@@ -87,6 +115,9 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                     labelStyle="lg:text-sm text-xs"
                     variant={variantValidityCheck(field.value)}
                     message={messageCheck(field.value)}
+                    type="number"
+                    min="50"
+                    max="500"
                   />
                 )}
               />
@@ -100,10 +131,67 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                 />
               )}
             </div>
-          </div>
-        )}
 
-        {(selectedNcd === 'all' || selectedNcd === NCD.CVD) && (
+            {/* Random Blood Sugar - Optional when fasting is provided */}
+            <div className="grid grid-cols-[2fr_1fr] items-center">
+              <div className="relative">
+                <Controller
+                  name="bloodTest.bloodSugarRandom"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Enter Random Blood Sugar Level"
+                      label={
+                        <div className="flex items-center gap-2">
+                          <span>Random Blood Sugar</span>
+                          {hasFastingBloodSugar && (
+                            <span className="text-xs text-gray-500">
+                              (Optional)
+                            </span>
+                          )}
+                          {hasFastingBloodSugar && (
+                            <Tooltip>
+                              <TooltipTrigger type="button">
+                                <HelpCircleIcon
+                                  size="1rem"
+                                  className="text-gray-400 hover:text-gray-600 cursor-help"
+                                />
+                              </TooltipTrigger>
+                              <TooltipContent>
+                                <p className="max-w-xs">
+                                  Random blood sugar is optional when fasting
+                                  blood sugar is provided, as fasting values are
+                                  more reliable for diabetes assessment.
+                                </p>
+                              </TooltipContent>
+                            </Tooltip>
+                          )}
+                        </div>
+                      }
+                      labelStyle="lg:text-sm text-xs"
+                      variant={variantValidityCheck(field.value)}
+                      message={messageCheck(field.value)}
+                      type="number"
+                      min="50"
+                      max="500"
+                      disabled={hasFastingBloodSugar && !field.value}
+                    />
+                  )}
+                />
+              </div>
+              {bloodSugar1 && (
+                <BadgeField
+                  variant={
+                    categorizeBloodSugarLevel(Number(bloodSugar1)).variant
+                  }
+                  value={categorizeBloodSugarLevel(Number(bloodSugar1)).message}
+                  className="ml-2 mt-6"
+                />
+              )}
+            </div>
+          </div>
+
           <div>
             <Text as="h3" variant="text/sm" className="font-medium mb-2">
               Blood Cholesterol Level{' '}
@@ -122,10 +210,19 @@ export const BloodTestsForm = ({ onNext }: Props) => {
               interventions.
             </Text>
 
-            <div className="grid gap-4 grid-cols-2">
+            {/* Cholesterol validation error */}
+            {validationErrors.cholesterol && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
+                <Text variant="text/sm" className="text-red-800">
+                  ⚠️ {validationErrors.cholesterol}
+                </Text>
+              </div>
+            )}
+
+            <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
               <div className="grid grid-cols-[2fr_1fr] items-center">
                 <Controller
-                  name="bloodTest.cholesterol.total"
+                  name="bloodTest.cholesterolTotal"
                   control={control}
                   render={({ field }) => (
                     <div>
@@ -134,8 +231,18 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                         placeholder="Enter Total Cholesterol"
                         label="Total Cholesterol (mg/dL)"
                         labelStyle="lg:text-sm text-xs"
-                        variant={variantValidityCheck(field.value)}
-                        message={messageCheck(field.value)}
+                        variant={
+                          validationErrors.cholesterol
+                            ? 'destructive'
+                            : variantValidityCheck(field.value)
+                        }
+                        message={
+                          validationErrors.cholesterol ||
+                          messageCheck(field.value)
+                        }
+                        type="number"
+                        min="100"
+                        max="600"
                       />
                     </div>
                   )}
@@ -157,7 +264,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
 
               <div className="grid grid-cols-[2fr_1fr] items-center">
                 <Controller
-                  name="bloodTest.cholesterol.ldl"
+                  name="bloodTest.cholesterolLdl"
                   control={control}
                   render={({ field }) => (
                     <Input
@@ -165,8 +272,18 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                       placeholder="Enter LDL (Bad Cholesterol)"
                       label="LDL (Bad Cholesterol) (mg/dL)"
                       labelStyle="lg:text-sm text-xs"
-                      variant={variantValidityCheck(field.value)}
-                      message={messageCheck(field.value)}
+                      variant={
+                        validationErrors.cholesterol
+                          ? 'destructive'
+                          : variantValidityCheck(field.value)
+                      }
+                      message={
+                        validationErrors.cholesterol ||
+                        messageCheck(field.value)
+                      }
+                      type="number"
+                      min="30"
+                      max="400"
                     />
                   )}
                 />
@@ -181,7 +298,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
 
               <div className="grid grid-cols-[2fr_1fr] items-center">
                 <Controller
-                  name="bloodTest.cholesterol.hdl"
+                  name="bloodTest.cholesterolHdl"
                   control={control}
                   render={({ field }) => (
                     <Input
@@ -189,8 +306,18 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                       placeholder="Enter HDL (Good Cholesterol)"
                       label="HDL (Good Cholesterol) (mg/dL)"
                       labelStyle="lg:text-sm text-xs"
-                      variant={variantValidityCheck(field.value)}
-                      message={messageCheck(field.value)}
+                      variant={
+                        validationErrors.cholesterol
+                          ? 'destructive'
+                          : variantValidityCheck(field.value)
+                      }
+                      message={
+                        validationErrors.cholesterol ||
+                        messageCheck(field.value)
+                      }
+                      type="number"
+                      min="20"
+                      max="150"
                     />
                   )}
                 />
@@ -205,7 +332,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
 
               <div className="grid grid-cols-[2fr_1fr] items-center">
                 <Controller
-                  name="bloodTest.cholesterol.triglycerides"
+                  name="bloodTest.cholesterolTriglycerides"
                   control={control}
                   render={({ field }) => (
                     <Input
@@ -215,6 +342,9 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                       labelStyle="lg:text-sm text-xs"
                       variant={variantValidityCheck(field.value)}
                       message={messageCheck(field.value)}
+                      type="number"
+                      min="30"
+                      max="1000"
                     />
                   )}
                 />
@@ -228,15 +358,13 @@ export const BloodTestsForm = ({ onNext }: Props) => {
               </div>
             </div>
           </div>
-        )}
 
-        {(selectedNcd === 'all' || selectedNcd === NCD.DIABETES) && (
           <div>
             <Text as="h3" variant="text/sm" className="font-medium mb-2">
               HbA1c (Glycated Hemoglobin)
             </Text>
             <Controller
-              name="bloodTest.hba1c.level"
+              name="bloodTest.hba1cLevel"
               control={control}
               render={({ field }) => (
                 <Input
@@ -246,18 +374,26 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                   labelStyle="lg:text-sm text-xs"
                   variant={variantValidityCheck(field.value)}
                   message={messageCheck(field.value)}
+                  type="number"
+                  min="3"
+                  max="15"
+                  step="0.1"
                 />
               )}
             />
           </div>
-        )}
-      </div>
+        </div>
 
-      <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext}>
-          Next
-        </Button>
+        <div className="flex justify-end mt-6">
+          <Button
+            className="px-8"
+            onClick={onNext}
+            disabled={hasValidationErrors}
+          >
+            Save & continue
+          </Button>
+        </div>
       </div>
-    </div>
+    </TooltipProvider>
   )
 }

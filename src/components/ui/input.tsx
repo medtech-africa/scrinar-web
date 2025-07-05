@@ -24,7 +24,7 @@ export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof inputVariants> {
   full?: boolean
-  label?: string
+  label?: string | React.ReactNode
   option?: string
   message?: string
   leadingIcon?: React.ReactNode

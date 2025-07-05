@@ -5,8 +5,8 @@ import { cn } from '@/lib/utils'
 
 const PlayIcon = () => (
   <svg
-    width="24"
-    height="24"
+    width="20"
+    height="20"
     viewBox="0 0 24 24"
     fill="none"
     xmlns="http://www.w3.org/2000/svg"
@@ -61,8 +61,8 @@ const MeasurementGuides = ({
 
   return (
     <div className="w-full">
-      {/* Featured video area */}
-      <div className="relative aspect-square w-full overflow-hidden">
+      {/* Featured video area - smaller aspect ratio */}
+      <div className="relative aspect-video w-full overflow-hidden rounded-lg border">
         {isPlaying && currentVideoId ? (
           <iframe
             className="absolute top-0 left-0 w-full h-full"
@@ -78,16 +78,16 @@ const MeasurementGuides = ({
               src={`https://img.youtube.com/vi/${currentVideoId}/hqdefault.jpg`}
               alt="Video thumbnail"
               className="w-full h-full object-cover"
-              height={300}
+              height={200}
               width={300}
             />
             <button
               type="button"
               onClick={() => setIsPlaying(true)}
-              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 rounded-full bg-white bg-opacity-80 flex items-center justify-center"
+              className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-12 h-12 rounded-full bg-white bg-opacity-80 flex items-center justify-center"
               aria-label="Play video"
             >
-              <div className="flex items-center justify-center w-12 h-12 rounded-full bg-red-600 text-white">
+              <div className="flex items-center justify-center w-8 h-8 rounded-full bg-red-600 text-white">
                 <PlayIcon />
               </div>
             </button>
@@ -95,27 +95,30 @@ const MeasurementGuides = ({
         )}
       </div>
 
-      {/* List of video guides */}
-      <div className="py-4">
+      {/* List of video guides - more compact */}
+      <div className="py-3 space-y-1">
         {guides.map((guide) => (
           <button
             key={guide.id}
             type="button"
             onClick={() => playVideo(guide.videoUrl)}
             className={cn(
-              'w-full flex items-center justify-between py-3 px-2 hover:bg-gray-100 rounded-md transition-colors text-left',
-              guide.videoUrl.includes(currentVideoId) && 'text-blue-900'
+              'w-full flex items-center justify-between py-2 px-3 hover:bg-gray-100 rounded-md transition-colors text-left text-sm',
+              guide.videoUrl.includes(currentVideoId) &&
+                'bg-blue-50 text-blue-900'
             )}
           >
             <Text
               className={cn(
-                guide.videoUrl.includes(currentVideoId) && 'text-blue-600'
+                'text-sm',
+                guide.videoUrl.includes(currentVideoId) &&
+                  'text-blue-600 font-medium'
               )}
             >
               {guide.title}
             </Text>
 
-            <div>
+            <div className="text-gray-400">
               <PlayIcon />
             </div>
           </button>
