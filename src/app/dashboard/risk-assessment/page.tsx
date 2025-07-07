@@ -206,7 +206,6 @@ const CreateAssessmentModal = ({ children }: { children: React.ReactNode }) => {
                 <div className="space-y-3">
                   <Input
                     placeholder="Search by name or medical ID..."
-                    value={patientSearch}
                     onChange={(e) => setPatientSearch(e.target.value)}
                     leadingIcon={<IconPicker icon="search" />}
                   />
