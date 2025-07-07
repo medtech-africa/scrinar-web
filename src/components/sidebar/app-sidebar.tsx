@@ -67,6 +67,20 @@ const generalData = [
       'jica_researchers',
     ],
   },
+  {
+    title: 'Patients',
+    icon: 'profile2User',
+    url: 'patients',
+    roles: [
+      'school',
+      'instructor',
+      'organization',
+      'play4health_admin',
+      'super_admin',
+      'jica_enumerators',
+      'jica_researchers',
+    ],
+  },
   // {
   //   title: 'Health Data',
   //   icon: 'health',
@@ -183,24 +197,6 @@ const data = {
           url: '/dashboard/family-health-data/mothers',
           isActive: (pathname) =>
             pathname.includes('/family-health-data/mothers'),
-        },
-      ],
-    },
-    {
-      title: 'User Profile',
-      url: '#',
-      icon: <IconPicker icon="profile2User" />,
-      isActive: (pathname) => pathname.startsWith('/dashboard/user-profile'),
-      items: [
-        {
-          title: 'Children',
-          url: '/dashboard/user-profile/students',
-          isActive: (pathname) => pathname.includes('/user-profile/students'),
-        },
-        {
-          title: 'Parents',
-          url: '/dashboard/user-profile/parents',
-          isActive: (pathname) => pathname.includes('/user-profile/parents'),
         },
       ],
     },

@@ -1,7 +1,10 @@
 'use client'
 import React from 'react'
 import { RiskAssessmentForm } from '../RiskAssessmentForm'
-import { useRiskAssessment } from '@/hooks/queries/useRiskAssessment'
+import {
+  useGeneratedRiskAssessment,
+  useRiskAssessment,
+} from '@/hooks/queries/useRiskAssessment'
 import { useParams } from 'next/navigation'
 import ContentLoader from '@/components/content-loader'
 import { RiskAssessmentReport } from '../RiskAssessmentReport'
@@ -11,12 +14,13 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 const RiskAssessmentDetailsPage = () => {
   const params = useParams<{ id: string }>()
   const { data, isPending } = useRiskAssessment(params.id)
+  const { data: generatedData, isPending: isGeneratedPending } =
+    useGeneratedRiskAssessment(params.id)
   // TODO restructure
-  console.log('🚀 ~ RiskAssessmentDetailsPage ~ data:', data)
 
   const formMethods = useForm({ defaultValues: data?.requestData })
 
-  if (isPending) {
+  if (isPending || isGeneratedPending) {
     return <ContentLoader loading />
   }
 
@@ -41,14 +45,17 @@ const RiskAssessmentDetailsPage = () => {
               <FormProvider {...formMethods}>
                 <RiskAssessmentReport
                   className="w-full max-w-3xl mx-auto mt-10"
-                  data={data}
-                  personalInfo={data?.requestData.personalInfo}
+                  data={{
+                    requestData: data,
+                    responseData: generatedData,
+                  }}
+                  personalInfo={data?.user}
                   showActionButton={false}
                 />
               </FormProvider>
             </TabsContent>
             <TabsContent value="form">
-              <RiskAssessmentForm displayOnly data={data} />
+              <RiskAssessmentForm displayOnly data={{ requestData: data }} />
             </TabsContent>
           </Tabs>
         </div>

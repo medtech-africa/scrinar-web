@@ -69,7 +69,7 @@ export const AddNewStudentContent = () => {
     formState: { errors },
     watch,
   } = useForm<IFormValue>({
-    resolver: validation.createPatient,
+    resolver: validation.createStudent,
     defaultValues: { avatar: true },
   })
 

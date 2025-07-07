@@ -10,7 +10,6 @@ import {
   Bar,
 } from 'recharts'
 import { motion } from 'framer-motion'
-import { IconPicker } from '../ui/icon-picker'
 import { ToastField } from '../ui/toast'
 import {
   Findrisc,
@@ -18,6 +17,16 @@ import {
   RiskData,
   Who,
   WhoBreakdown,
+  COPD,
+  COPDBreakdown,
+  BreastCancer,
+  BreastCancerBreakdown,
+  ProstateCancer,
+  ProstateCancerBreakdown,
+  ColorectalCancer,
+  ColorectalCancerBreakdown,
+  CKD,
+  CKDBreakdown,
 } from '@/hooks/queries/useRiskAssessment'
 // import { useFormContext } from 'react-hook-form'
 // import calculateAge from '@/utils/calculateAge'
@@ -29,13 +38,19 @@ import { Text } from '../ui/text'
 import { RiskTrendGraph } from './RiskTrendGraph'
 import { RiskGaugeBar } from './RiskGaugeBar'
 import PreventionTips from './PreventionTips'
-import Link from 'next/link'
 import DiseaseBreakdown from './DiseaseBreakdown'
 import RiskSummary from './RiskSummary'
 import { NCD } from '@/types/riskAssessment.types'
 
 // Types
-export type RiskType = 'who' | 'findrisc'
+export type RiskType =
+  | 'who'
+  | 'findrisc'
+  | 'copd'
+  | 'breastCancer'
+  | 'prostateCancer'
+  | 'colorectalCancer'
+  | 'ckd'
 export type RiskLevel = 'low' | 'moderate' | 'high'
 
 export interface IRiskBreakdownItem {
@@ -69,10 +84,53 @@ const FACTOR_LABELS: { [key: string]: string } = {
   smoking: 'Smoking Status',
   diabetes: 'Diabetes',
   cholesterol: 'Cholesterol Levels',
+  // COPD factors
+  coughDuration: 'Chronic Cough',
+  shortnessOfBreath: 'Shortness of Breath',
+  activityLimitations: 'Activity Limitations',
+  exposureToDust: 'Dust Exposure',
+  smokingHistory: 'Smoking History',
+  // Breast Cancer factors
+  ageAtMenarche: 'Age at Menarche',
+  ageAtFirstBirth: 'Age at First Birth',
+  ageAtMenopause: 'Age at Menopause',
+  hormoneReplacementTherapy: 'Hormone Replacement Therapy',
+  benignBreastDisease: 'Benign Breast Disease',
+  familyHistory: 'Family History',
+  brcaMutationStatus: 'BRCA Mutation Status',
+  breastDensity: 'Breast Density',
+  // Prostate Cancer factors
+  psaLevel: 'PSA Level',
+  digitalRectalExam: 'Digital Rectal Exam',
+  prostateVolume: 'Prostate Volume',
+  previousBiopsy: 'Previous Biopsy',
+  freeToTotalPsaRatio: 'Free-to-Total PSA Ratio',
+  ethnicity: 'Ethnicity',
+  urinarySymptoms: 'Urinary Symptoms',
+  // Colorectal Cancer factors
+  personalHistory: 'Personal History',
+  smokingStatus: 'Smoking Status',
+  diet: 'Diet',
+  physicalActivity: 'Physical Activity',
+  medicalHistory: 'Medical History',
+  medicationUse: 'Medication Use',
+  // CKD factors
+  serumCreatinine: 'Serum Creatinine',
+  cardiovascularDisease: 'Cardiovascular Disease',
+  medications: 'Medications',
+  symptoms: 'Symptoms',
+  lifestyle: 'Lifestyle',
 }
 
 const formatRiskFactors = (
-  factors?: FindriscBreakdown | WhoBreakdown,
+  factors?:
+    | FindriscBreakdown
+    | WhoBreakdown
+    | COPDBreakdown
+    | BreastCancerBreakdown
+    | ProstateCancerBreakdown
+    | ColorectalCancerBreakdown
+    | CKDBreakdown,
   totalRiskScore = 0
 ) => {
   const formattedFactors = Object.entries(factors ?? {})
@@ -171,7 +229,15 @@ const ClinicalSummary = ({
   data,
   isLoading = false,
 }: {
-  data: Who | Findrisc | null
+  data:
+    | Who
+    | Findrisc
+    | COPD
+    | BreastCancer
+    | ProstateCancer
+    | ColorectalCancer
+    | CKD
+    | null
   isLoading?: boolean
 }) => {
   if (isLoading) {
@@ -198,98 +264,22 @@ const ClinicalSummary = ({
         )}
       </div>
 
-      {/* <div className="mb-4">
-        <div className="flex items-center mb-2">
-          <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
-            <IconPicker icon="health" className="text-red-500" size={16} />
-          </div>
-          <h4 className="font-medium">Diagnoses</h4>
-        </div>
-        <ul className="list-disc ml-8 text-sm space-y-1">
-          <li>Prediabetes (HbA1c: 6.0%)</li>
-          <li>Mild Hypertension (BP: 140/90)</li>
-          <li>Angina Episodes (History Suggests Ischemia)</li>
-        </ul>
-      </div> */}
-
       <div className="mb-4">
-        <div className="flex items-center mb-2">
-          <div className="w-8 h-8 rounded-full bg-orange-100 flex items-center justify-center mr-2">
-            <IconPicker icon="document" className="text-orange-500" size={16} />
-          </div>
-          <h4 className="font-medium">Recommended</h4>
-        </div>
+        <h4 className="font-medium">Lifestyle Modifications</h4>
         {data?.lifestyleModification === undefined ? (
-          <div className="space-y-2">
-            <Skeleton className="h-4 w-full" />
-            <Skeleton className="h-4 w-3/4" />
-            <Skeleton className="h-4 w-2/3" />
-          </div>
+          <Skeleton className="h-6 w-full" />
         ) : (
-          <ul className="list-disc ml-8 text-sm space-y-1">
-            {data?.lifestyleModification
-              ?.split('.')
-              .map((rec) => rec && <li key={rec}>{rec}</li>)}
-          </ul>
+          <p className="text-sm">{data?.lifestyleModification}</p>
         )}
       </div>
 
-      {/* <div className="mb-4">
-        <div className="flex items-center mb-2">
-          <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center mr-2">
-            <IconPicker icon="alertCircle" className="text-red-500" size={16} />
-          </div>
-          <h4 className="font-medium">Stroke Risk Alert: 12% over 6 months</h4>
-        </div>
-      </div> */}
-
       <div className="mb-4">
-        <div className="flex items-center mb-2">
-          <div className="w-8 h-8 rounded-full bg-purple-100 flex items-center justify-center mr-2">
-            <IconPicker icon="calendar" className="text-purple-500" size={16} />
-          </div>
-          <Text variant="text/sm">Follow up Action</Text>
-        </div>
+        <h4 className="font-medium">Follow-up Actions</h4>
         {data?.followUpAction === undefined ? (
           <Skeleton className="h-6 w-full" />
         ) : (
-          <Text variant="text/sm" className="ml-4">
-            {data?.followUpAction}
-          </Text>
+          <p className="text-sm">{data?.followUpAction}</p>
         )}
-      </div>
-
-      <div className="mt-6">
-        <div className="border-t pt-4">
-          <h4 className="font-medium mb-2">Edit summary</h4>
-          <textarea
-            className="w-full border rounded-md p-3 h-20"
-            placeholder="Add Your Observations"
-            aria-label="Clinical observations"
-          />
-        </div>
-
-        <div className="flex flex-wrap items-center gap-3 mt-4">
-          <Button
-            variant="secondary"
-            size="sm"
-            className="flex items-center gap-1"
-          >
-            <IconPicker icon="userEdit" size={16} /> Edit
-          </Button>
-          {/* <Button
-            variant="outline"
-            size="sm"
-            className="flex items-center gap-1 border-primary"
-          >
-            <IconPicker icon="saveAdd" size={16} /> Save to EHR
-          </Button> */}
-
-          <div className="flex-1" />
-          <Link target="_blank" href="https://forcardio.app">
-            <Button className="ml-auto">Schedule consultation</Button>
-          </Link>
-        </div>
       </div>
     </div>
   )
@@ -352,6 +342,35 @@ export const RiskAssessmentResult: React.FC<{
       id: 'findrisc',
       label: 'Diabetes risk',
       show: ncdType ? ncdType === 'all' || ncdType === NCD.DIABETES : true,
+    },
+    {
+      id: 'copd',
+      label: 'COPD risk',
+      show: ncdType ? ncdType === 'all' || ncdType === NCD.COPD : true,
+    },
+    {
+      id: 'breastCancer',
+      label: 'Breast Cancer risk',
+      show: ncdType ? ncdType === 'all' || ncdType === NCD.BREAST_CANCER : true,
+    },
+    {
+      id: 'prostateCancer',
+      label: 'Prostate Cancer risk',
+      show: ncdType
+        ? ncdType === 'all' || ncdType === NCD.PROSTATE_CANCER
+        : true,
+    },
+    {
+      id: 'colorectalCancer',
+      label: 'Colorectal Cancer risk',
+      show: ncdType
+        ? ncdType === 'all' || ncdType === NCD.COLORECTAL_CANCER
+        : true,
+    },
+    {
+      id: 'ckd',
+      label: 'CKD risk',
+      show: ncdType ? ncdType === 'all' || ncdType === NCD.CKD : true,
     },
   ]
 
@@ -456,13 +475,13 @@ export const RiskAssessmentResult: React.FC<{
             <RiskGaugeBar
               score={parseFloat(activeData?.score ?? '0')}
               riskLevel={activeData?.riskLevel ?? ''}
-              type={isWHO ? 'CVD' : 'Diabetes'}
+              type={getRiskTypeLabel(activeTab)}
             />
 
             <RiskSummary
               score={parseFloat(activeData?.score ?? '0')}
               level={riskLevel}
-              type={isWHO ? 'cvd' : 'diabetes'}
+              type={getRiskTypeForSummary(activeTab)}
             />
 
             {isWHO && (
@@ -543,6 +562,59 @@ export const getRiskColor = (riskLevel: RiskLevel): string => {
     high: '#EB5757',
   }
   return colors[riskLevel] || colors.low
+}
+
+// Helper function to get risk type label
+const getRiskTypeLabel = (activeTab: RiskType): string => {
+  switch (activeTab) {
+    case 'who':
+      return 'CVD'
+    case 'findrisc':
+      return 'Diabetes'
+    case 'copd':
+      return 'COPD'
+    case 'breastCancer':
+      return 'Breast Cancer'
+    case 'prostateCancer':
+      return 'Prostate Cancer'
+    case 'colorectalCancer':
+      return 'Colorectal Cancer'
+    case 'ckd':
+      return 'CKD'
+    default:
+      return 'CVD'
+  }
+}
+
+// Helper function to get risk type for summary
+const getRiskTypeForSummary = (
+  activeTab: RiskType
+):
+  | 'cvd'
+  | 'diabetes'
+  | 'copd'
+  | 'breastCancer'
+  | 'prostateCancer'
+  | 'colorectalCancer'
+  | 'ckd' => {
+  switch (activeTab) {
+    case 'who':
+      return 'cvd'
+    case 'findrisc':
+      return 'diabetes'
+    case 'copd':
+      return 'copd'
+    case 'breastCancer':
+      return 'breastCancer'
+    case 'prostateCancer':
+      return 'prostateCancer'
+    case 'colorectalCancer':
+      return 'colorectalCancer'
+    case 'ckd':
+      return 'ckd'
+    default:
+      return 'cvd'
+  }
 }
 
 export default RiskAssessmentResult

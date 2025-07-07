@@ -26,16 +26,16 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
           <Text as="h3" variant="text/sm" className="font-medium mb-3 md:mb-5">
             Lifestyle & Habits
           </Text>
-          <div className="gap-4 grid grid-cols-1 md:grid-cols-2">
+          <div className="gap-4 grid grid-cols-1 lg:grid-cols-2">
             {/* Tobacco Use */}
             <OptionWithRadioField
               label="Do you currently smoke or use any tobacco products?"
               options={['Yes', 'No']}
-              form={{ id: 'lifestyle.tobacco.currentlyUses' }}
+              form={{ id: 'lifestyle.tobaccoCurrentlyUses' }}
             />
-            {watch('lifestyle.tobacco.currentlyUses') === 'Yes' && (
+            {watch('lifestyle.tobaccoCurrentlyUses') === 'Yes' && (
               <Controller
-                name="lifestyle.tobacco.dailyUnits"
+                name="lifestyle.tobaccoDailyUnits"
                 control={control}
                 rules={{
                   required:
@@ -54,7 +54,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label="Have you quit smoking in the past?"
               options={['Yes', 'No']}
-              form={{ id: 'lifestyle.tobacco.quit' }}
+              form={{ id: 'lifestyle.tobaccoQuit' }}
             />
 
             {/* Alcohol Consumption */}
@@ -67,14 +67,14 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 'Regularly (3–5 times a week)',
                 'Frequently (6 or more times a week)',
               ]}
-              form={{ id: 'lifestyle.alcohol.usage' }}
+              form={{ id: 'lifestyle.alcoholUsage' }}
             />
-            {['Occasionally', 'Frequently', 'Regularly'].includes(
-              watch('lifestyle.alcohol.usage')
-            ) && (
+            {(watch('lifestyle.alcoholUsage')?.includes('Occasionally') ||
+              watch('lifestyle.alcoholUsage')?.includes('Frequently') ||
+              watch('lifestyle.alcoholUsage')?.includes('Regularly')) && (
               <>
                 <Controller
-                  name="lifestyle.alcohol.daysPerWeek"
+                  name="lifestyle.alcoholDaysPerWeek"
                   control={control}
                   render={({ field }) => (
                     <Input
@@ -86,7 +86,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                   )}
                 />
                 <Controller
-                  name="lifestyle.alcohol.drinksPerDay"
+                  name="lifestyle.alcoholDrinksPerDay"
                   control={control}
                   render={({ field }) => (
                     <Input
@@ -109,17 +109,17 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 'Regularly (3–5 times a week)',
                 'Frequently (6 or more times a week)',
               ]}
-              form={{ id: 'lifestyle.diet.processedFoods' }}
+              form={{ id: 'lifestyle.dietProcessedFoods' }}
             />
             <OptionWithRadioField
               label="Do you add salt to your food at the table?"
               options={['Yes', 'No']}
-              form={{ id: 'lifestyle.diet.addSalt' }}
+              form={{ id: 'lifestyle.dietAddSalt' }}
             />
             <OptionWithRadioField
               label="How many servings of fruits and vegetables do you consume daily? (a serving is about the size of an adult's closed fist)"
               options={['None', '1-2 servings', '3-4 servings', '5+ servings']}
-              form={{ id: 'lifestyle.diet.fruitVegServings' }}
+              form={{ id: 'lifestyle.dietFruitVegServings' }}
             />
 
             {/* Physical Activity */}
@@ -131,17 +131,13 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 'Regularly (3–5 times a week)',
                 'Frequently (6 or more times a week)',
               ]}
-              form={{ id: 'lifestyle.physicalActivity.engages' }}
+              form={{ id: 'lifestyle.physicalActivityEngages' }}
             />
-            {watch('lifestyle.physicalActivity.engages') === 'Yes' && (
+            {Boolean(watch('lifestyle.physicalActivityEngages')) && (
               <>
                 <Controller
-                  name="lifestyle.physicalActivity.type"
+                  name="lifestyle.physicalActivityType"
                   control={control}
-                  rules={{
-                    required:
-                      selectedNcd === NCD.CVD || selectedNcd === NCD.DIABETES,
-                  }}
                   render={({ field }) => (
                     <Input
                       {...field}
@@ -152,12 +148,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                   )}
                 />
                 <Controller
-                  name="lifestyle.physicalActivity.duration"
+                  name="lifestyle.physicalActivityDuration"
                   control={control}
-                  rules={{
-                    required:
-                      selectedNcd === NCD.CVD || selectedNcd === NCD.DIABETES,
-                  }}
                   render={({ field }) => (
                     <Input
                       {...field}
@@ -168,12 +160,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                   )}
                 />
                 <Controller
-                  name="lifestyle.physicalActivity.frequency"
+                  name="lifestyle.physicalActivityFrequency"
                   control={control}
-                  rules={{
-                    required:
-                      selectedNcd === NCD.CVD || selectedNcd === NCD.DIABETES,
-                  }}
                   render={({ field }) => (
                     <Input
                       {...field}
@@ -191,7 +179,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
 
       <div className="flex justify-end mt-6">
         <Button className="px-8" onClick={onNext} type="button">
-          Next
+          Save & continue
         </Button>
       </div>
     </div>

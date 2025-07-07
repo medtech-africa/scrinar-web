@@ -1,9 +1,9 @@
 'use client'
 import DropDownMenu, { MenuItemProp } from '@/components/drop-down-menu'
 import EmptyData from '@/components/empty-data'
+
 import { PageHeader } from '@/components/page-header'
 import Pagination from '@/components/pagination'
-import SortBy from '@/components/sort-by'
 import TableLoader from '@/components/table-loader'
 import { Avatar } from '@/components/ui/avatar'
 import { Button } from '@/components/ui/button'
@@ -19,7 +19,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import useStudents from '@/hooks/queries/useStudents'
+import usePatients from '@/hooks/queries/usePatients'
 import { useDebouncedState } from '@/hooks/useDebouncedState'
 import { usePaginate } from '@/hooks/usePagination'
 import useSchoolChangeRefresh from '@/hooks/useSchoolChangeRefresh'
@@ -44,12 +44,12 @@ const FilterData = () => {
           endingIcon={<IconPicker icon="add" />}
         />
         <Button
-          value="Nutritional Health"
+          value="Age"
           className="bg-grey-50 text-grey-900 hover:bg-grey-100"
           endingIcon={<IconPicker icon="add" />}
         />
         <Button
-          value="Exercise Habits"
+          value="Gender"
           className="bg-grey-50 text-grey-900 hover:bg-grey-100"
           endingIcon={<IconPicker icon="add" />}
         />
@@ -62,21 +62,21 @@ const FilterData = () => {
     </div>
   )
 }
+
 type FilterHeaderProps = {
   setOpenFilter: (value: boolean) => void
   openFilter: boolean
   onSearchChange: (val: string) => void
   searchVal?: string
   loading?: boolean
-  onSortChange: (val: string) => void
 }
+
 const FilterHeader = ({
   setOpenFilter: _,
   openFilter: __,
   onSearchChange,
   searchVal,
   loading,
-  onSortChange,
 }: FilterHeaderProps) => {
   return (
     <div className="md:flex md:flex-row grid grid-cols-1 py-4 justify-between mt-2 border-y border-grey-50 mb-2 items-center">
@@ -84,32 +84,18 @@ const FilterHeader = ({
         <Input
           leadingIcon={<IconPicker icon="search" />}
           className="rounded-[49px] bg-grey-100 text-sm  md:w-[17.25rem] w-[15rem]"
-          placeholder="Search by Name, Level or Gender...."
+          placeholder="Search by Name, Medical Record Number or Gender...."
           full={false}
           onChange={(e) => onSearchChange(e.target.value)}
           endingIcon={
             loading && searchVal && <IconPicker icon="loader2" size={20} />
           }
         />
-
-        <SortBy onChange={onSortChange} />
       </div>
       <div className="flex gap-x-4 mt-2 md:mt-0">
-        {/* @Todo:not time */}
-        {/* <Button
-          onClick={() => setOpenFilter(!openFilter)}
-          value="Filter Data"
-          className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
-          endingIcon={<IconPicker icon="arrowDown" />}
-        />
-        <Button
-          value="Export Data"
-          className="bg-grey-50 text-grey-900 hover:bg-grey-100 p-2 md:px-4 md:py-2"
-          endingIcon={<IconPicker icon="export" />}
-        /> */}
-        <Link href={`students/add-student`}>
+        <Link href={`patients/add`}>
           <Button
-            value="Add New Student"
+            value="Add New Patient"
             variant="primary"
             className="p-2 md:px-4 md:py-2 h-full"
             leadingIcon={<IconPicker icon="add" />}
@@ -120,12 +106,11 @@ const FilterHeader = ({
   )
 }
 
-export default function Students() {
+export default function Patients() {
   const router = useRouter()
   const [openFilter, setOpenFilter] = useState(false)
   const [selectedRow, setSelectedRow] = useState<string | null>(null)
   const [deleteModal, setDeleteModal] = useState(false)
-  const [sortVal, setSort] = useState('')
 
   const { currentPage, setCurrentPage, handlePrev, handleNext } = usePaginate(
     {}
@@ -136,34 +121,28 @@ export default function Students() {
     isPending: isLoading,
     refetch,
     isFetching,
-  } = useStudents(currentPage, '', search, sortVal)
+  } = usePatients(currentPage, search)
   useSchoolChangeRefresh(refetch)
 
-  const studentsData = data?.data
+  const patientsData = data?.data
 
   const { isPending: deleteLoading, mutate } = useMutation({
     mutationFn: () =>
-      baseAxios.delete(API.student(encodeURIComponent(selectedRow ?? ''))),
+      baseAxios.delete(API.patient(encodeURIComponent(selectedRow ?? ''))),
   })
-
-  const handleMoreClick = (rowId: string) => {
-    setSelectedRow(selectedRow === rowId ? null : rowId)
-  }
 
   const menuItems: MenuItemProp[] = [
     {
       title: 'View',
       icon: IconNames.documentText,
       action: () =>
-        router.push(`students/view/${encodeURIComponent(selectedRow ?? '')}`),
+        router.push(`patients/view/${encodeURIComponent(selectedRow ?? '')}`),
     },
     {
       title: 'Edit',
       icon: IconNames.userEdit,
       action: () =>
-        router.push(
-          `students/edit-student/${encodeURIComponent(selectedRow ?? '')}`
-        ),
+        router.push(`patients/edit/${encodeURIComponent(selectedRow ?? '')}`),
     },
     {
       title: 'Delete',
@@ -174,14 +153,17 @@ export default function Students() {
     },
   ]
 
+  const handleMoreClick = (rowId: string) => {
+    setSelectedRow(selectedRow === rowId ? null : rowId)
+  }
+
   const handleDelete = async () => {
     await mutate(undefined, {
       onSuccess: () => {
         setSelectedRow(null)
         setDeleteModal(false)
         refetch()
-        toast.success('Successfully deleted student')
-        // toast.success('')
+        toast.success('Successfully deleted patient')
       },
       onError: (err) => {
         errorMessage(err)
@@ -192,8 +174,8 @@ export default function Students() {
   return (
     <div>
       <PageHeader
-        title="Students"
-        subtitle="Manage Students profiles, Add, View and Delete Profile."
+        title="Patients"
+        subtitle="Manage Patient profiles, Add, View and Delete Profile."
         avatar="avatar"
       />
       <FilterHeader
@@ -202,106 +184,118 @@ export default function Students() {
         onSearchChange={setSearch}
         searchVal={search}
         loading={isFetching}
-        onSortChange={setSort}
       />
+
       {openFilter && <FilterData />}
+
+      <div className="bg-white rounded-lg border border-grey-50">
+        <>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Patient</TableHead>
+                <TableHead>Gender</TableHead>
+                <TableHead>Phone Number</TableHead>
+                <TableHead>Date Added</TableHead>
+                <TableHead className="text-right">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {isLoading ? (
+                <TableLoader />
+              ) : (
+                patientsData?.map((patient: DataType) => (
+                  <TableRow key={patient.id}>
+                    <TableCell>
+                      <div className="flex items-center gap-x-3">
+                        <Avatar
+                          src={patient.avatarUrl}
+                          fallback={returnJoinedFirstCharacter(
+                            patient.firstName,
+                            patient.lastName
+                          )}
+                        />
+                        <div>
+                          <div className="font-medium text-base">
+                            {patient.firstName} {patient.lastName}
+                          </div>
+                          <div className="text-sm text-grey-500">
+                            {patient.nationalId || 'No ID'}
+                          </div>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-base">{patient.gender}</div>
+                    </TableCell>
+
+                    <TableCell>
+                      <div className="text-base">
+                        {patient.phoneNumber || 'N/A'}
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="text-base">
+                        {format(new Date(patient.createdAt), 'MMM dd, yyyy')}
+                      </div>
+                    </TableCell>
+                    <TableCell className="text-right relative">
+                      <button
+                        title="Icon picker"
+                        onClick={() => handleMoreClick(patient.id)}
+                        className="p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
+                        id="menu-button"
+                        aria-expanded="true"
+                        aria-haspopup="true"
+                      >
+                        <IconPicker icon="more" size="1.25rem" />
+                      </button>
+                      {selectedRow === patient.id && !deleteModal && (
+                        <DropDownMenu
+                          menuItems={menuItems}
+                          onClose={() => setSelectedRow(null)}
+                        />
+                      )}
+                    </TableCell>
+                  </TableRow>
+                ))
+              )}
+            </TableBody>
+          </Table>
+          {patientsData?.length === 0 && <EmptyData />}
+
+          {patientsData?.length > 0 && (
+            <Pagination
+              current={currentPage}
+              setCurrent={setCurrentPage}
+              total={data?.total}
+              onNext={handleNext}
+              onPrev={handlePrev}
+              pageSize={data?.per_page}
+              className="mt-2"
+            />
+          )}
+        </>
+      </div>
+
       <Delete
         open={deleteModal}
-        onClose={setDeleteModal}
+        onClose={() => setDeleteModal(false)}
         action={handleDelete}
         actionLoading={deleteLoading}
       />
-
-      <div className="py-3 md:py-8">
-        <Table className="table-auto" hasEmptyData={studentsData?.length === 0}>
-          <TableHeader className="bg-grey-100">
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Level</TableHead>
-              <TableHead>Gender</TableHead>
-              <TableHead>Age</TableHead>
-              <TableHead>Date Added</TableHead>
-              <TableHead>Action</TableHead>
-            </TableRow>
-          </TableHeader>
-
-          <TableBody>
-            {isLoading ? (
-              <TableLoader />
-            ) : (
-              studentsData?.map((val: DataType) => (
-                <TableRow
-                  key={val.id}
-                  className="font-normal text-sm text-grey-600"
-                >
-                  <TableCell className="flex gap-x-2 items-center">
-                    <Avatar
-                      src={val?.avatarUrl}
-                      fallback={returnJoinedFirstCharacter(
-                        val.firstName,
-                        val.lastName
-                      )}
-                    />
-                    <div className="flex gap-x-[3px]">
-                      <div>{val.firstName}</div>
-                      <div>{val.lastName}</div>
-                    </div>
-                  </TableCell>
-
-                  <TableCell className="capitalize">
-                    {val.level ?? '-'}
-                  </TableCell>
-                  <TableCell className="capitalize">{val.gender}</TableCell>
-                  <TableCell>{val.age}</TableCell>
-                  <TableCell>
-                    {format(new Date(val.createdAt), 'PPP')}
-                  </TableCell>
-                  <TableCell className="relative">
-                    <button
-                      title="Icon picker"
-                      onClick={() => handleMoreClick(val.id)}
-                      className="p-2 rounded-full hover:bg-gray-50 focus:outline-none focus:ring focus:ring-gray-50 w-fit"
-                      id="menu-button"
-                      aria-expanded="true"
-                      aria-haspopup="true"
-                    >
-                      <IconPicker icon="more" size="1.25rem" />
-                    </button>
-                    {selectedRow === val.id && !deleteModal && (
-                      <DropDownMenu
-                        menuItems={menuItems}
-                        onClose={() => setSelectedRow(null)}
-                      />
-                    )}
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-        {studentsData?.length === 0 && <EmptyData />}
-      </div>
-      {studentsData?.length > 0 && (
-        <Pagination
-          current={currentPage}
-          setCurrent={setCurrentPage}
-          total={data?.total}
-          onNext={handleNext}
-          onPrev={handlePrev}
-          pageSize={data?.per_page}
-          className="mt-2"
-        />
-      )}
     </div>
   )
 }
+
 type DataType = {
   id: string
   avatarUrl?: string
   firstName: string
   lastName: string
-  level: string
+  age: number
   gender: string
-  age?: string
+  phoneNumber?: string
+  nationalId?: string
   createdAt: string
 }

@@ -12,6 +12,46 @@ const createPatient = yupResolver(
       .required('Please enter first name')
       .typeError('Please enter first name')
       .lowercase(),
+    middleName: yup.string().optional().lowercase(),
+    lastName: yup
+      .string()
+      .required('Please enter last name')
+      .typeError('Please enter last name')
+      .lowercase(),
+    dateOfBirth: yup
+      .string()
+      .required('Please enter date of birth')
+      .typeError('Please enter date of birth'),
+    gender: yup
+      .object()
+      .shape({ label: yup.string().required(), value: yup.string().required() })
+      .required('Please select a gender')
+      .typeError('Please select a gender'),
+    ethnicity: yup
+      .object()
+      .shape({ label: yup.string(), value: yup.string() })
+      .optional(),
+    country: yup
+      .object()
+      .shape({ label: yup.string(), value: yup.string() })
+      .optional(),
+    occupation: yup.string().optional(),
+    phoneNumber: yup.string().optional(),
+    address: yup.string().optional(),
+    nationalId: yup.string().optional(),
+    emergencyContact: yup.string().optional(),
+    avatar: yup.boolean(),
+  })
+)
+
+const createStudent = yupResolver(
+  yup.object().shape({
+    email: yup.string().optional().email(),
+    firstName: yup
+      .string()
+      .required('Please enter first name')
+      .typeError('Please enter first name')
+      .lowercase(),
     lastName: yup
       .string()
       .required('Please enter last name')
@@ -52,6 +92,7 @@ const createPatient = yupResolver(
     avatar: yup.boolean(),
   })
 )
+
 const registerStudent = yupResolver(
   yup.object().shape({
     email: yup.string().optional().email(),
@@ -773,6 +814,7 @@ const projectValidation = yupResolver(
 )
 
 const validation = {
+  createStudent,
   createPatient,
   createInstructor,
   login,

@@ -10,7 +10,7 @@ import { useMemo } from 'react'
 
 export default function ViewRecord({ params }: { params: { id: string } }) {
   const { data: riskData, isPending: isLoading } = useRiskAssessment(params?.id)
-  const providerNotes = riskData?.requestData?.providerNotes
+  const providerNote = riskData?.requestData?.providerNote
   const data = useMemo(
     () =>
       riskData
@@ -39,11 +39,11 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
         {data && userData && (
           <div className="mb-4">
             <RiskAssessmentResult data={data} />
-            {providerNotes && (
+            {providerNote && (
               <TextArea
                 className="mt-3"
                 disabled
-                defaultValue={providerNotes}
+                defaultValue={providerNote}
                 placeholder="Enter additional observations or comments..."
                 label="Provider Notes"
               />

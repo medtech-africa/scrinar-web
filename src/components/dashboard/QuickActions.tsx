@@ -6,26 +6,18 @@ import { Text } from '../ui/text'
 import { Divider } from '../ui/divider'
 import Modal from '../ui/modal'
 import { AddHealthDataRecordContent } from '@/app/dashboard/health-data/add-record/add-health-data-record-content'
-import { AddRecordContent } from '@/app/dashboard/user-profile/instructors/add-instructor/add-record-content'
-import { AddNewParentContent } from '@/app/dashboard/user-profile/parents/add/add-new-parent-content'
-import { AddParentQuestionnaire } from '@/app/dashboard/user-profile/parents/questionnaire/add-questionnaire'
-import { AddNewStudentContent } from '@/app/dashboard/user-profile/students/add-student/add-new-student-content'
+import { AddNewPatientContent } from '@/app/dashboard/patients/add/add-new-patient-content'
 
 // import { useQueryState } from 'nuqs'
 
 const data = [
   {
-    title: 'Create New Child Profile',
-    subtitle: 'Add Child Profile',
+    title: 'Create New Patient Profile',
+    subtitle: 'Add Patient Profile',
     icon: 'profile2User' as IconNames,
-    type: 'student',
+    type: 'patient',
   },
-  {
-    title: 'Create New Parent Profile',
-    subtitle: 'Add Parent Profile',
-    icon: 'profile2User' as IconNames,
-    type: 'parent',
-  },
+
   {
     title: 'NCD Risk Assessment',
     subtitle: 'Get risk assessment report',
@@ -38,12 +30,6 @@ const data = [
     subtitle: 'Add health progress',
     icon: 'health' as IconNames,
     type: 'health-data',
-  },
-  {
-    title: 'Enter Parent Questionnaire',
-    subtitle: 'Add/update parent questionnaire',
-    icon: 'bookmark' as IconNames,
-    type: 'parent questionnaire',
   },
 ]
 
@@ -103,11 +89,8 @@ export const QuickActions = () => {
         }}
         title={`Add new ${modalType}`}
       >
-        {modalType === 'student' && <AddNewStudentContent />}
-        {modalType === 'parent' && <AddNewParentContent />}
-        {modalType === 'instructor' && <AddRecordContent />}
+        {modalType === 'patient' && <AddNewPatientContent />}
         {modalType === 'health-data' && <AddHealthDataRecordContent />}
-        {modalType === 'parent questionnaire' && <AddParentQuestionnaire />}
       </Modal>
     </div>
   )

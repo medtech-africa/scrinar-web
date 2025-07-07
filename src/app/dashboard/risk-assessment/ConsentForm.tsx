@@ -10,7 +10,7 @@ import { Controller, useFormContext } from 'react-hook-form'
 import SignatureCanvas from 'react-signature-canvas'
 
 const updateConsent = async (data: any, assessmentId: string) =>
-  await baseAxios.patch(`${API.riskAssessment}/${assessmentId}`, data)
+  await baseAxios.patch(API.updateRiskAssessment(assessmentId), data)
 
 export const ConsentForm = ({ assessmentId = '' }) => {
   const { control, setValue, watch } = useFormContext()
@@ -22,13 +22,13 @@ export const ConsentForm = ({ assessmentId = '' }) => {
 
   const consentSignature = watch('consentSignature')
   const reportEmail = watch('reportEmail')
-  const providerNotes = watch('providerNotes')
+  const providerNote = watch('providerNote')
 
   useEffect(() => {
     const data = {
       consentSignature,
       reportEmail,
-      providerNotes,
+      providerNote,
     }
 
     const timeoutId = setTimeout(() => {
@@ -37,7 +37,7 @@ export const ConsentForm = ({ assessmentId = '' }) => {
 
     return () => clearTimeout(timeoutId)
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [consentSignature, reportEmail, providerNotes])
+  }, [consentSignature, reportEmail, providerNote])
 
   return (
     <PageCard
@@ -96,7 +96,7 @@ export const ConsentForm = ({ assessmentId = '' }) => {
       />
 
       <Controller
-        name="providerNotes"
+        name="providerNote"
         control={control}
         render={({ field }) => (
           <TextArea

@@ -17,6 +17,19 @@ export const API = {
   students: `${BASE_URL}/api/v1/students`,
   registerStudents: `${BASE_URL}/api/v1/students/createByPublic`,
   parents: `${BASE_URL}/api/v1/parents`,
+  //patients
+  getPatients: (page?: number, searchVal = '') => {
+    const params = new URLSearchParams({
+      page: String(page),
+      limit: '15',
+      per_page: '15',
+      search: searchVal,
+    })
+    return `${BASE_URL}/api/v1/scrinar-user?${params.toString()}`
+  },
+  patients: `${BASE_URL}/api/v1/scrinar-user`,
+
+  patient: (id: string) => `${BASE_URL}/api/v1/scrinar-user/${id}`,
   exportParentQuestionnaire: `${BASE_URL}/api/v1/parents/questionnaire/export`,
   parentQuestionnaire: (id: string) =>
     `${BASE_URL}/api/v1/parents/${id}/questionnaire`,
@@ -172,11 +185,16 @@ export const API = {
   childrenAnalytics: `${BASE_URL}/api/v1/analytics/all/children`,
 
   // risk assessment
-  riskAssessment: `${BASE_URL}/api/v1/risk-assessment`,
-  riskAssessmentData: `${BASE_URL}/api/v1/risk-assessment/user-data`,
+  createRiskAssessment: (userId: string) =>
+    `${BASE_URL}/api/v1/scrinar-vitals/${userId}`,
+  riskAssessmentData: `${BASE_URL}/api/v1/scrinar-vitals`,
+  generateRiskAssessment: (id: string) =>
+    `${BASE_URL}/api/v1/scrinar-vitals/${id}/generate-result`,
   riskAssessmentDetails: (id: string) =>
-    `${BASE_URL}/api/v1/risk-assessment/${id}`,
-  sendRiskAssessment: `${BASE_URL}/api/v1/risk-assessment/send`,
+    `${BASE_URL}/api/v1/scrinar-vitals/${id}`,
+  updateRiskAssessment: (id: string) =>
+    `${BASE_URL}/api/v1/scrinar-vitals/${id}`,
+  sendRiskAssessment: `${BASE_URL}/api/v1/scrinar-vitals/send`,
 
   //form
   createForm: `${BASE_URL}/api/v1/forms`,

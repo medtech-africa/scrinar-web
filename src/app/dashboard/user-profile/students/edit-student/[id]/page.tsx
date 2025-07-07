@@ -51,7 +51,7 @@ export default function EditRecord({ params }: { params: { id: string } }) {
     setValue,
     formState: { errors },
   } = useForm<IFormValue>({
-    resolver: validation.createPatient,
+    resolver: validation.createStudent,
   })
   useEffect(() => {
     if (data) {

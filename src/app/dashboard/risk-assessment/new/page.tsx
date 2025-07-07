@@ -1,17 +1,180 @@
 'use client'
-import React from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import { RiskAssessmentForm } from '../RiskAssessmentForm'
-import { useSearchParams } from 'next/navigation'
+import { useSearchParams, useRouter } from 'next/navigation'
 import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
 import { RiskAssessmentModelRequestData } from '@/hooks/queries/useRiskAssessment'
+import { usePatient } from '@/hooks/queries/usePatients'
+import { useRiskAssessment } from '@/hooks/queries/useRiskAssessment'
+import { useMutation } from '@tanstack/react-query'
+import baseAxios from '@/utils/baseAxios'
+import { API } from '@/utils/api'
+import toast from 'react-hot-toast'
+
+import ContentLoader from '@/components/content-loader'
+import { Text } from '@/components/ui/text'
 
 const RiskAssessment = () => {
   const searchParams = useSearchParams()
+  const router = useRouter()
+
+  const patientId = searchParams.get('patientId')
+  const storageId = searchParams.get('storageId')
+  const urlAssessmentId = searchParams.get('assessmentId')
+
+  const [formData, setFormData] =
+    useState<RiskAssessmentModelRequestData | null>(null)
+  const [isLoading, setIsLoading] = useState(false)
+  const [assessmentId, setAssessmentId] = useState<string | null>(
+    urlAssessmentId
+  )
+
+  // Ref to track if assessment creation has been triggered
+  const assessmentCreationTriggered = useRef(false)
 
   const getStorageData = useRiskAssessmentStorage((store) => store.get)
-  const storedData = getStorageData(
-    searchParams.get('storageId') || ''
-  ) as unknown as RiskAssessmentModelRequestData | null
+
+  // Fetch patient data if patientId is provided
+  const { data: patient, isPending: isPatientLoading } = usePatient(
+    patientId || ''
+  )
+
+  // Fetch existing assessment data if urlAssessmentId is provided
+  const { data: existingAssessment, isPending: isAssessmentLoading } =
+    useRiskAssessment(urlAssessmentId || '')
+
+  // Create assessment mutation
+  const { mutate: createAssessment, isPending: isCreatingAssessment } =
+    useMutation({
+      mutationFn: async (data: any) => {
+        const response = await baseAxios.post(
+          API.createRiskAssessment(data.userId),
+          data
+        )
+        return response.data.data
+      },
+      onSuccess: (data) => {
+        setAssessmentId(data.id)
+        // Update URL to include the assessment ID
+        const newUrl = new URL(window.location.href)
+        newUrl.searchParams.set('assessmentId', data.id)
+        router.replace(newUrl.pathname + newUrl.search)
+        toast.success('Assessment created successfully')
+      },
+      onError: (error: any) => {
+        toast.error(
+          error?.response?.data?.message || 'Failed to create assessment'
+        )
+      },
+    })
+
+  useEffect(() => {
+    const initializeFormData = async () => {
+      setIsLoading(true)
+
+      try {
+        let initialData: RiskAssessmentModelRequestData | null = null
+
+        // If we have an existing assessment, use its data
+        if (existingAssessment?.user?.id) {
+          initialData = existingAssessment
+        }
+        // If we have a storageId, get from local storage (only if no existing assessment)
+        else if (storageId) {
+          const storedData = getStorageData(
+            storageId
+          ) as unknown as RiskAssessmentModelRequestData | null
+          if (storedData) {
+            initialData = storedData
+          }
+        }
+
+        // If we have patient data, create or update initial data with patient info
+        if (patient) {
+          // If no initial data exists, create new data structure
+          if (!initialData) {
+            initialData = {
+              ncdType: 'all',
+              personalInfo: {
+                firstName: patient.firstName || '',
+                middleName: patient.middleName || '',
+                lastName: patient.lastName || '',
+                dateOfBirth: patient.dateOfBirth || '',
+                gender: patient.gender || '',
+                ethnicity: patient.ethnicity || '',
+                country: patient.country || '',
+                occupation: patient.occupation || '',
+                phoneNumber: patient.phoneNumber || '',
+                address: patient.address || '',
+                nationalId: patient.nationalId || '',
+                emergencyContact: patient.emergencyContact || '',
+              },
+            }
+          } else {
+            // If initial data exists, update the personal info with patient data
+            initialData = {
+              ...initialData,
+              personalInfo: {
+                firstName: patient.firstName || '',
+                middleName: patient.middleName || '',
+                lastName: patient.lastName || '',
+                dateOfBirth: patient.dateOfBirth || '',
+                gender: patient.gender || '',
+                ethnicity: patient.ethnicity || '',
+                country: patient.country || '',
+                occupation: patient.occupation || '',
+                phoneNumber: patient.phoneNumber || '',
+                address: patient.address || '',
+                nationalId: patient.nationalId || '',
+                emergencyContact: patient.emergencyContact || '',
+              },
+            }
+          }
+
+          // Create assessment when patient data is available and no assessment ID exists
+          // and assessment creation hasn't been triggered yet
+          if (
+            patient.id &&
+            !urlAssessmentId &&
+            !assessmentId &&
+            !assessmentCreationTriggered.current
+          ) {
+            assessmentCreationTriggered.current = true
+            createAssessment({
+              userId: patient.id,
+              ncdType: 'all',
+            })
+          }
+        }
+
+        setFormData(initialData)
+      } catch (error) {
+        console.error('Error initializing form data:', error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    initializeFormData()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    storageId,
+    patient,
+    getStorageData,
+    createAssessment,
+    urlAssessmentId,
+    existingAssessment,
+  ])
+
+  // Show loading state while fetching data
+  if (
+    isLoading ||
+    isPatientLoading ||
+    isAssessmentLoading ||
+    (isCreatingAssessment && !urlAssessmentId && !assessmentId)
+  ) {
+    return <ContentLoader loading />
+  }
 
   return (
     <div className="flex flex-col gap-y-5">
@@ -24,21 +187,58 @@ const RiskAssessment = () => {
         </p>
         <p>
           This screening page is designed for use in pharmacies and hospitals to
-          assess a patient’s risk of developing NCDs over a 2 year period, using
-          vital signs, family history, personal lifestyle and screening
+          assess a patient&apos;s risk of developing NCDs over a 2 year period,
+          using vital signs, family history, personal lifestyle and screening
           responses to provide a comprehensive risk assessment.
         </p>
+
+        {/* Show patient info if available */}
+        {patient && (
+          <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
+            <Text variant="text/sm" className="font-medium text-blue-900 mb-2">
+              Patient Information
+            </Text>
+            <Text variant="text/sm" className="text-blue-800 capitalize">
+              {[patient.firstName, patient.middleName, patient.lastName]
+                .filter(Boolean)
+                .join(' ')}
+              {patient.nationalId && ` (ID: ${patient.nationalId})`}
+            </Text>
+          </div>
+        )}
+
+        {/* Show status message for existing patient flow */}
+        {patientId &&
+          !urlAssessmentId &&
+          !assessmentId &&
+          isCreatingAssessment && (
+            <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mt-4">
+              <Text
+                variant="text/sm"
+                className="font-medium text-yellow-900 mb-2"
+              >
+                ⚠️ Creating Assessment
+              </Text>
+              <Text variant="text/sm" className="text-yellow-800">
+                Please wait while we create your assessment...
+              </Text>
+            </div>
+          )}
       </div>
       <div className="">
         <div className="grid">
           <RiskAssessmentForm
             data={
-              storedData
+              formData
                 ? {
-                    requestData: storedData as RiskAssessmentModelRequestData,
+                    requestData: formData as RiskAssessmentModelRequestData,
                   }
                 : undefined
             }
+            patientId={patientId}
+            userId={patient?.id || null}
+            assessmentId={assessmentId}
+            isPatientDataPrefilled={!!patient}
           />
         </div>
       </div>

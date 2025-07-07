@@ -124,7 +124,7 @@ export const CardiacAssessmentForm = ({ onNext }: Props) => {
 
       <div className="flex justify-end mt-6">
         <Button className="px-8" onClick={onNext} type="button">
-          Next
+          Save & continue
         </Button>
       </div>
     </div>
