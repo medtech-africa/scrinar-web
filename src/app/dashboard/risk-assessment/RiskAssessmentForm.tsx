@@ -41,6 +41,8 @@ import { slugify } from '@/utils/slugify'
 import { NcdFilterProvider, useNcdFilter } from './NcdFilterContext'
 import { NCD } from '@/types/riskAssessment.types'
 import { useRiskAssessmentPolling } from '@/hooks/queries/useRiskAssessment'
+import { getFieldPath } from '@/constants/fieldMappings'
+import { NcdSubFilter } from './NcdSubFilter'
 
 // Status Section Component
 const StatusSection = ({
@@ -171,23 +173,6 @@ const StatusSection = ({
   )
 }
 
-const tabOrder = [
-  'bio',
-  'vitals',
-  'labs',
-  'lifestyle',
-  'familyHistory',
-  'cardiacAssessment',
-  'copdAssessment',
-  'breastCancerAssessment',
-  'prostateCancerAssessment',
-  'colorectalCancerAssessment',
-  'ckdAssessment',
-  'medical',
-  'historical',
-  'timeseries',
-]
-
 const RiskAssessmentFormContent = ({
   data,
   displayOnly = false,
@@ -208,7 +193,15 @@ const RiskAssessmentFormContent = ({
   const [progress, setProgress] = useState(0)
   const [showResults, setShowResults] = useState(false)
   const [activeTab, setActiveTab] = useState('bio')
-  const { selectedNcd, setSelectedNcd, getRequiredFields } = useNcdFilter()
+  const {
+    selectedNcd,
+    setSelectedNcd,
+    selectedSpecificNcds,
+    toggleSpecificNcd,
+    selectAllSpecificNcds,
+    deselectAllSpecificNcds,
+    getRequiredFields,
+  } = useNcdFilter()
   const formMethods = useForm({ defaultValues: data?.requestData })
 
   // Reset form when data changes
@@ -301,13 +294,30 @@ const RiskAssessmentFormContent = ({
     },
   })
 
-  const isFormValid = (data: any) => {
+  const isFormValid = (_data: any) => {
     if (selectedNcd === 'all') {
-      const totalFields = 30
-      const filledFields = countFilledFields(data)
-      const filledPercentage = (filledFields / totalFields) * 100
+      // Check if all required fields for selected specific NCDs are filled
+      const formData = formMethods.watch()
+
+      // Check if all selected specific NCDs have their required fields filled
+      const allRequiredFieldsFilled = selectedSpecificNcds.every((ncdType) => {
+        const requiredFields = getRequiredFields(ncdType)
+        if (!requiredFields) return true
+
+        return Object.entries(requiredFields).every(([field, isRequired]) => {
+          if (!isRequired) return true
+
+          const formField = getFieldPath(field)
+          const fieldValue = formField
+            .split('.')
+            .reduce((obj, key) => obj?.[key], formData as any)
+
+          return !!fieldValue
+        })
+      })
+
       return (
-        filledPercentage >= 60 &&
+        allRequiredFieldsFilled &&
         !!formMethods.watch('personalInfo.dateOfBirth')
       )
     }
@@ -330,7 +340,7 @@ const RiskAssessmentFormContent = ({
           bmi: 'vitals.bmi',
           height: 'vitals.height',
           weight: 'vitals.weight',
-          diabetes: 'diagnosedConditions.diabetes',
+          diabetes: 'symptoms.diabetes',
           cholesterol: 'vitals.totalCholesterol',
           smoking: 'lifestyle.tobaccoCurrentlyUses',
           hasQuitSmoking: 'lifestyle.tobaccoQuit',
@@ -403,9 +413,34 @@ const RiskAssessmentFormContent = ({
 
   const isFormFilledError = (data: any) => {
     if (selectedNcd === 'all') {
-      const filledPercentage = (countFilledFields(data) / 50) * 100
-      if (filledPercentage < 60) {
-        return 'Please fill more data to analyze risk assessment'
+      // Check which specific NCDs have missing required fields
+      const formData = formMethods.watch()
+      const missingNcds: string[] = []
+
+      selectedSpecificNcds.forEach((ncdType) => {
+        const requiredFields = getRequiredFields(ncdType)
+        if (!requiredFields) return
+
+        const hasMissingFields = Object.entries(requiredFields).some(
+          ([field, isRequired]) => {
+            if (!isRequired) return false
+
+            const formField = getFieldPath(field)
+            const fieldValue = formField
+              .split('.')
+              .reduce((obj, key) => obj?.[key], formData as any)
+
+            return !fieldValue
+          }
+        )
+
+        if (hasMissingFields) {
+          missingNcds.push(ncdType)
+        }
+      })
+
+      if (missingNcds.length > 0) {
+        return `Please fill required fields for: ${missingNcds.join(', ')}`
       }
     } else {
       const requiredFields = getRequiredFields(selectedNcd)
@@ -415,45 +450,7 @@ const RiskAssessmentFormContent = ({
         .filter(([field, isRequired]) => {
           if (!isRequired) return false
 
-          const fieldMap: Record<string, string> = {
-            age: 'personalInfo.age',
-            gender: 'personalInfo.gender',
-            systolicBP: 'vitals.systolicBP',
-            bmi: 'vitals.bmi',
-            height: 'vitals.height',
-            weight: 'vitals.weight',
-            diabetes: 'diagnosedConditions.diabetes',
-            cholesterol: 'vitals.totalCholesterol',
-            smoking: 'lifestyle.tobaccoCurrentlyUses',
-            hasQuitSmoking: 'lifestyle.tobaccoQuit',
-            dateOfBirth: 'personalInfo.dateOfBirth',
-            // COPD fields
-            coughDuration: 'copd.coughDuration',
-            shortnessOfBreath: 'copd.shortnessOfBreath',
-            activityLimitations: 'copd.activityLimitations',
-            exposureToDust: 'copd.exposureToDust',
-            // Breast Cancer fields
-            ageAtMenarche: 'breastCancer.ageAtMenarche',
-            ageAtFirstBirth: 'breastCancer.ageAtFirstBirth',
-            ageAtMenopause: 'breastCancer.ageAtMenopause',
-            hormoneReplacementTherapy: 'breastCancer.hormoneReplacementTherapy',
-            benignBreastDisease: 'breastCancer.benignBreastDisease',
-            familyHistoryBreastCancer: 'familyHistory.breastCancer',
-            familyHistoryOvarianCancer: 'familyHistory.ovarianCancer',
-            brcaMutationStatus: 'breastCancer.brcaMutationStatus',
-            breastDensity: 'breastCancer.breastDensity',
-            // Prostate Cancer fields
-            psaLevel: 'prostateCancer.psaLevel',
-            digitalRectalExam: 'prostateCancer.digitalRectalExam',
-            prostateVolume: 'prostateCancer.prostateVolume',
-            familyHistoryProstateCancer: 'familyHistory.prostateCancer',
-            previousBiopsy: 'prostateCancer.previousBiopsy',
-            freeToTotalPsaRatio: 'prostateCancer.freeToTotalPsaRatio',
-            ethnicity: 'prostateCancer.ethnicity',
-            urinarySymptoms: 'prostateCancer.urinarySymptoms',
-          }
-
-          const formField = fieldMap[field]
+          const formField = getFieldPath(field)
           const fieldValue = formField
             .split('.')
             .reduce((obj, key) => obj?.[key], data as any)
@@ -484,8 +481,9 @@ const RiskAssessmentFormContent = ({
 
   const handleNext = () => {
     // Check if we need assessmentId for the next section
-    const nextTabIndex = tabOrder.indexOf(activeTab) + 1
-    const nextTab = tabOrder[nextTabIndex]
+    const filteredOrder = getFilteredTabOrder()
+    const nextTabIndex = filteredOrder.indexOf(activeTab) + 1
+    const nextTab = filteredOrder[nextTabIndex]
 
     // If we have patientId but no assessmentId, and trying to go beyond bio section
     if (_patientId && !_assessmentId && nextTab && nextTab !== 'bio') {
@@ -535,7 +533,6 @@ const RiskAssessmentFormContent = ({
         case 'medical':
           sectionData = {
             symptoms: currentFormData.symptoms,
-            diagnosedConditions: currentFormData.diagnosedConditions,
             sleepPattern: currentFormData.sleepPattern,
             previousHealthScreening: currentFormData.previousHealthScreening,
           }
@@ -564,30 +561,88 @@ const RiskAssessmentFormContent = ({
       }
     }
 
-    const currentIndex = tabOrder.indexOf(activeTab)
-    if (currentIndex < tabOrder.length - 1) {
-      setActiveTab(tabOrder[currentIndex + 1])
+    const currentIndex = filteredOrder.indexOf(activeTab)
+    if (currentIndex < filteredOrder.length - 1) {
+      setActiveTab(filteredOrder[currentIndex + 1])
     }
   }
 
   const handlePrevious = () => {
-    const currentIndex = tabOrder.indexOf(activeTab)
+    const filteredOrder = getFilteredTabOrder()
+    const currentIndex = filteredOrder.indexOf(activeTab)
     if (currentIndex > 0) {
-      setActiveTab(tabOrder[currentIndex - 1])
+      setActiveTab(filteredOrder[currentIndex - 1])
     }
   }
 
   // Calculate current step
   const getCurrentStep = () => {
-    return tabOrder.indexOf(activeTab) + 1
+    const filteredOrder = getFilteredTabOrder()
+    return filteredOrder.indexOf(activeTab) + 1
+  }
+
+  // Get filtered tab order based on selected NCD types
+  const getFilteredTabOrder = () => {
+    const baseTabs = ['bio', 'vitals', 'labs', 'lifestyle', 'familyHistory']
+    const assessmentTabs = []
+
+    // Add assessment tabs based on selected NCD types
+    if (selectedNcd === 'all') {
+      if (
+        selectedSpecificNcds.includes('cvd') ||
+        selectedSpecificNcds.includes('diabetes')
+      ) {
+        assessmentTabs.push('cardiacAssessment')
+      }
+      if (selectedSpecificNcds.includes('copd')) {
+        assessmentTabs.push('copdAssessment')
+      }
+      if (selectedSpecificNcds.includes('breastCancer')) {
+        assessmentTabs.push('breastCancerAssessment')
+      }
+      if (selectedSpecificNcds.includes('prostateCancer')) {
+        assessmentTabs.push('prostateCancerAssessment')
+      }
+      if (selectedSpecificNcds.includes('colorectalCancer')) {
+        assessmentTabs.push('colorectalCancerAssessment')
+      }
+      if (selectedSpecificNcds.includes('ckd')) {
+        assessmentTabs.push('ckdAssessment')
+      }
+    } else {
+      // For individual NCD selections
+      if (selectedNcd !== 'diabetes') {
+        assessmentTabs.push('cardiacAssessment')
+      }
+      if (selectedNcd === 'copd') {
+        assessmentTabs.push('copdAssessment')
+      }
+      if (selectedNcd === 'breastCancer') {
+        assessmentTabs.push('breastCancerAssessment')
+      }
+      if (selectedNcd === 'prostateCancer') {
+        assessmentTabs.push('prostateCancerAssessment')
+      }
+      if (selectedNcd === 'colorectalCancer') {
+        assessmentTabs.push('colorectalCancerAssessment')
+      }
+      if (selectedNcd === 'ckd') {
+        assessmentTabs.push('ckdAssessment')
+      }
+    }
+
+    const finalTabs = ['medical', 'historical']
+    return [...baseTabs, ...assessmentTabs, ...finalTabs]
   }
 
   // Get step number for a specific tab
   const getStepNumber = (tabValue: string) => {
-    return tabOrder.indexOf(tabValue) + 1
+    const filteredOrder = getFilteredTabOrder()
+    return filteredOrder.indexOf(tabValue) + 1
   }
 
-  const tabsLength = tabOrder.length - 1
+  const filteredTabOrder = getFilteredTabOrder()
+  const tabsLength = filteredTabOrder.length
 
   return (
     <FormProvider {...formMethods}>
@@ -744,6 +799,16 @@ const RiskAssessmentFormContent = ({
                           CKD
                         </button>
                       </div>
+
+                      {/* Sub-filter for All NCDs */}
+                      {selectedNcd === 'all' && (
+                        <NcdSubFilter
+                          selectedSpecificNcds={selectedSpecificNcds}
+                          toggleSpecificNcd={toggleSpecificNcd}
+                          selectAllSpecificNcds={selectAllSpecificNcds}
+                          deselectAllSpecificNcds={deselectAllSpecificNcds}
+                        />
+                      )}
                     </div>
                   </div>
 
@@ -822,9 +887,20 @@ const RiskAssessmentFormContent = ({
                   <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 sticky top-4">
                     <Collapsible defaultOpen>
                       <CollapsibleTrigger className="flex items-center justify-between w-full mb-3">
-                        <Text variant="text/md" className="font-semibold">
-                          Assessment Progress
-                        </Text>
+                        <div>
+                          <Text variant="text/md" className="font-semibold">
+                            Assessment Progress
+                          </Text>
+                          {selectedNcd === 'all' && (
+                            <Text
+                              variant="text/xs"
+                              className="text-gray-500 mt-1"
+                            >
+                              {selectedSpecificNcds.length} assessment types
+                              selected
+                            </Text>
+                          )}
+                        </div>
                         <IconPicker
                           icon="arrowDown"
                           className="transition-transform duration-200 group-data-[state=open]:rotate-180"
@@ -917,7 +993,8 @@ const RiskAssessmentFormContent = ({
                               6. Cardiac Assessment
                             </Tabs.Trigger>
                           )}
-                          {(selectedNcd === 'all' ||
+                          {((selectedNcd === 'all' &&
+                            selectedSpecificNcds.includes('copd')) ||
                             selectedNcd === NCD.COPD) && (
                             <Tabs.Trigger
                               className={cn(
@@ -934,7 +1011,8 @@ const RiskAssessmentFormContent = ({
                               {getStepNumber('copdAssessment')}. COPD Assessment
                             </Tabs.Trigger>
                           )}
-                          {(selectedNcd === 'all' ||
+                          {((selectedNcd === 'all' &&
+                            selectedSpecificNcds.includes('breastCancer')) ||
                             selectedNcd === NCD.BREAST_CANCER) && (
                             <Tabs.Trigger
                               className={cn(
@@ -952,7 +1030,8 @@ const RiskAssessmentFormContent = ({
                               Cancer
                             </Tabs.Trigger>
                           )}
-                          {(selectedNcd === 'all' ||
+                          {((selectedNcd === 'all' &&
+                            selectedSpecificNcds.includes('prostateCancer')) ||
                             selectedNcd === NCD.PROSTATE_CANCER) && (
                             <Tabs.Trigger
                               className={cn(
@@ -970,7 +1049,10 @@ const RiskAssessmentFormContent = ({
                               Prostate Cancer
                             </Tabs.Trigger>
                           )}
-                          {(selectedNcd === 'all' ||
+                          {((selectedNcd === 'all' &&
+                            selectedSpecificNcds.includes(
+                              'colorectalCancer'
+                            )) ||
                             selectedNcd === NCD.COLORECTAL_CANCER) && (
                             <Tabs.Trigger
                               className={cn(
@@ -988,7 +1070,8 @@ const RiskAssessmentFormContent = ({
                               Colorectal Cancer
                             </Tabs.Trigger>
                           )}
-                          {(selectedNcd === 'all' ||
+                          {((selectedNcd === 'all' &&
+                            selectedSpecificNcds.includes('ckd')) ||
                             selectedNcd === NCD.CKD) && (
                             <Tabs.Trigger
                               className={cn(
@@ -1118,27 +1201,6 @@ const RiskAssessmentGeneratedReport = ({
   //     />
   //   )
   // }
-}
-
-const countFilledFields = (obj: any): number => {
-  let count = 0
-
-  const traverse = (value: any) => {
-    if (value === null || value === undefined || value === '') {
-      return
-    }
-
-    if (Array.isArray(value)) {
-      value.forEach((item) => traverse(item))
-    } else if (typeof value === 'object') {
-      Object.values(value).forEach((val) => traverse(val))
-    } else {
-      count++
-    }
-  }
-
-  traverse(obj)
-  return count
 }
 
 export const RiskAssessmentForm = (props: {

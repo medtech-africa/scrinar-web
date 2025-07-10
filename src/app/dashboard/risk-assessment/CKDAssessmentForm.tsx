@@ -1,19 +1,18 @@
 import React from 'react'
 import { OptionWithRadioField } from './OptionWithRadioField'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
-import { Controller, useFormContext } from 'react-hook-form'
 import { useNcdFilter } from './NcdFilterContext'
 import { NCD } from '@/types/riskAssessment.types'
+import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
   onNext: () => void
 }
 
 export const CKDAssessmentForm = ({ onNext }: Props) => {
-  const { control } = useFormContext()
   const { selectedNcd } = useNcdFilter()
+  const isRequiredField = useRequiredFieldLabel()
 
   // Only show this form for CKD or all NCDs
   if (selectedNcd !== 'all' && selectedNcd !== NCD.CKD) {
@@ -37,35 +36,6 @@ export const CKDAssessmentForm = ({ onNext }: Props) => {
       </div> */}
 
       <div className="space-y-6">
-        {/* Serum Creatinine */}
-        <div>
-          <Text as="h3" variant="text/sm" className="font-medium mb-4">
-            Laboratory Values
-          </Text>
-          <Controller
-            name="ckd.serumCreatinine"
-            control={control}
-            rules={{
-              required: selectedNcd === NCD.CKD || selectedNcd === 'all',
-              min: {
-                value: 0.1,
-                message: 'Creatinine must be greater than 0.1',
-              },
-              max: { value: 20, message: 'Creatinine must be less than 20' },
-            }}
-            render={({ field }) => (
-              <Input
-                {...field}
-                type="number"
-                step="0.01"
-                placeholder="mg/dL"
-                label="Serum Creatinine (mg/dL)"
-                labelStyle="lg:text-sm text-xs"
-              />
-            )}
-          />
-        </div>
-
         {/* Additional CKD Risk Factors */}
         <div>
           <Text as="h3" variant="text/sm" className="font-medium mb-4">
@@ -73,31 +43,43 @@ export const CKDAssessmentForm = ({ onNext }: Props) => {
           </Text>
           <div className="space-y-4">
             <OptionWithRadioField
-              label="Do you have diabetes?"
+              label={isRequiredField('Do you have diabetes?', 'ckd.diabetes')}
               options={['Yes', 'No']}
-              form={{ id: 'ckd.diabetes' }}
+              form={{ id: 'symptoms.diabetes' }}
             />
 
             <OptionWithRadioField
-              label="Do you have hypertension (high blood pressure)?"
+              label={isRequiredField(
+                'Do you have hypertension (high blood pressure)?',
+                'ckd.hypertension'
+              )}
               options={['Yes', 'No']}
               form={{ id: 'ckd.hypertension' }}
             />
 
             <OptionWithRadioField
-              label="Do you have a family history of kidney disease?"
+              label={isRequiredField(
+                'Do you have a family history of kidney disease?',
+                'ckd.familyHistoryKidneyDisease'
+              )}
               options={['Yes', 'No']}
               form={{ id: 'ckd.familyHistory' }}
             />
 
             <OptionWithRadioField
-              label="Do you have cardiovascular disease?"
+              label={isRequiredField(
+                'Do you have cardiovascular disease?',
+                'ckd.cardiovascularDisease'
+              )}
               options={['Yes', 'No']}
               form={{ id: 'ckd.cardiovascularDisease' }}
             />
 
             <OptionWithRadioField
-              label="Do you take medications that may affect kidney function?"
+              label={isRequiredField(
+                'Do you take medications that may affect kidney function?',
+                'ckd.medicationsAffectingKidney'
+              )}
               options={['Yes', 'No']}
               form={{ id: 'ckd.medications' }}
             />
@@ -111,25 +93,37 @@ export const CKDAssessmentForm = ({ onNext }: Props) => {
           </Text>
           <div className="space-y-4">
             <OptionWithRadioField
-              label="Do you experience fatigue or weakness?"
+              label={isRequiredField(
+                'Do you experience fatigue or weakness?',
+                'ckd.fatigue'
+              )}
               options={['Yes', 'No']}
               form={{ id: 'ckd.symptomsFatigue' }}
             />
 
             <OptionWithRadioField
-              label="Do you experience swelling in your feet, ankles, or hands?"
+              label={isRequiredField(
+                'Do you experience swelling in your feet, ankles, or hands?',
+                'ckd.swelling'
+              )}
               options={['Yes', 'No']}
               form={{ id: 'ckd.symptomsSwelling' }}
             />
 
             <OptionWithRadioField
-              label="Do you experience shortness of breath?"
+              label={isRequiredField(
+                'Do you experience shortness of breath?',
+                'ckd.shortnessOfBreath'
+              )}
               options={['Yes', 'No']}
               form={{ id: 'ckd.symptomsShortnessOfBreath' }}
             />
 
             <OptionWithRadioField
-              label="Do you experience changes in urination (frequency, color, or amount)?"
+              label={isRequiredField(
+                'Do you experience changes in urination (frequency, color, or amount)?',
+                'ckd.urinationChanges'
+              )}
               options={['Yes', 'No']}
               form={{ id: 'ckd.symptomsUrinationChanges' }}
             />

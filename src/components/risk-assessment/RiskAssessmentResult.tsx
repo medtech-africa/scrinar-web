@@ -90,6 +90,7 @@ const FACTOR_LABELS: { [key: string]: string } = {
   activityLimitations: 'Activity Limitations',
   exposureToDust: 'Dust Exposure',
   smokingHistory: 'Smoking History',
+  pefLevel: 'PEF Level',
   // Breast Cancer factors
   ageAtMenarche: 'Age at Menarche',
   ageAtFirstBirth: 'Age at First Birth',

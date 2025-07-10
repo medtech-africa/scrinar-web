@@ -5,6 +5,7 @@ import { IconNames } from '@/components/ui/icon-picker/icon-names'
 import { ViewPatientContent } from './view-patient-content'
 
 const navigationItems = [
+  { label: 'Risk Assessment', icon: IconNames.arrowRight },
   { label: 'Patients', icon: IconNames.arrowRight },
   { label: 'View Patient' },
 ]

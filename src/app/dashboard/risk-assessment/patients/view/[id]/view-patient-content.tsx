@@ -24,7 +24,7 @@ export const ViewPatientContent = ({ patientId }: { patientId: string }) => {
         </Text>
         <Button
           variant="outline"
-          onClick={() => router.push('/dashboard/patients')}
+          onClick={() => router.push('/dashboard/risk-assessment')}
         >
           Back to Patients
         </Button>
@@ -192,14 +192,16 @@ export const ViewPatientContent = ({ patientId }: { patientId: string }) => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => router.push('/dashboard/patients')}
+          onClick={() => router.push('/dashboard/risk-assessment')}
         >
           <IconPicker icon="arrowLeft" className="mr-2" />
           Back to Patients
         </Button>
         <Button
           type="button"
-          onClick={() => router.push(`/dashboard/patients/edit/${patientId}`)}
+          onClick={() =>
+            router.push(`/dashboard/risk-assessment/patients/edit/${patientId}`)
+          }
         >
           <IconPicker icon="userEdit" className="mr-2" />
           Edit Patient

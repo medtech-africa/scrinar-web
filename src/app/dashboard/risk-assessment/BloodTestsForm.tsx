@@ -20,6 +20,8 @@ import {
 } from '@/components/ui/tooltip'
 import { HelpCircleIcon } from '@/components/ui/icon-picker/icons/help-circle'
 
+import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
+
 type Props = {
   onNext: () => void
 }
@@ -54,6 +56,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({})
+  const isRequiredField = useRequiredFieldLabel()
 
   const bloodSugar1 = watch('bloodTest.bloodSugarRandom')
   const bloodSugar2 = watch('bloodTest.bloodSugarFasting')
@@ -111,7 +114,10 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                   <Input
                     {...field}
                     placeholder="Enter Fasting Blood Sugar Level"
-                    label="Fasting Blood Sugar"
+                    label={isRequiredField(
+                      'Fasting Blood Sugar',
+                      'bloodTest.bloodSugarFasting'
+                    )}
                     labelStyle="lg:text-sm text-xs"
                     variant={variantValidityCheck(field.value)}
                     message={messageCheck(field.value)}
@@ -229,7 +235,10 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                       <Input
                         {...field}
                         placeholder="Enter Total Cholesterol"
-                        label="Total Cholesterol (mg/dL)"
+                        label={isRequiredField(
+                          'Total Cholesterol (mg/dL)',
+                          'bloodTest.cholesterolTotal'
+                        )}
                         labelStyle="lg:text-sm text-xs"
                         variant={
                           validationErrors.cholesterol
@@ -270,7 +279,10 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                     <Input
                       {...field}
                       placeholder="Enter LDL (Bad Cholesterol)"
-                      label="LDL (Bad Cholesterol) (mg/dL)"
+                      label={isRequiredField(
+                        'LDL (Bad Cholesterol) (mg/dL)',
+                        'bloodTest.cholesterolLdl'
+                      )}
                       labelStyle="lg:text-sm text-xs"
                       variant={
                         validationErrors.cholesterol
@@ -304,7 +316,10 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                     <Input
                       {...field}
                       placeholder="Enter HDL (Good Cholesterol)"
-                      label="HDL (Good Cholesterol) (mg/dL)"
+                      label={isRequiredField(
+                        'HDL (Good Cholesterol) (mg/dL)',
+                        'bloodTest.cholesterolHdl'
+                      )}
                       labelStyle="lg:text-sm text-xs"
                       variant={
                         validationErrors.cholesterol
@@ -338,7 +353,10 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                     <Input
                       {...field}
                       placeholder="Enter Triglycerides"
-                      label="Triglycerides (mg/dL)"
+                      label={isRequiredField(
+                        'Triglycerides (mg/dL)',
+                        'bloodTest.cholesterolTriglycerides'
+                      )}
                       labelStyle="lg:text-sm text-xs"
                       variant={variantValidityCheck(field.value)}
                       message={messageCheck(field.value)}
@@ -370,7 +388,10 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                 <Input
                   {...field}
                   placeholder="Enter HbA1c Level"
-                  label="HbA1c Level (%)"
+                  label={isRequiredField(
+                    'HbA1c Level (%)',
+                    'bloodTest.hba1cLevel'
+                  )}
                   labelStyle="lg:text-sm text-xs"
                   variant={variantValidityCheck(field.value)}
                   message={messageCheck(field.value)}
@@ -378,6 +399,64 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                   min="3"
                   max="15"
                   step="0.1"
+                />
+              )}
+            />
+          </div>
+
+          <div>
+            <Text as="h3" variant="text/sm" className="font-medium mb-2">
+              Peak Expiratory Flow (PEF)
+            </Text>
+            <Controller
+              name="bloodTest.pefLevel"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  placeholder="Enter PEF Level"
+                  label={isRequiredField(
+                    'PEF Level (L/min)',
+                    'bloodTest.pefLevel'
+                  )}
+                  labelStyle="lg:text-sm text-xs"
+                  variant={variantValidityCheck(field.value)}
+                  message={messageCheck(field.value)}
+                  type="number"
+                  min="0"
+                  max="1000"
+                  step="1"
+                />
+              )}
+            />
+          </div>
+
+          {/* Serum Creatinine */}
+          <div>
+            <Text as="h3" variant="text/sm" className="font-medium mb-4">
+              Laboratory Values
+            </Text>
+            <Controller
+              name="bloodTest.serumCreatinine"
+              control={control}
+              rules={{
+                min: {
+                  value: 0.1,
+                  message: 'Creatinine must be greater than 0.1',
+                },
+                max: { value: 20, message: 'Creatinine must be less than 20' },
+              }}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="number"
+                  step="0.01"
+                  placeholder="mg/dL"
+                  label={isRequiredField(
+                    'Serum Creatinine (mg/dL)',
+                    'bloodTest.serumCreatinine'
+                  )}
+                  labelStyle="lg:text-sm text-xs"
                 />
               )}
             />

@@ -1,4 +1,5 @@
 import { createContext, useContext, ReactNode, useState } from 'react'
+import { getInternalFieldName } from '@/constants/fieldMappings'
 
 export type NcdType =
   | 'all'
@@ -9,6 +10,8 @@ export type NcdType =
   | 'prostateCancer'
   | 'colorectalCancer'
   | 'ckd'
+
+export type SpecificNcdType = Exclude<NcdType, 'all'>
 
 interface NcdRequiredFields {
   cvd: {
@@ -41,6 +44,7 @@ interface NcdRequiredFields {
     shortnessOfBreath: boolean
     activityLimitations: boolean
     exposureToDust: boolean
+    pefLevel: boolean
   }
   breastCancer: {
     dateOfBirth: boolean
@@ -125,6 +129,7 @@ const ncdRequiredFields: NcdRequiredFields = {
     shortnessOfBreath: true,
     activityLimitations: true,
     exposureToDust: true,
+    pefLevel: true,
   },
   breastCancer: {
     dateOfBirth: true,
@@ -181,6 +186,11 @@ const ncdRequiredFields: NcdRequiredFields = {
 interface NcdFilterContextType {
   selectedNcd: NcdType
   setSelectedNcd: (ncd: NcdType) => void
+  selectedSpecificNcds: SpecificNcdType[]
+  setSelectedSpecificNcds: (ncds: SpecificNcdType[]) => void
+  toggleSpecificNcd: (ncd: SpecificNcdType) => void
+  selectAllSpecificNcds: () => void
+  deselectAllSpecificNcds: () => void
   getRequiredFields: (
     ncdType: NcdType
   ) => NcdRequiredFields[keyof NcdRequiredFields] | null
@@ -193,6 +203,17 @@ const NcdFilterContext = createContext<NcdFilterContextType | undefined>(
 
 export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
   const [selectedNcd, setSelectedNcd] = useState<NcdType>('all')
+  const [selectedSpecificNcds, setSelectedSpecificNcds] = useState<
+    SpecificNcdType[]
+  >([
+    'cvd',
+    'diabetes',
+    'copd',
+    'breastCancer',
+    'prostateCancer',
+    'colorectalCancer',
+    'ckd',
+  ])
 
   const getRequiredFields = (
     ncdType: NcdType
@@ -201,69 +222,56 @@ export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
     return ncdRequiredFields[ncdType]
   }
 
+  const toggleSpecificNcd = (ncd: SpecificNcdType) => {
+    setSelectedSpecificNcds((prev) => {
+      if (prev.includes(ncd)) {
+        const newSelection = prev.filter((item) => item !== ncd)
+        // Ensure at least 2 NCDs are selected
+        return newSelection.length >= 2 ? newSelection : prev
+      } else {
+        return [...prev, ncd]
+      }
+    })
+  }
+
+  const selectAllSpecificNcds = () => {
+    setSelectedSpecificNcds([
+      'cvd',
+      'diabetes',
+      'copd',
+      'breastCancer',
+      'prostateCancer',
+      'colorectalCancer',
+      'ckd',
+    ])
+  }
+
+  const deselectAllSpecificNcds = () => {
+    // Keep at least 2 NCDs selected (the first two)
+    setSelectedSpecificNcds(['cvd', 'diabetes'])
+  }
+
   const isFieldRequired = (field: string): boolean => {
-    if (selectedNcd === 'all') return true
+    if (selectedNcd === 'all') {
+      // Check if field is required for any of the selected specific NCDs
+      return selectedSpecificNcds.some((ncdType) => {
+        const requiredFields = getRequiredFields(ncdType)
+        if (!requiredFields) return false
+        const internalFieldName = getInternalFieldName(field)
+        return (
+          requiredFields[internalFieldName as keyof typeof requiredFields] ||
+          false
+        )
+      })
+    }
 
     const requiredFields = getRequiredFields(selectedNcd)
     if (!requiredFields) return false
 
-    const fieldMap: Record<string, string> = {
-      gender: 'personalInfo.gender',
-      systolicBP: 'vitals.sys',
-      bmi: 'vitals.bmi',
-      height: 'vitals.height',
-      weight: 'vitals.weight',
-      diabetes: 'diagnosedConditions.diabetes',
-      cholesterol: 'bloodTest.cholesterol.total',
-      smoking: 'lifestyle.tobacco.currentlyUses',
-      hasQuitSmoking: 'lifestyle.tobacco.quit',
-      dateOfBirth: 'personalInfo.dateOfBirth',
-      // COPD fields
-      coughDuration: 'copd.coughDuration',
-      shortnessOfBreath: 'copd.shortnessOfBreath',
-      activityLimitations: 'copd.activityLimitations',
-      exposureToDust: 'copd.exposureToDust',
-      // Breast Cancer fields
-      ageAtMenarche: 'breastCancer.ageAtMenarche',
-      ageAtFirstBirth: 'breastCancer.ageAtFirstBirth',
-      ageAtMenopause: 'breastCancer.ageAtMenopause',
-      hormoneReplacementTherapy: 'breastCancer.hormoneReplacementTherapy',
-      benignBreastDisease: 'breastCancer.benignBreastDisease',
-      familyHistoryBreastCancer: 'familyHistory.breastCancer',
-      familyHistoryOvarianCancer: 'familyHistory.ovarianCancer',
-      brcaMutationStatus: 'breastCancer.brcaMutationStatus',
-      breastDensity: 'breastCancer.breastDensity',
-      // Prostate Cancer fields
-      psaLevel: 'prostateCancer.psaLevel',
-      digitalRectalExam: 'prostateCancer.digitalRectalExam',
-      prostateVolume: 'prostateCancer.prostateVolume',
-      familyHistoryProstateCancer: 'familyHistory.prostateCancer',
-      previousBiopsy: 'prostateCancer.previousBiopsy',
-      freeToTotalPsaRatio: 'prostateCancer.freeToTotalPsaRatio',
-      ethnicity: 'prostateCancer.ethnicity',
-      urinarySymptoms: 'prostateCancer.urinarySymptoms',
-      // Colorectal Cancer fields
-      personalHistoryColorectalCancer: 'colorectalCancer.personalHistory',
-      personalHistoryPolyps: 'colorectalCancer.personalHistoryPolyps',
-      familyHistoryColorectalCancer: 'familyHistory.colorectalCancer',
-      familyHistoryPolyps: 'colorectalCancer.familyHistoryPolyps',
-      inflammatoryBowelDisease: 'colorectalCancer.inflammatoryBowelDisease',
-      smokingStatus: 'colorectalCancer.smokingStatus',
-      vegetableConsumption: 'colorectalCancer.vegetableConsumption',
-      physicalActivity: 'colorectalCancer.physicalActivity',
-      colonoscopyHistory: 'colorectalCancer.colonoscopyHistory',
-      aspirinUse: 'colorectalCancer.aspirinUse',
-      nsaidUse: 'colorectalCancer.nsaidUse',
-      // CKD fields
-      serumCreatinine: 'ckd.serumCreatinine',
-    }
-
-    const mappedField = Object.entries(fieldMap).find(
-      ([_, value]) => value === field
-    )?.[0]
-    return mappedField
-      ? requiredFields[mappedField as keyof typeof requiredFields]
-      : false
+    const internalFieldName = getInternalFieldName(field)
+    return (
+      requiredFields[internalFieldName as keyof typeof requiredFields] || false
+    )
   }
 
   return (
@@ -271,6 +279,11 @@ export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
       value={{
         selectedNcd,
         setSelectedNcd,
+        selectedSpecificNcds,
+        setSelectedSpecificNcds,
+        toggleSpecificNcd,
+        selectAllSpecificNcds,
+        deselectAllSpecificNcds,
         getRequiredFields,
         isFieldRequired,
       }}

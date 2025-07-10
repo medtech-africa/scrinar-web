@@ -84,7 +84,7 @@ export const EditPatientContent = ({ patientId }: { patientId: string }) => {
           postReset()
           queryClient.invalidateQueries('patients' as any)
           queryClient.invalidateQueries(['singlePatient', patientId] as any)
-          router.push('/dashboard/patients')
+          router.push('/dashboard/risk-assessment')
         },
         onError: (err) => {
           errorMessage(err)
@@ -321,7 +321,7 @@ export const EditPatientContent = ({ patientId }: { patientId: string }) => {
         <Button
           type="button"
           variant="outline"
-          onClick={() => router.push('/dashboard/patients')}
+          onClick={() => router.push('/dashboard/risk-assessment')}
         >
           Cancel
         </Button>

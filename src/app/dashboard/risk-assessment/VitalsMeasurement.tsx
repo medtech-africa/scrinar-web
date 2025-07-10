@@ -22,6 +22,7 @@ import { Button } from '@/components/ui/button'
 import MeasurementGuides from '@/components/risk-assessment/MeasurementGuides'
 import { useNcdFilter } from './NcdFilterContext'
 import { NCD } from '@/types/riskAssessment.types'
+import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
   onNext: () => void
@@ -126,6 +127,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({})
+  const isRequiredField = useRequiredFieldLabel()
 
   const { bmi, sys, dys, height, weight, waist, oxygenSaturation, pulse } =
     watch('vitals', {})
@@ -212,7 +214,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                       <Input
                         {...field}
                         placeholder="170"
-                        label="Height (cm) *"
+                        label={isRequiredField('Height (cm)', 'vitals.height')}
                         labelStyle="flex justify-center items-center"
                         variant={
                           validationErrors.height
@@ -235,7 +237,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                       <Input
                         {...field}
                         placeholder="70"
-                        label="Weight (kg) *"
+                        label={isRequiredField('Weight (kg)', 'vitals.weight')}
                         labelStyle="flex justify-center items-center"
                         variant={
                           validationErrors.weight
@@ -259,7 +261,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         <Input
                           {...field}
                           placeholder="85"
-                          label="Waist (cm)"
+                          label={isRequiredField('Waist (cm)', 'vitals.waist')}
                           labelStyle="flex justify-center items-center"
                           variant={
                             validationErrors.waist
@@ -328,7 +330,10 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         <Input
                           {...field}
                           placeholder="120"
-                          label="Systolic (mmHg) *"
+                          label={isRequiredField(
+                            'Systolic (mmHg)',
+                            'vitals.sys'
+                          )}
                           labelStyle="lg:text-sm text-xs"
                           variant={
                             validationErrors.bloodPressure
@@ -355,7 +360,10 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         <Input
                           {...field}
                           placeholder="80"
-                          label="Diastolic (mmHg) *"
+                          label={isRequiredField(
+                            'Diastolic (mmHg)',
+                            'vitals.dys'
+                          )}
                           labelStyle="lg:text-sm text-xs"
                           variant={
                             validationErrors.bloodPressure
@@ -396,7 +404,10 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         <Input
                           {...field}
                           placeholder="72"
-                          label="Pulse/Heart Rate (bpm) *"
+                          label={isRequiredField(
+                            'Pulse/Heart Rate (bpm)',
+                            'vitals.pulse'
+                          )}
                           labelStyle="lg:text-sm text-xs"
                           variant={
                             validationErrors.pulse
@@ -445,7 +456,10 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                       <Input
                         {...field}
                         placeholder="98"
-                        label="Oxygen Saturation (SpO2 %)"
+                        label={isRequiredField(
+                          'Oxygen Saturation (SpO2 %)',
+                          'vitals.oxygenSaturation'
+                        )}
                         labelStyle="lg:text-sm text-xs"
                         variant={
                           validationErrors.oxygenSaturation
@@ -471,7 +485,10 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         <Input
                           {...field}
                           placeholder="36.5"
-                          label="Temperature (°C)"
+                          label={isRequiredField(
+                            'Temperature (°C)',
+                            'vitals.temperature'
+                          )}
                           labelStyle="lg:text-sm text-xs"
                           variant={variantValidityCheck(field.value)}
                           message={messageCheck(field.value)}

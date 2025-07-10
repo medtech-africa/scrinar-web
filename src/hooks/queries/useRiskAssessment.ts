@@ -125,7 +125,6 @@ export interface RiskAssessmentModelRequestData {
   lifestyle?: Lifestyle
   cardiac?: Cardiac
   symptoms?: Symptoms
-  diagnosedConditions?: DiagnosedConditions
   sleepPattern?: string
   previousHealthScreening?: PreviousHealthScreening
   consentAgreement?: boolean
@@ -154,17 +153,12 @@ export interface BloodTest {
   cholesterolHdl?: string
   cholesterolTriglycerides?: string
   hba1cLevel?: string
+  pefLevel?: string
 }
 
 export interface Cardiac {
   chestPain: string
   strokeSymptoms: string
-}
-
-export interface DiagnosedConditions {
-  hypertension: string
-  diabetes: string
-  highCholesterol: string
 }
 
 export interface FamilyHistory {
@@ -226,6 +220,9 @@ export interface Symptoms {
   chestPain: string
   shortnessOfBreath: string
   irregularHeartbeat: string
+  hypertension: string
+  diabetes: string
+  highCholesterol: string
 }
 
 export interface Vitals {

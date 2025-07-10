@@ -67,20 +67,6 @@ const generalData = [
       'jica_researchers',
     ],
   },
-  {
-    title: 'Patients',
-    icon: 'profile2User',
-    url: 'patients',
-    roles: [
-      'school',
-      'instructor',
-      'organization',
-      'play4health_admin',
-      'super_admin',
-      'jica_enumerators',
-      'jica_researchers',
-    ],
-  },
   // {
   //   title: 'Health Data',
   //   icon: 'health',

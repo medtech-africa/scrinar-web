@@ -6,6 +6,7 @@ import { Text } from '@/components/ui/text'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useNcdFilter } from './NcdFilterContext'
 import { NCD } from '@/types/riskAssessment.types'
+import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
   onNext: () => void
@@ -14,6 +15,7 @@ type Props = {
 export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
   const { control } = useFormContext()
   const { selectedNcd } = useNcdFilter()
+  const isRequiredField = useRequiredFieldLabel()
 
   // Only show this form for Prostate Cancer or all NCDs
   if (selectedNcd !== 'all' && selectedNcd !== NCD.PROSTATE_CANCER) {
@@ -36,7 +38,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             Family History
           </Text>
           <OptionWithRadioField
-            label="Did any of your close family members (brother, father or uncle on your father's or mother's side) suffer from prostate cancer now or in the past?"
+            label={isRequiredField(
+              "Did any of your close family members (brother, father or uncle on your father's or mother's side) suffer from prostate cancer now or in the past?",
+              'familyHistory.prostateCancer'
+            )}
             options={['No', 'Yes']}
             form={{ id: 'familyHistory.prostateCancer' }}
           />
@@ -48,7 +53,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             Age Group
           </Text>
           <OptionWithRadioField
-            label="To which age group do you belong?"
+            label={isRequiredField(
+              'To which age group do you belong?',
+              'prostateCancer.ageGroup'
+            )}
             options={[
               '55-59 years',
               '60-64 years',
@@ -73,7 +81,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 type="number"
                 step="0.01"
                 placeholder="ng/mL"
-                label="PSA level (ng/mL)"
+                label={isRequiredField(
+                  'PSA level (ng/mL)',
+                  'prostateCancer.psaLevel'
+                )}
                 labelStyle="lg:text-sm text-xs"
               />
             )}
@@ -86,7 +97,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             Digital Rectal Exam (DRE) Results
           </Text>
           <OptionWithRadioField
-            label="Digital Rectal Exam (DRE) results"
+            label={isRequiredField(
+              'Digital Rectal Exam (DRE) results',
+              'prostateCancer.digitalRectalExam'
+            )}
             options={['Normal', 'Abnormal', 'Not performed', 'Unknown']}
             form={{ id: 'prostateCancer.digitalRectalExam' }}
           />
@@ -106,7 +120,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 type="number"
                 step="0.1"
                 placeholder="cc"
-                label="Prostate volume (cc) - if available"
+                label={isRequiredField(
+                  'Prostate volume (cc) - if available',
+                  'prostateCancer.prostateVolume'
+                )}
                 labelStyle="lg:text-sm text-xs"
               />
             )}
@@ -119,7 +136,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             Previous Biopsy
           </Text>
           <OptionWithRadioField
-            label="Have you had a previous prostate biopsy?"
+            label={isRequiredField(
+              'Have you had a previous prostate biopsy?',
+              'prostateCancer.previousBiopsy'
+            )}
             options={[
               'No',
               'Yes, negative',
@@ -144,7 +164,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                 type="number"
                 step="0.01"
                 placeholder="Ratio (0.00-1.00)"
-                label="Free-to-total PSA ratio"
+                label={isRequiredField(
+                  'Free-to-total PSA ratio',
+                  'prostateCancer.freeToTotalPsaRatio'
+                )}
                 labelStyle="lg:text-sm text-xs"
               />
             )}
@@ -157,7 +180,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             Ethnicity
           </Text>
           <OptionWithRadioField
-            label="Ethnicity"
+            label={isRequiredField('Ethnicity', 'prostateCancer.ethnicity')}
             options={[
               'White/Caucasian',
               'Black/African American',
@@ -181,7 +204,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
 
           <div className="space-y-4">
             <OptionWithRadioField
-              label="1. How often have you had a sensation of not emptying your bladder completely after you finished urinating?"
+              label={isRequiredField(
+                '1. How often have you had a sensation of not emptying your bladder completely after you finished urinating?',
+                'prostateCancer.urinarySymptomsIncompleteEmptying'
+              )}
               options={[
                 'never',
                 'about 1 time in 5',
@@ -194,7 +220,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             />
 
             <OptionWithRadioField
-              label="2. How often have you had to urinate again less than two hours after you finished urinating?"
+              label={isRequiredField(
+                '2. How often have you had to urinate again less than two hours after you finished urinating?',
+                'prostateCancer.urinarySymptomsFrequency'
+              )}
               options={[
                 'never',
                 'about 1 time in 5',
@@ -207,7 +236,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             />
 
             <OptionWithRadioField
-              label="3. How often have you found you stopped and started again several times when you urinated?"
+              label={isRequiredField(
+                '3. How often have you found you stopped and started again several times when you urinated?',
+                'prostateCancer.urinarySymptomsIntermittency'
+              )}
               options={[
                 'never',
                 'about 1 time in 5',
@@ -220,7 +252,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             />
 
             <OptionWithRadioField
-              label="4. How often have you found it difficult to hold back urinating after you have felt the need?"
+              label={isRequiredField(
+                '4. How often have you found it difficult to hold back urinating after you have felt the need?',
+                'prostateCancer.urinarySymptomsUrgency'
+              )}
               options={[
                 'never',
                 'about 1 time in 5',
@@ -233,7 +268,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             />
 
             <OptionWithRadioField
-              label="5. How often have you noticed a reduction in the strength and force of your urinary stream?"
+              label={isRequiredField(
+                '5. How often have you noticed a reduction in the strength and force of your urinary stream?',
+                'prostateCancer.urinarySymptomsWeakStream'
+              )}
               options={[
                 'never',
                 'about 1 time in 5',
@@ -246,7 +284,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             />
 
             <OptionWithRadioField
-              label="6. How often have you had to push or strain to begin urinating?"
+              label={isRequiredField(
+                '6. How often have you had to push or strain to begin urinating?',
+                'prostateCancer.urinarySymptomsStraining'
+              )}
               options={[
                 'never',
                 'about 1 time in 5',
@@ -259,7 +300,10 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
             />
 
             <OptionWithRadioField
-              label="7. From the time you go to bed at night until the time you rise in the morning, how many times do you need to get up to urinate?"
+              label={isRequiredField(
+                '7. From the time you go to bed at night until the time you rise in the morning, how many times do you need to get up to urinate?',
+                'prostateCancer.urinarySymptomsNocturia'
+              )}
               options={[
                 'never',
                 'once',

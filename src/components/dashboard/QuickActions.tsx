@@ -6,9 +6,7 @@ import { Text } from '../ui/text'
 import { Divider } from '../ui/divider'
 import Modal from '../ui/modal'
 import { AddHealthDataRecordContent } from '@/app/dashboard/health-data/add-record/add-health-data-record-content'
-import { AddNewPatientContent } from '@/app/dashboard/patients/add/add-new-patient-content'
-
-// import { useQueryState } from 'nuqs'
+import { AddNewPatientContent } from '@/app/dashboard/risk-assessment/patients/add/add-new-patient-content'
 
 const data = [
   {

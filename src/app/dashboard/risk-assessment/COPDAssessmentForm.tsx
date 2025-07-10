@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { useNcdFilter } from './NcdFilterContext'
 import { NCD } from '@/types/riskAssessment.types'
+import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
   onNext: () => void
@@ -11,6 +12,7 @@ type Props = {
 
 export const COPDAssessmentForm = ({ onNext }: Props) => {
   const { selectedNcd } = useNcdFilter()
+  const isRequiredField = useRequiredFieldLabel()
 
   // Only show this form for COPD or all NCDs
   if (selectedNcd !== 'all' && selectedNcd !== NCD.COPD) {
@@ -34,31 +36,46 @@ export const COPDAssessmentForm = ({ onNext }: Props) => {
 
         <div className="space-y-4">
           <OptionWithRadioField
-            label="In the past 12 months, have you had a cough that lasted more than 3 months?"
+            label={isRequiredField(
+              'In the past 12 months, have you had a cough that lasted more than 3 months?',
+              'copd.coughDuration'
+            )}
             options={['Yes', 'No']}
             form={{ id: 'copd.coughDuration' }}
           />
 
           <OptionWithRadioField
-            label="In the past 12 months, have you had shortness of breath that gets worse with physical activity?"
+            label={isRequiredField(
+              'In the past 12 months, have you had shortness of breath that gets worse with physical activity?',
+              'copd.shortnessOfBreath'
+            )}
             options={['Yes', 'No']}
             form={{ id: 'copd.shortnessOfBreath' }}
           />
 
           <OptionWithRadioField
-            label="Do you experience limitations in your daily activities due to breathing problems?"
+            label={isRequiredField(
+              'Do you experience limitations in your daily activities due to breathing problems?',
+              'copd.activityLimitations'
+            )}
             options={['Yes', 'No']}
             form={{ id: 'copd.activityLimitations' }}
           />
 
           <OptionWithRadioField
-            label="Have you been exposed to dust, fumes, or chemicals at work or home?"
+            label={isRequiredField(
+              'Have you been exposed to dust, fumes, or chemicals at work or home?',
+              'copd.exposureToDust'
+            )}
             options={['Yes', 'No']}
             form={{ id: 'copd.exposureToDust' }}
           />
 
           <OptionWithRadioField
-            label="Have you ever smoked cigarettes?"
+            label={isRequiredField(
+              'Have you ever smoked cigarettes?',
+              'copd.everSmoked'
+            )}
             options={['Yes', 'No']}
             form={{ id: 'copd.everSmoked' }}
           />

@@ -6,6 +6,7 @@ import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
 import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
 import { slugify } from '@/utils/slugify'
+import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
   onNext: () => void
@@ -15,6 +16,7 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
   const { control, watch } = useFormContext()
   const formData = watch()
   const storeRiskAssessment = useRiskAssessmentStorage((store) => store.store)
+  const isRequiredField = useRequiredFieldLabel()
 
   useEffect(() => {
     storeRiskAssessment(
@@ -60,53 +62,77 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
           </Text>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
             <OptionWithRadioField
-              label="Cardiovascular Disease (CVD)"
+              label={isRequiredField(
+                'Cardiovascular Disease (CVD)',
+                'familyHistory.cvd'
+              )}
               options={['Yes', 'No', "Don't Know"]}
               form={{ id: 'familyHistory.cvd' }}
             />
             <OptionWithRadioField
-              label="Diabetes (Type 1 or Type 2)"
+              label={isRequiredField(
+                'Diabetes (Type 1 or Type 2)',
+                'familyHistory.diabetes'
+              )}
               options={['Yes', 'No', "Don't Know"]}
               form={{ id: 'familyHistory.diabetes' }}
             />
             <OptionWithRadioField
-              label="Hypertension (High Blood Pressure)"
+              label={isRequiredField(
+                'Hypertension (High Blood Pressure)',
+                'familyHistory.hypertension'
+              )}
               options={['Yes', 'No', "Don't Know"]}
               form={{ id: 'familyHistory.hypertension' }}
             />
             <OptionWithRadioField
-              label="Cancer"
+              label={isRequiredField('Cancer', 'familyHistory.cancer')}
               options={['Yes', 'No', "Don't Know"]}
               form={{ id: 'familyHistory.cancer' }}
             />
             <OptionWithRadioField
-              label="Breast Cancer"
+              label={isRequiredField(
+                'Breast Cancer',
+                'familyHistory.breastCancer'
+              )}
               options={['Yes', 'No', "Don't Know"]}
               form={{ id: 'familyHistory.breastCancer' }}
             />
             <OptionWithRadioField
-              label="Ovarian Cancer"
+              label={isRequiredField(
+                'Ovarian Cancer',
+                'familyHistory.ovarianCancer'
+              )}
               options={['Yes', 'No', "Don't Know"]}
               form={{ id: 'familyHistory.ovarianCancer' }}
             />
             <OptionWithRadioField
-              label="Prostate Cancer"
+              label={isRequiredField(
+                'Prostate Cancer',
+                'familyHistory.prostateCancer'
+              )}
               options={['Yes', 'No', "Don't Know"]}
               form={{ id: 'familyHistory.prostateCancer' }}
             />
             <OptionWithRadioField
-              label="Colorectal Cancer"
+              label={isRequiredField(
+                'Colorectal Cancer',
+                'familyHistory.colorectalCancer'
+              )}
               options={['Yes', 'No', "Don't Know"]}
               form={{ id: 'familyHistory.colorectalCancer' }}
             />
             <OptionWithRadioField
-              label="Stroke"
+              label={isRequiredField('Stroke', 'familyHistory.stroke')}
               options={['Yes', 'No', "Don't Know"]}
               form={{ id: 'familyHistory.stroke' }}
             />
             <div>
               <OptionWithRadioField
-                label="Other NCDs (specify)"
+                label={isRequiredField(
+                  'Other NCDs (specify)',
+                  'familyHistory.otherNcdsOption'
+                )}
                 options={['Yes', 'No']}
                 form={{ id: 'familyHistory.otherNcdsOption' }}
               />
