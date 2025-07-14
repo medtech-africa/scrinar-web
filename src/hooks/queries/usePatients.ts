@@ -16,7 +16,12 @@ const usePatients = (page?: number, searchVal?: string, sortVal?: string) => {
 const usePatient = (id: string) => {
   return useQuery({
     queryKey: ['singlePatient', id],
-    queryFn: () => baseAxios.get(API.patient(id)).then((res) => res.data?.data),
+    queryFn: () => {
+      if (!id) {
+        return null
+      }
+      return baseAxios.get(API.patient(id)).then((res) => res.data?.data)
+    },
   })
 }
 
