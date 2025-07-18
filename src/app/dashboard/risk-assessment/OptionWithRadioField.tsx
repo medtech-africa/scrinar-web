@@ -2,7 +2,7 @@ import { useCustomRegister } from '@/hooks/useCustomRegister'
 
 type OptionsWithOtherFieldProps = {
   studentId?: string
-  label?: string
+  label?: string | React.ReactNode
   options?: string[]
   form: {
     id: string

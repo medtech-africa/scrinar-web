@@ -73,11 +73,13 @@ const ToastField = React.forwardRef<HTMLDivElement, ToastVariantsProps>(
         </div>
 
         <div className="flex space-x-2">
-          <Button
-            variant="tertiary"
-            onClick={props.action1}
-            onlyIcon={<IconPicker icon="closeSquare" />}
-          />
+          {props.action1 && (
+            <Button
+              variant="tertiary"
+              onClick={props.action1}
+              onlyIcon={<IconPicker icon="closeSquare" />}
+            />
+          )}
 
           {props.buttonText2 && (
             <Button variant="tertiary" onClick={props.action2}>

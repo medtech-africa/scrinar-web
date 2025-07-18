@@ -28,6 +28,9 @@ const RiskAssessment = () => {
   const [assessmentId, setAssessmentId] = useState<string | null>(
     urlAssessmentId
   )
+  const [currentPatientId, setCurrentPatientId] = useState<string | null>(
+    patientId
+  )
 
   // Ref to track if assessment creation has been triggered
   const assessmentCreationTriggered = useRef(false)
@@ -35,9 +38,11 @@ const RiskAssessment = () => {
   const getStorageData = useRiskAssessmentStorage((store) => store.get)
 
   // Fetch patient data if patientId is provided
-  const { data: patient, isPending: isPatientLoading } = usePatient(
-    patientId || ''
-  )
+  const {
+    data: patient,
+    isPending: isPatientLoading,
+    error: patientError,
+  } = usePatient(patientId || '')
 
   // Fetch existing assessment data if urlAssessmentId is provided
   const { data: existingAssessment, isPending: isAssessmentLoading } =
@@ -67,6 +72,15 @@ const RiskAssessment = () => {
         )
       },
     })
+
+  // Handle patient creation success
+  const handlePatientCreated = (newPatientId: string) => {
+    setCurrentPatientId(newPatientId)
+    // Update URL to include the new patient ID
+    const newUrl = new URL(window.location.href)
+    newUrl.searchParams.set('patientId', newPatientId)
+    router.replace(newUrl.pathname + newUrl.search)
+  }
 
   useEffect(() => {
     const initializeFormData = async () => {
@@ -176,6 +190,48 @@ const RiskAssessment = () => {
     return <ContentLoader loading />
   }
 
+  // Handle case where patientId is provided but patient not found
+  if (patientId && patientError && !isPatientLoading) {
+    return (
+      <div className="flex flex-col gap-y-5">
+        <div className="flex flex-col gap-y-2">
+          <h1 className="text-2xl font-medium">NCD Risk Assessment</h1>
+          <p>
+            Non communicable Diseases (NCDs) are chronic conditions that are not
+            transmitted from person to person, such as diabetes, cardiovascular
+            disease, cancer, and chronic respiratory diseases.
+          </p>
+          <p>
+            This screening page is designed for use in pharmacies and hospitals
+            to assess a patient&apos;s risk of developing NCDs over a 2 year
+            period, using vital signs, family history, personal lifestyle and
+            screening responses to provide a comprehensive risk assessment.
+          </p>
+
+          <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-4">
+            <Text variant="text/sm" className="font-medium text-red-900 mb-2">
+              ⚠️ Patient Not Found
+            </Text>
+            <Text variant="text/sm" className="text-red-800 mb-4">
+              The patient with ID &quot;{patientId}&quot; could not be found.
+              You can proceed with creating a new patient assessment.
+            </Text>
+            <button
+              onClick={() => {
+                const newUrl = new URL(window.location.href)
+                newUrl.searchParams.delete('patientId')
+                router.replace(newUrl.pathname + newUrl.search)
+              }}
+              className="bg-red-600 text-white px-4 py-2 rounded-md hover:bg-red-700 transition-colors"
+            >
+              Create New Patient Assessment
+            </button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div className="flex flex-col gap-y-5">
       <div className="flex flex-col gap-y-2">
@@ -224,6 +280,19 @@ const RiskAssessment = () => {
               </Text>
             </div>
           )}
+
+        {/* Show status message for new patient flow */}
+        {!patientId && (
+          <div className="bg-green-50 border border-green-200 rounded-lg p-4 mt-4">
+            <Text variant="text/sm" className="font-medium text-green-900 mb-2">
+              📝 New Patient Assessment
+            </Text>
+            <Text variant="text/sm" className="text-green-800">
+              Please fill in the patient information below to create a new
+              patient profile and start the assessment.
+            </Text>
+          </div>
+        )}
       </div>
       <div className="">
         <div className="grid">
@@ -235,10 +304,10 @@ const RiskAssessment = () => {
                   }
                 : undefined
             }
-            patientId={patientId}
-            userId={patient?.id || null}
+            patientId={currentPatientId}
             assessmentId={assessmentId}
             isPatientDataPrefilled={!!patient}
+            onPatientCreated={handlePatientCreated}
           />
         </div>
       </div>

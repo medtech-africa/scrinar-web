@@ -41,8 +41,9 @@ import { slugify } from '@/utils/slugify'
 import { NcdFilterProvider, useNcdFilter } from './NcdFilterContext'
 import { NCD } from '@/types/riskAssessment.types'
 import { useRiskAssessmentPolling } from '@/hooks/queries/useRiskAssessment'
-import { getFieldPath } from '@/constants/fieldMappings'
+import { getFieldPath, getFieldDisplayName } from '@/constants/fieldMappings'
 import { NcdSubFilter } from './NcdSubFilter'
+import { useRouter } from 'next/navigation'
 
 // Status Section Component
 const StatusSection = ({
@@ -178,20 +179,19 @@ const RiskAssessmentFormContent = ({
   displayOnly = false,
   assessmentId: _assessmentId = null,
   patientId: _patientId,
-  userId: _userId,
   isPatientDataPrefilled = false,
-  onUserIdObtained,
+  onPatientCreated,
 }: {
   data?: Pick<RiskAssessmentModel, 'requestData'>
   displayOnly?: boolean
   assessmentId?: string | null
   patientId?: string | null
-  userId?: string | null
   isPatientDataPrefilled?: boolean
-  onUserIdObtained?: (userId: string) => void
+  onPatientCreated?: (patientId: string) => void
 }) => {
   const [progress, setProgress] = useState(0)
   const [showResults, setShowResults] = useState(false)
+  const [assessmentDone, setAssessmentDone] = useState(false)
   const [activeTab, setActiveTab] = useState('bio')
   const {
     selectedNcd,
@@ -285,6 +285,7 @@ const RiskAssessmentFormContent = ({
       setProgress(100)
       setTimeout(() => {
         setShowResults(true)
+        setAssessmentDone(true)
       }, 500)
       return data
     },
@@ -367,7 +368,6 @@ const RiskAssessmentFormContent = ({
           familyHistoryProstateCancer: 'familyHistory.prostateCancer',
           previousBiopsy: 'prostateCancer.previousBiopsy',
           freeToTotalPsaRatio: 'prostateCancer.freeToTotalPsaRatio',
-          ethnicity: 'prostateCancer.ethnicity',
           urinarySymptoms: 'prostateCancer.urinarySymptomsIncompleteEmptying',
         }
 
@@ -415,14 +415,14 @@ const RiskAssessmentFormContent = ({
     if (selectedNcd === 'all') {
       // Check which specific NCDs have missing required fields
       const formData = formMethods.watch()
-      const missingNcds: string[] = []
+      const missingFieldsByNcd: Record<string, string[]> = {}
 
       selectedSpecificNcds.forEach((ncdType) => {
         const requiredFields = getRequiredFields(ncdType)
         if (!requiredFields) return
 
-        const hasMissingFields = Object.entries(requiredFields).some(
-          ([field, isRequired]) => {
+        const missingFields = Object.entries(requiredFields)
+          .filter(([field, isRequired]) => {
             if (!isRequired) return false
 
             const formField = getFieldPath(field)
@@ -431,16 +431,19 @@ const RiskAssessmentFormContent = ({
               .reduce((obj, key) => obj?.[key], formData as any)
 
             return !fieldValue
-          }
-        )
+          })
+          .map(([field]) => getFieldDisplayName(field))
 
-        if (hasMissingFields) {
-          missingNcds.push(ncdType)
+        if (missingFields.length > 0) {
+          missingFieldsByNcd[ncdType] = missingFields
         }
       })
 
-      if (missingNcds.length > 0) {
-        return `Please fill required fields for: ${missingNcds.join(', ')}`
+      if (Object.keys(missingFieldsByNcd).length > 0) {
+        const errorMessages = Object.entries(missingFieldsByNcd).map(
+          ([ncdType, fields]) => `${ncdType}: ${fields.join(', ')}`
+        )
+        return `Please fill required fields: ${errorMessages.join('; ')}`
       }
     } else {
       const requiredFields = getRequiredFields(selectedNcd)
@@ -456,7 +459,7 @@ const RiskAssessmentFormContent = ({
             .reduce((obj, key) => obj?.[key], data as any)
           return !fieldValue
         })
-        .map(([field]) => field)
+        .map(([field]) => getFieldDisplayName(field))
 
       if (missingFields.length > 0) {
         return `Please fill in the following required fields: ${missingFields.join(', ')}`
@@ -817,9 +820,8 @@ const RiskAssessmentFormContent = ({
                       <PersonalInfoForm
                         onNext={handleNext}
                         disabled={isPatientDataPrefilled}
-                        userId={_userId}
                         patientId={_patientId}
-                        onUserIdObtained={onUserIdObtained}
+                        onPatientCreated={onPatientCreated}
                       />
                     </Tabs.Content>
 
@@ -872,7 +874,9 @@ const RiskAssessmentFormContent = ({
                           <Button
                             className="px-8"
                             leadingIcon={<IconPicker icon="saveAdd" />}
-                            disabled={isPending || !consentAgreement}
+                            disabled={
+                              isPending || !consentAgreement || assessmentDone
+                            }
                             type="submit"
                           >
                             Generate Assessment
@@ -1160,13 +1164,21 @@ const RiskAssessmentGeneratedReport = ({
   formData?: Partial<RiskAssessmentModelRequestData>
   setShowResults: (showResults: boolean) => void
 }) => {
+  const router = useRouter()
   const personalInfo = formData?.personalInfo
 
   const { data: polledData } = useRiskAssessmentPolling(resultData?.id)
 
   const actionButton = (
     <div className="mt-8 flex justify-end">
-      <Button onClick={() => setShowResults(false)}>Close</Button>
+      <Button
+        onClick={() => {
+          setShowResults(false)
+          router.push('/dashboard/risk-assessment')
+        }}
+      >
+        Close
+      </Button>
     </div>
   )
 
@@ -1208,9 +1220,8 @@ export const RiskAssessmentForm = (props: {
   displayOnly?: boolean
   assessmentId?: string | null
   patientId?: string | null
-  userId?: string | null
   isPatientDataPrefilled?: boolean
-  onUserIdObtained?: (userId: string) => void
+  onPatientCreated?: (patientId: string) => void
 }) => {
   return (
     <NcdFilterProvider>

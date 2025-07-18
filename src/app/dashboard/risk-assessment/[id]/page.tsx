@@ -1,6 +1,5 @@
 'use client'
 import React from 'react'
-import { RiskAssessmentForm } from '../RiskAssessmentForm'
 import {
   useGeneratedRiskAssessment,
   useRiskAssessment,
@@ -9,14 +8,14 @@ import { useParams } from 'next/navigation'
 import ContentLoader from '@/components/content-loader'
 import { RiskAssessmentReport } from '../RiskAssessmentReport'
 import { FormProvider, useForm } from 'react-hook-form'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 const RiskAssessmentDetailsPage = () => {
   const params = useParams<{ id: string }>()
   const { data, isPending } = useRiskAssessment(params.id)
-  const { data: generatedData, isPending: isGeneratedPending } =
+  const { data: generatedDataRaw, isPending: isGeneratedPending } =
     useGeneratedRiskAssessment(params.id)
-  // TODO restructure
+
+  const generatedData = generatedDataRaw?.responseData
 
   const formMethods = useForm({ defaultValues: data?.requestData })
 
@@ -35,30 +34,18 @@ const RiskAssessmentDetailsPage = () => {
         </p>
       </div>
       <div className="">
-        <div className="grid">
-          <Tabs defaultValue="result" className="w-full">
-            <TabsList>
-              <TabsTrigger value="result">Result</TabsTrigger>
-              <TabsTrigger value="form">Form</TabsTrigger>
-            </TabsList>
-            <TabsContent value="result">
-              <FormProvider {...formMethods}>
-                <RiskAssessmentReport
-                  className="w-full max-w-3xl mx-auto mt-10"
-                  data={{
-                    requestData: data,
-                    responseData: generatedData,
-                  }}
-                  personalInfo={data?.user}
-                  showActionButton={false}
-                />
-              </FormProvider>
-            </TabsContent>
-            <TabsContent value="form">
-              <RiskAssessmentForm displayOnly data={{ requestData: data }} />
-            </TabsContent>
-          </Tabs>
-        </div>
+        <FormProvider {...formMethods}>
+          <RiskAssessmentReport
+            className="w-full max-w-3xl mx-auto mt-10"
+            data={{
+              requestData: data?.requestData,
+              responseData: generatedData,
+              user: data?.user,
+            }}
+            personalInfo={data?.user}
+            showActionButton={false}
+          />
+        </FormProvider>
       </div>
     </div>
   )

@@ -70,7 +70,6 @@ interface NcdRequiredFields {
     familyHistoryProstateCancer: boolean
     previousBiopsy: boolean
     freeToTotalPsaRatio: boolean
-    ethnicity: boolean
     urinarySymptoms: boolean
   }
   colorectalCancer: {
@@ -78,7 +77,6 @@ interface NcdRequiredFields {
     gender: boolean
     height: boolean
     weight: boolean
-    ethnicity: boolean
     personalHistoryColorectalCancer: boolean
     personalHistoryPolyps: boolean
     familyHistoryColorectalCancer: boolean
@@ -86,7 +84,6 @@ interface NcdRequiredFields {
     inflammatoryBowelDisease: boolean
     smokingStatus: boolean
     vegetableConsumption: boolean
-    physicalActivity: boolean
     colonoscopyHistory: boolean
     aspirinUse: boolean
     nsaidUse: boolean
@@ -155,7 +152,6 @@ const ncdRequiredFields: NcdRequiredFields = {
     familyHistoryProstateCancer: true,
     previousBiopsy: true,
     freeToTotalPsaRatio: true,
-    ethnicity: true,
     urinarySymptoms: true,
   },
   colorectalCancer: {
@@ -163,7 +159,6 @@ const ncdRequiredFields: NcdRequiredFields = {
     gender: true,
     height: true,
     weight: true,
-    ethnicity: true,
     personalHistoryColorectalCancer: true,
     personalHistoryPolyps: true,
     familyHistoryColorectalCancer: true,
@@ -171,7 +166,6 @@ const ncdRequiredFields: NcdRequiredFields = {
     inflammatoryBowelDisease: true,
     smokingStatus: true,
     vegetableConsumption: true,
-    physicalActivity: true,
     colonoscopyHistory: true,
     aspirinUse: true,
     nsaidUse: true,

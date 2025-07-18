@@ -174,24 +174,6 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
           />
         </div>
 
-        {/* Ethnicity */}
-        <div>
-          <Text as="h3" variant="text/sm" className="font-medium mb-4">
-            Ethnicity
-          </Text>
-          <OptionWithRadioField
-            label={isRequiredField('Ethnicity', 'prostateCancer.ethnicity')}
-            options={[
-              'White/Caucasian',
-              'Black/African American',
-              'Hispanic/Latino',
-              'Asian',
-              'Other',
-            ]}
-            form={{ id: 'prostateCancer.ethnicity' }}
-          />
-        </div>
-
         {/* Urinary Symptoms - IPSS */}
         <div>
           <Text as="h3" variant="text/sm" className="font-medium mb-4">

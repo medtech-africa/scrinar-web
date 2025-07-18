@@ -40,7 +40,6 @@ import { RiskGaugeBar } from './RiskGaugeBar'
 import PreventionTips from './PreventionTips'
 import DiseaseBreakdown from './DiseaseBreakdown'
 import RiskSummary from './RiskSummary'
-import { NCD } from '@/types/riskAssessment.types'
 
 // Types
 export type RiskType =
@@ -332,51 +331,47 @@ export const RiskAssessmentResult: React.FC<{
   data?: RiskData
   isLoading?: boolean
   ncdType?: string
-}> = ({ data, isLoading = false, ncdType }) => {
+}> = ({ data, isLoading = false, ncdType: _ncdType }) => {
   const RISK_TABS: { id: RiskType; label: string; show: boolean }[] = [
     {
       id: 'who',
       label: 'Cardiovascular risk',
-      show: ncdType ? ncdType === 'all' || ncdType === NCD.CVD : true,
+      show: Boolean(data?.['who']),
     },
     {
       id: 'findrisc',
       label: 'Diabetes risk',
-      show: ncdType ? ncdType === 'all' || ncdType === NCD.DIABETES : true,
+      show: Boolean(data?.['findrisc']),
     },
     {
       id: 'copd',
       label: 'COPD risk',
-      show: ncdType ? ncdType === 'all' || ncdType === NCD.COPD : true,
+      show: Boolean(data?.['copd']),
     },
     {
       id: 'breastCancer',
       label: 'Breast Cancer risk',
-      show: ncdType ? ncdType === 'all' || ncdType === NCD.BREAST_CANCER : true,
+      show: Boolean(data?.['breastCancer']),
     },
     {
       id: 'prostateCancer',
       label: 'Prostate Cancer risk',
-      show: ncdType
-        ? ncdType === 'all' || ncdType === NCD.PROSTATE_CANCER
-        : true,
+      show: Boolean(data?.['prostateCancer']),
     },
     {
       id: 'colorectalCancer',
       label: 'Colorectal Cancer risk',
-      show: ncdType
-        ? ncdType === 'all' || ncdType === NCD.COLORECTAL_CANCER
-        : true,
+      show: Boolean(data?.['colorectalCancer']),
     },
     {
       id: 'ckd',
       label: 'CKD risk',
-      show: ncdType ? ncdType === 'all' || ncdType === NCD.CKD : true,
+      show: Boolean(data?.['ckd']),
     },
   ]
 
   const [activeTab, setActiveTab] = useState<RiskType>(
-    ncdType !== NCD.DIABETES ? 'who' : 'findrisc'
+    RISK_TABS.find((tab) => tab.show)?.id || 'who'
   )
 
   const isWHO = activeTab === 'who'

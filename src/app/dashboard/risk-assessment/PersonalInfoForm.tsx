@@ -22,17 +22,15 @@ import toast from 'react-hot-toast'
 type Props = {
   onNext: () => void
   disabled?: boolean
-  userId?: string | null
   patientId?: string | null
-  onUserIdObtained?: (userId: string) => void
+  onPatientCreated?: (patientId: string) => void
 }
 
 export const PersonalInfoForm = ({
   onNext,
   disabled = false,
-  userId,
   patientId,
-  onUserIdObtained,
+  onPatientCreated,
 }: Props) => {
   const { control, register, watch, setValue, handleSubmit } = useFormContext()
   const { isFieldRequired } = useNcdFilter()
@@ -44,8 +42,8 @@ export const PersonalInfoForm = ({
     },
     onSuccess: (data) => {
       toast.success('Patient created successfully')
-      if (onUserIdObtained) {
-        onUserIdObtained(data.id)
+      if (onPatientCreated) {
+        onPatientCreated(data.id)
       }
       onNext()
     },
@@ -55,11 +53,36 @@ export const PersonalInfoForm = ({
   })
 
   const handlePersonalInfoSubmit = (data: any) => {
-    if (userId) {
-      // If we already have userId, just proceed to next
-      onNext()
-    } else if (patientId) {
-      // If we have patientId but no userId, create patient
+    // Validate required fields
+    const requiredFields = ['firstName', 'lastName', 'dateOfBirth', 'gender']
+    const missingFields = requiredFields.filter(
+      (field) => !data.personalInfo[field]
+    )
+
+    if (missingFields.length > 0) {
+      const fieldNames = missingFields
+        .map((field) => {
+          switch (field) {
+            case 'firstName':
+              return 'First Name'
+            case 'lastName':
+              return 'Last Name'
+            case 'dateOfBirth':
+              return 'Date of Birth'
+            case 'gender':
+              return 'Gender'
+            default:
+              return field
+          }
+        })
+        .join(', ')
+
+      toast.error(`Please fill in the following required fields: ${fieldNames}`)
+      return
+    }
+
+    if (!patientId) {
+      // For new patient, create patient first
       const patientData = {
         firstName: data.personalInfo.firstName,
         middleName: data.personalInfo.middleName,
@@ -75,14 +98,11 @@ export const PersonalInfoForm = ({
         emergencyContact: data.personalInfo.emergencyContact,
       }
       createPatient(patientData)
-    } else {
-      // For new patient, just proceed to next
-      onNext()
     }
   }
 
-  const isFormDisabled = disabled || !!userId
-  const showSubmitButton = !userId && patientId
+  const isFormDisabled = disabled || !!patientId
+  const showSubmitButton = !patientId // Show submit button for new patients and when no userId exists
 
   return (
     <TooltipProvider>
@@ -94,10 +114,10 @@ export const PersonalInfoForm = ({
           Patient personal data
         </Text>
 
-        {userId && (
+        {patientId && (
           <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-4">
             <Text variant="text/sm" className="text-green-800">
-              ✅ Patient data saved successfully. You can now proceed to other
+              ✅ Patient data loaded successfully. You can now proceed to other
               sections.
             </Text>
           </div>
@@ -363,8 +383,8 @@ export const PersonalInfoForm = ({
               disabled={isFormDisabled || isCreatingPatient}
             >
               {isCreatingPatient
-                ? 'Saving Patient...'
-                : 'Save Patient & Continue'}
+                ? 'Creating Patient...'
+                : 'Create Patient & Continue'}
             </Button>
           ) : (
             <Button className="px-8" onClick={onNext} disabled={isFormDisabled}>

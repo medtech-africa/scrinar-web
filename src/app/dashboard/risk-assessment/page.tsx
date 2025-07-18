@@ -659,11 +659,11 @@ const RiskAssessment = () => {
       </div>
 
       <div className="">
-        <Tabs defaultValue="patients" className="w-full">
+        <Tabs defaultValue="results" className="w-full">
           <TabsList>
-            <TabsTrigger value="patients">Patients</TabsTrigger>
             <TabsTrigger value="results">Risk Assessment Results</TabsTrigger>
-            <TabsTrigger value="draft">Drafts</TabsTrigger>
+            <TabsTrigger value="patients">Patients</TabsTrigger>
+            {/* <TabsTrigger value="draft">Drafts</TabsTrigger> */}
           </TabsList>
 
           <TabsContent value="patients">
