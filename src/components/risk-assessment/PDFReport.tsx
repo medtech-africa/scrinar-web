@@ -15,7 +15,6 @@ import { useMutation } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import { PersonalInfo, RiskData } from '@/hooks/queries/useRiskAssessment'
-import calculateAge from '@/utils/calculateAge'
 import { categorizeBMIWHO2007 } from '@/utils/vitalCalculations'
 
 const siteUrl =
@@ -131,7 +130,7 @@ const PDFReport = ({
                 <Text>Age</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text>{calculateAge(personalInfo.dateOfBirth)} years</Text>
+                <Text>{personalInfo.age} years</Text>
               </View>
             </View>
             <View style={styles.tableRow}>
@@ -181,7 +180,7 @@ const PDFReport = ({
                 <View style={styles.tableCol}>
                   <Text>
                     {categorizeBMIWHO2007(
-                      calculateAge(personalInfo.dateOfBirth),
+                      personalInfo.age,
                       personalInfo.gender.toLowerCase(),
                       vitals.bmi
                     )?.message?.slice(

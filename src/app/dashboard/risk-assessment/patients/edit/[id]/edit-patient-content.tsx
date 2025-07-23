@@ -47,7 +47,7 @@ export const EditPatientContent = ({ patientId }: { patientId: string }) => {
         firstName: patient.firstName || '',
         middleName: patient.middleName || '',
         lastName: patient.lastName || '',
-        dateOfBirth: patient.dateOfBirth || '',
+        age: patient.age || 18,
         gender: patient.gender
           ? { value: patient.gender, label: patient.gender }
           : { value: '', label: '' },
@@ -164,15 +164,15 @@ export const EditPatientContent = ({ patientId }: { patientId: string }) => {
 
           <Controller
             control={control}
-            name="dateOfBirth"
+            name="age"
             render={({ field: { onChange, onBlur, value } }) => (
               <Input
                 onChange={onChange}
                 onBlur={onBlur}
                 value={value ?? ''}
-                type="date"
-                placeholder="Date of Birth"
-                label="Date of Birth"
+                type="number"
+                placeholder="Age"
+                label="Age"
                 labelStyle="lg:text-sm text-xs"
                 required
               />

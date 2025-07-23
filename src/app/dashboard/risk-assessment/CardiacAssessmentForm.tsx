@@ -26,7 +26,7 @@ export const CardiacAssessmentForm = ({ onNext }: Props) => {
   return (
     <div className="">
       <Text as="h2" className="font-medium mb-6 md:mb-8">
-        Cardiac Assessment Questionnaire
+        Cardiovascular Assessment Questionnaire
       </Text>
       <div>
         <Text

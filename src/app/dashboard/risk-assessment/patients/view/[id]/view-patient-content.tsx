@@ -5,7 +5,6 @@ import { Text } from '@/components/ui/text'
 import { usePatient } from '@/hooks/queries/usePatients'
 import ContentLoader from '@/components/content-loader'
 import { useRouter } from 'next/navigation'
-import { format } from 'date-fns'
 import { IconPicker } from '@/components/ui/icon-picker'
 
 export const ViewPatientContent = ({ patientId }: { patientId: string }) => {
@@ -30,22 +29,6 @@ export const ViewPatientContent = ({ patientId }: { patientId: string }) => {
         </Button>
       </div>
     )
-  }
-
-  const calculateAge = (dateOfBirth: string) => {
-    const today = new Date()
-    const birthDate = new Date(dateOfBirth)
-    let age = today.getFullYear() - birthDate.getFullYear()
-    const monthDiff = today.getMonth() - birthDate.getMonth()
-
-    if (
-      monthDiff < 0 ||
-      (monthDiff === 0 && today.getDate() < birthDate.getDate())
-    ) {
-      age--
-    }
-
-    return age
   }
 
   return (
@@ -82,12 +65,10 @@ export const ViewPatientContent = ({ patientId }: { patientId: string }) => {
 
             <div>
               <Text variant="text/sm" className="text-grey-600 mb-1">
-                Date of Birth
+                Age
               </Text>
               <Text variant="text/md" className="text-grey-900 font-medium">
-                {patient.dateOfBirth
-                  ? format(new Date(patient.dateOfBirth), 'MMM dd, yyyy')
-                  : 'N/A'}
+                {patient.age ? `${patient.age} years` : 'N/A'}
               </Text>
             </div>
 
@@ -96,9 +77,7 @@ export const ViewPatientContent = ({ patientId }: { patientId: string }) => {
                 Age
               </Text>
               <Text variant="text/md" className="text-grey-900 font-medium">
-                {patient.dateOfBirth
-                  ? `${calculateAge(patient.dateOfBirth)} years`
-                  : 'N/A'}
+                {patient.age ? `${patient.age} years` : 'N/A'}
               </Text>
             </div>
 

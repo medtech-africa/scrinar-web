@@ -2,7 +2,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
-import { Text } from '@/components/ui/text'
 import {
   Tooltip,
   TooltipContent,
@@ -28,7 +27,7 @@ const defaultValues = {
   firstName: '',
   middleName: '',
   lastName: '',
-  dateOfBirth: '',
+  age: 18,
   gender: { value: '', label: '' },
   ethnicity: { value: '', label: '' },
   country: { value: 'Nigeria', label: 'Nigeria' },
@@ -98,14 +97,6 @@ export const AddNewPatientContent = () => {
     <TooltipProvider>
       <form onSubmit={handleSubmit(onSubmit)}>
         <div className="w-full pt-7 mt-2">
-          {/* Required field indicator */}
-          <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-            <Text variant="text/sm" className="text-blue-800">
-              <span className="text-red-500 font-medium">*</span> indicates
-              required field
-            </Text>
-          </div>
-
           <div className="grid md:grid-cols-2 grid-cols-1 gap-6">
             <Controller
               control={control}
@@ -156,17 +147,19 @@ export const AddNewPatientContent = () => {
 
             <Controller
               control={control}
-              name="dateOfBirth"
+              name="age"
               render={({ field: { onChange, onBlur, value } }) => (
                 <Input
                   onChange={onChange}
                   onBlur={onBlur}
                   value={value ?? ''}
-                  type="date"
-                  placeholder="Date of Birth"
-                  label="Date of Birth *"
+                  type="number"
+                  placeholder="Enter age"
+                  label="Age as at last birthday *"
                   labelStyle="lg:text-sm text-xs"
                   required
+                  min="18"
+                  max="120"
                 />
               )}
             />

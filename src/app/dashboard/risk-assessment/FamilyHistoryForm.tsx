@@ -1,22 +1,19 @@
 import { Input } from '@/components/ui/input'
 import React, { useEffect } from 'react'
-import { Controller, useFormContext } from 'react-hook-form'
-import { OptionWithRadioField } from './OptionWithRadioField'
+import { useFormContext } from 'react-hook-form'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
 import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
 import { slugify } from '@/utils/slugify'
-import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
   onNext: () => void
 }
 
 export const FamilyHistoryForm = ({ onNext }: Props) => {
-  const { control, watch } = useFormContext()
+  const { register: customRegister, setValue, watch } = useFormContext()
   const formData = watch()
   const storeRiskAssessment = useRiskAssessmentStorage((store) => store.store)
-  const isRequiredField = useRequiredFieldLabel()
 
   useEffect(() => {
     storeRiskAssessment(
@@ -25,164 +22,242 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
     )
   }, [formData, storeRiskAssessment])
 
+  const medicalConditions = [
+    {
+      label:
+        'Cardiovascular disease eg stroke, heart disease, other vascular disease',
+      key: 'cvd',
+    },
+    {
+      label: 'Diabetes',
+      key: 'diabetes',
+    },
+    {
+      label: 'Hypertension',
+      key: 'hypertension',
+    },
+    {
+      label: 'Breast Cancer',
+      key: 'breastCancer',
+    },
+    {
+      label: 'Ovarian Cancer',
+      key: 'ovarianCancer',
+    },
+    {
+      label: 'Prostate cancer',
+      key: 'prostateCancer',
+    },
+    {
+      label: 'Colorectal cancer',
+      key: 'colorectalCancer',
+    },
+    {
+      label: 'Other NCDs eg Asthma',
+      key: 'otherNcds',
+    },
+  ]
+
   return (
     <div title="Family History & Lifestyle">
       <Text as="h2" className="font-medium mb-2">
         Family History
       </Text>
       <Text variant="text/sm" className="text-gray-500 mb-4">
-        Family History of NCDs (History of NCDs in First Degree relatives eg
-        mother, father, brother or sister.)
+        In this section, &apos;family history&apos; refers to your first-degree
+        relatives, that is, your biological parents, siblings, and children.
+        These are the family members who share up to 50% of their genes with
+        you.
       </Text>
 
       {/* Clear Instructions */}
-      <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+      {/* <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
         <Text variant="text/sm" className="text-blue-800 font-medium mb-2">
           📋 Instructions for Data Collection
         </Text>
         <Text variant="text/sm" className="text-blue-700">
           Please ask patient or caregiver about each of the following symptoms
           or conditions. If the patient is unsure about any family history,
-          select &quot;Don&apos;t Know&quot; rather than guessing.
+          select &quot;Don&apos;t Know&quot; rather than guessing
         </Text>
-      </div>
-      {/* Helper Text for Family Definition */}
-      <div className="mb-4 p-3 bg-gray-50 border border-gray-200 rounded-lg">
-        <Text variant="text/sm" className="text-gray-600">
-          <span className="font-medium">Family includes:</span> parents,
-          siblings, grandparents, aunts, uncles, and first cousins.
-        </Text>
-      </div>
+      </div> */}
 
-      <div className="space-y-6">
-        <div>
-          <Text variant="text/sm" className="text-gray-500 mb-4">
-            Does anyone in your family have or had any of the following
-            conditions?
-          </Text>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-            <OptionWithRadioField
-              label={isRequiredField(
-                'Cardiovascular Disease (CVD)',
-                'familyHistory.cvd'
-              )}
-              options={['Yes', 'No', "Don't Know"]}
-              form={{ id: 'familyHistory.cvd' }}
-            />
-            <OptionWithRadioField
-              label={isRequiredField(
-                'Diabetes (Type 1 or Type 2)',
-                'familyHistory.diabetes'
-              )}
-              options={['Yes', 'No', "Don't Know"]}
-              form={{ id: 'familyHistory.diabetes' }}
-            />
-            <OptionWithRadioField
-              label={isRequiredField(
-                'Hypertension (High Blood Pressure)',
-                'familyHistory.hypertension'
-              )}
-              options={['Yes', 'No', "Don't Know"]}
-              form={{ id: 'familyHistory.hypertension' }}
-            />
-            <OptionWithRadioField
-              label={isRequiredField('Cancer', 'familyHistory.cancer')}
-              options={['Yes', 'No', "Don't Know"]}
-              form={{ id: 'familyHistory.cancer' }}
-            />
-            <OptionWithRadioField
-              label={isRequiredField(
-                'Breast Cancer',
-                'familyHistory.breastCancer'
-              )}
-              options={['Yes', 'No', "Don't Know"]}
-              form={{ id: 'familyHistory.breastCancer' }}
-            />
-            <OptionWithRadioField
-              label={isRequiredField(
-                'Ovarian Cancer',
-                'familyHistory.ovarianCancer'
-              )}
-              options={['Yes', 'No', "Don't Know"]}
-              form={{ id: 'familyHistory.ovarianCancer' }}
-            />
-            <OptionWithRadioField
-              label={isRequiredField(
-                'Prostate Cancer',
-                'familyHistory.prostateCancer'
-              )}
-              options={['Yes', 'No', "Don't Know"]}
-              form={{ id: 'familyHistory.prostateCancer' }}
-            />
-            <OptionWithRadioField
-              label={isRequiredField(
-                'Colorectal Cancer',
-                'familyHistory.colorectalCancer'
-              )}
-              options={['Yes', 'No', "Don't Know"]}
-              form={{ id: 'familyHistory.colorectalCancer' }}
-            />
-            <OptionWithRadioField
-              label={isRequiredField('Stroke', 'familyHistory.stroke')}
-              options={['Yes', 'No', "Don't Know"]}
-              form={{ id: 'familyHistory.stroke' }}
-            />
-            <div>
-              <OptionWithRadioField
-                label={isRequiredField(
-                  'Other NCDs (specify)',
-                  'familyHistory.otherNcdsOption'
-                )}
-                options={['Yes', 'No']}
-                form={{ id: 'familyHistory.otherNcdsOption' }}
-              />
-
-              {watch('familyHistory.otherNcdsOption') === 'Yes' && (
-                <Controller
-                  name="familyHistory.otherNcds"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Specify"
-                      label="Other NCDs (specify)"
-                      labelStyle="lg:text-sm text-xs"
-                    />
+      <div className="overflow-x-auto">
+        <div className="min-w-[800px]">
+          <table className="table-auto w-full border-collapse border border-gray-300">
+            <thead>
+              <tr className="bg-blue-200 text-sm">
+                <th className="border border-gray-300 px-4 py-2 text-left min-w-[300px]">
+                  Medical Condition
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center min-w-[80px]">
+                  None
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center min-w-[80px]">
+                  Mother
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center min-w-[80px]">
+                  Father
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center min-w-[120px]">
+                  Brother/Sister (Full Sibling)
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center min-w-[80px]">
+                  Children
+                </th>
+                <th className="border border-gray-300 px-4 py-2 text-center min-w-[150px]">
+                  Other (Write the relative)
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {medicalConditions.map((condition) => (
+                <tr
+                  key={condition.key}
+                  className="odd:bg-white even:bg-gray-100"
+                >
+                  <td className="border border-gray-300 px-4 py-2 text-sm">
+                    {condition.label}
+                  </td>
+                  {['none', 'mother', 'father', 'sibling', 'children'].map(
+                    (value) => (
+                      <td
+                        key={condition.key + '_' + value}
+                        className="border border-gray-300 px-4 py-2 text-center relative"
+                      >
+                        <label className="absolute inset-0 flex items-center justify-center cursor-pointer">
+                          <span className="w-full h-full flex items-center justify-center">
+                            <input
+                              {...customRegister(
+                                `familyHistory.${condition.key}`
+                              )}
+                              value={value}
+                              onChange={(e) => {
+                                const isChecked = e.target.value
+                                const value = e.target.value
+                                if (isChecked) {
+                                  setValue(
+                                    `familyHistory.${condition.key}Others`,
+                                    null
+                                  )
+                                  setValue(
+                                    `familyHistory.${condition.key}`,
+                                    value
+                                  )
+                                }
+                              }}
+                              type="radio"
+                              title={condition.key}
+                            />
+                          </span>
+                        </label>
+                      </td>
+                    )
                   )}
-                />
-              )}
-            </div>
-          </div>
-          {/* Family History Timeline */}
-          <div className="mt-6">
-            <Text as="h3" variant="text/md" className="font-medium mb-3">
-              Family History Timeline
-            </Text>
-            <Controller
-              name="familyHistory.timeline"
-              control={control}
-              render={({ field }) => (
-                <textarea
-                  {...field}
-                  placeholder="Enter records of family members diagnosed with NCDs and their age at diagnosis (e.g., Father - Diabetes at age 45, Mother - Hypertension at age 50)"
-                  className="w-full p-3 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  rows={4}
-                ></textarea>
-              )}
-            />
-            <Text variant="text/sm" className="text-gray-500 mt-2">
-              Please include: family member, condition, age at diagnosis, and
-              current status (if known)
-            </Text>
-          </div>
-          <div className="mt-4 p-3 bg-green-50 border border-green-200 rounded-lg">
-            <Text variant="text/sm" className="text-green-700">
-              💡 <span className="font-medium">Tip:</span> If you&apos;re unsure
-              about any family history, it&apos;s better to select
-              &quot;Don&apos;t Know&quot; than to guess. This helps maintain
-              data quality.
-            </Text>
-          </div>
+                  <td className="border border-gray-300 px-4 py-2">
+                    <Input
+                      {...customRegister(
+                        `familyHistory.${condition.key}Others`
+                      )}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        setValue(`familyHistory.${condition.key}Others`, value)
+                        setValue(`familyHistory.${condition.key}`, null)
+                      }}
+                      placeholder="Specify relative"
+                    />
+                  </td>
+                </tr>
+              ))}
+              {/* Additional NCDs section */}
+              {/* <tr className="odd:bg-white even:bg-gray-100">
+                <td className="border border-gray-300 px-4 py-2 text-sm">
+                  NCD 1
+                </td>
+                {['none', 'mother', 'father', 'sibling', 'children'].map(
+                  (value) => (
+                    <td
+                      key={'ncd1_' + value}
+                      className="border border-gray-300 px-4 py-2 text-center relative"
+                    >
+                      <label className="absolute inset-0 flex items-center justify-center cursor-pointer">
+                        <span className="w-full h-full flex items-center justify-center">
+                          <input
+                            {...customRegister('familyHistory.ncd1')}
+                            value={value}
+                            onChange={(e) => {
+                              const isChecked = e.target.value
+                              const value = e.target.value
+                              if (isChecked) {
+                                setValue('familyHistory.ncd1Others', null)
+                                setValue('familyHistory.ncd1', value)
+                              }
+                            }}
+                            type="radio"
+                            title="ncd1"
+                          />
+                        </span>
+                      </label>
+                    </td>
+                  )
+                )}
+                <td className="border border-gray-300 px-4 py-2">
+                  <Input
+                    {...customRegister('familyHistory.ncd1Others')}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      setValue('familyHistory.ncd1Others', value)
+                      setValue('familyHistory.ncd1', null)
+                    }}
+                    placeholder="Specify relative"
+                  />
+                </td>
+              </tr>
+              <tr className="odd:bg-white even:bg-gray-100">
+                <td className="border border-gray-300 px-4 py-2 text-sm">
+                  NCD 2, etc
+                </td>
+                {['none', 'mother', 'father', 'sibling', 'children'].map(
+                  (value) => (
+                    <td
+                      key={'ncd2_' + value}
+                      className="border border-gray-300 px-4 py-2 text-center relative"
+                    >
+                      <label className="absolute inset-0 flex items-center justify-center cursor-pointer">
+                        <span className="w-full h-full flex items-center justify-center">
+                          <input
+                            {...customRegister('familyHistory.ncd2')}
+                            value={value}
+                            onChange={(e) => {
+                              const isChecked = e.target.value
+                              const value = e.target.value
+                              if (isChecked) {
+                                setValue('familyHistory.ncd2Others', null)
+                                setValue('familyHistory.ncd2', value)
+                              }
+                            }}
+                            type="radio"
+                            title="ncd2"
+                          />
+                        </span>
+                      </label>
+                    </td>
+                  )
+                )}
+                <td className="border border-gray-300 px-4 py-2">
+                  <Input
+                    {...customRegister('familyHistory.ncd2Others')}
+                    onChange={(e) => {
+                      const value = e.target.value
+                      setValue('familyHistory.ncd2Others', value)
+                      setValue('familyHistory.ncd2', null)
+                    }}
+                    placeholder="Specify relative"
+                  />
+                </td>
+              </tr> */}
+            </tbody>
+          </table>
         </div>
       </div>
 

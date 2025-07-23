@@ -133,7 +133,7 @@ const validateAndTransformData = (data?: Partial<RiskAssessmentModel>) => {
         ageAtFirstBirth: 0,
         ageAtMenopause: 0,
         hormoneReplacementTherapy: 0,
-        benignBreastDisease: 0,
+        breastBiopsy: 0,
         familyHistory: 0,
         brcaMutationStatus: 0,
         breastDensity: 0,

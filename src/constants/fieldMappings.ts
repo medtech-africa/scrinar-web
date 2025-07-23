@@ -6,7 +6,6 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   // Personal Info fields
   age: 'personalInfo.age',
   gender: 'personalInfo.gender',
-  dateOfBirth: 'personalInfo.dateOfBirth',
 
   // Vitals fields
   systolicBP: 'vitals.sys',
@@ -23,11 +22,11 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   diabetes: 'symptoms.diabetes',
   cholesterol: 'bloodTest.cholesterolTotal',
   serumCreatinine: 'bloodTest.serumCreatinine',
-  pefLevel: 'bloodTest.pefLevel',
+  pefLevel: 'copd.pefLevel',
 
   // Lifestyle fields
-  smoking: 'lifestyle.tobaccoCurrentlyUses',
-  hasQuitSmoking: 'lifestyle.tobaccoQuit',
+  smoking: 'lifestyle.everSmoked',
+  hasQuitSmoking: 'lifestyle.currentSmokingStatus',
 
   // COPD fields
   coughDuration: 'copd.coughDuration',
@@ -38,32 +37,29 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   // Breast Cancer fields
   ageAtMenarche: 'breastCancer.ageAtMenarche',
   ageAtFirstBirth: 'breastCancer.ageAtFirstBirth',
-  ageAtMenopause: 'breastCancer.ageAtMenopause',
+  menopauseStatus: 'breastCancer.menopauseStatus',
   hormoneReplacementTherapy: 'breastCancer.hormoneReplacementTherapy',
-  benignBreastDisease: 'breastCancer.benignBreastDisease',
+  breastBiopsy: 'breastCancer.breastBiopsy',
   familyHistoryBreastCancer: 'familyHistory.breastCancer',
   familyHistoryOvarianCancer: 'familyHistory.ovarianCancer',
   brcaMutationStatus: 'breastCancer.brcaMutationStatus',
   breastDensity: 'breastCancer.breastDensity',
 
   // Prostate Cancer fields
-  psaLevel: 'prostateCancer.psaLevel',
-  digitalRectalExam: 'prostateCancer.digitalRectalExam',
-  prostateVolume: 'prostateCancer.prostateVolume',
   familyHistoryProstateCancer: 'familyHistory.prostateCancer',
-  previousBiopsy: 'prostateCancer.previousBiopsy',
-  freeToTotalPsaRatio: 'prostateCancer.freeToTotalPsaRatio',
   urinarySymptoms: 'prostateCancer.urinarySymptomsFrequency',
+  psaLevel: 'bloodTest.psaLevel',
 
   // Colorectal Cancer fields
   personalHistoryColorectalCancer: 'colorectalCancer.personalHistory',
   personalHistoryPolyps: 'colorectalCancer.personalHistoryPolyps',
-  familyHistoryColorectalCancer: 'familyHistory.colorectalCancer',
+  familyHistoryColorectalCancer:
+    'colorectalCancer.familyHistoryColorectalCancer',
   familyHistoryPolyps: 'colorectalCancer.familyHistoryPolyps',
   inflammatoryBowelDisease: 'colorectalCancer.inflammatoryBowelDisease',
-  smokingStatus: 'colorectalCancer.smokingStatus',
-  vegetableConsumption: 'colorectalCancer.vegetableConsumption',
-  physicalActivity: 'physicalActivity',
+  smokingStatus: 'lifestyle.currentSmokingStatus',
+  vegetableConsumption: 'lifestyle.vegetableServingsPerWeek',
+  physicalActivity: 'lifestyle.moderateActivityHoursPerWeek',
   colonoscopyHistory: 'colorectalCancer.colonoscopyHistory',
   aspirinUse: 'colorectalCancer.aspirinUse',
   nsaidUse: 'colorectalCancer.nsaidUse',
@@ -79,7 +75,6 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   // Personal Info fields
   age: 'Age',
   gender: 'Gender',
-  dateOfBirth: 'Date of Birth',
 
   // Vitals fields
   systolicBP: 'Systolic Blood Pressure',
@@ -111,22 +106,19 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   // Breast Cancer fields
   ageAtMenarche: 'Age at Menarche',
   ageAtFirstBirth: 'Age at First Birth',
+  menopauseStatus: 'Menopause Status',
   ageAtMenopause: 'Age at Menopause',
   hormoneReplacementTherapy: 'Hormone Replacement Therapy',
-  benignBreastDisease: 'Benign Breast Disease',
+  breastBiopsy: 'Breast Biopsy',
   familyHistoryBreastCancer: 'Family History of Breast Cancer',
   familyHistoryOvarianCancer: 'Family History of Ovarian Cancer',
   brcaMutationStatus: 'BRCA Mutation Status',
   breastDensity: 'Breast Density',
 
   // Prostate Cancer fields
-  psaLevel: 'PSA Level',
-  digitalRectalExam: 'Digital Rectal Exam',
-  prostateVolume: 'Prostate Volume',
   familyHistoryProstateCancer: 'Family History of Prostate Cancer',
-  previousBiopsy: 'Previous Biopsy',
-  freeToTotalPsaRatio: 'Free to Total PSA Ratio',
   urinarySymptoms: 'Urinary Symptoms',
+  psaLevel: 'PSA Level',
 
   // Colorectal Cancer fields
   personalHistoryColorectalCancer: 'Personal History of Colorectal Cancer',

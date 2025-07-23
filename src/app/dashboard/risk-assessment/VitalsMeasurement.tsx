@@ -17,7 +17,7 @@ import {
 import { Label } from '@/components/ui/label'
 import { messageCheck, variantValidityCheck } from './utils'
 import isValidNumber from '@/utils/isValidNumber'
-import calculateAge from '@/utils/calculateAge'
+
 import { Button } from '@/components/ui/button'
 import MeasurementGuides from '@/components/risk-assessment/MeasurementGuides'
 import { useNcdFilter } from './NcdFilterContext'
@@ -127,14 +127,14 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({})
+  const [isGuidesOpen, setIsGuidesOpen] = useState(false)
   const isRequiredField = useRequiredFieldLabel()
 
   const { bmi, sys, dys, height, weight, waist, oxygenSaturation, pulse } =
     watch('vitals', {})
-  const { gender: genderVal, dateOfBirth } = watch('personalInfo', {})
+  const { gender: genderVal, age } = watch('personalInfo', {})
 
   const gender = genderVal?.toLowerCase()
-  const age = calculateAge(dateOfBirth)
 
   useEffect(() => {
     if (isValidNumber(height) && isValidNumber(weight)) {
@@ -191,20 +191,13 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
           Vitals records
         </Text>
 
-        <div className="grid lg:grid-cols-3 gap-6 mt-6">
-          {/* Main form content - takes 2/3 of the space */}
-          <div className="lg:col-span-2 order-2 lg:order-1">
+        <div className="mt-6">
+          {/* Main form content - full width */}
+          <div>
             <div>
               <div>
                 <Text as="h3" variant="text/md" className="font-medium mb-2">
                   Antropometry
-                </Text>
-                <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
-                  To measure height, stand upright using a flat ruler or
-                  measuring tape and mark the highest point of your head. For
-                  weight, use a calibrated scale while standing barefoot. For
-                  waist size, wrap a tape around the narrowest part, keeping it
-                  snug and level.
                 </Text>
                 <div className="flex gap-3 w-full ">
                   <Controller
@@ -281,7 +274,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                 </div>
 
                 {(selectedNcd === 'all' || selectedNcd === NCD.CVD) && (
-                  <div className="mt-4">
+                  <div className="my-4">
                     <div className="bg-grey-50 w-full p-4 flex justify-center">
                       <Text>BMI Result</Text>
                     </div>
@@ -430,7 +423,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                   <Text as="h3" variant="text/sm" className="font-medium mb-2">
                     Oxygen & Temperature (Optional)
                   </Text>
-                  <div className="flex items-center gap-2 mb-2">
+                  <div className="flex items-center gap-2 mb-3">
                     <Text variant="text/sm" className="text-gray-600">
                       Optional, but recommended for full risk assessment
                     </Text>
@@ -504,16 +497,55 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Video guides - takes 1/3 of the space */}
-          <div className="lg:col-span-1 order-1 lg:order-2">
-            <div className="sticky top-4">
-              <Text as="h3" variant="text/sm" className="font-medium mb-2">
-                Measurement Guides
+        {/* Collapsible Measurement Guides */}
+        <div className="mt-6 border border-gray-200 rounded-lg">
+          <button
+            type="button"
+            onClick={() => setIsGuidesOpen(!isGuidesOpen)}
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <HelpCircleIcon size="1.2rem" className="text-blue-600" />
+              <Text variant="text/sm" className="font-medium text-gray-900">
+                Need help with measurements?
               </Text>
-              <MeasurementGuides />
             </div>
-          </div>
+            <div
+              className={`transform transition-transform ${isGuidesOpen ? 'rotate-180' : ''}`}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 9L12 15L18 9"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </button>
+
+          {isGuidesOpen && (
+            <div className="px-4 pb-4 border-t border-gray-200">
+              <div className="pt-4">
+                <Text
+                  variant="text/sm"
+                  className="font-medium mb-3 text-gray-900"
+                >
+                  Measurement Guides
+                </Text>
+                <MeasurementGuides />
+              </div>
+            </div>
+          )}
         </div>
 
         <div className="flex justify-end mt-6">

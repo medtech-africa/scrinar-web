@@ -16,7 +16,7 @@ export interface IFormValue {
   firstName: string
   middleName?: string
   lastName: string
-  dateOfBirth: string
+  age: number
   gender: { value: string; label: string }
   ethnicity?: { value?: string; label?: string }
   country?: { value?: string; label?: string }
@@ -34,7 +34,7 @@ export interface IDataToSend {
   firstName: string
   middleName?: string
   lastName: string
-  dateOfBirth: string
+  age: number
   gender?: string
   ethnicity?: string
   country?: string

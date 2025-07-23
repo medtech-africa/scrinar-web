@@ -404,33 +404,6 @@ export const BloodTestsForm = ({ onNext }: Props) => {
             />
           </div>
 
-          <div>
-            <Text as="h3" variant="text/sm" className="font-medium mb-2">
-              Peak Expiratory Flow (PEF)
-            </Text>
-            <Controller
-              name="bloodTest.pefLevel"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="Enter PEF Level"
-                  label={isRequiredField(
-                    'PEF Level (L/min)',
-                    'bloodTest.pefLevel'
-                  )}
-                  labelStyle="lg:text-sm text-xs"
-                  variant={variantValidityCheck(field.value)}
-                  message={messageCheck(field.value)}
-                  type="number"
-                  min="0"
-                  max="1000"
-                  step="1"
-                />
-              )}
-            />
-          </div>
-
           {/* Serum Creatinine */}
           <div>
             <Text as="h3" variant="text/sm" className="font-medium mb-4">
@@ -460,6 +433,27 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                 />
               )}
             />
+
+            {/* PSA Level */}
+            <div className="mt-4">
+              <Controller
+                name="bloodTest.psaLevel"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="number"
+                    step="0.01"
+                    placeholder="ng/mL"
+                    label={isRequiredField(
+                      'PSA level (ng/mL)',
+                      'bloodTest.psaLevel'
+                    )}
+                    labelStyle="lg:text-sm text-xs"
+                  />
+                )}
+              />
+            </div>
           </div>
         </div>
 

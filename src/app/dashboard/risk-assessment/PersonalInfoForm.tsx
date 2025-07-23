@@ -54,7 +54,7 @@ export const PersonalInfoForm = ({
 
   const handlePersonalInfoSubmit = (data: any) => {
     // Validate required fields
-    const requiredFields = ['firstName', 'lastName', 'dateOfBirth', 'gender']
+    const requiredFields = ['firstName', 'lastName', 'age', 'gender']
     const missingFields = requiredFields.filter(
       (field) => !data.personalInfo[field]
     )
@@ -67,8 +67,8 @@ export const PersonalInfoForm = ({
               return 'First Name'
             case 'lastName':
               return 'Last Name'
-            case 'dateOfBirth':
-              return 'Date of Birth'
+            case 'age':
+              return 'Age'
             case 'gender':
               return 'Gender'
             default:
@@ -87,7 +87,7 @@ export const PersonalInfoForm = ({
         firstName: data.personalInfo.firstName,
         middleName: data.personalInfo.middleName,
         lastName: data.personalInfo.lastName,
-        dateOfBirth: data.personalInfo.dateOfBirth,
+        age: data.personalInfo.age,
         gender: data.personalInfo.gender,
         ethnicity: data.personalInfo.ethnicity,
         country: data.personalInfo.country,
@@ -122,14 +122,6 @@ export const PersonalInfoForm = ({
             </Text>
           </div>
         )}
-
-        {/* Required field indicator */}
-        <div className="mb-6 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <Text variant="text/sm" className="text-blue-800">
-            <span className="text-red-500 font-medium">*</span> indicates
-            required field
-          </Text>
-        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
           <Controller
@@ -180,17 +172,19 @@ export const PersonalInfoForm = ({
           />
 
           <Controller
-            name="personalInfo.dateOfBirth"
+            name="personalInfo.age"
             control={control}
             render={({ field }) => (
               <Input
                 {...field}
-                type="date"
-                placeholder="Date of Birth"
-                label="Date of Birth *"
+                type="number"
+                placeholder="Enter age"
+                label="Age as at last birthday *"
                 labelStyle="lg:text-sm text-xs"
-                required={isFieldRequired('personalInfo.dateOfBirth')}
+                required={isFieldRequired('personalInfo.age')}
                 disabled={isFormDisabled}
+                min="18"
+                max="120"
               />
             )}
           />

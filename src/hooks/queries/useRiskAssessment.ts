@@ -131,11 +131,10 @@ export interface RiskAssessmentModelRequestData {
   reportEmail?: string
   providerNote?: string
   consentSignature?: string
-  copd?: COPD
-  breastCancer?: BreastCancer
+  copd?: COPDRequest
+  breastCancer?: BreastCancerRequest
   prostateCancer?: ProstateCancerRequest
   colorectalCancer?: ColorectalCancer
-  ckd?: CKDRequest
 }
 
 interface Prediction {
@@ -153,7 +152,6 @@ export interface BloodTest {
   cholesterolHdl?: string
   cholesterolTriglycerides?: string
   hba1cLevel?: string
-  pefLevel?: string
 }
 
 export interface Cardiac {
@@ -163,27 +161,35 @@ export interface Cardiac {
 
 export interface FamilyHistory {
   cvd: string
+  cvdOthers?: string
   diabetes: string
+  diabetesOthers?: string
   hypertension: string
-  cancer: string
-  stroke: string
-  otherNcdsOption: string
+  hypertensionOthers?: string
+  breastCancer: string
+  breastCancerOthers?: string
+  ovarianCancer: string
+  ovarianCancerOthers?: string
+  prostateCancer: string
+  prostateCancerOthers?: string
+  colorectalCancer: string
+  colorectalCancerOthers?: string
+  otherNcds: string
+  otherNcdsOthers?: string
 }
 
 export interface Lifestyle {
-  tobaccoCurrentlyUses: string
-  tobaccoQuit?: string
-  tobaccoDailyUnits?: string
-  alcoholUsage: string
-  alcoholDaysPerWeek?: string
-  alcoholDrinksPerDay?: string
-  dietProcessedFoods: string
-  dietAddSalt: string
-  dietFruitVegServings: string
-  physicalActivityEngages: string
-  physicalActivityType?: string
-  physicalActivityDuration?: string
-  physicalActivityFrequency?: string
+  everSmoked: string
+  currentSmokingStatus: string
+  alcoholFrequency: string
+  processedFoodsFrequency: string
+  addSaltAtTable: string
+  vegetableServingsPerWeek: string
+  vegetableServingSize: string
+  moderateActivityMonths: number
+  moderateActivityHoursPerWeek: string
+  vigorousActivityMonths: number
+  vigorousActivityHoursPerWeek: string
 }
 
 export interface PersonalInfo {
@@ -191,7 +197,7 @@ export interface PersonalInfo {
   firstName: string
   middleName?: string
   lastName: string
-  dateOfBirth: string
+  age: number
   ethnicity?: string
   country?: string
   occupation: string
@@ -308,6 +314,14 @@ export interface COPD {
   predictions?: Prediction[]
 }
 
+export interface COPDRequest {
+  coughDuration?: string
+  shortnessOfBreath?: string
+  activityLimitations?: string
+  exposureToDust?: string
+  pefLevel?: string
+}
+
 export interface COPDBreakdown {
   coughDuration: number
   shortnessOfBreath: number
@@ -328,13 +342,29 @@ export interface BreastCancer {
   predictions?: Prediction[]
 }
 
+export interface BreastCancerRequest {
+  hasBeenDiagnosed?: string
+  ageAtMenarche?: string
+  ageAtFirstBirth?: string
+  menopauseStatus?: string
+  ageAtMenopause?: string
+  hormoneReplacementTherapy?: string
+  breastBiopsy?: string
+  brcaMutationStatus?: string
+  breastDensity?: string
+  personalHistoryOvarianCancer?: string
+  personalHistoryColorectalPancreaticCancer?: string
+  personalHistoryUterineCancer?: string
+  ashkenaziInheritance?: string
+}
+
 export interface BreastCancerBreakdown {
   age: number
   ageAtMenarche: number
   ageAtFirstBirth: number
   ageAtMenopause: number
   hormoneReplacementTherapy: number
-  benignBreastDisease: number
+  breastBiopsy: number
   familyHistory: number
   brcaMutationStatus: number
   breastDensity: number
@@ -402,25 +432,6 @@ export interface ColorectalCancerBreakdown {
   physicalActivity: number
   medicalHistory: number
   medicationUse: number
-}
-
-export interface CKDRequest {
-  serumCreatinine?: string
-  diabetes?: string
-  hypertension?: string
-  familyHistory?: string
-  cardiovascularDisease?: string
-  medications?: string
-  symptomsFatigue?: string
-  symptomsSwelling?: string
-  symptomsShortnessOfBreath?: string
-  symptomsUrinationChanges?: string
-  symptomsNausea?: string
-  symptomsMuscleCramps?: string
-  smoking?: string
-  alcohol?: string
-  lowSodiumDiet?: string
-  exercise?: string
 }
 
 export interface CKD {

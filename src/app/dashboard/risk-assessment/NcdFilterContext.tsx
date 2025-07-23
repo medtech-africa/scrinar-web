@@ -15,7 +15,7 @@ export type SpecificNcdType = Exclude<NcdType, 'all'>
 
 interface NcdRequiredFields {
   cvd: {
-    dateOfBirth: boolean
+    age: boolean
     gender: boolean
     systolicBP: boolean
     bmi: boolean
@@ -25,7 +25,7 @@ interface NcdRequiredFields {
     hasQuitSmoking: boolean
   }
   diabetes: {
-    dateOfBirth: boolean
+    age: boolean
     gender: boolean
     systolicBP: boolean
     height: boolean
@@ -36,7 +36,7 @@ interface NcdRequiredFields {
     hasQuitSmoking: boolean
   }
   copd: {
-    dateOfBirth: boolean
+    age: boolean
     gender: boolean
     smoking: boolean
     hasQuitSmoking: boolean
@@ -47,33 +47,29 @@ interface NcdRequiredFields {
     pefLevel: boolean
   }
   breastCancer: {
-    dateOfBirth: boolean
+    age: boolean
     gender: boolean
     height: boolean
     weight: boolean
     ageAtMenarche: boolean
     ageAtFirstBirth: boolean
-    ageAtMenopause: boolean
+    menopauseStatus: boolean
     hormoneReplacementTherapy: boolean
-    benignBreastDisease: boolean
+    breastBiopsy: boolean
     familyHistoryBreastCancer: boolean
     familyHistoryOvarianCancer: boolean
     brcaMutationStatus: boolean
     breastDensity: boolean
   }
   prostateCancer: {
-    dateOfBirth: boolean
+    age: boolean
     gender: boolean
     psaLevel: boolean
-    digitalRectalExam: boolean
-    prostateVolume: boolean
     familyHistoryProstateCancer: boolean
-    previousBiopsy: boolean
-    freeToTotalPsaRatio: boolean
     urinarySymptoms: boolean
   }
   colorectalCancer: {
-    dateOfBirth: boolean
+    age: boolean
     gender: boolean
     height: boolean
     weight: boolean
@@ -89,7 +85,7 @@ interface NcdRequiredFields {
     nsaidUse: boolean
   }
   ckd: {
-    dateOfBirth: boolean
+    age: boolean
     gender: boolean
     serumCreatinine: boolean
   }
@@ -97,7 +93,7 @@ interface NcdRequiredFields {
 
 const ncdRequiredFields: NcdRequiredFields = {
   cvd: {
-    dateOfBirth: true,
+    age: true,
     gender: true,
     bmi: true,
     diabetes: true,
@@ -107,7 +103,7 @@ const ncdRequiredFields: NcdRequiredFields = {
     systolicBP: true,
   },
   diabetes: {
-    dateOfBirth: true,
+    age: true,
     gender: true,
     systolicBP: true,
     height: true,
@@ -118,7 +114,7 @@ const ncdRequiredFields: NcdRequiredFields = {
     hasQuitSmoking: true,
   },
   copd: {
-    dateOfBirth: true,
+    age: true,
     gender: true,
     smoking: true,
     hasQuitSmoking: true,
@@ -129,33 +125,29 @@ const ncdRequiredFields: NcdRequiredFields = {
     pefLevel: true,
   },
   breastCancer: {
-    dateOfBirth: true,
+    age: true,
     gender: true,
     height: true,
     weight: true,
     ageAtMenarche: true,
     ageAtFirstBirth: true,
-    ageAtMenopause: true,
+    menopauseStatus: true,
     hormoneReplacementTherapy: true,
-    benignBreastDisease: true,
+    breastBiopsy: true,
     familyHistoryBreastCancer: true,
     familyHistoryOvarianCancer: true,
     brcaMutationStatus: true,
     breastDensity: true,
   },
   prostateCancer: {
-    dateOfBirth: true,
+    age: true,
     gender: true,
     psaLevel: true,
-    digitalRectalExam: true,
-    prostateVolume: true,
     familyHistoryProstateCancer: true,
-    previousBiopsy: true,
-    freeToTotalPsaRatio: true,
     urinarySymptoms: true,
   },
   colorectalCancer: {
-    dateOfBirth: true,
+    age: true,
     gender: true,
     height: true,
     weight: true,
@@ -171,7 +163,7 @@ const ncdRequiredFields: NcdRequiredFields = {
     nsaidUse: true,
   },
   ckd: {
-    dateOfBirth: true,
+    age: true,
     gender: true,
     serumCreatinine: true,
   },

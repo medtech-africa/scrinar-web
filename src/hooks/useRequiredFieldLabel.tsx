@@ -12,7 +12,7 @@ import React from 'react'
  * const isRequiredField = useRequiredFieldLabel()
  *
  * <Input
- *   label={isRequiredField("PEF Level (L/min)", "bloodTest.pefLevel")}
+ *   label={isRequiredField("PEF Level (L/min)", "copd.pefLevel")}
  *   // ... other props
  * />
  * ```

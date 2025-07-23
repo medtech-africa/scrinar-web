@@ -7,8 +7,6 @@ import { VitalsMeasurement } from './VitalsMeasurement'
 import { BloodTestsForm } from './BloodTestsForm'
 import { FamilyHistoryLifestyleForm } from './FamilyHistoryLifestyleForm'
 import { HistoricalDataCollectionForm } from './HistoricalDataCollectionForm'
-// import { TimeSeriesDataForm } from './TimeSeriesDataForm'
-// import { MedicalHistoryForm } from './MedicalHistoryForm'
 import { useState, useEffect } from 'react'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
@@ -30,12 +28,7 @@ import {
 import { Text } from '@/components/ui/text'
 import { ScreeningQuestionsForm } from './ScreeningQuestionsForm'
 import { FamilyHistoryForm } from './FamilyHistoryForm'
-import CardiacAssessmentForm from './CardiacAssessmentForm'
-import { COPDAssessmentForm } from './COPDAssessmentForm'
-import { BreastCancerAssessmentForm } from './BreastCancerAssessmentForm'
-import { ProstateCancerAssessmentForm } from './ProstateCancerAssessmentForm'
-import { ColorectalCancerAssessmentForm } from './ColorectalCancerAssessmentForm'
-import { CKDAssessmentForm } from './CKDAssessmentForm'
+import { NCDQuestionnaireForm } from './NCDQuestionnaireForm'
 import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
 import { slugify } from '@/utils/slugify'
 import { NcdFilterProvider, useNcdFilter } from './NcdFilterContext'
@@ -75,7 +68,7 @@ const StatusSection = ({
     return !!(
       personalInfo?.firstName &&
       personalInfo?.lastName &&
-      personalInfo?.dateOfBirth &&
+      personalInfo?.age &&
       personalInfo?.gender
     )
   }
@@ -317,10 +310,7 @@ const RiskAssessmentFormContent = ({
         })
       })
 
-      return (
-        allRequiredFieldsFilled &&
-        !!formMethods.watch('personalInfo.dateOfBirth')
-      )
+      return allRequiredFieldsFilled && !!formMethods.watch('personalInfo.age')
     }
 
     const requiredFields = getRequiredFields(selectedNcd)
@@ -343,9 +333,8 @@ const RiskAssessmentFormContent = ({
           weight: 'vitals.weight',
           diabetes: 'symptoms.diabetes',
           cholesterol: 'vitals.totalCholesterol',
-          smoking: 'lifestyle.tobaccoCurrentlyUses',
-          hasQuitSmoking: 'lifestyle.tobaccoQuit',
-          dateOfBirth: 'personalInfo.dateOfBirth',
+          smoking: 'lifestyle.everSmoked',
+          hasQuitSmoking: 'lifestyle.currentSmokingStatus',
           // COPD fields
           coughDuration: 'copd.coughDuration',
           shortnessOfBreath: 'copd.shortnessOfBreath',
@@ -354,20 +343,16 @@ const RiskAssessmentFormContent = ({
           // Breast Cancer fields
           ageAtMenarche: 'breastCancer.ageAtMenarche',
           ageAtFirstBirth: 'breastCancer.ageAtFirstBirth',
-          ageAtMenopause: 'breastCancer.ageAtMenopause',
+          menopauseStatus: 'breastCancer.menopauseStatus',
           hormoneReplacementTherapy: 'breastCancer.hormoneReplacementTherapy',
-          benignBreastDisease: 'breastCancer.benignBreastDisease',
+          breastBiopsy: 'breastCancer.breastBiopsy',
           familyHistoryBreastCancer: 'familyHistory.breastCancer',
           familyHistoryOvarianCancer: 'familyHistory.ovarianCancer',
           brcaMutationStatus: 'breastCancer.brcaMutationStatus',
           breastDensity: 'breastCancer.breastDensity',
           // Prostate Cancer fields
-          psaLevel: 'prostateCancer.psaLevel',
-          digitalRectalExam: 'prostateCancer.digitalRectalExam',
-          prostateVolume: 'prostateCancer.prostateVolume',
+          psaLevel: 'bloodTest.psaLevel',
           familyHistoryProstateCancer: 'familyHistory.prostateCancer',
-          previousBiopsy: 'prostateCancer.previousBiopsy',
-          freeToTotalPsaRatio: 'prostateCancer.freeToTotalPsaRatio',
           urinarySymptoms: 'prostateCancer.urinarySymptomsIncompleteEmptying',
         }
 
@@ -466,8 +451,8 @@ const RiskAssessmentFormContent = ({
       }
     }
 
-    if (!formMethods.watch('personalInfo.dateOfBirth')) {
-      return 'Please fill the date of birth field'
+    if (!formMethods.watch('personalInfo.age')) {
+      return 'Please fill the age field'
     }
   }
 
@@ -515,23 +500,14 @@ const RiskAssessmentFormContent = ({
         case 'familyHistory':
           sectionData = { familyHistory: currentFormData.familyHistory }
           break
-        case 'cardiacAssessment':
-          sectionData = { cardiac: currentFormData.cardiac }
-          break
-        case 'copdAssessment':
-          sectionData = { copd: currentFormData.copd }
-          break
-        case 'breastCancerAssessment':
-          sectionData = { breastCancer: currentFormData.breastCancer }
-          break
-        case 'prostateCancerAssessment':
-          sectionData = { prostateCancer: currentFormData.prostateCancer }
-          break
-        case 'colorectalCancerAssessment':
-          sectionData = { colorectalCancer: currentFormData.colorectalCancer }
-          break
-        case 'ckdAssessment':
-          sectionData = { ckd: currentFormData.ckd }
+        case 'ncdQuestionnaire':
+          sectionData = {
+            cardiac: currentFormData.cardiac,
+            copd: currentFormData.copd,
+            breastCancer: currentFormData.breastCancer,
+            prostateCancer: currentFormData.prostateCancer,
+            colorectalCancer: currentFormData.colorectalCancer,
+          }
           break
         case 'medical':
           sectionData = {
@@ -589,49 +565,14 @@ const RiskAssessmentFormContent = ({
     const baseTabs = ['bio', 'vitals', 'labs', 'lifestyle', 'familyHistory']
     const assessmentTabs = []
 
-    // Add assessment tabs based on selected NCD types
-    if (selectedNcd === 'all') {
-      if (
-        selectedSpecificNcds.includes('cvd') ||
-        selectedSpecificNcds.includes('diabetes')
-      ) {
-        assessmentTabs.push('cardiacAssessment')
-      }
-      if (selectedSpecificNcds.includes('copd')) {
-        assessmentTabs.push('copdAssessment')
-      }
-      if (selectedSpecificNcds.includes('breastCancer')) {
-        assessmentTabs.push('breastCancerAssessment')
-      }
-      if (selectedSpecificNcds.includes('prostateCancer')) {
-        assessmentTabs.push('prostateCancerAssessment')
-      }
-      if (selectedSpecificNcds.includes('colorectalCancer')) {
-        assessmentTabs.push('colorectalCancerAssessment')
-      }
-      if (selectedSpecificNcds.includes('ckd')) {
-        assessmentTabs.push('ckdAssessment')
-      }
-    } else {
-      // For individual NCD selections
-      if (selectedNcd !== 'diabetes') {
-        assessmentTabs.push('cardiacAssessment')
-      }
-      if (selectedNcd === 'copd') {
-        assessmentTabs.push('copdAssessment')
-      }
-      if (selectedNcd === 'breastCancer') {
-        assessmentTabs.push('breastCancerAssessment')
-      }
-      if (selectedNcd === 'prostateCancer') {
-        assessmentTabs.push('prostateCancerAssessment')
-      }
-      if (selectedNcd === 'colorectalCancer') {
-        assessmentTabs.push('colorectalCancerAssessment')
-      }
-      if (selectedNcd === 'ckd') {
-        assessmentTabs.push('ckdAssessment')
-      }
+    // Check if any NCD assessments should be shown
+    const shouldShowNCDQuestionnaire =
+      selectedNcd === 'all'
+        ? selectedSpecificNcds.length > 0
+        : selectedNcd !== NCD.DIABETES
+
+    if (shouldShowNCDQuestionnaire) {
+      assessmentTabs.push('ncdQuestionnaire')
     }
 
     const finalTabs = ['medical', 'historical']
@@ -649,11 +590,11 @@ const RiskAssessmentFormContent = ({
 
   return (
     <FormProvider {...formMethods}>
-      <div className="relative">
-        <div className="container mx-auto px-0 md:px-4 py-6">
+      <div className="relative h-screen">
+        <div className="container mx-auto px-0 md:px-4 py-6 h-full">
           <form
             onSubmit={formMethods.handleSubmit(handleSubmit)}
-            className="w-full h-full"
+            className="w-full h-full flex flex-col"
           >
             {/* Status Section */}
             <StatusSection
@@ -661,9 +602,13 @@ const RiskAssessmentFormContent = ({
               assessmentId={_assessmentId}
             />
 
-            <Tabs.Root value={activeTab} onValueChange={handleTabChange}>
-              <div className="flex gap-8">
-                <div className="w-full lg:w-3/4 order-2 lg:order-1">
+            <Tabs.Root
+              value={activeTab}
+              onValueChange={handleTabChange}
+              className="flex-1"
+            >
+              <div className="flex gap-8 h-full">
+                <div className="w-full lg:w-3/4 order-2 lg:order-1 overflow-y-auto pr-4">
                   <div className="mb-6">
                     <div className="flex items-center justify-between mb-4">
                       <div>
@@ -815,7 +760,7 @@ const RiskAssessmentFormContent = ({
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100">
+                  <div className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 min-h-0">
                     <Tabs.Content value="bio">
                       <PersonalInfoForm
                         onNext={handleNext}
@@ -839,28 +784,8 @@ const RiskAssessmentFormContent = ({
                     <Tabs.Content value="familyHistory">
                       <FamilyHistoryForm onNext={handleNext} />
                     </Tabs.Content>
-                    <Tabs.Content value="cardiacAssessment">
-                      <CardiacAssessmentForm onNext={handleNext} />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="copdAssessment">
-                      <COPDAssessmentForm onNext={handleNext} />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="breastCancerAssessment">
-                      <BreastCancerAssessmentForm onNext={handleNext} />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="prostateCancerAssessment">
-                      <ProstateCancerAssessmentForm onNext={handleNext} />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="colorectalCancerAssessment">
-                      <ColorectalCancerAssessmentForm onNext={handleNext} />
-                    </Tabs.Content>
-
-                    <Tabs.Content value="ckdAssessment">
-                      <CKDAssessmentForm onNext={handleNext} />
+                    <Tabs.Content value="ncdQuestionnaire">
+                      <NCDQuestionnaireForm onNext={handleNext} />
                     </Tabs.Content>
 
                     <Tabs.Content value="medical">
@@ -888,7 +813,7 @@ const RiskAssessmentFormContent = ({
                 </div>
 
                 <div className="w-1/4 order-1 lg:order-2 hidden lg:block">
-                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 sticky top-4">
+                  <div className="bg-white rounded-lg p-4 shadow-sm border border-gray-100 sticky top-4 h-fit">
                     <Collapsible defaultOpen>
                       <CollapsibleTrigger className="flex items-center justify-between w-full mb-3">
                         <div>
@@ -981,25 +906,9 @@ const RiskAssessmentFormContent = ({
                           >
                             5. Family History
                           </Tabs.Trigger>
-                          {selectedNcd !== NCD.DIABETES && (
-                            <Tabs.Trigger
-                              className={cn(
-                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
-                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
-                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
-                                _patientId &&
-                                  !_assessmentId &&
-                                  'opacity-50 cursor-not-allowed'
-                              )}
-                              value="cardiacAssessment"
-                              disabled={!!(_patientId && !_assessmentId)}
-                            >
-                              6. Cardiac Assessment
-                            </Tabs.Trigger>
-                          )}
                           {((selectedNcd === 'all' &&
-                            selectedSpecificNcds.includes('copd')) ||
-                            selectedNcd === NCD.COPD) && (
+                            selectedSpecificNcds.length > 0) ||
+                            selectedNcd !== NCD.DIABETES) && (
                             <Tabs.Trigger
                               className={cn(
                                 'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
@@ -1009,87 +918,11 @@ const RiskAssessmentFormContent = ({
                                   !_assessmentId &&
                                   'opacity-50 cursor-not-allowed'
                               )}
-                              value="copdAssessment"
+                              value="ncdQuestionnaire"
                               disabled={!!(_patientId && !_assessmentId)}
                             >
-                              {getStepNumber('copdAssessment')}. COPD Assessment
-                            </Tabs.Trigger>
-                          )}
-                          {((selectedNcd === 'all' &&
-                            selectedSpecificNcds.includes('breastCancer')) ||
-                            selectedNcd === NCD.BREAST_CANCER) && (
-                            <Tabs.Trigger
-                              className={cn(
-                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
-                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
-                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
-                                _patientId &&
-                                  !_assessmentId &&
-                                  'opacity-50 cursor-not-allowed'
-                              )}
-                              value="breastCancerAssessment"
-                              disabled={!!(_patientId && !_assessmentId)}
-                            >
-                              {getStepNumber('breastCancerAssessment')}. Breast
-                              Cancer
-                            </Tabs.Trigger>
-                          )}
-                          {((selectedNcd === 'all' &&
-                            selectedSpecificNcds.includes('prostateCancer')) ||
-                            selectedNcd === NCD.PROSTATE_CANCER) && (
-                            <Tabs.Trigger
-                              className={cn(
-                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
-                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
-                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
-                                _patientId &&
-                                  !_assessmentId &&
-                                  'opacity-50 cursor-not-allowed'
-                              )}
-                              value="prostateCancerAssessment"
-                              disabled={!!(_patientId && !_assessmentId)}
-                            >
-                              {getStepNumber('prostateCancerAssessment')}.
-                              Prostate Cancer
-                            </Tabs.Trigger>
-                          )}
-                          {((selectedNcd === 'all' &&
-                            selectedSpecificNcds.includes(
-                              'colorectalCancer'
-                            )) ||
-                            selectedNcd === NCD.COLORECTAL_CANCER) && (
-                            <Tabs.Trigger
-                              className={cn(
-                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
-                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
-                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
-                                _patientId &&
-                                  !_assessmentId &&
-                                  'opacity-50 cursor-not-allowed'
-                              )}
-                              value="colorectalCancerAssessment"
-                              disabled={!!(_patientId && !_assessmentId)}
-                            >
-                              {getStepNumber('colorectalCancerAssessment')}.
-                              Colorectal Cancer
-                            </Tabs.Trigger>
-                          )}
-                          {((selectedNcd === 'all' &&
-                            selectedSpecificNcds.includes('ckd')) ||
-                            selectedNcd === NCD.CKD) && (
-                            <Tabs.Trigger
-                              className={cn(
-                                'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
-                                'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
-                                'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
-                                _patientId &&
-                                  !_assessmentId &&
-                                  'opacity-50 cursor-not-allowed'
-                              )}
-                              value="ckdAssessment"
-                              disabled={!!(_patientId && !_assessmentId)}
-                            >
-                              {getStepNumber('ckdAssessment')}. CKD Assessment
+                              {getStepNumber('ncdQuestionnaire')}. NCD
+                              Questionnaire
                             </Tabs.Trigger>
                           )}
                           <Tabs.Trigger

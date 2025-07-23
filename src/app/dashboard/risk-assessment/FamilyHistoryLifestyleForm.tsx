@@ -1,11 +1,10 @@
 import { Input } from '@/components/ui/input'
+import { Select } from '@/components/ui/select'
 import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
-import { useNcdFilter } from './NcdFilterContext'
-import { NCD } from '@/types/riskAssessment.types'
 import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
@@ -13,66 +12,48 @@ type Props = {
 }
 
 export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
-  const { control, watch } = useFormContext()
-  const { selectedNcd } = useNcdFilter()
+  const { control } = useFormContext()
   const isRequiredField = useRequiredFieldLabel()
 
   return (
     <div title="Family History & Lifestyle">
       <Text as="h2" className="font-medium mb-2">
-        Lifestyle/Behavioral Factors
+        Lifestyle Habits
       </Text>
 
-      <div className="space-y-6">
+      <div className="space-y-8">
+        {/* Smoking and Alcohol Section */}
         <div>
           <Text as="h3" variant="text/sm" className="font-medium mb-3 md:mb-5">
-            Lifestyle & Habits
+            Smoking and alcohol
           </Text>
           <div className="gap-4 grid grid-cols-1 lg:grid-cols-2">
-            {/* Tobacco Use */}
             <OptionWithRadioField
               label={isRequiredField(
-                'Do you currently smoke or use any tobacco products?',
-                'lifestyle.tobacco.currentlyUses'
+                'Have you ever smoked cigarettes?',
+                'lifestyle.everSmoked'
               )}
               options={['Yes', 'No']}
-              form={{ id: 'lifestyle.tobaccoCurrentlyUses' }}
-            />
-            {watch('lifestyle.tobaccoCurrentlyUses') === 'Yes' && (
-              <Controller
-                name="lifestyle.tobaccoDailyUnits"
-                control={control}
-                rules={{
-                  required:
-                    selectedNcd === NCD.CVD || selectedNcd === NCD.DIABETES,
-                }}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    placeholder="Enter number of cigarettes/units daily"
-                    label={isRequiredField(
-                      'If yes, how many cigarettes or units daily?',
-                      'lifestyle.tobacco.dailyAmount'
-                    )}
-                    labelStyle="lg:text-sm text-xs"
-                  />
-                )}
-              />
-            )}
-            <OptionWithRadioField
-              label={isRequiredField(
-                'Have you quit smoking in the past?',
-                'lifestyle.tobacco.quit'
-              )}
-              options={['Yes', 'No']}
-              form={{ id: 'lifestyle.tobaccoQuit' }}
+              form={{ id: 'lifestyle.everSmoked' }}
             />
 
-            {/* Alcohol Consumption */}
             <OptionWithRadioField
               label={isRequiredField(
-                'Do you consume alcohol?',
-                'lifestyle.alcohol.uses'
+                'Do you currently smoke cigarettes?',
+                'lifestyle.currentSmokingStatus'
+              )}
+              options={[
+                'Yes, currently smoking',
+                'Former smoker',
+                'Never smoked',
+              ]}
+              form={{ id: 'lifestyle.currentSmokingStatus' }}
+            />
+
+            <OptionWithRadioField
+              label={isRequiredField(
+                'How often do you consume alcohol?',
+                'lifestyle.alcoholFrequency'
               )}
               options={[
                 'Never',
@@ -81,139 +62,170 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 'Regularly (3–5 times a week)',
                 'Frequently (6 or more times a week)',
               ]}
-              form={{ id: 'lifestyle.alcoholUsage' }}
+              form={{ id: 'lifestyle.alcoholFrequency' }}
             />
-            {(watch('lifestyle.alcoholUsage')?.includes('Occasionally') ||
-              watch('lifestyle.alcoholUsage')?.includes('Frequently') ||
-              watch('lifestyle.alcoholUsage')?.includes('Regularly')) && (
-              <>
-                <Controller
-                  name="lifestyle.alcoholDaysPerWeek"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Enter number of days per week"
-                      label={isRequiredField(
-                        'If yes, how many days per week?',
-                        'lifestyle.alcohol.daysPerWeek'
-                      )}
-                      labelStyle="lg:text-sm text-xs"
-                    />
-                  )}
-                />
-                <Controller
-                  name="lifestyle.alcoholDrinksPerDay"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Enter average number of drinks per day"
-                      label={isRequiredField(
-                        'Average number of drinks per day',
-                        'lifestyle.alcohol.drinksPerDay'
-                      )}
-                      labelStyle="lg:text-sm text-xs"
-                    />
-                  )}
-                />
-              </>
-            )}
+          </div>
+        </div>
 
-            {/* Diet and Nutrition */}
+        {/* Diet Section */}
+        <div>
+          <Text as="h3" variant="text/sm" className="font-medium mb-3 md:mb-5">
+            Diet
+          </Text>
+          <div className="gap-4 grid grid-cols-1 lg:grid-cols-2">
             <OptionWithRadioField
               label={isRequiredField(
-                'Do you consume processed foods (e.g., Corn-beef)?',
-                'lifestyle.processedFoods'
+                'How often do you consume processed foods such as corned beef, sausages, noodles?',
+                'lifestyle.processedFoodsFrequency'
               )}
               options={[
+                'Never',
                 'Seldomly (less than once a week)',
                 'Occasionally (1–2 times a week)',
                 'Regularly (3–5 times a week)',
                 'Frequently (6 or more times a week)',
               ]}
-              form={{ id: 'lifestyle.dietProcessedFoods' }}
+              form={{ id: 'lifestyle.processedFoodsFrequency' }}
             />
+
             <OptionWithRadioField
               label={isRequiredField(
                 'Do you add salt to your food at the table?',
-                'lifestyle.saltAtTable'
+                'lifestyle.addSaltAtTable'
               )}
               options={['Yes', 'No']}
-              form={{ id: 'lifestyle.dietAddSalt' }}
-            />
-            <OptionWithRadioField
-              label={isRequiredField(
-                "How many servings of fruits and vegetables do you consume daily? (a serving is about the size of an adult's closed fist)",
-                'lifestyle.fruitsVegetables'
-              )}
-              options={['None', '1-2 servings', '3-4 servings', '5+ servings']}
-              form={{ id: 'lifestyle.dietFruitVegServings' }}
+              form={{ id: 'lifestyle.addSaltAtTable' }}
             />
 
-            {/* Physical Activity */}
             <OptionWithRadioField
               label={isRequiredField(
-                'Do you engage in physical activity?',
-                'lifestyle.physicalActivity'
+                'In the last month, about how many servings of vegetables or leafy green salads did you eat per week? (serving is each time you had vegetables or leafy greens, and includes leafy green salads and raw, cooked, canned, and frozen vegetables (including beans) Does not include fried vegetables like French fries or fried potatoes.)',
+                'lifestyle.vegetableServingsPerWeek'
               )}
               options={[
-                'Seldomly (less than once a week)',
-                'Occasionally (1–2 times a week)',
-                'Regularly (3–5 times a week)',
-                'Frequently (6 or more times a week)',
+                'None',
+                'Less than 1 serving/week',
+                '1-2 servings/week',
+                '3-4 servings/week',
+                '5-6 servings/week',
+                '7-10 servings/week',
+                'More than 10 servings/week',
               ]}
-              form={{ id: 'lifestyle.physicalActivityEngages' }}
+              form={{ id: 'lifestyle.vegetableServingsPerWeek' }}
             />
-            {Boolean(watch('lifestyle.physicalActivityEngages')) && (
-              <>
-                <Controller
-                  name="lifestyle.physicalActivityType"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Enter type of activity (e.g., walking, gym, sports)"
-                      label={isRequiredField(
-                        'If yes, what type?',
-                        'lifestyle.physicalActivityType'
-                      )}
-                      labelStyle="lg:text-sm text-xs"
-                    />
+
+            <OptionWithRadioField
+              label={isRequiredField(
+                "In the last month, how much did you usually eat in each serving of vegetables or leafy green salads? (a cup is about the size of an adult's closed fist)",
+                'lifestyle.vegetableServingSize'
+              )}
+              options={[
+                '½ cup or less',
+                'Between ½ cup - 1½ cups',
+                '1½ cups - 3 cups',
+                '3 cups - 5 cups',
+                'More than 5 cups',
+              ]}
+              form={{ id: 'lifestyle.vegetableServingSize' }}
+            />
+          </div>
+        </div>
+
+        {/* Physical Activity Section */}
+        <div>
+          <Text as="h3" variant="text/sm" className="font-medium mb-3 md:mb-5">
+            Physical Activity
+          </Text>
+          <div className="gap-4 grid grid-cols-1 lg:grid-cols-2">
+            <Controller
+              name="lifestyle.moderateActivityMonths"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="number"
+                  min="0"
+                  max="12"
+                  placeholder="How many months"
+                  label={isRequiredField(
+                    'In the past 12 months, how many months did you do any moderate physical activity? (Moderate activities DO NOT cause you to sweat or breathe hard. Some examples include vacuuming, gardening, easy walking for exercise, and so on.)',
+                    'lifestyle.moderateActivityMonths'
                   )}
+                  labelStyle="lg:text-sm text-xs"
                 />
-                <Controller
-                  name="lifestyle.physicalActivityDuration"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Enter duration in minutes/day"
-                      label={isRequiredField(
-                        'Duration (minutes/day)',
-                        'lifestyle.physicalActivityDuration'
-                      )}
-                      labelStyle="lg:text-sm text-xs"
-                    />
+              )}
+            />
+
+            <Controller
+              name="lifestyle.moderateActivityHoursPerWeek"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  placeholder="Select hours per week"
+                  label="During those months, on average, about how many hours per week did you do moderate physical activities?"
+                  labelStyle="lg:text-sm text-xs"
+                  options={[
+                    { value: 'Up to 1 hour/week', label: 'Up to 1 hour/week' },
+                    {
+                      value: 'Between 1 - 2 hours/week',
+                      label: 'Between 1 - 2 hours/week',
+                    },
+                    { value: '2 - 3 hours/week', label: '2 - 3 hours/week' },
+                    { value: '3 - 4 hours/week', label: '3 - 4 hours/week' },
+                    {
+                      value: 'More than 4 hours/week',
+                      label: 'More than 4 hours/week',
+                    },
+                  ]}
+                />
+              )}
+            />
+
+            <Controller
+              name="lifestyle.vigorousActivityMonths"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="number"
+                  min="0"
+                  max="12"
+                  placeholder="How many months"
+                  label={isRequiredField(
+                    'In the past 12 months, how many months did you do any vigorous physical activity? (Vigorous activities include all activities that DO cause you to sweat or breathe hard. Some examples include racquet sports, basketball, running, fast biking, exercise class, weight lifting, backpacking, swimming, and heavy labor such as shoveling dirt.)',
+                    'lifestyle.vigorousActivityMonths'
                   )}
+                  labelStyle="lg:text-sm text-xs"
                 />
-                <Controller
-                  name="lifestyle.physicalActivityFrequency"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Enter frequency in days/week"
-                      label={isRequiredField(
-                        'Frequency (days/week)',
-                        'lifestyle.physicalActivityFrequency'
-                      )}
-                      labelStyle="lg:text-sm text-xs"
-                    />
-                  )}
+              )}
+            />
+
+            <Controller
+              name="lifestyle.vigorousActivityHoursPerWeek"
+              control={control}
+              render={({ field }) => (
+                <Select
+                  {...field}
+                  placeholder="Select hours per week"
+                  label="During those months, on average, about how many hours per week did you do vigorous physical activities?"
+                  labelStyle="lg:text-sm text-xs"
+                  options={[
+                    { value: 'Up to 1 hour/week', label: 'Up to 1 hour/week' },
+                    {
+                      value: 'Between 1 - 2 hours/week',
+                      label: 'Between 1 - 2 hours/week',
+                    },
+                    { value: '2 - 3 hours/week', label: '2 - 3 hours/week' },
+                    { value: '3 - 4 hours/week', label: '3 - 4 hours/week' },
+                    {
+                      value: 'More than 4 hours/week',
+                      label: 'More than 4 hours/week',
+                    },
+                  ]}
                 />
-              </>
-            )}
+              )}
+            />
           </div>
         </div>
       </div>

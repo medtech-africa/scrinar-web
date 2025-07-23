@@ -95,7 +95,7 @@ const FACTOR_LABELS: { [key: string]: string } = {
   ageAtFirstBirth: 'Age at First Birth',
   ageAtMenopause: 'Age at Menopause',
   hormoneReplacementTherapy: 'Hormone Replacement Therapy',
-  benignBreastDisease: 'Benign Breast Disease',
+  breastBiopsy: 'Breast Biopsy',
   familyHistory: 'Family History',
   brcaMutationStatus: 'BRCA Mutation Status',
   breastDensity: 'Breast Density',
