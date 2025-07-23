@@ -124,8 +124,6 @@ export interface RiskAssessmentModelRequestData {
   familyHistory?: FamilyHistory
   lifestyle?: Lifestyle
   cardiac?: Cardiac
-  symptoms?: Symptoms
-  sleepPattern?: string
   previousHealthScreening?: PreviousHealthScreening
   consentAgreement?: boolean
   reportEmail?: string
@@ -216,19 +214,6 @@ export interface PreviousHealthScreening {
   bloodSugarLevel?: string
   bmiAvailable?: string
   bmiLevel?: string
-}
-
-export interface SleepPatterns {
-  hoursPerNight: string
-}
-
-export interface Symptoms {
-  chestPain: string
-  shortnessOfBreath: string
-  irregularHeartbeat: string
-  hypertension: string
-  diabetes: string
-  highCholesterol: string
 }
 
 export interface Vitals {

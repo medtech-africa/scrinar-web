@@ -19,7 +19,6 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   temperature: 'vitals.temperature',
 
   // Blood Test fields
-  diabetes: 'symptoms.diabetes',
   cholesterol: 'bloodTest.cholesterolTotal',
   serumCreatinine: 'bloodTest.serumCreatinine',
   pefLevel: 'copd.pefLevel',
@@ -63,9 +62,6 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   colonoscopyHistory: 'colorectalCancer.colonoscopyHistory',
   aspirinUse: 'colorectalCancer.aspirinUse',
   nsaidUse: 'colorectalCancer.nsaidUse',
-
-  // CKD fields
-  hypertension: 'symptoms.hypertension',
 }
 
 /**
@@ -88,7 +84,6 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   temperature: 'Temperature',
 
   // Blood Test fields
-  diabetes: 'Diabetes Status',
   cholesterol: 'Total Cholesterol',
   serumCreatinine: 'Serum Creatinine',
   pefLevel: 'PEF Level',

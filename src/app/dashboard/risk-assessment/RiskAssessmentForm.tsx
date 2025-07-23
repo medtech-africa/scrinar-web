@@ -26,7 +26,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import { Text } from '@/components/ui/text'
-import { ScreeningQuestionsForm } from './ScreeningQuestionsForm'
+
 import { FamilyHistoryForm } from './FamilyHistoryForm'
 import { NCDQuestionnaireForm } from './NCDQuestionnaireForm'
 import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
@@ -331,7 +331,6 @@ const RiskAssessmentFormContent = ({
           bmi: 'vitals.bmi',
           height: 'vitals.height',
           weight: 'vitals.weight',
-          diabetes: 'symptoms.diabetes',
           cholesterol: 'vitals.totalCholesterol',
           smoking: 'lifestyle.everSmoked',
           hasQuitSmoking: 'lifestyle.currentSmokingStatus',
@@ -509,13 +508,7 @@ const RiskAssessmentFormContent = ({
             colorectalCancer: currentFormData.colorectalCancer,
           }
           break
-        case 'medical':
-          sectionData = {
-            symptoms: currentFormData.symptoms,
-            sleepPattern: currentFormData.sleepPattern,
-            previousHealthScreening: currentFormData.previousHealthScreening,
-          }
-          break
+
         case 'historical':
           sectionData = {
             previousHealthScreening: currentFormData.previousHealthScreening,
@@ -575,7 +568,7 @@ const RiskAssessmentFormContent = ({
       assessmentTabs.push('ncdQuestionnaire')
     }
 
-    const finalTabs = ['medical', 'historical']
+    const finalTabs = ['historical']
     return [...baseTabs, ...assessmentTabs, ...finalTabs]
   }
 
@@ -788,10 +781,6 @@ const RiskAssessmentFormContent = ({
                       <NCDQuestionnaireForm onNext={handleNext} />
                     </Tabs.Content>
 
-                    <Tabs.Content value="medical">
-                      <ScreeningQuestionsForm onNext={handleNext} />
-                    </Tabs.Content>
-
                     <Tabs.Content value="historical">
                       <HistoricalDataCollectionForm />
                       <div className="flex justify-end mt-6">
@@ -925,20 +914,7 @@ const RiskAssessmentFormContent = ({
                               Questionnaire
                             </Tabs.Trigger>
                           )}
-                          <Tabs.Trigger
-                            className={cn(
-                              'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
-                              'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
-                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
-                              _patientId &&
-                                !_assessmentId &&
-                                'opacity-50 cursor-not-allowed'
-                            )}
-                            value="medical"
-                            disabled={!!(_patientId && !_assessmentId)}
-                          >
-                            {getStepNumber('medical')}. Medical History
-                          </Tabs.Trigger>
+
                           <Tabs.Trigger
                             className={cn(
                               'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',

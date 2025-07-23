@@ -19,7 +19,6 @@ interface NcdRequiredFields {
     gender: boolean
     systolicBP: boolean
     bmi: boolean
-    diabetes: boolean
     cholesterol: boolean
     smoking: boolean
     hasQuitSmoking: boolean
@@ -30,7 +29,6 @@ interface NcdRequiredFields {
     systolicBP: boolean
     height: boolean
     weight: boolean
-    diabetes: boolean
     cholesterol: boolean
     smoking: boolean
     hasQuitSmoking: boolean
@@ -96,7 +94,6 @@ const ncdRequiredFields: NcdRequiredFields = {
     age: true,
     gender: true,
     bmi: true,
-    diabetes: true,
     cholesterol: true,
     smoking: true,
     hasQuitSmoking: true,
@@ -108,7 +105,6 @@ const ncdRequiredFields: NcdRequiredFields = {
     systolicBP: true,
     height: true,
     weight: true,
-    diabetes: true,
     cholesterol: true,
     smoking: true,
     hasQuitSmoking: true,
