@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { useNcdFilter } from './NcdFilterContext'
 import { NCD } from '@/types/riskAssessment.types'
-import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
   onNext: () => void
@@ -13,7 +12,6 @@ type Props = {
 export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
   const { register: customRegister } = useFormContext()
   const { selectedNcd } = useNcdFilter()
-  const isRequiredField = useRequiredFieldLabel()
 
   // Only show this form for Prostate Cancer or all NCDs
   if (selectedNcd !== 'all' && selectedNcd !== NCD.PROSTATE_CANCER) {
