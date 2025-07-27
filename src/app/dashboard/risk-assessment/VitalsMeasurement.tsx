@@ -21,7 +21,6 @@ import isValidNumber from '@/utils/isValidNumber'
 import { Button } from '@/components/ui/button'
 import MeasurementGuides from '@/components/risk-assessment/MeasurementGuides'
 import { useNcdFilter } from './NcdFilterContext'
-import { NCD } from '@/types/riskAssessment.types'
 import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
@@ -123,7 +122,7 @@ const validatePulse = (value: string) => {
 
 export const VitalsMeasurement = ({ onNext }: Props) => {
   const { control, watch, setValue } = useFormContext()
-  const { selectedNcd } = useNcdFilter()
+  const { hasNcdSelected } = useNcdFilter()
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
   >({})
@@ -246,7 +245,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                       />
                     )}
                   />
-                  {(selectedNcd === 'all' || selectedNcd === NCD.CVD) && (
+                  {(hasNcdSelected('cvd') || hasNcdSelected('diabetes')) && (
                     <Controller
                       name="vitals.waist"
                       control={control}
@@ -273,7 +272,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                   )}
                 </div>
 
-                {(selectedNcd === 'all' || selectedNcd === NCD.CVD) && (
+                {(hasNcdSelected('cvd') || hasNcdSelected('diabetes')) && (
                   <div className="my-4">
                     <div className="bg-grey-50 w-full p-4 flex justify-center">
                       <Text>BMI Result</Text>

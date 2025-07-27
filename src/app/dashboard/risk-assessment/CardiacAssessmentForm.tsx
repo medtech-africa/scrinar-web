@@ -4,7 +4,6 @@ import { OptionWithRadioField } from './OptionWithRadioField'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
 import { useNcdFilter } from './NcdFilterContext'
-import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
@@ -13,13 +12,13 @@ type Props = {
 export const CardiacAssessmentForm = ({ onNext }: Props) => {
   const { watch } = useFormContext()
 
-  const { selectedNcd } = useNcdFilter()
-  // Only show this form for CVD or all NCDs
+  const { hasNcdSelected } = useNcdFilter()
+  // Only show this form for CVD or diabetes
 
   const hasChestPain = watch('cardiac.chestPain') === 'Yes'
   const hasChestPainLocation = watch('cardiac.chestPainLocation') === 'Yes'
 
-  if (selectedNcd === NCD.DIABETES) {
+  if (!hasNcdSelected('cvd') && !hasNcdSelected('diabetes')) {
     return null
   }
 

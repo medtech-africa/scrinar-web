@@ -3,7 +3,6 @@ import { useFormContext } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { useNcdFilter } from './NcdFilterContext'
-import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
@@ -11,10 +10,10 @@ type Props = {
 
 export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
   const { register: customRegister } = useFormContext()
-  const { selectedNcd } = useNcdFilter()
+  const { hasNcdSelected } = useNcdFilter()
 
-  // Only show this form for Prostate Cancer or all NCDs
-  if (selectedNcd !== 'all' && selectedNcd !== NCD.PROSTATE_CANCER) {
+  // Only show this form for Prostate Cancer
+  if (!hasNcdSelected('prostateCancer')) {
     return null
   }
 

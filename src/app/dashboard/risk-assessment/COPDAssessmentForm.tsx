@@ -4,7 +4,6 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { Input } from '@/components/ui/input'
 import { useNcdFilter } from './NcdFilterContext'
-import { NCD } from '@/types/riskAssessment.types'
 import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
@@ -12,12 +11,12 @@ type Props = {
 }
 
 export const COPDAssessmentForm = ({ onNext }: Props) => {
-  const { selectedNcd } = useNcdFilter()
+  const { hasNcdSelected } = useNcdFilter()
   const { register: customRegister } = useFormContext()
   const isRequiredField = useRequiredFieldLabel()
 
-  // Only show this form for COPD or all NCDs
-  if (selectedNcd !== 'all' && selectedNcd !== NCD.COPD) {
+  // Only show this form for COPD
+  if (!hasNcdSelected('copd')) {
     return null
   }
 

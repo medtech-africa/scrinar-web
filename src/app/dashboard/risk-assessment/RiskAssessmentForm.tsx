@@ -32,10 +32,9 @@ import { NCDQuestionnaireForm } from './NCDQuestionnaireForm'
 import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
 import { slugify } from '@/utils/slugify'
 import { NcdFilterProvider, useNcdFilter } from './NcdFilterContext'
-import { NCD } from '@/types/riskAssessment.types'
 import { useRiskAssessmentPolling } from '@/hooks/queries/useRiskAssessment'
 import { getFieldPath, getFieldDisplayName } from '@/constants/fieldMappings'
-import { NcdSubFilter } from './NcdSubFilter'
+
 import { useRouter } from 'next/navigation'
 
 // Status Section Component
@@ -187,13 +186,12 @@ const RiskAssessmentFormContent = ({
   const [assessmentDone, setAssessmentDone] = useState(false)
   const [activeTab, setActiveTab] = useState('bio')
   const {
-    selectedNcd,
-    setSelectedNcd,
-    selectedSpecificNcds,
-    toggleSpecificNcd,
-    selectAllSpecificNcds,
-    deselectAllSpecificNcds,
+    selectedNcds,
+    toggleNcd,
+    selectAllNcds,
+    deselectAllNcds,
     getRequiredFields,
+    hasNcdSelected,
   } = useNcdFilter()
   const formMethods = useForm({ defaultValues: data?.requestData })
 
@@ -289,82 +287,27 @@ const RiskAssessmentFormContent = ({
   })
 
   const isFormValid = (_data: any) => {
-    if (selectedNcd === 'all') {
-      // Check if all required fields for selected specific NCDs are filled
-      const formData = formMethods.watch()
-
-      // Check if all selected specific NCDs have their required fields filled
-      const allRequiredFieldsFilled = selectedSpecificNcds.every((ncdType) => {
-        const requiredFields = getRequiredFields(ncdType)
-        if (!requiredFields) return true
-
-        return Object.entries(requiredFields).every(([field, isRequired]) => {
-          if (!isRequired) return true
-
-          const formField = getFieldPath(field)
-          const fieldValue = formField
-            .split('.')
-            .reduce((obj, key) => obj?.[key], formData as any)
-
-          return !!fieldValue
-        })
-      })
-
-      return allRequiredFieldsFilled && !!formMethods.watch('personalInfo.age')
-    }
-
-    const requiredFields = getRequiredFields(selectedNcd)
-    if (!requiredFields) return false
-
+    // Check if all required fields for selected NCDs are filled
     const formData = formMethods.watch()
 
-    // Check if all required fields are filled
-    const isAllFieldsFilled = Object.entries(requiredFields).every(
-      ([field, isRequired]) => {
+    // Check if all selected NCDs have their required fields filled
+    const allRequiredFieldsFilled = selectedNcds.every((ncdType) => {
+      const requiredFields = getRequiredFields(ncdType)
+      if (!requiredFields) return true
+
+      return Object.entries(requiredFields).every(([field, isRequired]) => {
         if (!isRequired) return true
 
-        // Map form fields to required fields
-        const fieldMap: Record<string, string> = {
-          age: 'personalInfo.age',
-          gender: 'personalInfo.gender',
-          systolicBP: 'vitals.systolicBP',
-          bmi: 'vitals.bmi',
-          height: 'vitals.height',
-          weight: 'vitals.weight',
-          cholesterol: 'vitals.totalCholesterol',
-          smoking: 'lifestyle.everSmoked',
-          hasQuitSmoking: 'lifestyle.currentSmokingStatus',
-          // COPD fields
-          coughDuration: 'copd.coughDuration',
-          shortnessOfBreath: 'copd.shortnessOfBreath',
-          activityLimitations: 'copd.activityLimitations',
-          exposureToDust: 'copd.exposureToDust',
-          // Breast Cancer fields
-          ageAtMenarche: 'breastCancer.ageAtMenarche',
-          ageAtFirstBirth: 'breastCancer.ageAtFirstBirth',
-          menopauseStatus: 'breastCancer.menopauseStatus',
-          hormoneReplacementTherapy: 'breastCancer.hormoneReplacementTherapy',
-          breastBiopsy: 'breastCancer.breastBiopsy',
-          familyHistoryBreastCancer: 'familyHistory.breastCancer',
-          familyHistoryOvarianCancer: 'familyHistory.ovarianCancer',
-          brcaMutationStatus: 'breastCancer.brcaMutationStatus',
-          breastDensity: 'breastCancer.breastDensity',
-          // Prostate Cancer fields
-          psaLevel: 'bloodTest.psaLevel',
-          familyHistoryProstateCancer: 'familyHistory.prostateCancer',
-          urinarySymptoms: 'prostateCancer.urinarySymptomsIncompleteEmptying',
-        }
-
-        const formField = fieldMap[field]
+        const formField = getFieldPath(field)
         const fieldValue = formField
           .split('.')
           .reduce((obj, key) => obj?.[key], formData as any)
 
         return !!fieldValue
-      }
-    )
+      })
+    })
 
-    return isAllFieldsFilled
+    return allRequiredFieldsFilled && !!formMethods.watch('personalInfo.age')
   }
 
   const handleSubmit = (data: RiskAssessmentModelRequestData) => {
@@ -395,43 +338,14 @@ const RiskAssessmentFormContent = ({
     analyzeRisk(_assessmentId)
   }
 
-  const isFormFilledError = (data: any) => {
-    if (selectedNcd === 'all') {
-      // Check which specific NCDs have missing required fields
-      const formData = formMethods.watch()
-      const missingFieldsByNcd: Record<string, string[]> = {}
+  const isFormFilledError = (_data: any) => {
+    // Check which NCDs have missing required fields
+    const formData = formMethods.watch()
+    const missingFieldsByNcd: Record<string, string[]> = {}
 
-      selectedSpecificNcds.forEach((ncdType) => {
-        const requiredFields = getRequiredFields(ncdType)
-        if (!requiredFields) return
-
-        const missingFields = Object.entries(requiredFields)
-          .filter(([field, isRequired]) => {
-            if (!isRequired) return false
-
-            const formField = getFieldPath(field)
-            const fieldValue = formField
-              .split('.')
-              .reduce((obj, key) => obj?.[key], formData as any)
-
-            return !fieldValue
-          })
-          .map(([field]) => getFieldDisplayName(field))
-
-        if (missingFields.length > 0) {
-          missingFieldsByNcd[ncdType] = missingFields
-        }
-      })
-
-      if (Object.keys(missingFieldsByNcd).length > 0) {
-        const errorMessages = Object.entries(missingFieldsByNcd).map(
-          ([ncdType, fields]) => `${ncdType}: ${fields.join(', ')}`
-        )
-        return `Please fill required fields: ${errorMessages.join('; ')}`
-      }
-    } else {
-      const requiredFields = getRequiredFields(selectedNcd)
-      if (!requiredFields) return 'Invalid NCD type selected'
+    selectedNcds.forEach((ncdType) => {
+      const requiredFields = getRequiredFields(ncdType)
+      if (!requiredFields) return
 
       const missingFields = Object.entries(requiredFields)
         .filter(([field, isRequired]) => {
@@ -440,14 +354,22 @@ const RiskAssessmentFormContent = ({
           const formField = getFieldPath(field)
           const fieldValue = formField
             .split('.')
-            .reduce((obj, key) => obj?.[key], data as any)
+            .reduce((obj, key) => obj?.[key], formData as any)
+
           return !fieldValue
         })
         .map(([field]) => getFieldDisplayName(field))
 
       if (missingFields.length > 0) {
-        return `Please fill in the following required fields: ${missingFields.join(', ')}`
+        missingFieldsByNcd[ncdType] = missingFields
       }
+    })
+
+    if (Object.keys(missingFieldsByNcd).length > 0) {
+      const errorMessages = Object.entries(missingFieldsByNcd).map(
+        ([ncdType, fields]) => `${ncdType}: ${fields.join(', ')}`
+      )
+      return `Please fill required fields: ${errorMessages.join('; ')}`
     }
 
     if (!formMethods.watch('personalInfo.age')) {
@@ -559,10 +481,7 @@ const RiskAssessmentFormContent = ({
     const assessmentTabs = []
 
     // Check if any NCD assessments should be shown
-    const shouldShowNCDQuestionnaire =
-      selectedNcd === 'all'
-        ? selectedSpecificNcds.length > 0
-        : selectedNcd !== NCD.DIABETES
+    const shouldShowNCDQuestionnaire = selectedNcds.length > 0
 
     if (shouldShowNCDQuestionnaire) {
       assessmentTabs.push('ncdQuestionnaire')
@@ -638,118 +557,149 @@ const RiskAssessmentFormContent = ({
                     </div>
 
                     {/* NCD Type Selection */}
-                    <div className="bg-white rounded-lg border border-gray-200 p-4">
-                      <Text as="h3" className="font-medium mb-3">
-                        Assessment Type
-                      </Text>
-                      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2">
-                        <button
-                          type="button"
-                          onClick={() => setSelectedNcd('all')}
-                          className={cn(
-                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
-                            selectedNcd === 'all'
-                              ? 'bg-primary text-white border-primary shadow-sm'
-                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-                          )}
-                        >
-                          All NCDs
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedNcd('cvd')}
-                          className={cn(
-                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
-                            selectedNcd === 'cvd'
-                              ? 'bg-primary text-white border-primary shadow-sm'
-                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-                          )}
-                        >
-                          CVD
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedNcd('diabetes')}
-                          className={cn(
-                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
-                            selectedNcd === 'diabetes'
-                              ? 'bg-primary text-white border-primary shadow-sm'
-                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-                          )}
-                        >
-                          Diabetes
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedNcd('copd')}
-                          className={cn(
-                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
-                            selectedNcd === 'copd'
-                              ? 'bg-primary text-white border-primary shadow-sm'
-                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-                          )}
-                        >
-                          COPD
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedNcd('breastCancer')}
-                          className={cn(
-                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
-                            selectedNcd === 'breastCancer'
-                              ? 'bg-primary text-white border-primary shadow-sm'
-                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-                          )}
-                        >
-                          Breast Cancer
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedNcd('prostateCancer')}
-                          className={cn(
-                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
-                            selectedNcd === 'prostateCancer'
-                              ? 'bg-primary text-white border-primary shadow-sm'
-                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-                          )}
-                        >
-                          Prostate Cancer
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedNcd('colorectalCancer')}
-                          className={cn(
-                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
-                            selectedNcd === 'colorectalCancer'
-                              ? 'bg-primary text-white border-primary shadow-sm'
-                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-                          )}
-                        >
-                          Colorectal Cancer
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSelectedNcd('ckd')}
-                          className={cn(
-                            'px-3 py-2 text-sm rounded-md border transition-all font-medium',
-                            selectedNcd === 'ckd'
-                              ? 'bg-primary text-white border-primary shadow-sm'
-                              : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
-                          )}
-                        >
-                          CKD
-                        </button>
-                      </div>
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+                      <Collapsible defaultOpen>
+                        <CollapsibleTrigger className="flex items-center justify-between w-full mb-3">
+                          <Text as="h3" className="font-semibold">
+                            Select NCD
+                          </Text>
 
-                      {/* Sub-filter for All NCDs */}
-                      {selectedNcd === 'all' && (
-                        <NcdSubFilter
-                          selectedSpecificNcds={selectedSpecificNcds}
-                          toggleSpecificNcd={toggleSpecificNcd}
-                          selectAllSpecificNcds={selectAllSpecificNcds}
-                          deselectAllSpecificNcds={deselectAllSpecificNcds}
-                        />
-                      )}
+                          <IconPicker
+                            icon="arrowDown"
+                            className="transition-transform duration-200 group-data-[state=open]:rotate-180"
+                          />
+                        </CollapsibleTrigger>
+                        <CollapsibleContent>
+                          <Text variant="text/sm" className="mb-3">
+                            Choose a minimum of 2 NCDs to get started with your
+                            assessment
+                          </Text>
+                          <div className="grid grid-cols-2 gap-4">
+                            <div className="space-y-3">
+                              <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={selectedNcds.length === 7}
+                                  onChange={() => {
+                                    if (selectedNcds.length === 7) {
+                                      deselectAllNcds()
+                                    } else {
+                                      selectAllNcds()
+                                    }
+                                  }}
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                />
+                                <Text
+                                  variant="text/sm"
+                                  className="font-medium text-gray-700"
+                                >
+                                  All NCDs
+                                </Text>
+                              </label>
+                              <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={hasNcdSelected('cvd')}
+                                  onChange={() => toggleNcd('cvd')}
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                />
+                                <Text
+                                  variant="text/sm"
+                                  className="font-medium text-gray-700"
+                                >
+                                  Cardiovascular Disease
+                                </Text>
+                              </label>
+                              <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={hasNcdSelected('diabetes')}
+                                  onChange={() => toggleNcd('diabetes')}
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                />
+                                <Text
+                                  variant="text/sm"
+                                  className="font-medium text-gray-700"
+                                >
+                                  Diabetes
+                                </Text>
+                              </label>
+                              <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={hasNcdSelected('copd')}
+                                  onChange={() => toggleNcd('copd')}
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                />
+                                <Text
+                                  variant="text/sm"
+                                  className="font-medium text-gray-700"
+                                >
+                                  COPD
+                                </Text>
+                              </label>
+                            </div>
+                            <div className="space-y-3">
+                              <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={hasNcdSelected('breastCancer')}
+                                  onChange={() => toggleNcd('breastCancer')}
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                />
+                                <Text
+                                  variant="text/sm"
+                                  className="font-medium text-gray-700"
+                                >
+                                  Breast Cancer
+                                </Text>
+                              </label>
+                              <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={hasNcdSelected('prostateCancer')}
+                                  onChange={() => toggleNcd('prostateCancer')}
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                />
+                                <Text
+                                  variant="text/sm"
+                                  className="font-medium text-gray-700"
+                                >
+                                  Prostate Cancer
+                                </Text>
+                              </label>
+                              <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={hasNcdSelected('colorectalCancer')}
+                                  onChange={() => toggleNcd('colorectalCancer')}
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                />
+                                <Text
+                                  variant="text/sm"
+                                  className="font-medium text-gray-700"
+                                >
+                                  Colorectal Cancer
+                                </Text>
+                              </label>
+                              <label className="flex items-center space-x-3 cursor-pointer">
+                                <input
+                                  type="checkbox"
+                                  checked={hasNcdSelected('ckd')}
+                                  onChange={() => toggleNcd('ckd')}
+                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                />
+                                <Text
+                                  variant="text/sm"
+                                  className="font-medium text-gray-700"
+                                >
+                                  CKD
+                                </Text>
+                              </label>
+                            </div>
+                          </div>
+                        </CollapsibleContent>
+                      </Collapsible>
                     </div>
                   </div>
 
@@ -809,13 +759,12 @@ const RiskAssessmentFormContent = ({
                           <Text variant="text/md" className="font-semibold">
                             Assessment Progress
                           </Text>
-                          {selectedNcd === 'all' && (
+                          {selectedNcds.length > 0 && (
                             <Text
                               variant="text/xs"
                               className="text-gray-500 mt-1"
                             >
-                              {selectedSpecificNcds.length} assessment types
-                              selected
+                              {selectedNcds.length} assessment types selected
                             </Text>
                           )}
                         </div>
@@ -895,9 +844,7 @@ const RiskAssessmentFormContent = ({
                           >
                             5. Family History
                           </Tabs.Trigger>
-                          {((selectedNcd === 'all' &&
-                            selectedSpecificNcds.length > 0) ||
-                            selectedNcd !== NCD.DIABETES) && (
+                          {selectedNcds.length > 0 && (
                             <Tabs.Trigger
                               className={cn(
                                 'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',

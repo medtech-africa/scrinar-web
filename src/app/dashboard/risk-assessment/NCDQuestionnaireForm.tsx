@@ -3,53 +3,52 @@
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
 import { useNcdFilter } from './NcdFilterContext'
-import { NCD } from '@/types/riskAssessment.types'
 import CardiacAssessmentForm from './CardiacAssessmentForm'
 import { COPDAssessmentForm } from './COPDAssessmentForm'
 import { BreastCancerAssessmentForm } from './BreastCancerAssessmentForm'
 import { ProstateCancerAssessmentForm } from './ProstateCancerAssessmentForm'
 import { ColorectalCancerAssessmentForm } from './ColorectalCancerAssessmentForm'
 import { CKDAssessmentForm } from './CKDAssessmentForm'
-import { Separator } from '@/components/ui/separator'
+import { useState } from 'react'
+import { cn } from '@/lib/utils'
 
 interface Props {
   onNext: () => void
 }
 
 export const NCDQuestionnaireForm = ({ onNext }: Props) => {
-  const { selectedNcd, selectedSpecificNcds } = useNcdFilter()
+  const { hasNcdSelected } = useNcdFilter()
+  const [activeNcdTab, setActiveNcdTab] = useState<string>('')
 
   // Determine which assessments to show based on selected NCDs
-  const showCardiac =
-    selectedNcd === 'all'
-      ? selectedSpecificNcds.includes('cvd') ||
-        selectedSpecificNcds.includes('diabetes')
-      : selectedNcd !== NCD.DIABETES
+  const showCardiac = hasNcdSelected('cvd') || hasNcdSelected('diabetes')
 
-  const showCOPD =
-    selectedNcd === 'all'
-      ? selectedSpecificNcds.includes('copd')
-      : selectedNcd === NCD.COPD
+  const showCOPD = hasNcdSelected('copd')
 
-  const showBreastCancer =
-    selectedNcd === 'all'
-      ? selectedSpecificNcds.includes('breastCancer')
-      : selectedNcd === NCD.BREAST_CANCER
+  const showBreastCancer = hasNcdSelected('breastCancer')
 
-  const showProstateCancer =
-    selectedNcd === 'all'
-      ? selectedSpecificNcds.includes('prostateCancer')
-      : selectedNcd === NCD.PROSTATE_CANCER
+  const showProstateCancer = hasNcdSelected('prostateCancer')
 
-  const showColorectalCancer =
-    selectedNcd === 'all'
-      ? selectedSpecificNcds.includes('colorectalCancer')
-      : selectedNcd === NCD.COLORECTAL_CANCER
+  const showColorectalCancer = hasNcdSelected('colorectalCancer')
 
-  const showCKD =
-    selectedNcd === 'all'
-      ? selectedSpecificNcds.includes('ckd')
-      : selectedNcd === NCD.CKD
+  const showCKD = hasNcdSelected('ckd')
+
+  // Create available tabs based on what's selected
+  const availableTabs = []
+  if (showCardiac) availableTabs.push({ id: 'cvd', label: 'CVD' })
+  if (showCOPD) availableTabs.push({ id: 'copd', label: 'COPD' })
+  if (showBreastCancer)
+    availableTabs.push({ id: 'breastCancer', label: 'Breast Cancer' })
+  if (showProstateCancer)
+    availableTabs.push({ id: 'prostateCancer', label: 'Prostate Cancer' })
+  if (showColorectalCancer)
+    availableTabs.push({ id: 'colorectalCancer', label: 'Colorectal Cancer' })
+  if (showCKD) availableTabs.push({ id: 'ckd', label: 'CKD' })
+
+  // Set default active tab if none is set
+  if (!activeNcdTab && availableTabs.length > 0) {
+    setActiveNcdTab(availableTabs[0].id)
+  }
 
   // Count how many assessments are shown
   const assessmentCount = [
@@ -83,65 +82,98 @@ export const NCDQuestionnaireForm = ({ onNext }: Props) => {
   return (
     <div>
       <Text as="h2" className="font-medium mb-6 md:mb-8">
-        NCD Questionnaire
-      </Text>
-      <Text variant="text/sm" className="text-gray-500 mb-6">
-        Complete the following assessments based on your selected NCD types
+        NCD Questionnaire Section
       </Text>
 
+      {/* NCD Type Tabs */}
+      <div className="mb-6">
+        <div className="grid grid-cols-4 gap-2">
+          {availableTabs.slice(0, 4).map((tab) => (
+            <button
+              key={tab.id}
+              type="button"
+              onClick={() => setActiveNcdTab(tab.id)}
+              className={cn(
+                'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                activeNcdTab === tab.id
+                  ? 'bg-primary text-white border-primary shadow-sm'
+                  : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+              )}
+            >
+              {tab.label}
+            </button>
+          ))}
+        </div>
+        {availableTabs.length > 4 && (
+          <div className="grid grid-cols-3 gap-2 mt-2">
+            {availableTabs.slice(4).map((tab) => (
+              <button
+                key={tab.id}
+                type="button"
+                onClick={() => setActiveNcdTab(tab.id)}
+                className={cn(
+                  'px-3 py-2 text-sm rounded-md border transition-all font-medium',
+                  activeNcdTab === tab.id
+                    ? 'bg-primary text-white border-primary shadow-sm'
+                    : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50 hover:border-gray-400'
+                )}
+              >
+                {tab.label}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Assessment Content based on active tab */}
       <div className="space-y-8">
         {/* Cardiovascular/Cardiac Assessment */}
-        {showCardiac && (
+        {showCardiac && activeNcdTab === 'cvd' && (
           <div>
             <div className="[&_button]:hidden">
               <CardiacAssessmentForm onNext={() => {}} />
             </div>
-            <Separator className="my-6" />
           </div>
         )}
 
         {/* COPD Assessment */}
-        {showCOPD && (
+        {showCOPD && activeNcdTab === 'copd' && (
           <div>
             <div className="[&_button]:hidden">
               <COPDAssessmentForm onNext={() => {}} />
             </div>
-            <Separator className="my-6" />
           </div>
         )}
 
         {/* Breast Cancer Assessment */}
-        {showBreastCancer && (
+        {showBreastCancer && activeNcdTab === 'breastCancer' && (
           <div>
             <div className="[&_button]:hidden">
               <BreastCancerAssessmentForm onNext={() => {}} />
             </div>
-            <Separator className="my-6" />
           </div>
         )}
 
         {/* Prostate Cancer Assessment */}
-        {showProstateCancer && (
+        {showProstateCancer && activeNcdTab === 'prostateCancer' && (
           <div>
             <div className="[&_button]:hidden">
               <ProstateCancerAssessmentForm onNext={() => {}} />
             </div>
-            <Separator className="my-6" />
           </div>
         )}
 
         {/* Colorectal Cancer Assessment */}
-        {showColorectalCancer && (
+        {showColorectalCancer && activeNcdTab === 'colorectalCancer' && (
           <div>
             <div className="[&_button]:hidden">
               <ColorectalCancerAssessmentForm onNext={() => {}} />
             </div>
-            <Separator className="my-6" />
           </div>
         )}
 
         {/* CKD Assessment */}
-        {showCKD && (
+        {showCKD && activeNcdTab === 'ckd' && (
           <div>
             <div className="[&_button]:hidden">
               <CKDAssessmentForm onNext={() => {}} />

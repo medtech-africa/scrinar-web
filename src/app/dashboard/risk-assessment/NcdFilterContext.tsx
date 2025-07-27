@@ -166,17 +166,16 @@ const ncdRequiredFields: NcdRequiredFields = {
 }
 
 interface NcdFilterContextType {
-  selectedNcd: NcdType
-  setSelectedNcd: (ncd: NcdType) => void
-  selectedSpecificNcds: SpecificNcdType[]
-  setSelectedSpecificNcds: (ncds: SpecificNcdType[]) => void
-  toggleSpecificNcd: (ncd: SpecificNcdType) => void
-  selectAllSpecificNcds: () => void
-  deselectAllSpecificNcds: () => void
+  selectedNcds: SpecificNcdType[]
+  setSelectedNcds: (ncds: SpecificNcdType[]) => void
+  toggleNcd: (ncd: SpecificNcdType) => void
+  selectAllNcds: () => void
+  deselectAllNcds: () => void
   getRequiredFields: (
-    ncdType: NcdType
+    ncdType: SpecificNcdType
   ) => NcdRequiredFields[keyof NcdRequiredFields] | null
   isFieldRequired: (field: string) => boolean
+  hasNcdSelected: (ncd: SpecificNcdType) => boolean
 }
 
 const NcdFilterContext = createContext<NcdFilterContextType | undefined>(
@@ -184,10 +183,7 @@ const NcdFilterContext = createContext<NcdFilterContextType | undefined>(
 )
 
 export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedNcd, setSelectedNcd] = useState<NcdType>('all')
-  const [selectedSpecificNcds, setSelectedSpecificNcds] = useState<
-    SpecificNcdType[]
-  >([
+  const [selectedNcds, setSelectedNcds] = useState<SpecificNcdType[]>([
     'cvd',
     'diabetes',
     'copd',
@@ -198,14 +194,13 @@ export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
   ])
 
   const getRequiredFields = (
-    ncdType: NcdType
+    ncdType: SpecificNcdType
   ): NcdRequiredFields[keyof NcdRequiredFields] | null => {
-    if (ncdType === 'all') return null
     return ncdRequiredFields[ncdType]
   }
 
-  const toggleSpecificNcd = (ncd: SpecificNcdType) => {
-    setSelectedSpecificNcds((prev) => {
+  const toggleNcd = (ncd: SpecificNcdType) => {
+    setSelectedNcds((prev) => {
       if (prev.includes(ncd)) {
         const newSelection = prev.filter((item) => item !== ncd)
         // Ensure at least 2 NCDs are selected
@@ -216,8 +211,8 @@ export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
     })
   }
 
-  const selectAllSpecificNcds = () => {
-    setSelectedSpecificNcds([
+  const selectAllNcds = () => {
+    setSelectedNcds([
       'cvd',
       'diabetes',
       'copd',
@@ -228,46 +223,38 @@ export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
     ])
   }
 
-  const deselectAllSpecificNcds = () => {
+  const deselectAllNcds = () => {
     // Keep at least 2 NCDs selected (the first two)
-    setSelectedSpecificNcds(['cvd', 'diabetes'])
+    setSelectedNcds(['cvd', 'diabetes'])
   }
 
   const isFieldRequired = (field: string): boolean => {
-    if (selectedNcd === 'all') {
-      // Check if field is required for any of the selected specific NCDs
-      return selectedSpecificNcds.some((ncdType) => {
-        const requiredFields = getRequiredFields(ncdType)
-        if (!requiredFields) return false
-        const internalFieldName = getInternalFieldName(field)
-        return (
-          requiredFields[internalFieldName as keyof typeof requiredFields] ||
-          false
-        )
-      })
-    }
+    return selectedNcds.some((ncdType) => {
+      const requiredFields = getRequiredFields(ncdType)
+      if (!requiredFields) return false
+      const internalFieldName = getInternalFieldName(field)
+      return (
+        requiredFields[internalFieldName as keyof typeof requiredFields] ||
+        false
+      )
+    })
+  }
 
-    const requiredFields = getRequiredFields(selectedNcd)
-    if (!requiredFields) return false
-
-    const internalFieldName = getInternalFieldName(field)
-    return (
-      requiredFields[internalFieldName as keyof typeof requiredFields] || false
-    )
+  const hasNcdSelected = (ncd: SpecificNcdType): boolean => {
+    return selectedNcds.includes(ncd)
   }
 
   return (
     <NcdFilterContext.Provider
       value={{
-        selectedNcd,
-        setSelectedNcd,
-        selectedSpecificNcds,
-        setSelectedSpecificNcds,
-        toggleSpecificNcd,
-        selectAllSpecificNcds,
-        deselectAllSpecificNcds,
+        selectedNcds,
+        setSelectedNcds,
+        toggleNcd,
+        selectAllNcds,
+        deselectAllNcds,
         getRequiredFields,
         isFieldRequired,
+        hasNcdSelected,
       }}
     >
       {children}

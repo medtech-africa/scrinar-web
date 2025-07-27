@@ -12,8 +12,10 @@ type Props = {
 }
 
 export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
-  const { control } = useFormContext()
+  const { control, watch } = useFormContext()
   const isRequiredField = useRequiredFieldLabel()
+
+  const hasDailyPhysicalActivity = watch('lifestyle.hasDailyPhysicalActivity')
 
   return (
     <div title="Family History & Lifestyle">
@@ -137,96 +139,115 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             Physical Activity
           </Text>
           <div className="gap-4 grid grid-cols-1 lg:grid-cols-2">
-            <Controller
-              name="lifestyle.moderateActivityMonths"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="number"
-                  min="0"
-                  max="12"
-                  placeholder="How many months"
-                  label={isRequiredField(
-                    'In the past 12 months, how many months did you do any moderate physical activity? (Moderate activities DO NOT cause you to sweat or breathe hard. Some examples include vacuuming, gardening, easy walking for exercise, and so on.)',
-                    'lifestyle.moderateActivityMonths'
-                  )}
-                  labelStyle="lg:text-sm text-xs"
-                />
+            <OptionWithRadioField
+              label={isRequiredField(
+                'Over the past 12 months, do you usually have at least 30 minutes of daily physical activity at work and/or during leisure time (including normal daily activity)?',
+                'lifestyle.hasDailyPhysicalActivity'
               )}
-            />
-
-            <Controller
-              name="lifestyle.moderateActivityHoursPerWeek"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  placeholder="Select hours per week"
-                  label="During those months, on average, about how many hours per week did you do moderate physical activities?"
-                  labelStyle="lg:text-sm text-xs"
-                  options={[
-                    { value: 'Up to 1 hour/week', label: 'Up to 1 hour/week' },
-                    {
-                      value: 'Between 1 - 2 hours/week',
-                      label: 'Between 1 - 2 hours/week',
-                    },
-                    { value: '2 - 3 hours/week', label: '2 - 3 hours/week' },
-                    { value: '3 - 4 hours/week', label: '3 - 4 hours/week' },
-                    {
-                      value: 'More than 4 hours/week',
-                      label: 'More than 4 hours/week',
-                    },
-                  ]}
-                />
-              )}
-            />
-
-            <Controller
-              name="lifestyle.vigorousActivityMonths"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="number"
-                  min="0"
-                  max="12"
-                  placeholder="How many months"
-                  label={isRequiredField(
-                    'In the past 12 months, how many months did you do any vigorous physical activity? (Vigorous activities include all activities that DO cause you to sweat or breathe hard. Some examples include racquet sports, basketball, running, fast biking, exercise class, weight lifting, backpacking, swimming, and heavy labor such as shoveling dirt.)',
-                    'lifestyle.vigorousActivityMonths'
-                  )}
-                  labelStyle="lg:text-sm text-xs"
-                />
-              )}
-            />
-
-            <Controller
-              name="lifestyle.vigorousActivityHoursPerWeek"
-              control={control}
-              render={({ field }) => (
-                <Select
-                  {...field}
-                  placeholder="Select hours per week"
-                  label="During those months, on average, about how many hours per week did you do vigorous physical activities?"
-                  labelStyle="lg:text-sm text-xs"
-                  options={[
-                    { value: 'Up to 1 hour/week', label: 'Up to 1 hour/week' },
-                    {
-                      value: 'Between 1 - 2 hours/week',
-                      label: 'Between 1 - 2 hours/week',
-                    },
-                    { value: '2 - 3 hours/week', label: '2 - 3 hours/week' },
-                    { value: '3 - 4 hours/week', label: '3 - 4 hours/week' },
-                    {
-                      value: 'More than 4 hours/week',
-                      label: 'More than 4 hours/week',
-                    },
-                  ]}
-                />
-              )}
+              options={['Yes', 'No']}
+              form={{ id: 'lifestyle.hasDailyPhysicalActivity' }}
             />
           </div>
+
+          {hasDailyPhysicalActivity === 'Yes' && (
+            <div className="gap-4 grid grid-cols-1 lg:grid-cols-2 mt-4">
+              <Controller
+                name="lifestyle.moderateActivityMonths"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="number"
+                    min="0"
+                    max="12"
+                    placeholder="How many months"
+                    label={isRequiredField(
+                      'In the past 12 months, how many months did you do any moderate physical activity? (Moderate activities DO NOT cause you to sweat or breathe hard. Some examples include vacuuming, gardening, easy walking for exercise, and so on.)',
+                      'lifestyle.moderateActivityMonths'
+                    )}
+                    labelStyle="lg:text-sm text-xs"
+                  />
+                )}
+              />
+
+              <Controller
+                name="lifestyle.moderateActivityHoursPerWeek"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    placeholder="Select hours per week"
+                    label="During those months, on average, about how many hours per week did you do moderate physical activities?"
+                    labelStyle="lg:text-sm text-xs"
+                    options={[
+                      {
+                        value: 'Up to 1 hour/week',
+                        label: 'Up to 1 hour/week',
+                      },
+                      {
+                        value: 'Between 1 - 2 hours/week',
+                        label: 'Between 1 - 2 hours/week',
+                      },
+                      { value: '2 - 3 hours/week', label: '2 - 3 hours/week' },
+                      { value: '3 - 4 hours/week', label: '3 - 4 hours/week' },
+                      {
+                        value: 'More than 4 hours/week',
+                        label: 'More than 4 hours/week',
+                      },
+                    ]}
+                  />
+                )}
+              />
+
+              <Controller
+                name="lifestyle.vigorousActivityMonths"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="number"
+                    min="0"
+                    max="12"
+                    placeholder="How many months"
+                    label={isRequiredField(
+                      'In the past 12 months, how many months did you do any vigorous physical activity? (Vigorous activities include all activities that DO cause you to sweat or breathe hard. Some examples include racquet sports, basketball, running, fast biking, exercise class, weight lifting, backpacking, swimming, and heavy labor such as shoveling dirt.)',
+                      'lifestyle.vigorousActivityMonths'
+                    )}
+                    labelStyle="lg:text-sm text-xs"
+                  />
+                )}
+              />
+
+              <Controller
+                name="lifestyle.vigorousActivityHoursPerWeek"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    placeholder="Select hours per week"
+                    label="During those months, on average, about how many hours per week did you do vigorous physical activities?"
+                    labelStyle="lg:text-sm text-xs"
+                    options={[
+                      {
+                        value: 'Up to 1 hour/week',
+                        label: 'Up to 1 hour/week',
+                      },
+                      {
+                        value: 'Between 1 - 2 hours/week',
+                        label: 'Between 1 - 2 hours/week',
+                      },
+                      { value: '2 - 3 hours/week', label: '2 - 3 hours/week' },
+                      { value: '3 - 4 hours/week', label: '3 - 4 hours/week' },
+                      {
+                        value: 'More than 4 hours/week',
+                        label: 'More than 4 hours/week',
+                      },
+                    ]}
+                  />
+                )}
+              />
+            </div>
+          )}
         </div>
       </div>
 

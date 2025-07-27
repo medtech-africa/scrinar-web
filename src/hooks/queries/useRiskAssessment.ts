@@ -184,6 +184,7 @@ export interface Lifestyle {
   addSaltAtTable: string
   vegetableServingsPerWeek: string
   vegetableServingSize: string
+  hasDailyPhysicalActivity: string
   moderateActivityMonths: number
   moderateActivityHoursPerWeek: string
   vigorousActivityMonths: number
