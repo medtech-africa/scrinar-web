@@ -16,6 +16,7 @@ export interface NcdRequiredFields {
     bmi: boolean
     physicalActivity: boolean
     eatsFruitVegetableDaily: boolean
+    diet: boolean
     hasFamilyhistoryDiabetes: boolean
     usesAntihypertensiveMedication: boolean
     hasHistoryHighBloodGlucose: boolean
@@ -65,6 +66,7 @@ export interface NcdRequiredFields {
     inflammatoryBowelDisease: boolean
     smokingStatus: boolean
     vegetableConsumption: boolean
+    diet: boolean
     colonoscopyHistory: boolean
     aspirinUse: boolean
     nsaidUse: boolean
@@ -92,6 +94,7 @@ export const ncdRequiredFields: NcdRequiredFields = {
     bmi: true,
     physicalActivity: true,
     eatsFruitVegetableDaily: true,
+    diet: true,
     hasFamilyhistoryDiabetes: true,
     usesAntihypertensiveMedication: true,
     hasHistoryHighBloodGlucose: true,
@@ -141,6 +144,7 @@ export const ncdRequiredFields: NcdRequiredFields = {
     inflammatoryBowelDisease: true,
     smokingStatus: true,
     vegetableConsumption: true,
+    diet: true,
     colonoscopyHistory: true,
     aspirinUse: true,
     nsaidUse: true,

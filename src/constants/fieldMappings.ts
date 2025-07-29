@@ -28,7 +28,7 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   hasQuitSmoking: 'lifestyle.currentSmokingStatus',
   physicalActivity: 'lifestyle.hasDailyPhysicalActivity',
   eatsFruitVegetableDaily: 'lifestyle.vegetableServingsPerWeek',
-
+  diet: 'lifestyle.diet',
   useHypensiveMedication: 'lifestyle.usesAntihypertensiveMedication',
   hasHistoryHighBloodGlucose:
     'previousHealthScreening.hasHistoryHighBloodGlucose',
@@ -106,6 +106,7 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   hasQuitSmoking: 'Smoking Cessation',
   physicalActivity: 'Physical Activity',
   eatsFruitVegetableDaily: 'Fruit/Vegetable Consumption',
+  diet: 'Diet',
   useHypensiveMedication: 'Use of Hypensive Medication',
   hasHistoryHighBloodGlucose: 'History of High Blood Glucose',
 

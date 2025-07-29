@@ -1,6 +1,6 @@
 import { Input } from '@/components/ui/input'
 import { Select } from '@/components/ui/select'
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
 import { Text } from '@/components/ui/text'
@@ -12,13 +12,152 @@ type Props = {
 }
 
 export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
-  const { control, watch } = useFormContext()
+  const { control, watch, setValue } = useFormContext()
   const isRequiredField = useRequiredFieldLabel()
 
   const hasDailyPhysicalActivity = watch('lifestyle.hasDailyPhysicalActivity')
 
   // Get all form data for conditional required field logic
   const formData = watch()
+
+  const processedFoodsFrequency = watch('lifestyle.processedFoodsFrequency')
+  const addSaltAtTable = watch('lifestyle.addSaltAtTable')
+  const vegetableServingsPerWeek = watch('lifestyle.vegetableServingsPerWeek')
+  const vegetableServingSize = watch('lifestyle.vegetableServingSize')
+
+  // Diet assessment system
+  useEffect(() => {
+    const dietQuestions = {
+      processedFoodsFrequency,
+      addSaltAtTable,
+      vegetableServingsPerWeek,
+      vegetableServingSize,
+    }
+
+    // Check if any diet questions are filled
+    const hasAnyDietData = Object.values(dietQuestions).some(
+      (value) => value && value.trim() !== ''
+    )
+
+    if (!hasAnyDietData) {
+      // If no diet questions are filled, set diet to 'low'
+      setValue('lifestyle.diet', 'low')
+      return
+    }
+
+    // Calculate diet score based on available filled questions
+    let score = 0
+    let totalQuestions = 0
+
+    // Processed foods scoring (lower frequency = better score)
+    if (dietQuestions.processedFoodsFrequency) {
+      totalQuestions++
+      switch (dietQuestions.processedFoodsFrequency) {
+        case 'Never':
+          score += 3
+          break
+        case 'Seldomly (less than once a week)':
+          score += 2
+          break
+        case 'Occasionally (1–2 times a week)':
+          score += 1
+          break
+        case 'Regularly (3–5 times a week)':
+          score += 0
+          break
+        case 'Frequently (6 or more times a week)':
+          score += 0
+          break
+      }
+    }
+
+    // Salt usage scoring
+    if (dietQuestions.addSaltAtTable) {
+      totalQuestions++
+      switch (dietQuestions.addSaltAtTable) {
+        case 'No':
+          score += 3
+          break
+        case 'Yes':
+          score += 0
+          break
+      }
+    }
+
+    // Vegetable servings scoring
+    if (dietQuestions.vegetableServingsPerWeek) {
+      totalQuestions++
+      switch (dietQuestions.vegetableServingsPerWeek) {
+        case 'None':
+          score += 0
+          break
+        case 'Less than 1 serving/week':
+          score += 0
+          break
+        case '1-2 servings/week':
+          score += 1
+          break
+        case '3-4 servings/week':
+          score += 2
+          break
+        case '5-6 servings/week':
+          score += 3
+          break
+        case '7-10 servings/week':
+          score += 3
+          break
+        case 'More than 10 servings/week':
+          score += 3
+          break
+      }
+    }
+
+    // Vegetable serving size scoring
+    if (dietQuestions.vegetableServingSize) {
+      totalQuestions++
+      switch (dietQuestions.vegetableServingSize) {
+        case '½ cup or less':
+          score += 0
+          break
+        case 'Between ½ cup - 1½ cups':
+          score += 1
+          break
+        case '1½ cups - 3 cups':
+          score += 2
+          break
+        case '3 cups - 5 cups':
+          score += 3
+          break
+        case 'More than 5 cups':
+          score += 3
+          break
+      }
+    }
+
+    // Calculate average score and determine diet quality
+    if (totalQuestions > 0) {
+      const averageScore = score / totalQuestions
+      let dietQuality: 'poor' | 'moderate' | 'good'
+
+      if (averageScore >= 2.5) {
+        dietQuality = 'good'
+      } else if (averageScore >= 1.5) {
+        dietQuality = 'moderate'
+      } else {
+        dietQuality = 'poor'
+      }
+
+      setValue('lifestyle.diet', dietQuality)
+    }
+  }, [
+    processedFoodsFrequency,
+    addSaltAtTable,
+    vegetableServingsPerWeek,
+    vegetableServingSize,
+    setValue,
+  ])
+
+  //create a check for all diet questions and add a need field called lifestyle.diet: 'poor' | 'moderate' | 'good'. this will be gotten from available filled diet questions (if no diet questions are filled, then it should be 'low' and analyze available filled diet question without any required field). Run it here
 
   return (
     <div title="Family History & Lifestyle">
@@ -80,6 +219,32 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
           <Text as="h3" variant="text/sm" className="font-medium mb-3 md:mb-5">
             Diet
           </Text>
+
+          {/* Diet Quality Indicator */}
+          {watch('lifestyle.diet') && watch('lifestyle.diet') !== 'low' && (
+            <div className="mb-4 p-3 rounded-lg border">
+              <Text variant="text/sm" className="font-medium mb-1">
+                Calculated Diet Quality:
+              </Text>
+              <div className="flex items-center space-x-2">
+                <span
+                  className={`px-2 py-1 rounded text-xs font-medium ${
+                    watch('lifestyle.diet') === 'good'
+                      ? 'bg-green-100 text-green-800'
+                      : watch('lifestyle.diet') === 'moderate'
+                        ? 'bg-yellow-100 text-yellow-800'
+                        : 'bg-red-100 text-red-800'
+                  }`}
+                >
+                  {watch('lifestyle.diet')?.toUpperCase()}
+                </span>
+                <Text variant="text/sm" className="text-gray-600">
+                  Based on available diet information
+                </Text>
+              </div>
+            </div>
+          )}
+
           <div className="gap-4 grid grid-cols-1 lg:grid-cols-2">
             <OptionWithRadioField
               label={isRequiredField(
