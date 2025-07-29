@@ -21,13 +21,14 @@ import filterObject from '@/utils/filterObject'
 import { IDataToSend, IFormValue } from './page'
 import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 import countries from '@/constants/countries.json'
+import DatePicker from '@/components/ui/date-picker'
 
 const defaultValues = {
   email: '',
   firstName: '',
   middleName: '',
   lastName: '',
-  age: 18,
+  dateOfBirth: '',
   gender: { value: '', label: '' },
   ethnicity: { value: '', label: '' },
   country: { value: 'Nigeria', label: 'Nigeria' },
@@ -82,15 +83,11 @@ export const AddNewPatientContent = () => {
   }
 
   const ethnicityOptions = convertStringsToOptionArray([
-    'Black/African',
-    'Asian',
-    'Caucasian/White',
-    'Hispanic/Latino',
-    'Middle Eastern',
-    'Native American/Indigenous',
-    'Pacific Islander',
-    'Mixed/Multiple Ethnicities',
-    'Other',
+    ['Black/African', 'black'],
+    ['Asian', 'asian'],
+    ['Caucasian/White', 'white'],
+    ['Hispanic/Latino', 'hispanic'],
+    ['Other', 'other'],
   ])
 
   return (
@@ -146,20 +143,17 @@ export const AddNewPatientContent = () => {
             />
 
             <Controller
+              name="dateOfBirth"
               control={control}
-              name="age"
-              render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                  onChange={onChange}
-                  onBlur={onBlur}
-                  value={value ?? ''}
-                  type="number"
-                  placeholder="Enter age"
-                  label="Age as at last birthday *"
-                  labelStyle="lg:text-sm text-xs"
-                  required
-                  min="18"
-                  max="120"
+              render={({ field }) => (
+                <DatePicker
+                  {...field}
+                  label="Date of Birth *"
+                  placeholder="Select Date of Birth"
+                  value={field.value}
+                  onChange={(value) => {
+                    field.onChange(value)
+                  }}
                 />
               )}
             />
@@ -231,9 +225,10 @@ export const AddNewPatientContent = () => {
                   onBlur={onBlur}
                   value={value ?? ''}
                   type="tel"
-                  placeholder="Enter Phone Number (Optional)"
-                  label="Phone Number"
+                  placeholder="Enter Phone Number"
+                  label="Phone Number *"
                   labelStyle="lg:text-sm text-xs"
+                  required
                 />
               )}
             />

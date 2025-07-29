@@ -18,6 +18,7 @@ import { useMutation } from '@tanstack/react-query'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import toast from 'react-hot-toast'
+import DatePicker from '@/components/ui/date-picker'
 
 type Props = {
   onNext: () => void
@@ -54,7 +55,13 @@ export const PersonalInfoForm = ({
 
   const handlePersonalInfoSubmit = (data: any) => {
     // Validate required fields
-    const requiredFields = ['firstName', 'lastName', 'age', 'gender']
+    const requiredFields = [
+      'firstName',
+      'lastName',
+      'dateOfBirth',
+      'gender',
+      'phoneNumber',
+    ]
     const missingFields = requiredFields.filter(
       (field) => !data.personalInfo[field]
     )
@@ -67,10 +74,12 @@ export const PersonalInfoForm = ({
               return 'First Name'
             case 'lastName':
               return 'Last Name'
-            case 'age':
-              return 'Age'
+            case 'dateOfBirth':
+              return 'Date of Birth'
             case 'gender':
               return 'Gender'
+            case 'phoneNumber':
+              return 'Phone Number'
             default:
               return field
           }
@@ -87,7 +96,7 @@ export const PersonalInfoForm = ({
         firstName: data.personalInfo.firstName,
         middleName: data.personalInfo.middleName,
         lastName: data.personalInfo.lastName,
-        age: data.personalInfo.age,
+        dateOfBirth: data.personalInfo.dateOfBirth,
         gender: data.personalInfo.gender,
         ethnicity: data.personalInfo.ethnicity,
         country: data.personalInfo.country,
@@ -172,19 +181,19 @@ export const PersonalInfoForm = ({
           />
 
           <Controller
-            name="personalInfo.age"
+            name="personalInfo.dateOfBirth"
             control={control}
             render={({ field }) => (
-              <Input
+              <DatePicker
                 {...field}
-                type="number"
-                placeholder="Enter age"
-                label="Age as at last birthday *"
-                labelStyle="lg:text-sm text-xs"
-                required={isFieldRequired('personalInfo.age')}
+                label="Date of Birth *"
+                placeholder="Select Date of Birth"
+                required={isFieldRequired('personalInfo.dateOfBirth')}
                 disabled={isFormDisabled}
-                min="18"
-                max="120"
+                value={field.value}
+                onChange={(value) => {
+                  field.onChange(value)
+                }}
               />
             )}
           />
@@ -213,15 +222,11 @@ export const PersonalInfoForm = ({
             label="Ethnicity *"
             placeholder="Select Ethnicity"
             options={convertStringsToOptionArray([
-              'Black/African',
-              'Asian',
-              'Caucasian/White',
-              'Hispanic/Latino',
-              'Middle Eastern',
-              'Native American/Indigenous',
-              'Pacific Islander',
-              'Mixed/Multiple Ethnicities',
-              'Other',
+              ['Black/African', 'black'],
+              ['Asian', 'asian'],
+              ['Caucasian/White', 'white'],
+              ['Hispanic/Latino', 'hispanic'],
+              ['Other', 'other'],
             ])}
             value={{
               value: watch('personalInfo.ethnicity'),
@@ -275,7 +280,7 @@ export const PersonalInfoForm = ({
                 {...field}
                 type="tel"
                 placeholder="Enter Phone Number"
-                label="Phone Number"
+                label="Phone Number *"
                 labelStyle="lg:text-sm text-xs"
                 disabled={isFormDisabled}
               />

@@ -133,6 +133,9 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
     watch('vitals', {})
   const { gender: genderVal, age } = watch('personalInfo', {})
 
+  // Get all form data for conditional required field logic
+  const formData = watch()
+
   const gender = genderVal?.toLowerCase()
 
   useEffect(() => {
@@ -206,7 +209,11 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                       <Input
                         {...field}
                         placeholder="170"
-                        label={isRequiredField('Height (cm)', 'vitals.height')}
+                        label={isRequiredField(
+                          'Height (cm)',
+                          'vitals.height',
+                          formData
+                        )}
                         labelStyle="flex justify-center items-center"
                         variant={
                           validationErrors.height
@@ -229,7 +236,11 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                       <Input
                         {...field}
                         placeholder="70"
-                        label={isRequiredField('Weight (kg)', 'vitals.weight')}
+                        label={isRequiredField(
+                          'Weight (kg)',
+                          'vitals.weight',
+                          formData
+                        )}
                         labelStyle="flex justify-center items-center"
                         variant={
                           validationErrors.weight
@@ -253,7 +264,11 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         <Input
                           {...field}
                           placeholder="85"
-                          label={isRequiredField('Waist (cm)', 'vitals.waist')}
+                          label={isRequiredField(
+                            'Waist (cm)',
+                            'vitals.waist',
+                            formData
+                          )}
                           labelStyle="flex justify-center items-center"
                           variant={
                             validationErrors.waist
@@ -324,7 +339,8 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                           placeholder="120"
                           label={isRequiredField(
                             'Systolic (mmHg)',
-                            'vitals.sys'
+                            'vitals.sys',
+                            formData
                           )}
                           labelStyle="lg:text-sm text-xs"
                           variant={
@@ -354,7 +370,8 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                           placeholder="80"
                           label={isRequiredField(
                             'Diastolic (mmHg)',
-                            'vitals.dys'
+                            'vitals.dys',
+                            formData
                           )}
                           labelStyle="lg:text-sm text-xs"
                           variant={
@@ -398,7 +415,8 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                           placeholder="72"
                           label={isRequiredField(
                             'Pulse/Heart Rate (bpm)',
-                            'vitals.pulse'
+                            'vitals.pulse',
+                            formData
                           )}
                           labelStyle="lg:text-sm text-xs"
                           variant={
@@ -450,7 +468,8 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         placeholder="98"
                         label={isRequiredField(
                           'Oxygen Saturation (SpO2 %)',
-                          'vitals.oxygenSaturation'
+                          'vitals.oxygenSaturation',
+                          formData
                         )}
                         labelStyle="lg:text-sm text-xs"
                         variant={
@@ -479,7 +498,8 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                           placeholder="36.5"
                           label={isRequiredField(
                             'Temperature (°C)',
-                            'vitals.temperature'
+                            'vitals.temperature',
+                            formData
                           )}
                           labelStyle="lg:text-sm text-xs"
                           variant={variantValidityCheck(field.value)}

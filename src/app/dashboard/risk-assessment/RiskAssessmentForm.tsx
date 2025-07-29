@@ -67,7 +67,7 @@ const StatusSection = ({
     return !!(
       personalInfo?.firstName &&
       personalInfo?.lastName &&
-      personalInfo?.age &&
+      personalInfo?.dateOfBirth &&
       personalInfo?.gender
     )
   }
@@ -307,7 +307,8 @@ const RiskAssessmentFormContent = ({
       })
     })
 
-    return allRequiredFieldsFilled && !!formMethods.watch('personalInfo.age')
+    const personalInfo = formMethods.watch('personalInfo')
+    return allRequiredFieldsFilled && !!personalInfo?.dateOfBirth
   }
 
   const handleSubmit = (data: RiskAssessmentModelRequestData) => {
@@ -372,8 +373,9 @@ const RiskAssessmentFormContent = ({
       return `Please fill required fields: ${errorMessages.join('; ')}`
     }
 
-    if (!formMethods.watch('personalInfo.age')) {
-      return 'Please fill the age field'
+    const personalInfo = formMethods.watch('personalInfo')
+    if (!personalInfo?.dateOfBirth) {
+      return 'Please fill the date of birth field'
     }
   }
 
@@ -428,6 +430,8 @@ const RiskAssessmentFormContent = ({
             breastCancer: currentFormData.breastCancer,
             prostateCancer: currentFormData.prostateCancer,
             colorectalCancer: currentFormData.colorectalCancer,
+            lifestyle: currentFormData.lifestyle,
+            previousHealthScreening: currentFormData.previousHealthScreening,
           }
           break
 

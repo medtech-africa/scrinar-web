@@ -16,6 +16,7 @@ import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import { PersonalInfo, RiskData } from '@/hooks/queries/useRiskAssessment'
 import { categorizeBMIWHO2007 } from '@/utils/vitalCalculations'
+import calculateAge from '@/utils/calculateAge'
 
 const siteUrl =
   process.env.ENV === 'development'
@@ -130,7 +131,7 @@ const PDFReport = ({
                 <Text>Age</Text>
               </View>
               <View style={styles.tableCol}>
-                <Text>{personalInfo.age} years</Text>
+                <Text>{calculateAge(personalInfo.dateOfBirth)} years</Text>
               </View>
             </View>
             <View style={styles.tableRow}>
@@ -180,7 +181,7 @@ const PDFReport = ({
                 <View style={styles.tableCol}>
                   <Text>
                     {categorizeBMIWHO2007(
-                      personalInfo.age,
+                      calculateAge(personalInfo.dateOfBirth),
                       personalInfo.gender.toLowerCase(),
                       vitals.bmi
                     )?.message?.slice(

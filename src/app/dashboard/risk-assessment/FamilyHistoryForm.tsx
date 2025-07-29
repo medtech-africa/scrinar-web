@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useFormContext } from 'react-hook-form'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
@@ -14,6 +14,7 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
   const { register: customRegister, setValue, watch } = useFormContext()
   const formData = watch()
   const storeRiskAssessment = useRiskAssessmentStorage((store) => store.store)
+  const [others, setOthers] = useState<Record<string, string | null>>({})
 
   useEffect(() => {
     storeRiskAssessment(
@@ -21,6 +22,14 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
       formData
     )
   }, [formData, storeRiskAssessment])
+
+  useEffect(() => {
+    Object.entries(others).forEach(([key, value]) => {
+      if (value) {
+        setValue(`familyHistory.${key}`, value)
+      }
+    })
+  }, [others])
 
   const medicalConditions = [
     {
@@ -133,13 +142,12 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
                               )}
                               value={value}
                               onChange={(e) => {
-                                const isChecked = e.target.value
+                                setOthers((prev) => ({
+                                  ...prev,
+                                  [condition.key]: null,
+                                }))
                                 const value = e.target.value
-                                if (isChecked) {
-                                  setValue(
-                                    `familyHistory.${condition.key}Others`,
-                                    null
-                                  )
+                                if (value) {
                                   setValue(
                                     `familyHistory.${condition.key}`,
                                     value
@@ -156,14 +164,14 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
                   )}
                   <td className="border border-gray-300 px-4 py-2">
                     <Input
-                      {...customRegister(
-                        `familyHistory.${condition.key}Others`
-                      )}
                       onChange={(e) => {
                         const value = e.target.value
-                        setValue(`familyHistory.${condition.key}Others`, value)
-                        setValue(`familyHistory.${condition.key}`, null)
+                        setOthers((prev) => ({
+                          ...prev,
+                          [condition.key]: value,
+                        }))
                       }}
+                      value={others[condition.key] ?? ''}
                       placeholder="Specify relative"
                     />
                   </td>

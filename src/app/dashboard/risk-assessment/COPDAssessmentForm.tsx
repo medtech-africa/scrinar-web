@@ -11,9 +11,12 @@ type Props = {
 }
 
 export const COPDAssessmentForm = ({ onNext }: Props) => {
+  const { register: customRegister, watch } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
-  const { register: customRegister } = useFormContext()
   const isRequiredField = useRequiredFieldLabel()
+
+  // Get all form data for conditional required field logic
+  const formData = watch()
 
   // Only show this form for COPD
   if (!hasNcdSelected('copd')) {
@@ -101,9 +104,9 @@ export const COPDAssessmentForm = ({ onNext }: Props) => {
 
                 <tr className="odd:bg-white even:bg-gray-100">
                   <td className="border border-gray-300 px-4 py-2 text-sm">
-                    Have you ever smoked cigarettes?
+                    Do you currently smoke cigarettes?
                   </td>
-                  {['Yes', 'No'].map((value) => (
+                  {['Yes, currently smoking', 'Never smoked'].map((value) => (
                     <td
                       key={'smoking_' + value}
                       className="border border-gray-300 px-4 py-2 text-center relative"
@@ -111,10 +114,12 @@ export const COPDAssessmentForm = ({ onNext }: Props) => {
                       <label className="absolute inset-0 flex items-center justify-center cursor-pointer">
                         <span className="w-full h-full flex items-center justify-center">
                           <input
-                            {...customRegister('lifestyle.everSmoked')}
+                            {...customRegister(
+                              'lifestyle.currentSmokingStatus'
+                            )}
                             value={value}
                             type="radio"
-                            title="lifestyle.everSmoked"
+                            title="lifestyle.currentSmokingStatus"
                           />
                         </span>
                       </label>
@@ -137,7 +142,11 @@ export const COPDAssessmentForm = ({ onNext }: Props) => {
           <Input
             {...customRegister('copd.pefLevel')}
             placeholder="Enter PEF Level"
-            label={isRequiredField('PEF Level (L/min)', 'copd.pefLevel')}
+            label={isRequiredField(
+              'PEF Level (L/min)',
+              'copd.pefLevel',
+              formData
+            )}
             labelStyle="lg:text-sm text-xs"
             type="number"
             min="0"

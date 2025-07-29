@@ -21,8 +21,12 @@ export const useRequiredFieldLabel = () => {
   const { isFieldRequired } = useNcdFilter()
 
   // eslint-disable-next-line react/display-name
-  return (label: string, fieldPath: string): React.ReactNode => {
-    const isRequired = isFieldRequired(fieldPath)
+  return (
+    label: string,
+    fieldPath: string,
+    formData?: any
+  ): React.ReactNode => {
+    const isRequired = isFieldRequired(fieldPath, formData)
     if (isRequired) {
       return (
         <span>

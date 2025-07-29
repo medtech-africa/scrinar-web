@@ -6,6 +6,7 @@ import { usePatient } from '@/hooks/queries/usePatients'
 import ContentLoader from '@/components/content-loader'
 import { useRouter } from 'next/navigation'
 import { IconPicker } from '@/components/ui/icon-picker'
+import calculateAge from '@/utils/calculateAge'
 
 export const ViewPatientContent = ({ patientId }: { patientId: string }) => {
   const router = useRouter()
@@ -68,16 +69,20 @@ export const ViewPatientContent = ({ patientId }: { patientId: string }) => {
                 Age
               </Text>
               <Text variant="text/md" className="text-grey-900 font-medium">
-                {patient.age ? `${patient.age} years` : 'N/A'}
+                {patient.dateOfBirth
+                  ? `${calculateAge(patient.dateOfBirth)} years`
+                  : 'N/A'}
               </Text>
             </div>
 
             <div>
               <Text variant="text/sm" className="text-grey-600 mb-1">
-                Age
+                Date of Birth
               </Text>
               <Text variant="text/md" className="text-grey-900 font-medium">
-                {patient.age ? `${patient.age} years` : 'N/A'}
+                {patient.dateOfBirth
+                  ? new Date(patient.dateOfBirth).toLocaleDateString()
+                  : 'N/A'}
               </Text>
             </div>
 

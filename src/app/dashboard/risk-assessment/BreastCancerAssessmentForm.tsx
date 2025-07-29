@@ -137,20 +137,22 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
               <Text as="h3" variant="text/sm" className="font-medium my-4">
                 Hormone Replacement Therapy
               </Text>
-              <div className="space-y-4">
-                <OptionWithRadioField
-                  label="Have you used hormone replacement therapy (HRT)? — HRT includes estrogen-only or combined estrogen and progesterone but does not include hormonal birth control."
-                  options={[
-                    'Never',
-                    'Last used more than 5 years ago',
-                    'Last used less than 5 years ago but not currently using',
-                    'Current user',
-                  ]}
-                  form={{ id: 'breastCancer.hormoneReplacementTherapy' }}
-                />
-              </div>
+              <Controller
+                name="breastCancer.hormoneReplacementTherapy"
+                control={control}
+                render={({ field }) => (
+                  <Input
+                    {...field}
+                    type="number"
+                    placeholder="Years"
+                    label="Have you used hormone replacement therapy (HRT)? — HRT includes estrogen-only or combined estrogen and progesterone but does not include hormonal birth control."
+                    labelStyle="lg:text-sm text-xs"
+                  />
+                )}
+              />
             </div>
 
+            {/* Breast Biopsy - used for benign breast disease */}
             <div>
               <Text as="h3" variant="text/sm" className="font-medium mt-4 mb-1">
                 Have you had a breast biopsy?

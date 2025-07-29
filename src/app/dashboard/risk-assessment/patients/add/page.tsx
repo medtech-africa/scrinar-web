@@ -16,7 +16,7 @@ export interface IFormValue {
   firstName: string
   middleName?: string
   lastName: string
-  age: number
+  dateOfBirth: string
   gender: { value: string; label: string }
   ethnicity?: { value?: string; label?: string }
   country?: { value?: string; label?: string }

@@ -21,15 +21,22 @@ const DatePicker = ({ onChange, value, ...props }: IDatePicker) => {
   useClickAway(datePickerRef, () => setOpen(false))
   return (
     <div ref={datePickerRef} className="relative w-full">
-      <div className={cn(`cursor-pointer`)} onClick={() => setOpen((p) => !p)}>
+      <div
+        className={cn(`cursor-pointer`)}
+        role="button"
+        tabIndex={0}
+        onClick={() => (props.disabled ? null : setOpen((p) => !p))}
+      >
         <Input
           labelStyle="lg:text-sm text-xs"
           endingIcon={
             <IconPicker icon="calendar2" className="cursor-pointer" size={20} />
           }
-          className="disabled:text-grey-900 disabled:bg-white"
+          className={
+            !props.disabled ? 'disabled:text-grey-900 disabled:bg-white' : ''
+          }
           value={value ? new Date(value).toLocaleDateString() : ''}
-          disabled
+          disabled={props.disabled}
           {...props}
         />
       </div>

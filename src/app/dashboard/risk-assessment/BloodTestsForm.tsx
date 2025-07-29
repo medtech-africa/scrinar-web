@@ -66,6 +66,9 @@ export const BloodTestsForm = ({ onNext }: Props) => {
   const ldlc = watch('bloodTest.cholesterolLdl')
   const totalCholesterol = watch('bloodTest.cholesterolTotal')
 
+  // Get all form data for conditional required field logic
+  const formData = watch()
+
   // Validate cholesterol values
   useEffect(() => {
     const errors: Record<string, string> = {}
@@ -116,7 +119,8 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                     placeholder="Enter Fasting Blood Sugar Level"
                     label={isRequiredField(
                       'Fasting Blood Sugar',
-                      'bloodTest.bloodSugarFasting'
+                      'bloodTest.bloodSugarFasting',
+                      formData
                     )}
                     labelStyle="lg:text-sm text-xs"
                     variant={variantValidityCheck(field.value)}
@@ -390,7 +394,8 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                   placeholder="Enter HbA1c Level"
                   label={isRequiredField(
                     'HbA1c Level (%)',
-                    'bloodTest.hba1cLevel'
+                    'bloodTest.hba1cLevel',
+                    formData
                   )}
                   labelStyle="lg:text-sm text-xs"
                   variant={variantValidityCheck(field.value)}
@@ -427,7 +432,8 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                   placeholder="mg/dL"
                   label={isRequiredField(
                     'Serum Creatinine (mg/dL)',
-                    'bloodTest.serumCreatinine'
+                    'bloodTest.serumCreatinine',
+                    formData
                   )}
                   labelStyle="lg:text-sm text-xs"
                 />
@@ -447,7 +453,8 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                     placeholder="ng/mL"
                     label={isRequiredField(
                       'PSA level (ng/mL)',
-                      'bloodTest.psaLevel'
+                      'bloodTest.psaLevel',
+                      formData
                     )}
                     labelStyle="lg:text-sm text-xs"
                   />

@@ -26,6 +26,12 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   // Lifestyle fields
   smoking: 'lifestyle.everSmoked',
   hasQuitSmoking: 'lifestyle.currentSmokingStatus',
+  physicalActivity: 'lifestyle.hasDailyPhysicalActivity',
+  eatsFruitVegetableDaily: 'lifestyle.vegetableServingsPerWeek',
+
+  useHypensiveMedication: 'lifestyle.usesAntihypertensiveMedication',
+  hasHistoryHighBloodGlucose:
+    'previousHealthScreening.hasHistoryHighBloodGlucose',
 
   // COPD fields
   coughDuration: 'copd.coughDuration',
@@ -47,6 +53,14 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   // Prostate Cancer fields
   familyHistoryProstateCancer: 'familyHistory.prostateCancer',
   urinarySymptoms: 'prostateCancer.urinarySymptomsFrequency',
+  urinarySymptomsIncompleteEmptying:
+    'prostateCancer.urinarySymptomsIncompleteEmptying',
+  urinarySymptomsFrequency: 'prostateCancer.urinarySymptomsFrequency',
+  urinarySymptomsIntermittency: 'prostateCancer.urinarySymptomsIntermittency',
+  urinarySymptomsUrgency: 'prostateCancer.urinarySymptomsUrgency',
+  urinarySymptomsWeakStream: 'prostateCancer.urinarySymptomsWeakStream',
+  urinarySymptomsStraining: 'prostateCancer.urinarySymptomsStraining',
+  urinarySymptomsNocturia: 'prostateCancer.urinarySymptomsNocturia',
   psaLevel: 'bloodTest.psaLevel',
 
   // Colorectal Cancer fields
@@ -58,7 +72,6 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   inflammatoryBowelDisease: 'colorectalCancer.inflammatoryBowelDisease',
   smokingStatus: 'lifestyle.currentSmokingStatus',
   vegetableConsumption: 'lifestyle.vegetableServingsPerWeek',
-  physicalActivity: 'lifestyle.moderateActivityHoursPerWeek',
   colonoscopyHistory: 'colorectalCancer.colonoscopyHistory',
   aspirinUse: 'colorectalCancer.aspirinUse',
   nsaidUse: 'colorectalCancer.nsaidUse',
@@ -91,6 +104,10 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   // Lifestyle fields
   smoking: 'Smoking Status',
   hasQuitSmoking: 'Smoking Cessation',
+  physicalActivity: 'Physical Activity',
+  eatsFruitVegetableDaily: 'Fruit/Vegetable Consumption',
+  useHypensiveMedication: 'Use of Hypensive Medication',
+  hasHistoryHighBloodGlucose: 'History of High Blood Glucose',
 
   // COPD fields
   coughDuration: 'Cough Duration',
@@ -113,6 +130,13 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   // Prostate Cancer fields
   familyHistoryProstateCancer: 'Family History of Prostate Cancer',
   urinarySymptoms: 'Urinary Symptoms',
+  urinarySymptomsIncompleteEmptying: 'Incomplete Emptying',
+  urinarySymptomsFrequency: 'Urinary Frequency',
+  urinarySymptomsIntermittency: 'Urinary Intermittency',
+  urinarySymptomsUrgency: 'Urinary Urgency',
+  urinarySymptomsWeakStream: 'Weak Urinary Stream',
+  urinarySymptomsStraining: 'Urinary Straining',
+  urinarySymptomsNocturia: 'Nocturia',
   psaLevel: 'PSA Level',
 
   // Colorectal Cancer fields
@@ -123,7 +147,6 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   inflammatoryBowelDisease: 'Inflammatory Bowel Disease',
   smokingStatus: 'Smoking Status',
   vegetableConsumption: 'Vegetable Consumption',
-  physicalActivity: 'Physical Activity',
   colonoscopyHistory: 'Colonoscopy History',
   aspirinUse: 'Aspirin Use',
   nsaidUse: 'NSAID Use',

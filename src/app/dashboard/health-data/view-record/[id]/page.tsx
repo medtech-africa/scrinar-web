@@ -56,19 +56,19 @@ export default function ViewRecord({ params }: { params: { id: string } }) {
     },
     {
       id: '4',
-      title: data?.weight + 'KG' ?? '-',
+      title: data?.weight ? data?.weight + 'KG' : '-',
       description: 'Weight',
       icon: <IconPicker icon="weight" size={40} className="text-white" />,
     },
     {
       id: '5',
-      title: userData?.age + ' years' ?? '-',
+      title: userData?.age ? userData?.age + ' years' : '-',
       description: 'Age',
       icon: <IconPicker icon="ageIcon" size={40} className="text-white" />,
     },
     {
       id: '6',
-      title: data?.waist + 'CM' ?? '-',
+      title: data?.waist ? data?.waist + 'CM' : '-',
       description: 'Waist',
       icon: <IconPicker icon="waist" size={40} className="text-white" />,
     },

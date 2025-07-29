@@ -18,6 +18,7 @@ import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 import countries from '@/constants/countries.json'
 import ContentLoader from '@/components/content-loader'
 import { useRouter } from 'next/navigation'
+import DatePicker from '@/components/ui/date-picker'
 
 export const EditPatientContent = ({ patientId }: { patientId: string }) => {
   const router = useRouter()
@@ -47,7 +48,7 @@ export const EditPatientContent = ({ patientId }: { patientId: string }) => {
         firstName: patient.firstName || '',
         middleName: patient.middleName || '',
         lastName: patient.lastName || '',
-        age: patient.age || 18,
+        dateOfBirth: patient.dateOfBirth || '',
         gender: patient.gender
           ? { value: patient.gender, label: patient.gender }
           : { value: '', label: '' },
@@ -96,15 +97,11 @@ export const EditPatientContent = ({ patientId }: { patientId: string }) => {
   }
 
   const ethnicityOptions = convertStringsToOptionArray([
-    'Black/African',
-    'Asian',
-    'Caucasian/White',
-    'Hispanic/Latino',
-    'Middle Eastern',
-    'Native American/Indigenous',
-    'Pacific Islander',
-    'Mixed/Multiple Ethnicities',
-    'Other',
+    ['Black/African', 'black'],
+    ['Asian', 'asian'],
+    ['Caucasian/White', 'white'],
+    ['Hispanic/Latino', 'hispanic'],
+    ['Other', 'other'],
   ])
 
   if (isLoading) {
@@ -163,18 +160,17 @@ export const EditPatientContent = ({ patientId }: { patientId: string }) => {
           />
 
           <Controller
+            name="dateOfBirth"
             control={control}
-            name="age"
-            render={({ field: { onChange, onBlur, value } }) => (
-              <Input
-                onChange={onChange}
-                onBlur={onBlur}
-                value={value ?? ''}
-                type="number"
-                placeholder="Age"
-                label="Age"
-                labelStyle="lg:text-sm text-xs"
-                required
+            render={({ field }) => (
+              <DatePicker
+                {...field}
+                label="Date of Birth *"
+                placeholder="Select Date of Birth"
+                value={field.value}
+                onChange={(value) => {
+                  field.onChange(value)
+                }}
               />
             )}
           />

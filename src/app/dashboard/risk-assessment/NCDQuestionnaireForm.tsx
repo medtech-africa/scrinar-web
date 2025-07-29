@@ -9,6 +9,7 @@ import { BreastCancerAssessmentForm } from './BreastCancerAssessmentForm'
 import { ProstateCancerAssessmentForm } from './ProstateCancerAssessmentForm'
 import { ColorectalCancerAssessmentForm } from './ColorectalCancerAssessmentForm'
 import { CKDAssessmentForm } from './CKDAssessmentForm'
+import { DiabetesAssessmentForm } from './DiabetesAssessmentForm'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
 
@@ -32,6 +33,7 @@ export const NCDQuestionnaireForm = ({ onNext }: Props) => {
   const showColorectalCancer = hasNcdSelected('colorectalCancer')
 
   const showCKD = hasNcdSelected('ckd')
+  const showDiabetes = hasNcdSelected('diabetes')
 
   // Create available tabs based on what's selected
   const availableTabs = []
@@ -44,6 +46,7 @@ export const NCDQuestionnaireForm = ({ onNext }: Props) => {
   if (showColorectalCancer)
     availableTabs.push({ id: 'colorectalCancer', label: 'Colorectal Cancer' })
   if (showCKD) availableTabs.push({ id: 'ckd', label: 'CKD' })
+  if (showDiabetes) availableTabs.push({ id: 'diabetes', label: 'Diabetes' })
 
   // Set default active tab if none is set
   if (!activeNcdTab && availableTabs.length > 0) {
@@ -58,6 +61,7 @@ export const NCDQuestionnaireForm = ({ onNext }: Props) => {
     showProstateCancer,
     showColorectalCancer,
     showCKD,
+    showDiabetes,
   ].filter(Boolean).length
 
   if (assessmentCount === 0) {
@@ -177,6 +181,15 @@ export const NCDQuestionnaireForm = ({ onNext }: Props) => {
           <div>
             <div className="[&_button]:hidden">
               <CKDAssessmentForm onNext={() => {}} />
+            </div>
+          </div>
+        )}
+
+        {/* Diabetes Assessment */}
+        {showDiabetes && activeNcdTab === 'diabetes' && (
+          <div>
+            <div className="[&_button]:hidden">
+              <DiabetesAssessmentForm onNext={() => {}} />
             </div>
           </div>
         )}

@@ -3,6 +3,7 @@ import { useFormContext } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { useNcdFilter } from './NcdFilterContext'
+import calculateAge from '@/utils/calculateAge'
 
 type Props = {
   onNext: () => void
@@ -19,7 +20,8 @@ export const CKDAssessmentForm = ({ onNext }: Props) => {
 
   // Get values from other sections
   const formData = watch()
-  const age = formData?.personalInfo?.age
+  const dateOfBirth = formData?.personalInfo?.dateOfBirth
+  const age = dateOfBirth ? calculateAge(dateOfBirth) : null
   const gender = formData?.personalInfo?.gender
   const serumCreatinine = formData?.bloodTest?.serumCreatinine
 

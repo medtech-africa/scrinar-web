@@ -161,19 +161,12 @@ export interface FamilyHistory {
   cvd: string
   cvdOthers?: string
   diabetes: string
-  diabetesOthers?: string
   hypertension: string
-  hypertensionOthers?: string
   breastCancer: string
-  breastCancerOthers?: string
   ovarianCancer: string
-  ovarianCancerOthers?: string
   prostateCancer: string
-  prostateCancerOthers?: string
   colorectalCancer: string
-  colorectalCancerOthers?: string
   otherNcds: string
-  otherNcdsOthers?: string
 }
 
 export interface Lifestyle {
@@ -189,6 +182,7 @@ export interface Lifestyle {
   moderateActivityHoursPerWeek: string
   vigorousActivityMonths: number
   vigorousActivityHoursPerWeek: string
+  usesAntihypertensiveMedication?: string
 }
 
 export interface PersonalInfo {
@@ -196,7 +190,7 @@ export interface PersonalInfo {
   firstName: string
   middleName?: string
   lastName: string
-  age: number
+  dateOfBirth: string
   ethnicity?: string
   country?: string
   occupation: string
@@ -215,6 +209,7 @@ export interface PreviousHealthScreening {
   bloodSugarLevel?: string
   bmiAvailable?: string
   bmiLevel?: string
+  hasHistoryHighBloodGlucose?: string
 }
 
 export interface Vitals {
@@ -357,13 +352,6 @@ export interface BreastCancerBreakdown {
 }
 
 export interface ProstateCancerRequest {
-  ageGroup?: string
-  psaLevel?: string
-  digitalRectalExam?: string
-  prostateVolume?: string
-  previousBiopsy?: string
-  freeToTotalPsaRatio?: string
-  ethnicity?: string
   urinarySymptomsIncompleteEmptying?: string
   urinarySymptomsFrequency?: string
   urinarySymptomsIntermittency?: string
@@ -389,7 +377,6 @@ export interface ProstateCancerBreakdown {
   age: number
   familyHistory: number
   psaLevel: number
-  digitalRectalExam: number
   prostateVolume: number
   previousBiopsy: number
   freeToTotalPsaRatio: number

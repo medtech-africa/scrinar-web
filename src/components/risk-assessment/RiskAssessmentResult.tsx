@@ -100,8 +100,7 @@ const FACTOR_LABELS: { [key: string]: string } = {
   brcaMutationStatus: 'BRCA Mutation Status',
   breastDensity: 'Breast Density',
   // Prostate Cancer factors
-  psaLevel: 'PSA Level',
-  digitalRectalExam: 'Digital Rectal Exam',
+  // psaLevel: 'PSA Level',
   prostateVolume: 'Prostate Volume',
   previousBiopsy: 'Previous Biopsy',
   freeToTotalPsaRatio: 'Free-to-Total PSA Ratio',

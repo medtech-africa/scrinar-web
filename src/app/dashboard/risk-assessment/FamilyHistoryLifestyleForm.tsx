@@ -17,6 +17,9 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
 
   const hasDailyPhysicalActivity = watch('lifestyle.hasDailyPhysicalActivity')
 
+  // Get all form data for conditional required field logic
+  const formData = watch()
+
   return (
     <div title="Family History & Lifestyle">
       <Text as="h2" className="font-medium mb-2">
@@ -33,7 +36,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label={isRequiredField(
                 'Have you ever smoked cigarettes?',
-                'lifestyle.everSmoked'
+                'lifestyle.everSmoked',
+                formData
               )}
               options={['Yes', 'No']}
               form={{ id: 'lifestyle.everSmoked' }}
@@ -42,7 +46,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label={isRequiredField(
                 'Do you currently smoke cigarettes?',
-                'lifestyle.currentSmokingStatus'
+                'lifestyle.currentSmokingStatus',
+                formData
               )}
               options={[
                 'Yes, currently smoking',
@@ -55,7 +60,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label={isRequiredField(
                 'How often do you consume alcohol?',
-                'lifestyle.alcoholFrequency'
+                'lifestyle.alcoholFrequency',
+                formData
               )}
               options={[
                 'Never',
@@ -78,7 +84,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label={isRequiredField(
                 'How often do you consume processed foods such as corned beef, sausages, noodles?',
-                'lifestyle.processedFoodsFrequency'
+                'lifestyle.processedFoodsFrequency',
+                formData
               )}
               options={[
                 'Never',
@@ -93,7 +100,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label={isRequiredField(
                 'Do you add salt to your food at the table?',
-                'lifestyle.addSaltAtTable'
+                'lifestyle.addSaltAtTable',
+                formData
               )}
               options={['Yes', 'No']}
               form={{ id: 'lifestyle.addSaltAtTable' }}
@@ -102,7 +110,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label={isRequiredField(
                 'In the last month, about how many servings of vegetables or leafy green salads did you eat per week? (serving is each time you had vegetables or leafy greens, and includes leafy green salads and raw, cooked, canned, and frozen vegetables (including beans) Does not include fried vegetables like French fries or fried potatoes.)',
-                'lifestyle.vegetableServingsPerWeek'
+                'lifestyle.vegetableServingsPerWeek',
+                formData
               )}
               options={[
                 'None',
@@ -119,7 +128,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label={isRequiredField(
                 "In the last month, how much did you usually eat in each serving of vegetables or leafy green salads? (a cup is about the size of an adult's closed fist)",
-                'lifestyle.vegetableServingSize'
+                'lifestyle.vegetableServingSize',
+                formData
               )}
               options={[
                 '½ cup or less',
@@ -142,7 +152,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
             <OptionWithRadioField
               label={isRequiredField(
                 'Over the past 12 months, do you usually have at least 30 minutes of daily physical activity at work and/or during leisure time (including normal daily activity)?',
-                'lifestyle.hasDailyPhysicalActivity'
+                'lifestyle.hasDailyPhysicalActivity',
+                formData
               )}
               options={['Yes', 'No']}
               form={{ id: 'lifestyle.hasDailyPhysicalActivity' }}
@@ -163,7 +174,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                     placeholder="How many months"
                     label={isRequiredField(
                       'In the past 12 months, how many months did you do any moderate physical activity? (Moderate activities DO NOT cause you to sweat or breathe hard. Some examples include vacuuming, gardening, easy walking for exercise, and so on.)',
-                      'lifestyle.moderateActivityMonths'
+                      'lifestyle.moderateActivityMonths',
+                      formData
                     )}
                     labelStyle="lg:text-sm text-xs"
                   />
@@ -211,7 +223,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                     placeholder="How many months"
                     label={isRequiredField(
                       'In the past 12 months, how many months did you do any vigorous physical activity? (Vigorous activities include all activities that DO cause you to sweat or breathe hard. Some examples include racquet sports, basketball, running, fast biking, exercise class, weight lifting, backpacking, swimming, and heavy labor such as shoveling dirt.)',
-                      'lifestyle.vigorousActivityMonths'
+                      'lifestyle.vigorousActivityMonths',
+                      formData
                     )}
                     labelStyle="lg:text-sm text-xs"
                   />

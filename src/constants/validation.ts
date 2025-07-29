@@ -18,12 +18,10 @@ const createPatient = yupResolver(
       .required('Please enter last name')
       .typeError('Please enter last name')
       .lowercase(),
-    age: yup
-      .number()
-      .required('Please enter age')
-      .typeError('Please enter a valid age')
-      .min(18, 'Age must be at least 18')
-      .max(120, 'Age must be at most 120'),
+    dateOfBirth: yup
+      .string()
+      .required('Please enter date of birth')
+      .typeError('Please enter date of birth'),
     gender: yup
       .object()
       .shape({ label: yup.string().required(), value: yup.string().required() })
