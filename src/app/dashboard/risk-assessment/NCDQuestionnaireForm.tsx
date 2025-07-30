@@ -12,41 +12,46 @@ import { CKDAssessmentForm } from './CKDAssessmentForm'
 import { DiabetesAssessmentForm } from './DiabetesAssessmentForm'
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
+import { NCD } from '@/types/riskAssessment.types'
 
 interface Props {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const NCDQuestionnaireForm = ({ onNext }: Props) => {
+export const NCDQuestionnaireForm = ({ onNext, disabled }: Props) => {
   const { hasNcdSelected } = useNcdFilter()
   const [activeNcdTab, setActiveNcdTab] = useState<string>('')
 
   // Determine which assessments to show based on selected NCDs
-  const showCardiac = hasNcdSelected('cvd') || hasNcdSelected('diabetes')
+  const showCardiac = hasNcdSelected(NCD.CVD) || hasNcdSelected(NCD.DIABETES)
 
-  const showCOPD = hasNcdSelected('copd')
+  const showCOPD = hasNcdSelected(NCD.COPD)
 
-  const showBreastCancer = hasNcdSelected('breastCancer')
+  const showBreastCancer = hasNcdSelected(NCD.BREAST_CANCER)
 
-  const showProstateCancer = hasNcdSelected('prostateCancer')
+  const showProstateCancer = hasNcdSelected(NCD.PROSTATE_CANCER)
 
-  const showColorectalCancer = hasNcdSelected('colorectalCancer')
+  const showColorectalCancer = hasNcdSelected(NCD.COLORECTAL_CANCER)
 
-  const showCKD = hasNcdSelected('ckd')
-  const showDiabetes = hasNcdSelected('diabetes')
+  const showCKD = hasNcdSelected(NCD.CKD)
+  const showDiabetes = hasNcdSelected(NCD.DIABETES)
 
   // Create available tabs based on what's selected
   const availableTabs = []
-  if (showCardiac) availableTabs.push({ id: 'cvd', label: 'CVD' })
-  if (showCOPD) availableTabs.push({ id: 'copd', label: 'COPD' })
+  if (showCardiac) availableTabs.push({ id: NCD.CVD, label: 'CVD' })
+  if (showCOPD) availableTabs.push({ id: NCD.COPD, label: 'COPD' })
   if (showBreastCancer)
-    availableTabs.push({ id: 'breastCancer', label: 'Breast Cancer' })
+    availableTabs.push({ id: NCD.BREAST_CANCER, label: 'Breast Cancer' })
   if (showProstateCancer)
-    availableTabs.push({ id: 'prostateCancer', label: 'Prostate Cancer' })
+    availableTabs.push({ id: NCD.PROSTATE_CANCER, label: 'Prostate Cancer' })
   if (showColorectalCancer)
-    availableTabs.push({ id: 'colorectalCancer', label: 'Colorectal Cancer' })
-  if (showCKD) availableTabs.push({ id: 'ckd', label: 'CKD' })
-  if (showDiabetes) availableTabs.push({ id: 'diabetes', label: 'Diabetes' })
+    availableTabs.push({
+      id: NCD.COLORECTAL_CANCER,
+      label: 'Colorectal Cancer',
+    })
+  if (showCKD) availableTabs.push({ id: NCD.CKD, label: 'CKD' })
+  if (showDiabetes) availableTabs.push({ id: NCD.DIABETES, label: 'Diabetes' })
 
   // Set default active tab if none is set
   if (!activeNcdTab && availableTabs.length > 0) {
@@ -74,11 +79,18 @@ export const NCDQuestionnaireForm = ({ onNext }: Props) => {
           No specific NCD assessments selected. Please select assessment types
           above.
         </Text>
-        <div className="flex justify-end mt-6">
-          <Button className="px-8" onClick={onNext} type="button">
-            Next
-          </Button>
-        </div>
+        {!disabled && (
+          <div className="flex justify-end mt-6">
+            <Button
+              className="px-8"
+              onClick={onNext}
+              type="button"
+              disabled={disabled}
+            >
+              Next
+            </Button>
+          </div>
+        )}
       </div>
     )
   }
@@ -132,73 +144,84 @@ export const NCDQuestionnaireForm = ({ onNext }: Props) => {
       {/* Assessment Content based on active tab */}
       <div className="space-y-8">
         {/* Cardiovascular/Cardiac Assessment */}
-        {showCardiac && activeNcdTab === 'cvd' && (
+        {showCardiac && activeNcdTab === NCD.CVD && (
           <div>
             <div className="[&_button]:hidden">
-              <CardiacAssessmentForm onNext={() => {}} />
+              <CardiacAssessmentForm onNext={() => {}} disabled={disabled} />
             </div>
           </div>
         )}
 
         {/* COPD Assessment */}
-        {showCOPD && activeNcdTab === 'copd' && (
+        {showCOPD && activeNcdTab === NCD.COPD && (
           <div>
             <div className="[&_button]:hidden">
-              <COPDAssessmentForm onNext={() => {}} />
+              <COPDAssessmentForm onNext={() => {}} disabled={disabled} />
             </div>
           </div>
         )}
 
         {/* Breast Cancer Assessment */}
-        {showBreastCancer && activeNcdTab === 'breastCancer' && (
+        {showBreastCancer && activeNcdTab === NCD.BREAST_CANCER && (
           <div>
             <div className="[&_button]:hidden">
-              <BreastCancerAssessmentForm onNext={() => {}} />
+              <BreastCancerAssessmentForm
+                onNext={() => {}}
+                disabled={disabled}
+              />
             </div>
           </div>
         )}
 
         {/* Prostate Cancer Assessment */}
-        {showProstateCancer && activeNcdTab === 'prostateCancer' && (
+        {showProstateCancer && activeNcdTab === NCD.PROSTATE_CANCER && (
           <div>
             <div className="[&_button]:hidden">
-              <ProstateCancerAssessmentForm onNext={() => {}} />
+              <ProstateCancerAssessmentForm
+                onNext={() => {}}
+                disabled={disabled}
+              />
             </div>
           </div>
         )}
 
         {/* Colorectal Cancer Assessment */}
-        {showColorectalCancer && activeNcdTab === 'colorectalCancer' && (
+        {showColorectalCancer && activeNcdTab === NCD.COLORECTAL_CANCER && (
           <div>
             <div className="[&_button]:hidden">
-              <ColorectalCancerAssessmentForm onNext={() => {}} />
+              <ColorectalCancerAssessmentForm
+                onNext={() => {}}
+                disabled={disabled}
+              />
             </div>
           </div>
         )}
 
         {/* CKD Assessment */}
-        {showCKD && activeNcdTab === 'ckd' && (
+        {showCKD && activeNcdTab === NCD.CKD && (
           <div>
             <div className="[&_button]:hidden">
-              <CKDAssessmentForm onNext={() => {}} />
+              <CKDAssessmentForm onNext={() => {}} disabled={disabled} />
             </div>
           </div>
         )}
 
         {/* Diabetes Assessment */}
-        {showDiabetes && activeNcdTab === 'diabetes' && (
+        {showDiabetes && activeNcdTab === NCD.DIABETES && (
           <div>
             <div className="[&_button]:hidden">
-              <DiabetesAssessmentForm onNext={() => {}} />
+              <DiabetesAssessmentForm onNext={() => {}} disabled={disabled} />
             </div>
           </div>
         )}
       </div>
 
       <div className="flex justify-end mt-8">
-        <Button className="px-8" onClick={onNext} type="button">
-          Next
-        </Button>
+        {!disabled && (
+          <Button className="px-8" onClick={onNext} type="button">
+            Next
+          </Button>
+        )}
       </div>
     </div>
   )

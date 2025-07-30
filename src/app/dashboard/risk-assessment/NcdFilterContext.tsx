@@ -1,22 +1,20 @@
-import { createContext, useContext, ReactNode, useState } from 'react'
+import {
+  createContext,
+  useContext,
+  ReactNode,
+  useState,
+  useEffect,
+} from 'react'
 import { getInternalFieldName } from '@/constants/fieldMappings'
 import {
   getRequiredFields as getRequiredFieldsFromConfig,
   getConditionalRequiredFields,
   checkUrinarySymptomsFilled,
 } from '@/constants/requiredFields'
+import { NCD } from '@/types/riskAssessment.types'
+import { ALL_NCD_TYPES } from '@/constants/riskAssessment'
 
-export type NcdType =
-  | 'all'
-  | 'cvd'
-  | 'diabetes'
-  | 'copd'
-  | 'breastCancer'
-  | 'prostateCancer'
-  | 'colorectalCancer'
-  | 'ckd'
-
-export type SpecificNcdType = Exclude<NcdType, 'all'>
+export type SpecificNcdType = NCD
 
 interface NcdFilterContextType {
   selectedNcds: SpecificNcdType[]
@@ -27,22 +25,47 @@ interface NcdFilterContextType {
   getRequiredFields: (ncdType: SpecificNcdType) => any | null
   isFieldRequired: (field: string, formData?: any) => boolean
   hasNcdSelected: (ncd: SpecificNcdType) => boolean
+  getNcdTypeString: () => string
 }
 
 const NcdFilterContext = createContext<NcdFilterContextType | undefined>(
   undefined
 )
 
-export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
-  const [selectedNcds, setSelectedNcds] = useState<SpecificNcdType[]>([
-    'cvd',
-    'diabetes',
-    'copd',
-    'breastCancer',
-    'prostateCancer',
-    'colorectalCancer',
-    'ckd',
-  ])
+interface NcdFilterProviderProps {
+  children: ReactNode
+  initialNcdType?: string
+}
+
+export const NcdFilterProvider = ({
+  children,
+  initialNcdType,
+}: NcdFilterProviderProps) => {
+  const [selectedNcds, setSelectedNcds] =
+    useState<SpecificNcdType[]>(ALL_NCD_TYPES)
+
+  // Parse initial ncdType and set selected NCDs
+  useEffect(() => {
+    if (initialNcdType && initialNcdType.trim() !== '') {
+      const ncdArray = initialNcdType
+        .split(',')
+        .map((ncd) => ncd.trim() as SpecificNcdType)
+      // Filter to only include valid NCD types
+      const validNcds = ncdArray.filter((ncd) =>
+        Object.values(NCD).includes(ncd)
+      )
+
+      if (validNcds.length >= 1) {
+        setSelectedNcds(validNcds)
+      } else {
+        // If less than 1 valid NCDs, default to all
+        setSelectedNcds(ALL_NCD_TYPES)
+      }
+    } else {
+      // If no ncdType provided, default to all
+      setSelectedNcds(ALL_NCD_TYPES)
+    }
+  }, [initialNcdType])
 
   const getRequiredFields = (ncdType: SpecificNcdType): any | null => {
     return getRequiredFieldsFromConfig(ncdType)
@@ -52,8 +75,8 @@ export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
     setSelectedNcds((prev) => {
       if (prev.includes(ncd)) {
         const newSelection = prev.filter((item) => item !== ncd)
-        // Ensure at least 2 NCDs are selected
-        return newSelection.length >= 2 ? newSelection : prev
+        // Ensure at least 1 NCD is selected
+        return newSelection.length >= 1 ? newSelection : prev
       } else {
         return [...prev, ncd]
       }
@@ -61,20 +84,16 @@ export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
   }
 
   const selectAllNcds = () => {
-    setSelectedNcds([
-      'cvd',
-      'diabetes',
-      'copd',
-      'breastCancer',
-      'prostateCancer',
-      'colorectalCancer',
-      'ckd',
-    ])
+    setSelectedNcds(ALL_NCD_TYPES)
   }
 
   const deselectAllNcds = () => {
-    // Keep at least 2 NCDs selected (the first two)
-    setSelectedNcds(['cvd', 'diabetes'])
+    // Keep at least 1 NCD selected (the first one)
+    setSelectedNcds([NCD.CVD])
+  }
+
+  const getNcdTypeString = (): string => {
+    return selectedNcds.join(',')
   }
 
   const isFieldRequired = (field: string, formData?: any): boolean => {
@@ -90,7 +109,7 @@ export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
         // Special handling for urinary symptoms - check if any are filled
         if (
           internalFieldName === 'urinarySymptoms' &&
-          ncdType === 'prostateCancer'
+          ncdType === NCD.PROSTATE_CANCER
         ) {
           const hasPsaLevel =
             formData?.bloodTest?.psaLevel &&
@@ -138,6 +157,7 @@ export const NcdFilterProvider = ({ children }: { children: ReactNode }) => {
         getRequiredFields,
         isFieldRequired,
         hasNcdSelected,
+        getNcdTypeString,
       }}
     >
       {children}

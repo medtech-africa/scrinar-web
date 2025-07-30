@@ -60,39 +60,29 @@ export const useRiskAssessmentPolling = (id: string) => {
         data?.responseData?.who?.lifestyleModification !== undefined &&
         data?.responseData?.who?.followUpAction !== undefined &&
         data?.responseData?.who?.breakdown !== undefined &&
-        data?.responseData?.who?.diseaseBreakdown !== undefined &&
         // Diabetes (FINDRISC) model
         data?.responseData?.findrisc?.lifestyleModification !== undefined &&
         data?.responseData?.findrisc?.followUpAction !== undefined &&
         data?.responseData?.findrisc?.breakdown !== undefined &&
-        data?.responseData?.findrisc?.diseaseBreakdown !== undefined &&
-        // COPD model
-        data?.responseData?.copd?.lifestyleModification !== undefined &&
-        data?.responseData?.copd?.followUpAction !== undefined &&
-        data?.responseData?.copd?.breakdown !== undefined &&
-        data?.responseData?.copd?.diseaseBreakdown !== undefined &&
+        // COPD model - check for either old structure or new structure
+        ((data?.responseData?.copd?.lifestyleModification !== undefined &&
+          data?.responseData?.copd?.followUpAction !== undefined) ||
+          (data?.responseData?.copd?.riskScore !== undefined &&
+            data?.responseData?.copd?.riskCategory !== undefined)) &&
         // Breast Cancer model
         data?.responseData?.breastCancer?.lifestyleModification !== undefined &&
         data?.responseData?.breastCancer?.followUpAction !== undefined &&
-        data?.responseData?.breastCancer?.breakdown !== undefined &&
-        data?.responseData?.breastCancer?.diseaseBreakdown !== undefined &&
         // Prostate Cancer model
-        data?.responseData?.prostateCancer?.lifestyleModification !==
-          undefined &&
-        data?.responseData?.prostateCancer?.followUpAction !== undefined &&
-        data?.responseData?.prostateCancer?.breakdown !== undefined &&
-        data?.responseData?.prostateCancer?.diseaseBreakdown !== undefined &&
+        data?.responseData?.prostate?.lifestyleModification !== undefined &&
+        data?.responseData?.prostate?.followUpAction !== undefined &&
         // Colorectal Cancer model
-        data?.responseData?.colorectalCancer?.lifestyleModification !==
-          undefined &&
-        data?.responseData?.colorectalCancer?.followUpAction !== undefined &&
-        data?.responseData?.colorectalCancer?.breakdown !== undefined &&
-        data?.responseData?.colorectalCancer?.diseaseBreakdown !== undefined &&
-        // CKD model
-        data?.responseData?.ckd?.lifestyleModification !== undefined &&
-        data?.responseData?.ckd?.followUpAction !== undefined &&
-        data?.responseData?.ckd?.breakdown !== undefined &&
-        data?.responseData?.ckd?.diseaseBreakdown !== undefined
+        data?.responseData?.colorectal?.lifestyleModification !== undefined &&
+        data?.responseData?.colorectal?.followUpAction !== undefined &&
+        // CKD model - check for either old structure or new structure
+        ((data?.responseData?.ckd?.lifestyleModification !== undefined &&
+          data?.responseData?.ckd?.followUpAction !== undefined) ||
+          (data?.responseData?.ckdOutput?.lifestyleModification !== undefined &&
+            data?.responseData?.ckdOutput?.followUpAction !== undefined))
 
       // Stop polling if we have the fields, otherwise poll every 3 seconds
       return hasRequiredFields ? false : 3000
@@ -132,10 +122,20 @@ export interface RiskAssessmentModelRequestData {
   copd?: COPDRequest
   breastCancer?: BreastCancerRequest
   prostateCancer?: ProstateCancerRequest
-  colorectalCancer?: ColorectalCancer
+  colorectalCancer?: ColorectalCancerRequest
+  ckd?: CKDRequest
+  diabetes?: DiabetesRequest
+  status?: string
 }
 
 interface Prediction {
+  high: number
+  low: number
+  moderate: number
+  month: number
+}
+
+interface TenYearPrediction {
   high: number
   low: number
   moderate: number
@@ -224,17 +224,40 @@ export interface Vitals {
   bmi: number
 }
 
+export interface CKDRequest {
+  age: string
+  serumCreatinine: string
+  diabetes: string
+  hypertension: string
+  familyHistory: string
+}
+
+export interface DiabetesRequest {
+  age: string
+  bmi: string
+  waist: string
+  physicalActivity: string
+  familyHistory: string
+}
+
 export interface RiskAssessmentModelResponseData {
   who?: Who
   findrisc?: Findrisc
   copd?: COPD
   breastCancer?: BreastCancer
-  prostateCancer?: ProstateCancer
-  colorectalCancer?: ColorectalCancer
-  ckd?: CKD
+  prostate?: ProstateCancer
+  colorectal?: ColorectalCancer
+  ckd?: CKD & CKDOutput
+  ckdOutput?: CKDOutput
   healthdata?: any
-  criticalAlerts: any[]
+  criticalAlerts: CriticalAlert[]
   predictions?: Prediction[]
+}
+
+export interface CriticalAlert {
+  severity: string
+  title: string
+  description: string
 }
 
 export interface Findrisc {
@@ -242,20 +265,25 @@ export interface Findrisc {
   lifestyleModification: string
   personalizedAdvice: string
   score: string
+  findRiscScorePoint?: number
   riskLevel: string
   breakdown: FindriscBreakdown
   status: boolean
   diseaseBreakdown: { [key: string]: number }
   predictions?: Prediction[]
+  _id?: string
 }
 
 export interface FindriscBreakdown {
   age: number
   bmi: number
-  waist: number
+  waistCircumference?: number
   physicalActivity: number
   familyHistory: number
   diet: number
+  fruitVegetableIntake?: number
+  antihypertensiveMedication?: number
+  highBloodGlucoseHistory?: number
 }
 
 export interface Who {
@@ -268,11 +296,14 @@ export interface Who {
   breakdown: WhoBreakdown
   status: boolean
   predictions?: Prediction[]
+  tenYearPredictions?: TenYearPrediction[]
+  _id?: string
 }
 
 export interface WhoBreakdown {
   age: number
-  bmi: number
+  BMI?: number
+  bmi?: number
   bloodPressure: number
   smoking: number
   diabetes: number
@@ -284,23 +315,37 @@ export type RiskData = RiskAssessmentModelResponseData &
 
 // New NCD Model Interfaces
 export interface COPD {
-  followUpAction: string
-  lifestyleModification: string
-  personalizedAdvice: string
-  score: string
-  riskLevel: string
-  breakdown: COPDBreakdown
-  status: boolean
-  diseaseBreakdown: { [key: string]: number }
+  followUpAction?: string
+  lifestyleModification?: string
+  personalizedAdvice?: string
+  score?: string
+  riskLevel?: string
+  breakdown?: COPDBreakdown
+  status?: boolean
+  diseaseBreakdown?: { [key: string]: number }
   predictions?: Prediction[]
+  // New COPD structure
+  riskScore?: number
+  riskCategory?: string
+  copdRisk?: string
+  lungCancerRisk?: string
+  recommendations?: string[]
 }
-
 export interface COPDRequest {
   coughDuration?: string
   shortnessOfBreath?: string
   activityLimitations?: string
   exposureToDust?: string
   pefLevel?: string
+}
+
+export interface ColorectalCancerRequest {
+  personalHistory?: string
+  personalHistoryPolyps?: string
+  inflammatoryBowelDisease?: string
+  familyHistory?: string
+  familyHistoryColorectalCancer?: string
+  familyHistoryColorectalPolyps?: string
 }
 
 export interface COPDBreakdown {
@@ -317,10 +362,11 @@ export interface BreastCancer {
   personalizedAdvice: string
   score: string
   riskLevel: string
-  breakdown: BreastCancerBreakdown
+  breakdown?: BreastCancerBreakdown
   status: boolean
-  diseaseBreakdown: { [key: string]: number }
+  diseaseBreakdown?: { [key: string]: number }
   predictions?: Prediction[]
+  _id?: string
 }
 
 export interface BreastCancerRequest {
@@ -408,25 +454,18 @@ export interface ColorectalCancerBreakdown {
 }
 
 export interface CKD {
+  eGFR: number
+  interpretation: string
+  recommendation: string
+  stage: string
+}
+
+export interface CKDOutput {
   followUpAction: string
   lifestyleModification: string
   personalizedAdvice: string
   score: string
   riskLevel: string
-  breakdown: CKDBreakdown
   status: boolean
-  diseaseBreakdown: { [key: string]: number }
-  predictions?: Prediction[]
-}
-
-export interface CKDBreakdown {
-  age: number
-  serumCreatinine: number
-  diabetes: number
-  hypertension: number
-  familyHistory: number
-  cardiovascularDisease: number
-  medications: number
-  symptoms: number
-  lifestyle: number
+  _id?: string
 }

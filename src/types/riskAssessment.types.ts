@@ -7,3 +7,12 @@ export enum NCD {
   COLORECTAL_CANCER = 'colorectalCancer',
   CKD = 'ckd',
 }
+
+export type ResultRiskType =
+  | 'who'
+  | 'findrisc'
+  | 'copd'
+  | 'breastCancer'
+  | 'prostate'
+  | 'colorectal'
+  | 'ckd'

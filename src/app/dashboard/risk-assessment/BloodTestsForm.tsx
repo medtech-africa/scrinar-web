@@ -24,6 +24,7 @@ import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
 // Validation functions
@@ -51,7 +52,7 @@ const validateCholesterol = (total: string, hdl: string, ldl: string) => {
   return { isValid: true, message: '' }
 }
 
-export const BloodTestsForm = ({ onNext }: Props) => {
+export const BloodTestsForm = ({ onNext, disabled }: Props) => {
   const { control, watch } = useFormContext()
   const [validationErrors, setValidationErrors] = useState<
     Record<string, string>
@@ -128,6 +129,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                     type="number"
                     min="50"
                     max="500"
+                    disabled={disabled}
                   />
                 )}
               />
@@ -185,7 +187,9 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                       type="number"
                       min="50"
                       max="500"
-                      disabled={hasFastingBloodSugar && !field.value}
+                      disabled={
+                        (hasFastingBloodSugar && !field.value) || disabled
+                      }
                     />
                   )}
                 />
@@ -256,6 +260,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                         type="number"
                         min="100"
                         max="600"
+                        disabled={disabled}
                       />
                     </div>
                   )}
@@ -300,6 +305,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                       type="number"
                       min="30"
                       max="400"
+                      disabled={disabled}
                     />
                   )}
                 />
@@ -337,6 +343,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                       type="number"
                       min="20"
                       max="150"
+                      disabled={disabled}
                     />
                   )}
                 />
@@ -367,6 +374,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                       type="number"
                       min="30"
                       max="1000"
+                      disabled={disabled}
                     />
                   )}
                 />
@@ -404,6 +412,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                   min="3"
                   max="15"
                   step="0.1"
+                  disabled={disabled}
                 />
               )}
             />
@@ -436,6 +445,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                     formData
                   )}
                   labelStyle="lg:text-sm text-xs"
+                  disabled={disabled}
                 />
               )}
             />
@@ -457,6 +467,7 @@ export const BloodTestsForm = ({ onNext }: Props) => {
                       formData
                     )}
                     labelStyle="lg:text-sm text-xs"
+                    disabled={disabled}
                   />
                 )}
               />
@@ -464,15 +475,17 @@ export const BloodTestsForm = ({ onNext }: Props) => {
           </div>
         </div>
 
-        <div className="flex justify-end mt-6">
-          <Button
-            className="px-8"
-            onClick={onNext}
-            disabled={hasValidationErrors}
-          >
-            Save & continue
-          </Button>
-        </div>
+        {!disabled && (
+          <div className="flex justify-end mt-6">
+            <Button
+              className="px-8"
+              onClick={onNext}
+              disabled={hasValidationErrors}
+            >
+              Save & continue
+            </Button>
+          </div>
+        )}
       </div>
     </TooltipProvider>
   )

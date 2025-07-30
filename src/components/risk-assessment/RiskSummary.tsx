@@ -1,3 +1,4 @@
+import { ResultRiskType } from '@/types/riskAssessment.types'
 import React from 'react'
 
 const getRiskLevelLikelihood = (score: number) => {
@@ -9,37 +10,32 @@ const getRiskLevelLikelihood = (score: number) => {
 const RiskSummary = ({
   score = 1,
   level = '',
-  type,
+  activeTab,
+  interpretation,
 }: {
   score: number
   level: string
-  type:
-    | 'cvd'
-    | 'diabetes'
-    | 'copd'
-    | 'breastCancer'
-    | 'prostateCancer'
-    | 'colorectalCancer'
-    | 'ckd'
+  activeTab: ResultRiskType
+  interpretation: string
 }) => {
   const likelihood = getRiskLevelLikelihood(score)
 
   const getText = () => {
-    switch (type) {
-      case 'cvd':
+    switch (activeTab) {
+      case 'who':
         return `A ${score}% risk means a ${level} chance of developing a stroke in 10 years and a ${likelihood} likelihood of heart disease.`
-      case 'diabetes':
+      case 'findrisc':
         return `A ${score}% risk means a ${level} chance of developing type II diabetes in 10 years and a ${likelihood} likelihood.`
       case 'copd':
         return `A ${score}% risk means a ${level} chance of developing COPD and a ${likelihood} likelihood of respiratory complications.`
       case 'breastCancer':
         return `A ${score}% risk means a ${level} chance of developing breast cancer in 10 years and a ${likelihood} likelihood.`
-      case 'prostateCancer':
+      case 'prostate':
         return `A ${score}% risk means a ${level} chance of developing prostate cancer and a ${likelihood} likelihood of aggressive disease.`
-      case 'colorectalCancer':
+      case 'colorectal':
         return `A ${score}% risk means a ${level} chance of developing colorectal cancer in 5 years and a ${likelihood} likelihood.`
       case 'ckd':
-        return `A ${score}% risk means a ${level} chance of developing chronic kidney disease and a ${likelihood} likelihood of progression.`
+        return `A stage ${score} means ${interpretation}`
       default:
         return `A ${score}% risk means a ${level} chance of developing the condition and a ${likelihood} likelihood.`
     }

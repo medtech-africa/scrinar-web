@@ -8,6 +8,7 @@ import {
   CollapsibleTrigger,
 } from '@/components/ui/collapsible'
 import { IconPicker } from '@/components/ui/icon-picker'
+import { NCD } from '@/types/riskAssessment.types'
 
 interface NcdSubFilterProps {
   selectedSpecificNcds: SpecificNcdType[]
@@ -34,13 +35,13 @@ export const NcdSubFilter: React.FC<NcdSubFilterProps> = ({
 }) => {
   const [isOpen, setIsOpen] = useState(true)
   const allNcdTypes: SpecificNcdType[] = [
-    'cvd',
-    'diabetes',
-    'copd',
-    'breastCancer',
-    'prostateCancer',
-    'colorectalCancer',
-    'ckd',
+    NCD.CVD,
+    NCD.DIABETES,
+    NCD.COPD,
+    NCD.BREAST_CANCER,
+    NCD.PROSTATE_CANCER,
+    NCD.COLORECTAL_CANCER,
+    NCD.CKD,
   ]
 
   const handleSelectAll = () => {

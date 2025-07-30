@@ -6,18 +6,20 @@ import { useNcdFilter } from './NcdFilterContext'
 import calculateAge from '@/utils/calculateAge'
 import { OptionWithRadioField } from './OptionWithRadioField'
 import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const DiabetesAssessmentForm = ({ onNext }: Props) => {
+export const DiabetesAssessmentForm = ({ onNext, disabled }: Props) => {
   const { watch } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
   const isRequiredField = useRequiredFieldLabel()
 
   // Only show this form for diabetes
-  if (!hasNcdSelected('diabetes')) {
+  if (!hasNcdSelected(NCD.DIABETES)) {
     return null
   }
 
@@ -131,6 +133,7 @@ export const DiabetesAssessmentForm = ({ onNext }: Props) => {
               )}
               options={['Yes', 'No']}
               form={{ id: 'lifestyle.usesAntihypertensiveMedication' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
@@ -143,15 +146,18 @@ export const DiabetesAssessmentForm = ({ onNext }: Props) => {
               form={{
                 id: 'previousHealthScreening.hasHistoryHighBloodGlucose',
               }}
+              disabled={disabled}
             />
           </div>
         </div>
       </div>
 
       <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext} type="button">
-          Save & continue
-        </Button>
+        {!disabled && (
+          <Button className="px-8" onClick={onNext} type="button">
+            Save & continue
+          </Button>
+        )}
       </div>
     </div>
   )

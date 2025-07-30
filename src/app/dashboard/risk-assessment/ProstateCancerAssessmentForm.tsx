@@ -4,12 +4,14 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { useNcdFilter } from './NcdFilterContext'
 import { BadgeField } from '@/components/ui/badge'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
+export const ProstateCancerAssessmentForm = ({ onNext, disabled }: Props) => {
   const { register: customRegister, watch } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
 
@@ -17,7 +19,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
   const psaLevel = watch('bloodTest.psaLevel')
 
   // Only show this form for Prostate Cancer
-  if (!hasNcdSelected('prostateCancer')) {
+  if (!hasNcdSelected(NCD.PROSTATE_CANCER)) {
     return null
   }
 
@@ -166,6 +168,7 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
                                   value={frequencyOptionsToScoreMap[value]}
                                   type="radio"
                                   title={symptom.key}
+                                  disabled={disabled}
                                 />
                               </span>
                             </label>
@@ -182,9 +185,11 @@ export const ProstateCancerAssessmentForm = ({ onNext }: Props) => {
       </div>
 
       <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext} type="button">
-          Save & continue
-        </Button>
+        {!disabled && (
+          <Button className="px-8" onClick={onNext} type="button">
+            Save & continue
+          </Button>
+        )}
       </div>
     </div>
   )

@@ -4,12 +4,14 @@ import { OptionWithRadioField } from './OptionWithRadioField'
 import { Text } from '@/components/ui/text'
 import { Button } from '@/components/ui/button'
 import { useNcdFilter } from './NcdFilterContext'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const CardiacAssessmentForm = ({ onNext }: Props) => {
+export const CardiacAssessmentForm = ({ onNext, disabled }: Props) => {
   const { watch } = useFormContext()
 
   const { hasNcdSelected } = useNcdFilter()
@@ -18,7 +20,7 @@ export const CardiacAssessmentForm = ({ onNext }: Props) => {
   const hasChestPain = watch('cardiac.chestPain') === 'Yes'
   const hasChestPainLocation = watch('cardiac.chestPainLocation') === 'Yes'
 
-  if (!hasNcdSelected('cvd') && !hasNcdSelected('diabetes')) {
+  if (!hasNcdSelected(NCD.CVD) && !hasNcdSelected(NCD.DIABETES)) {
     return null
   }
 
@@ -40,6 +42,7 @@ export const CardiacAssessmentForm = ({ onNext }: Props) => {
           label="Have you ever had any pain or discomfort or any pressure or heaviness in your chest?"
           options={['Yes', 'No']}
           form={{ id: 'cardiac.chestPain' }}
+          disabled={disabled}
         />
 
         {hasChestPain && (
@@ -48,6 +51,7 @@ export const CardiacAssessmentForm = ({ onNext }: Props) => {
               label="Do you get the pain in the center of the chest or left chest or left arm?"
               options={['Yes', 'No']}
               form={{ id: 'cardiac.chestPainLocation' }}
+              disabled={disabled}
             />
 
             {hasChestPainLocation && (
@@ -56,30 +60,35 @@ export const CardiacAssessmentForm = ({ onNext }: Props) => {
                   label="Do you get it when you walk at an ordinary pace on level or when you walk uphill or hurry?"
                   options={['Yes', 'No']}
                   form={{ id: 'cardiac.painOnExertion' }}
+                  disabled={disabled}
                 />
 
                 <OptionWithRadioField
                   label="Do you slowdown if you get the pain while walking?"
                   options={['Yes', 'No']}
                   form={{ id: 'cardiac.slowDownWithPain' }}
+                  disabled={disabled}
                 />
 
                 <OptionWithRadioField
                   label="Does the pain go away if you stand still or if you take a tablet under the tongue?"
                   options={['Yes', 'No']}
                   form={{ id: 'cardiac.painRelievedByRest' }}
+                  disabled={disabled}
                 />
 
                 <OptionWithRadioField
                   label="Does the pain go away in less than 10 minutes?"
                   options={['Yes', 'No']}
                   form={{ id: 'cardiac.painDurationLessThan10Min' }}
+                  disabled={disabled}
                 />
 
                 <OptionWithRadioField
                   label="Have you ever had a severe chest pain across the front of your chest lasting for half an hour or more?"
                   options={['Yes', 'No']}
                   form={{ id: 'cardiac.severePainOver30Min' }}
+                  disabled={disabled}
                 />
               </>
             )}
@@ -95,6 +104,7 @@ export const CardiacAssessmentForm = ({ onNext }: Props) => {
           label="Have you ever had any of the following: difficulty in talking, weakness of arm and/or leg on one side of the body or numbness on one side of the body?"
           options={['Yes', 'No']}
           form={{ id: 'cardiac.strokeSymptoms' }}
+          disabled={disabled}
         />
       </div>
 
@@ -122,9 +132,16 @@ export const CardiacAssessmentForm = ({ onNext }: Props) => {
       )}
 
       <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext} type="button">
-          Save & continue
-        </Button>
+        {!disabled && (
+          <Button
+            className="px-8"
+            onClick={onNext}
+            type="button"
+            disabled={disabled}
+          >
+            Save & continue
+          </Button>
+        )}
       </div>
     </div>
   )

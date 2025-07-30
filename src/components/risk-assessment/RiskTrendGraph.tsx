@@ -71,6 +71,10 @@ const RiskTrendGraph = ({
     high: Math.round(item.high * 100 * 10) / 10,
   }))
 
+  if (!predictions.length) {
+    return null
+  }
+
   // Sort by month
   chartData.sort((a, b) => a.month - b.month)
 

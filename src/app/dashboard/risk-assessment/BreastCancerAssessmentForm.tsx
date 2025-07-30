@@ -5,17 +5,19 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { Controller, useFormContext } from 'react-hook-form'
 import { useNcdFilter } from './NcdFilterContext'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
+export const BreastCancerAssessmentForm = ({ onNext, disabled }: Props) => {
   const { control, watch, register: customRegister } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
 
   // Only show this form for Breast Cancer
-  if (!hasNcdSelected('breastCancer')) {
+  if (!hasNcdSelected(NCD.BREAST_CANCER)) {
     return null
   }
 
@@ -43,6 +45,7 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
             label="Have you ever been diagnosed with Breast Cancer?"
             options={['Yes', 'No']}
             form={{ id: 'breastCancer.hasBeenDiagnosed' }}
+            disabled={disabled}
           />
 
           {hasBeenDiagnosedWithBreastCancer === 'Yes' && (
@@ -99,6 +102,7 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
                       label="Age at first child birth"
                       helperText="if no history of child birth, enter 0"
                       labelStyle="lg:text-sm text-xs"
+                      disabled={disabled}
                     />
                   )}
                 />
@@ -111,6 +115,7 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
                     'Postmenopause (no periods)',
                   ]}
                   form={{ id: 'breastCancer.menopauseStatus' }}
+                  disabled={disabled}
                 />
 
                 {watch('breastCancer.menopauseStatus') ===
@@ -125,6 +130,7 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
                         placeholder="Age in years"
                         label="Age at menopause (if applicable)"
                         labelStyle="lg:text-sm text-xs"
+                        disabled={disabled}
                       />
                     )}
                   />
@@ -147,6 +153,7 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
                     placeholder="Years"
                     label="Have you used hormone replacement therapy (HRT)? — HRT includes estrogen-only or combined estrogen and progesterone but does not include hormonal birth control."
                     labelStyle="lg:text-sm text-xs"
+                    disabled={disabled}
                   />
                 )}
               />
@@ -168,6 +175,7 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
                   'Lobular carcinoma in situ (LCIS)',
                 ]}
                 form={{ id: 'breastCancer.breastBiopsy' }}
+                disabled={disabled}
               />
             </div>
 
@@ -185,6 +193,7 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
                   'BRCA2 mutation',
                 ]}
                 form={{ id: 'breastCancer.brcaMutationStatus' }}
+                disabled={disabled}
               />
             </div>
 
@@ -203,6 +212,7 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
                   'Unknown',
                 ]}
                 form={{ id: 'breastCancer.breastDensity' }}
+                disabled={disabled}
               />
             </div>
 
@@ -287,6 +297,7 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
                   label="Do you have any Ashkenazi inheritance?"
                   options={['Yes', 'No', "I don't know"]}
                   form={{ id: 'breastCancer.ashkenaziInheritance' }}
+                  disabled={disabled}
                 />
               </div>
             </div>
@@ -295,9 +306,11 @@ export const BreastCancerAssessmentForm = ({ onNext }: Props) => {
       </div>
 
       <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext} type="button">
-          Next
-        </Button>
+        {!disabled && (
+          <Button className="px-8" onClick={onNext} type="button">
+            Next
+          </Button>
+        )}
       </div>
     </div>
   )

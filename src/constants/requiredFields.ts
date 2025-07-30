@@ -1,7 +1,8 @@
 import { SpecificNcdType } from '@/app/dashboard/risk-assessment/NcdFilterContext'
+import { NCD } from '@/types/riskAssessment.types'
 
 export interface NcdRequiredFields {
-  cvd: {
+  [NCD.CVD]: {
     dateOfBirth: boolean
     gender: boolean
     systolicBP: boolean
@@ -10,7 +11,7 @@ export interface NcdRequiredFields {
     smoking: boolean
     hasQuitSmoking: boolean
   }
-  diabetes: {
+  [NCD.DIABETES]: {
     dateOfBirth: boolean
     waist: boolean
     bmi: boolean
@@ -21,7 +22,7 @@ export interface NcdRequiredFields {
     usesAntihypertensiveMedication: boolean
     hasHistoryHighBloodGlucose: boolean
   }
-  copd: {
+  [NCD.COPD]: {
     dateOfBirth: boolean
     gender: boolean
     smoking: boolean
@@ -32,7 +33,7 @@ export interface NcdRequiredFields {
     exposureToDust: boolean
     pefLevel: boolean
   }
-  breastCancer: {
+  [NCD.BREAST_CANCER]: {
     dateOfBirth: boolean
     gender: boolean
     height: boolean
@@ -41,20 +42,22 @@ export interface NcdRequiredFields {
     ageAtFirstBirth: boolean
     menopauseStatus: boolean
     hormoneReplacementTherapy: boolean
+    hrtDuration: boolean
     breastBiopsy: boolean
+    benignBreastDisease: boolean
     familyHistoryBreastCancer: boolean
     familyHistoryOvarianCancer: boolean
     brcaMutationStatus: boolean
     breastDensity: boolean
   }
-  prostateCancer: {
+  [NCD.PROSTATE_CANCER]: {
     dateOfBirth: boolean
     gender: boolean
     psaLevel: boolean
     familyHistoryProstateCancer: boolean
     urinarySymptoms: boolean
   }
-  colorectalCancer: {
+  [NCD.COLORECTAL_CANCER]: {
     dateOfBirth: boolean
     gender: boolean
     height: boolean
@@ -71,7 +74,7 @@ export interface NcdRequiredFields {
     aspirinUse: boolean
     nsaidUse: boolean
   }
-  ckd: {
+  [NCD.CKD]: {
     dateOfBirth: boolean
     gender: boolean
     serumCreatinine: boolean
@@ -79,7 +82,7 @@ export interface NcdRequiredFields {
 }
 
 export const ncdRequiredFields: NcdRequiredFields = {
-  cvd: {
+  [NCD.CVD]: {
     dateOfBirth: true,
     gender: true,
     bmi: true,
@@ -88,7 +91,7 @@ export const ncdRequiredFields: NcdRequiredFields = {
     hasQuitSmoking: true,
     systolicBP: true,
   },
-  diabetes: {
+  [NCD.DIABETES]: {
     dateOfBirth: true,
     waist: true,
     bmi: true,
@@ -99,7 +102,7 @@ export const ncdRequiredFields: NcdRequiredFields = {
     usesAntihypertensiveMedication: true,
     hasHistoryHighBloodGlucose: true,
   },
-  copd: {
+  [NCD.COPD]: {
     dateOfBirth: true,
     gender: true,
     smoking: true,
@@ -110,7 +113,7 @@ export const ncdRequiredFields: NcdRequiredFields = {
     exposureToDust: true,
     pefLevel: true,
   },
-  breastCancer: {
+  [NCD.BREAST_CANCER]: {
     dateOfBirth: true,
     gender: true,
     height: true,
@@ -119,20 +122,22 @@ export const ncdRequiredFields: NcdRequiredFields = {
     ageAtFirstBirth: true,
     menopauseStatus: true,
     hormoneReplacementTherapy: true,
+    hrtDuration: true,
     breastBiopsy: true,
+    benignBreastDisease: true,
     familyHistoryBreastCancer: true,
     familyHistoryOvarianCancer: true,
     brcaMutationStatus: true,
     breastDensity: true,
   },
-  prostateCancer: {
+  [NCD.PROSTATE_CANCER]: {
     dateOfBirth: true,
     gender: true,
     psaLevel: true,
     familyHistoryProstateCancer: true,
     urinarySymptoms: true,
   },
-  colorectalCancer: {
+  [NCD.COLORECTAL_CANCER]: {
     dateOfBirth: true,
     gender: true,
     height: true,
@@ -149,7 +154,7 @@ export const ncdRequiredFields: NcdRequiredFields = {
     aspirinUse: true,
     nsaidUse: true,
   },
-  ckd: {
+  [NCD.CKD]: {
     dateOfBirth: true,
     gender: true,
     serumCreatinine: true,
@@ -207,12 +212,12 @@ export const getConditionalRequiredFields = (
   ncdType: SpecificNcdType,
   formData: any
 ): Partial<NcdRequiredFields[keyof NcdRequiredFields]> => {
-  if (ncdType === 'prostateCancer') {
+  if (ncdType === NCD.PROSTATE_CANCER) {
     const hasPsaLevel =
       formData?.bloodTest?.psaLevel && formData.bloodTest.psaLevel.trim() !== ''
 
     return {
-      ...ncdRequiredFields.prostateCancer,
+      ...ncdRequiredFields[NCD.PROSTATE_CANCER],
       // If PSA level is available, urinary symptoms are not required
       // If PSA level is not available, urinary symptoms are required (at least one should be filled)
       urinarySymptoms: !hasPsaLevel,

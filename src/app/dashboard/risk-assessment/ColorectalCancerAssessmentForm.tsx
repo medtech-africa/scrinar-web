@@ -4,17 +4,19 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { useFormContext } from 'react-hook-form'
 import { useNcdFilter } from './NcdFilterContext'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const ColorectalCancerAssessmentForm = ({ onNext }: Props) => {
+export const ColorectalCancerAssessmentForm = ({ onNext, disabled }: Props) => {
   const { watch } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
 
   // Only show this form for Colorectal Cancer
-  if (!hasNcdSelected('colorectalCancer')) {
+  if (!hasNcdSelected(NCD.COLORECTAL_CANCER)) {
     return null
   }
 
@@ -69,18 +71,21 @@ export const ColorectalCancerAssessmentForm = ({ onNext }: Props) => {
               label="Have you ever been diagnosed with colorectal cancer?"
               options={['Yes', 'No']}
               form={{ id: 'colorectalCancer.personalHistory' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
               label="Have you ever had colorectal polyps removed?"
               options={['Yes', 'No']}
               form={{ id: 'colorectalCancer.personalHistoryPolyps' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
               label="Have you been diagnosed with inflammatory bowel disease (Crohn's disease or ulcerative colitis)?"
               options={['Yes', 'No']}
               form={{ id: 'colorectalCancer.inflammatoryBowelDisease' }}
+              disabled={disabled}
             />
           </div>
         </div>
@@ -95,6 +100,7 @@ export const ColorectalCancerAssessmentForm = ({ onNext }: Props) => {
               label="Have any of your first-degree relatives (parents, siblings, children) been diagnosed with colorectal cancer?"
               options={['Yes', 'No']}
               form={{ id: 'colorectalCancer.familyHistoryColorectalCancer' }}
+              disabled={disabled}
             />
 
             {watch('colorectalCancer.familyHistoryColorectalCancer') ===
@@ -103,6 +109,7 @@ export const ColorectalCancerAssessmentForm = ({ onNext }: Props) => {
                 label="How many of these relatives had cancer of the colon or rectum (cancer of the lower intestine)?"
                 options={['1', '2 or more', "I don't know"]}
                 form={{ id: 'colorectalCancer.numberOfRelatives' }}
+                disabled={disabled}
               />
             )}
 
@@ -110,6 +117,7 @@ export const ColorectalCancerAssessmentForm = ({ onNext }: Props) => {
               label="Have any of your first-degree relatives had colorectal polyps removed?"
               options={['Yes', 'No']}
               form={{ id: 'colorectalCancer.familyHistoryPolyps' }}
+              disabled={disabled}
             />
           </div>
         </div>
@@ -124,12 +132,14 @@ export const ColorectalCancerAssessmentForm = ({ onNext }: Props) => {
               label="During the past 10 years, have you had a colonoscopy, sigmoidoscopy, or both?"
               options={['Yes', 'No', "I don't Know"]}
               form={{ id: 'colorectalCancer.colonoscopyHistory' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
               label="In the past 10 years, did a healthcare provider tell you that you have a colon or rectal polyp?"
               options={['Yes', 'No', "I don't Know"]}
               form={{ id: 'colorectalCancer.polypDiagnosis' }}
+              disabled={disabled}
             />
           </div>
         </div>
@@ -144,21 +154,25 @@ export const ColorectalCancerAssessmentForm = ({ onNext }: Props) => {
               label="During the past 30 days, did you take medications containing aspirin at least 3 times a week?  such as: Vasoprin, Bufferin, Bayer, Excedrin, Other generic forms?"
               options={['Yes', 'No']}
               form={{ id: 'colorectalCancer.aspirinUse' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
               label="During the past 30 days, did you take medications that do not contain aspirin at least 3 times a week?"
               options={['Yes', 'No']}
               form={{ id: 'colorectalCancer.nsaidUse' }}
+              disabled={disabled}
             />
           </div>
         </div>
       </div>
 
       <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext} type="button">
-          Save & continue
-        </Button>
+        {!disabled && (
+          <Button className="px-8" onClick={onNext} type="button">
+            Save & continue
+          </Button>
+        )}
       </div>
     </div>
   )

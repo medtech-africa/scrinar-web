@@ -22,9 +22,11 @@ import { Button } from '@/components/ui/button'
 import MeasurementGuides from '@/components/risk-assessment/MeasurementGuides'
 import { useNcdFilter } from './NcdFilterContext'
 import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
 // Enhanced validation functions
@@ -120,7 +122,7 @@ const validatePulse = (value: string) => {
   return { isValid: true, message: '' }
 }
 
-export const VitalsMeasurement = ({ onNext }: Props) => {
+export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
   const { control, watch, setValue } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
   const [validationErrors, setValidationErrors] = useState<
@@ -226,6 +228,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         min="50"
                         max="250"
                         type="number"
+                        disabled={disabled}
                       />
                     )}
                   />
@@ -253,10 +256,12 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         min="3"
                         max="300"
                         type="number"
+                        disabled={disabled}
                       />
                     )}
                   />
-                  {(hasNcdSelected('cvd') || hasNcdSelected('diabetes')) && (
+                  {(hasNcdSelected(NCD.CVD) ||
+                    hasNcdSelected(NCD.DIABETES)) && (
                     <Controller
                       name="vitals.waist"
                       control={control}
@@ -281,13 +286,14 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                           min="30"
                           max="200"
                           type="number"
+                          disabled={disabled}
                         />
                       )}
                     />
                   )}
                 </div>
 
-                {(hasNcdSelected('cvd') || hasNcdSelected('diabetes')) && (
+                {(hasNcdSelected(NCD.CVD) || hasNcdSelected(NCD.DIABETES)) && (
                   <div className="my-4">
                     <div className="bg-grey-50 w-full p-4 flex justify-center">
                       <Text>BMI Result</Text>
@@ -355,6 +361,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                           min="70"
                           max="250"
                           type="number"
+                          disabled={disabled}
                         />
                       )}
                     />
@@ -386,6 +393,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                           min="40"
                           max="150"
                           type="number"
+                          disabled={disabled}
                         />
                       )}
                     />
@@ -430,6 +438,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                           min="40"
                           max="200"
                           type="number"
+                          disabled={disabled}
                         />
                       )}
                     />
@@ -484,6 +493,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                         min="60"
                         max="100"
                         type="number"
+                        disabled={disabled}
                       />
                     )}
                   />
@@ -508,6 +518,7 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
                           max="45"
                           step="0.1"
                           type="number"
+                          disabled={disabled}
                         />
                       )}
                     />
@@ -567,15 +578,17 @@ export const VitalsMeasurement = ({ onNext }: Props) => {
           )}
         </div>
 
-        <div className="flex justify-end mt-6">
-          <Button
-            className="px-8"
-            onClick={onNext}
-            disabled={hasValidationErrors}
-          >
-            Save & continue
-          </Button>
-        </div>
+        {!disabled && (
+          <div className="flex justify-end mt-6">
+            <Button
+              className="px-8"
+              onClick={onNext}
+              disabled={hasValidationErrors}
+            >
+              Save & continue
+            </Button>
+          </div>
+        )}
       </div>
     </TooltipProvider>
   )

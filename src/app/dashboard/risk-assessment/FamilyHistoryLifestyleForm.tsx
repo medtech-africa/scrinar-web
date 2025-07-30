@@ -9,9 +9,10 @@ import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
+export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
   const { control, watch, setValue } = useFormContext()
   const isRequiredField = useRequiredFieldLabel()
 
@@ -180,6 +181,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
               )}
               options={['Yes', 'No']}
               form={{ id: 'lifestyle.everSmoked' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
@@ -194,6 +196,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 'Never smoked',
               ]}
               form={{ id: 'lifestyle.currentSmokingStatus' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
@@ -210,6 +213,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 'Frequently (6 or more times a week)',
               ]}
               form={{ id: 'lifestyle.alcoholFrequency' }}
+              disabled={disabled}
             />
           </div>
         </div>
@@ -260,6 +264,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 'Frequently (6 or more times a week)',
               ]}
               form={{ id: 'lifestyle.processedFoodsFrequency' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
@@ -270,6 +275,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
               )}
               options={['Yes', 'No']}
               form={{ id: 'lifestyle.addSaltAtTable' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
@@ -288,6 +294,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 'More than 10 servings/week',
               ]}
               form={{ id: 'lifestyle.vegetableServingsPerWeek' }}
+              disabled={disabled}
             />
 
             <OptionWithRadioField
@@ -304,6 +311,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                 'More than 5 cups',
               ]}
               form={{ id: 'lifestyle.vegetableServingSize' }}
+              disabled={disabled}
             />
           </div>
         </div>
@@ -322,6 +330,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
               )}
               options={['Yes', 'No']}
               form={{ id: 'lifestyle.hasDailyPhysicalActivity' }}
+              disabled={disabled}
             />
           </div>
 
@@ -343,6 +352,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                       formData
                     )}
                     labelStyle="lg:text-sm text-xs"
+                    disabled={disabled}
                   />
                 )}
               />
@@ -372,6 +382,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                         label: 'More than 4 hours/week',
                       },
                     ]}
+                    disabled={disabled}
                   />
                 )}
               />
@@ -392,6 +403,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                       formData
                     )}
                     labelStyle="lg:text-sm text-xs"
+                    disabled={disabled}
                   />
                 )}
               />
@@ -421,6 +433,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
                         label: 'More than 4 hours/week',
                       },
                     ]}
+                    disabled={disabled}
                   />
                 )}
               />
@@ -429,11 +442,18 @@ export const FamilyHistoryLifestyleForm = ({ onNext }: Props) => {
         </div>
       </div>
 
-      <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext} type="button">
-          Save & continue
-        </Button>
-      </div>
+      {!disabled && (
+        <div className="flex justify-end mt-6">
+          <Button
+            className="px-8"
+            onClick={onNext}
+            type="button"
+            disabled={disabled}
+          >
+            Save & continue
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

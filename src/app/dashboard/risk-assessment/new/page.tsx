@@ -13,6 +13,9 @@ import toast from 'react-hot-toast'
 
 import ContentLoader from '@/components/content-loader'
 import { Text } from '@/components/ui/text'
+import { PageHeader } from '@/components/page-header'
+import { IconNames } from '@/components/ui/icon-picker/icon-names'
+import { DEFAULT_NCD_TYPE } from '@/constants/riskAssessment'
 
 const RiskAssessment = () => {
   const searchParams = useSearchParams()
@@ -82,6 +85,11 @@ const RiskAssessment = () => {
     router.replace(newUrl.pathname + newUrl.search)
   }
 
+  const navigationItems = [
+    { label: 'Risk Assessment', icon: IconNames.arrowRight },
+    { label: 'New Assessment' },
+  ]
+
   useEffect(() => {
     const initializeFormData = async () => {
       setIsLoading(true)
@@ -108,7 +116,7 @@ const RiskAssessment = () => {
           // If no initial data exists, create new data structure
           if (!initialData) {
             initialData = {
-              ncdType: 'all',
+              ncdType: DEFAULT_NCD_TYPE,
               personalInfo: {
                 firstName: patient.firstName || '',
                 middleName: patient.middleName || '',
@@ -156,7 +164,7 @@ const RiskAssessment = () => {
             assessmentCreationTriggered.current = true
             createAssessment({
               userId: patient.id,
-              ncdType: 'all',
+              ncdType: DEFAULT_NCD_TYPE,
             })
           }
         }
@@ -193,21 +201,14 @@ const RiskAssessment = () => {
   // Handle case where patientId is provided but patient not found
   if (patientId && patientError && !isPatientLoading) {
     return (
-      <div className="flex flex-col gap-y-5">
-        <div className="flex flex-col gap-y-2">
-          <h1 className="text-2xl font-medium">NCD Risk Assessment</h1>
-          <p>
-            Non communicable Diseases (NCDs) are chronic conditions that are not
-            transmitted from person to person, such as diabetes, cardiovascular
-            disease, cancer, and chronic respiratory diseases.
-          </p>
-          <p>
-            This screening page is designed for use in pharmacies and hospitals
-            to assess a patient&apos;s risk of developing NCDs over a 2 year
-            period, using vital signs, family history, personal lifestyle and
-            screening responses to provide a comprehensive risk assessment.
-          </p>
-
+      <div>
+        <PageHeader
+          title="NCD Risk Assessment"
+          subtitle="Non communicable Diseases (NCDs) are chronic conditions that are not transmitted from person to person, such as diabetes, cardiovascular disease, cancer, and chronic respiratory diseases. This screening page is designed for use in pharmacies and hospitals to assess a patient's risk of developing NCDs over a 2 year period, using vital signs, family history, personal lifestyle and screening responses to provide a comprehensive risk assessment."
+          navigation={navigationItems}
+          avatar="avatar"
+        />
+        <div className="flex flex-col gap-y-5">
           <div className="bg-red-50 border border-red-200 rounded-lg p-4 mt-4">
             <Text variant="text/sm" className="font-medium text-red-900 mb-2">
               ⚠️ Patient Not Found
@@ -233,21 +234,14 @@ const RiskAssessment = () => {
   }
 
   return (
-    <div className="flex flex-col gap-y-5">
-      <div className="flex flex-col gap-y-2">
-        <h1 className="text-2xl font-medium">NCD Risk Assessment</h1>
-        <p>
-          Non communicable Diseases (NCDs) are chronic conditions that are not
-          transmitted from person to person, such as diabetes, cardiovascular
-          disease, cancer, and chronic respiratory diseases.
-        </p>
-        <p>
-          This screening page is designed for use in pharmacies and hospitals to
-          assess a patient&apos;s risk of developing NCDs over a 2 year period,
-          using vital signs, family history, personal lifestyle and screening
-          responses to provide a comprehensive risk assessment.
-        </p>
-
+    <div>
+      <PageHeader
+        title="NCD Risk Assessment"
+        subtitle="Non communicable Diseases (NCDs) are chronic conditions that are not transmitted from person to person, such as diabetes, cardiovascular disease, cancer, and chronic respiratory diseases. This screening page is designed for use in pharmacies and hospitals to assess a patient's risk of developing NCDs over a 2 year period, using vital signs, family history, personal lifestyle and screening responses to provide a comprehensive risk assessment."
+        navigation={navigationItems}
+        avatar="avatar"
+      />
+      <div className="flex flex-col gap-y-5">
         {/* Show patient info if available */}
         {patient && (
           <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mt-4">
@@ -293,22 +287,23 @@ const RiskAssessment = () => {
             </Text>
           </div>
         )}
-      </div>
-      <div className="">
-        <div className="grid">
-          <RiskAssessmentForm
-            data={
-              formData
-                ? {
-                    requestData: formData as RiskAssessmentModelRequestData,
-                  }
-                : undefined
-            }
-            patientId={currentPatientId}
-            assessmentId={assessmentId}
-            isPatientDataPrefilled={!!patient}
-            onPatientCreated={handlePatientCreated}
-          />
+
+        <div className="">
+          <div className="grid">
+            <RiskAssessmentForm
+              data={
+                formData
+                  ? {
+                      requestData: formData as RiskAssessmentModelRequestData,
+                    }
+                  : undefined
+              }
+              patientId={currentPatientId}
+              assessmentId={assessmentId}
+              isPatientDataPrefilled={!!patient}
+              onPatientCreated={handlePatientCreated}
+            />
+          </div>
         </div>
       </div>
     </div>

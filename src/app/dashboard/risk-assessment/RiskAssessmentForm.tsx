@@ -34,6 +34,8 @@ import { slugify } from '@/utils/slugify'
 import { NcdFilterProvider, useNcdFilter } from './NcdFilterContext'
 import { useRiskAssessmentPolling } from '@/hooks/queries/useRiskAssessment'
 import { getFieldPath, getFieldDisplayName } from '@/constants/fieldMappings'
+import { NCD } from '@/types/riskAssessment.types'
+import { NCD_DISPLAY_NAMES, ALL_NCD_TYPES } from '@/constants/riskAssessment'
 
 import { useRouter } from 'next/navigation'
 
@@ -190,8 +192,9 @@ const RiskAssessmentFormContent = ({
     toggleNcd,
     selectAllNcds,
     deselectAllNcds,
-    getRequiredFields,
     hasNcdSelected,
+    getRequiredFields,
+    getNcdTypeString,
   } = useNcdFilter()
   const formMethods = useForm({ defaultValues: data?.requestData })
 
@@ -322,6 +325,12 @@ const RiskAssessmentFormContent = ({
       return
     }
 
+    // Add ncdType to the data
+    const formDataWithNcdType = {
+      ...data,
+      ncdType: getNcdTypeString(),
+    }
+
     storeRiskAssessment(
       slugify(
         [
@@ -332,7 +341,7 @@ const RiskAssessmentFormContent = ({
           .filter(Boolean)
           .join(' ') + data.personalInfo?.gender
       ),
-      data
+      formDataWithNcdType
     )
 
     // Call analyzeRisk with assessmentId
@@ -406,6 +415,7 @@ const RiskAssessmentFormContent = ({
     if (_assessmentId) {
       const currentFormData = formMethods.watch()
       let sectionData: any = {}
+      sectionData.ncdType = getNcdTypeString()
 
       switch (activeTab) {
         case 'bio':
@@ -575,7 +585,7 @@ const RiskAssessmentFormContent = ({
                         </CollapsibleTrigger>
                         <CollapsibleContent>
                           <Text variant="text/sm" className="mb-3">
-                            Choose a minimum of 2 NCDs to get started with your
+                            Choose at least 1 NCD to get started with your
                             assessment
                           </Text>
                           <div className="grid grid-cols-2 gap-4">
@@ -583,14 +593,20 @@ const RiskAssessmentFormContent = ({
                               <label className="flex items-center space-x-3 cursor-pointer">
                                 <input
                                   type="checkbox"
-                                  checked={selectedNcds.length === 7}
+                                  checked={
+                                    selectedNcds.length === ALL_NCD_TYPES.length
+                                  }
                                   onChange={() => {
-                                    if (selectedNcds.length === 7) {
+                                    if (
+                                      selectedNcds.length ===
+                                      ALL_NCD_TYPES.length
+                                    ) {
                                       deselectAllNcds()
                                     } else {
                                       selectAllNcds()
                                     }
                                   }}
+                                  disabled={displayOnly}
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                                 />
                                 <Text
@@ -603,43 +619,58 @@ const RiskAssessmentFormContent = ({
                               <label className="flex items-center space-x-3 cursor-pointer">
                                 <input
                                   type="checkbox"
-                                  checked={hasNcdSelected('cvd')}
-                                  onChange={() => toggleNcd('cvd')}
+                                  checked={hasNcdSelected(NCD.CVD)}
+                                  onChange={() => toggleNcd(NCD.CVD)}
+                                  disabled={displayOnly}
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                                 />
                                 <Text
                                   variant="text/sm"
                                   className="font-medium text-gray-700"
                                 >
-                                  Cardiovascular Disease
+                                  {
+                                    NCD_DISPLAY_NAMES[
+                                      NCD.CVD as keyof typeof NCD_DISPLAY_NAMES
+                                    ]
+                                  }
                                 </Text>
                               </label>
                               <label className="flex items-center space-x-3 cursor-pointer">
                                 <input
                                   type="checkbox"
-                                  checked={hasNcdSelected('diabetes')}
-                                  onChange={() => toggleNcd('diabetes')}
+                                  checked={hasNcdSelected(NCD.DIABETES)}
+                                  onChange={() => toggleNcd(NCD.DIABETES)}
+                                  disabled={displayOnly}
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                                 />
                                 <Text
                                   variant="text/sm"
                                   className="font-medium text-gray-700"
                                 >
-                                  Diabetes
+                                  {
+                                    NCD_DISPLAY_NAMES[
+                                      NCD.DIABETES as keyof typeof NCD_DISPLAY_NAMES
+                                    ]
+                                  }
                                 </Text>
                               </label>
                               <label className="flex items-center space-x-3 cursor-pointer">
                                 <input
                                   type="checkbox"
-                                  checked={hasNcdSelected('copd')}
-                                  onChange={() => toggleNcd('copd')}
+                                  checked={hasNcdSelected(NCD.COPD)}
+                                  onChange={() => toggleNcd(NCD.COPD)}
+                                  disabled={displayOnly}
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                                 />
                                 <Text
                                   variant="text/sm"
                                   className="font-medium text-gray-700"
                                 >
-                                  COPD
+                                  {
+                                    NCD_DISPLAY_NAMES[
+                                      NCD.COPD as keyof typeof NCD_DISPLAY_NAMES
+                                    ]
+                                  }
                                 </Text>
                               </label>
                             </div>
@@ -647,57 +678,71 @@ const RiskAssessmentFormContent = ({
                               <label className="flex items-center space-x-3 cursor-pointer">
                                 <input
                                   type="checkbox"
-                                  checked={hasNcdSelected('breastCancer')}
-                                  onChange={() => toggleNcd('breastCancer')}
+                                  checked={hasNcdSelected(NCD.BREAST_CANCER)}
+                                  onChange={() => toggleNcd(NCD.BREAST_CANCER)}
+                                  disabled={displayOnly}
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                                 />
                                 <Text
                                   variant="text/sm"
                                   className="font-medium text-gray-700"
                                 >
-                                  Breast Cancer
+                                  {
+                                    NCD_DISPLAY_NAMES[
+                                      NCD.BREAST_CANCER as keyof typeof NCD_DISPLAY_NAMES
+                                    ]
+                                  }
                                 </Text>
                               </label>
                               <label className="flex items-center space-x-3 cursor-pointer">
                                 <input
                                   type="checkbox"
-                                  checked={hasNcdSelected('prostateCancer')}
-                                  onChange={() => toggleNcd('prostateCancer')}
+                                  checked={hasNcdSelected(NCD.PROSTATE_CANCER)}
+                                  onChange={() =>
+                                    toggleNcd(NCD.PROSTATE_CANCER)
+                                  }
+                                  disabled={displayOnly}
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                                 />
                                 <Text
                                   variant="text/sm"
                                   className="font-medium text-gray-700"
                                 >
-                                  Prostate Cancer
+                                  {NCD_DISPLAY_NAMES[NCD.PROSTATE_CANCER]}
                                 </Text>
                               </label>
                               <label className="flex items-center space-x-3 cursor-pointer">
                                 <input
                                   type="checkbox"
-                                  checked={hasNcdSelected('colorectalCancer')}
-                                  onChange={() => toggleNcd('colorectalCancer')}
+                                  checked={hasNcdSelected(
+                                    NCD.COLORECTAL_CANCER
+                                  )}
+                                  onChange={() =>
+                                    toggleNcd(NCD.COLORECTAL_CANCER)
+                                  }
+                                  disabled={displayOnly}
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                                 />
                                 <Text
                                   variant="text/sm"
                                   className="font-medium text-gray-700"
                                 >
-                                  Colorectal Cancer
+                                  {NCD_DISPLAY_NAMES[NCD.COLORECTAL_CANCER]}
                                 </Text>
                               </label>
                               <label className="flex items-center space-x-3 cursor-pointer">
                                 <input
                                   type="checkbox"
-                                  checked={hasNcdSelected('ckd')}
-                                  onChange={() => toggleNcd('ckd')}
+                                  checked={hasNcdSelected(NCD.CKD)}
+                                  onChange={() => toggleNcd(NCD.CKD)}
+                                  disabled={displayOnly}
                                   className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
                                 />
                                 <Text
                                   variant="text/sm"
                                   className="font-medium text-gray-700"
                                 >
-                                  CKD
+                                  {NCD_DISPLAY_NAMES[NCD.CKD]}
                                 </Text>
                               </label>
                             </div>
@@ -711,32 +756,47 @@ const RiskAssessmentFormContent = ({
                     <Tabs.Content value="bio">
                       <PersonalInfoForm
                         onNext={handleNext}
-                        disabled={isPatientDataPrefilled}
+                        disabled={isPatientDataPrefilled || displayOnly}
                         patientId={_patientId}
                         onPatientCreated={onPatientCreated}
                       />
                     </Tabs.Content>
 
                     <Tabs.Content value="vitals">
-                      <VitalsMeasurement onNext={handleNext} />
+                      <VitalsMeasurement
+                        onNext={handleNext}
+                        disabled={displayOnly}
+                      />
                     </Tabs.Content>
 
                     <Tabs.Content value="labs">
-                      <BloodTestsForm onNext={handleNext} />
+                      <BloodTestsForm
+                        onNext={handleNext}
+                        disabled={displayOnly}
+                      />
                     </Tabs.Content>
 
                     <Tabs.Content value="lifestyle">
-                      <FamilyHistoryLifestyleForm onNext={handleNext} />
+                      <FamilyHistoryLifestyleForm
+                        onNext={handleNext}
+                        disabled={displayOnly}
+                      />
                     </Tabs.Content>
                     <Tabs.Content value="familyHistory">
-                      <FamilyHistoryForm onNext={handleNext} />
+                      <FamilyHistoryForm
+                        onNext={handleNext}
+                        disabled={displayOnly}
+                      />
                     </Tabs.Content>
                     <Tabs.Content value="ncdQuestionnaire">
-                      <NCDQuestionnaireForm onNext={handleNext} />
+                      <NCDQuestionnaireForm
+                        onNext={handleNext}
+                        disabled={displayOnly}
+                      />
                     </Tabs.Content>
 
                     <Tabs.Content value="historical">
-                      <HistoricalDataCollectionForm />
+                      <HistoricalDataCollectionForm disabled={displayOnly} />
                       <div className="flex justify-end mt-6">
                         {!displayOnly && (
                           <Button
@@ -984,8 +1044,13 @@ export const RiskAssessmentForm = (props: {
   onPatientCreated?: (patientId: string) => void
 }) => {
   return (
-    <NcdFilterProvider>
-      <RiskAssessmentFormContent {...props} />
+    <NcdFilterProvider initialNcdType={props.data?.requestData?.ncdType}>
+      <RiskAssessmentFormContent
+        displayOnly={
+          props.displayOnly || props.data?.requestData?.status === 'completed'
+        }
+        {...props}
+      />
     </NcdFilterProvider>
   )
 }

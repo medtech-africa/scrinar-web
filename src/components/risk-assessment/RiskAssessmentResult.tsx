@@ -26,7 +26,7 @@ import {
   ColorectalCancer,
   ColorectalCancerBreakdown,
   CKD,
-  CKDBreakdown,
+  RiskAssessmentModelResponseData,
 } from '@/hooks/queries/useRiskAssessment'
 // import { useFormContext } from 'react-hook-form'
 // import calculateAge from '@/utils/calculateAge'
@@ -38,18 +38,9 @@ import { Text } from '../ui/text'
 import { RiskTrendGraph } from './RiskTrendGraph'
 import { RiskGaugeBar } from './RiskGaugeBar'
 import PreventionTips from './PreventionTips'
-import DiseaseBreakdown from './DiseaseBreakdown'
 import RiskSummary from './RiskSummary'
+import { ResultRiskType as RiskType } from '@/types/riskAssessment.types'
 
-// Types
-export type RiskType =
-  | 'who'
-  | 'findrisc'
-  | 'copd'
-  | 'breastCancer'
-  | 'prostateCancer'
-  | 'colorectalCancer'
-  | 'ckd'
 export type RiskLevel = 'low' | 'moderate' | 'high'
 
 export interface IRiskBreakdownItem {
@@ -79,10 +70,16 @@ interface IClinicalAlert {
 const FACTOR_LABELS: { [key: string]: string } = {
   age: 'Age',
   bmi: 'Body Mass Index',
+  BMI: 'Body Mass Index',
   bloodPressure: 'Blood Pressure',
   smoking: 'Smoking Status',
   diabetes: 'Diabetes',
   cholesterol: 'Cholesterol Levels',
+  // FINDRISC factors
+  waistCircumference: 'Waist Circumference',
+  fruitVegetableIntake: 'Fruit & Vegetable Intake',
+  antihypertensiveMedication: 'Antihypertensive Medication',
+  highBloodGlucoseHistory: 'High Blood Glucose History',
   // COPD factors
   coughDuration: 'Chronic Cough',
   shortnessOfBreath: 'Shortness of Breath',
@@ -128,15 +125,14 @@ const formatRiskFactors = (
     | COPDBreakdown
     | BreastCancerBreakdown
     | ProstateCancerBreakdown
-    | ColorectalCancerBreakdown
-    | CKDBreakdown,
+    | ColorectalCancerBreakdown,
   totalRiskScore = 0
 ) => {
   const formattedFactors = Object.entries(factors ?? {})
     .map(([key, value]) => ({
       name: FACTOR_LABELS[key] || key, // Use mapped label or fallback to key
-      value: value, // Original value
-      percentage: (value / totalRiskScore) * 100, // Calculate percentage contribution
+      value: value as number, // Type assertion for value
+      percentage: ((value as number) / totalRiskScore) * 100, // Calculate percentage contribution
     }))
     .sort((a, b) => b.value - a.value)
 
@@ -145,9 +141,11 @@ const formatRiskFactors = (
 const FactorBreakdown = ({
   data,
   isLoading = false,
+  activeTab,
 }: {
   data: any
   isLoading?: boolean
+  activeTab?: RiskType
 }) => {
   if (isLoading) {
     return <Skeleton className="w-full h-80" />
@@ -165,8 +163,9 @@ const FactorBreakdown = ({
     <div className="w-full">
       <div className="mb-8 p-4 border rounded-2xl border-grey-400">
         <Text className="font-medium text-grey-700 mb-2">
-          Here are some conditions that cannot be altered; they contribute to an
-          individual&apos;s baseline risk of cardiovascular diseases
+          {activeTab === 'ckd'
+            ? "Here are some conditions that cannot be altered; they contribute to an individual's baseline risk of kidney disease"
+            : "Here are some conditions that cannot be altered; they contribute to an individual's baseline risk of cardiovascular diseases"}
         </Text>
 
         <div className="space-y-4">
@@ -214,10 +213,9 @@ const FactorBreakdown = ({
       </div>
 
       <p className="mt-6 text-sm">
-        Managing underlying conditions listed above like high blood pressure,
-        unhealthy diet or high cholesterol with the help of your healthcare
-        provider would significantly improve your quality of life and reduce the
-        risk over the next 10 years.
+        {activeTab === 'ckd'
+          ? 'Managing underlying conditions listed above like diabetes, high blood pressure, or kidney-related issues with the help of your healthcare provider would significantly improve your kidney function and overall health.'
+          : 'Managing underlying conditions listed above like high blood pressure, unhealthy diet or high cholesterol with the help of your healthcare provider would significantly improve your quality of life and reduce the risk over the next 10 years.'}
       </p>
     </div>
   )
@@ -235,7 +233,11 @@ const ClinicalSummary = ({
     | BreastCancer
     | ProstateCancer
     | ColorectalCancer
-    | CKD
+    | (CKD & {
+        followUpAction?: string
+        lifestyleModification?: string
+        personalizedAdvice?: string
+      })
     | null
   isLoading?: boolean
 }) => {
@@ -284,7 +286,7 @@ const ClinicalSummary = ({
   )
 }
 
-const RecommendationList = () => {
+const RecommendationList = ({ recommendation }: { recommendation: string }) => {
   const recommendations = [
     '🩺  Schedule cardiology consult" (if stroke/CVD risk rises)',
     '💊  Adjust antihypertensive meds" (if BP is consistently high)',
@@ -296,13 +298,17 @@ const RecommendationList = () => {
       <Text className="font-medium mb-2">
         Recommendations based on risk trend
       </Text>
-      <ul className="space-y-2">
-        {recommendations.map((rec) => (
-          <Text variant="text/sm" key={rec}>
-            {rec}
-          </Text>
-        ))}
-      </ul>
+      {recommendation ? (
+        <Text variant="text/sm">{recommendation}</Text>
+      ) : (
+        <ul className="space-y-2">
+          {recommendations.map((rec) => (
+            <Text variant="text/sm" key={rec}>
+              {rec}
+            </Text>
+          ))}
+        </ul>
+      )}
     </div>
   )
 }
@@ -331,41 +337,68 @@ export const RiskAssessmentResult: React.FC<{
   isLoading?: boolean
   ncdType?: string
 }> = ({ data, isLoading = false, ncdType: _ncdType }) => {
+  // Helper function to check if NCD data is available (not empty object)
+  const hasValidData = (ncdType: RiskType): boolean => {
+    const ncdData = data?.[ncdType]
+    if (!ncdData) return false
+
+    // Check if it's an empty object
+    if (Object.keys(ncdData).length === 0) return false
+
+    // For CKD, check if it has either the old structure (followUpAction) or new structure (eGFR, stage)
+    if (ncdType === 'ckd') {
+      const ckdData = ncdData as any // Type assertion for CKD data
+      return !!(
+        ckdData.followUpAction ||
+        ckdData.eGFR ||
+        ckdData.stage ||
+        data?.ckdOutput
+      )
+    }
+
+    // For other NCDs, check if they have followUpAction (indicating they have actual data)
+    return !!(
+      ncdData.followUpAction ||
+      ncdData.lifestyleModification ||
+      ncdData.personalizedAdvice
+    )
+  }
+
   const RISK_TABS: { id: RiskType; label: string; show: boolean }[] = [
     {
       id: 'who',
       label: 'Cardiovascular risk',
-      show: Boolean(data?.['who']),
+      show: hasValidData('who'),
     },
     {
       id: 'findrisc',
       label: 'Diabetes risk',
-      show: Boolean(data?.['findrisc']),
+      show: hasValidData('findrisc'),
     },
     {
       id: 'copd',
       label: 'COPD risk',
-      show: Boolean(data?.['copd']),
+      show: hasValidData('copd'),
     },
     {
       id: 'breastCancer',
       label: 'Breast Cancer risk',
-      show: Boolean(data?.['breastCancer']),
+      show: hasValidData('breastCancer'),
     },
     {
-      id: 'prostateCancer',
+      id: 'prostate',
       label: 'Prostate Cancer risk',
-      show: Boolean(data?.['prostateCancer']),
+      show: hasValidData('prostate'),
     },
     {
-      id: 'colorectalCancer',
+      id: 'colorectal',
       label: 'Colorectal Cancer risk',
-      show: Boolean(data?.['colorectalCancer']),
+      show: hasValidData('colorectal'),
     },
     {
       id: 'ckd',
       label: 'CKD risk',
-      show: Boolean(data?.['ckd']),
+      show: hasValidData('ckd'),
     },
   ]
 
@@ -399,7 +432,10 @@ export const RiskAssessmentResult: React.FC<{
     data
   )
 
-  const riskLevel = getRiskLevel(Number(activeData?.score) ?? 0)
+  const riskLevel = getRiskLevel(
+    parseFloat(activeData?.score?.replace('Stage ', '') ?? '0'),
+    activeTab
+  )
 
   if (isLoading) {
     return (
@@ -460,23 +496,43 @@ export const RiskAssessmentResult: React.FC<{
         <>
           <div>
             <Text as="h2" className="font-medium mb-2">
-              Risk Score
+              {activeTab === 'ckd' ? 'CKD Stage' : 'Risk Score'}
             </Text>
             <p className="text-sm text-gray-600 mb-4">
-              The risk score helps you make lifestyle changes or take medical
-              advise to prevent heart disease.
+              {activeTab === 'ckd'
+                ? 'The CKD stage indicates the severity of kidney disease and helps guide treatment decisions.'
+                : 'The risk score helps you make lifestyle changes or take medical advise to prevent heart disease.'}
             </p>
 
             <RiskGaugeBar
-              score={parseFloat(activeData?.score ?? '0')}
+              score={
+                activeTab === 'ckd'
+                  ? parseFloat(activeData?.score?.replace('Stage ', '') ?? '0')
+                  : parseFloat(activeData?.score ?? '0')
+              }
               riskLevel={activeData?.riskLevel ?? ''}
-              type={getRiskTypeLabel(activeTab)}
+              activeTab={activeTab}
             />
 
             <RiskSummary
-              score={parseFloat(activeData?.score ?? '0')}
+              score={
+                activeTab === 'ckd'
+                  ? parseFloat(activeData?.score?.replace('Stage ', '') ?? '0')
+                  : parseFloat(activeData?.score ?? '0')
+              }
               level={riskLevel}
-              type={getRiskTypeForSummary(activeTab)}
+              activeTab={activeTab}
+              interpretation={
+                activeTab === 'ckd'
+                  ? (activeData as any)?.interpretation
+                  : activeTab === 'who' ||
+                      activeTab === 'findrisc' ||
+                      activeTab === 'breastCancer' ||
+                      activeTab === 'prostate' ||
+                      activeTab === 'colorectal'
+                    ? (activeData as any)?.interpretation
+                    : undefined
+              }
             />
 
             {isWHO && (
@@ -490,25 +546,51 @@ export const RiskAssessmentResult: React.FC<{
 
           <PageCard
             className="p-4 md:p-6 border-[0.2px] border-grey-300 rounded-lg"
-            title="Short-term & Mid-term Prediction"
+            title={
+              predictions.length > 0 ? 'Short-term & Mid-term Prediction' : ''
+            }
           >
             <RiskTrendGraph predictions={predictions ?? []} level={riskLevel} />
-            <RecommendationList />
-          </PageCard>
-
-          <PageCard
-            title="Contributing Factors"
-            subtitle="These are some conditions and behaviors that increase the risk of cardiovascular diseases"
-          >
-            <FactorBreakdown
-              data={formatRiskFactors(
-                activeData?.breakdown,
-                parseInt(activeData?.score || '0')
-              )}
-              isLoading={isLoading}
+            <RecommendationList
+              recommendation={
+                activeTab === 'ckd'
+                  ? (activeData as any)?.recommendation
+                  : activeTab === 'who' ||
+                      activeTab === 'findrisc' ||
+                      activeTab === 'breastCancer' ||
+                      activeTab === 'prostate' ||
+                      activeTab === 'colorectal'
+                    ? (activeData as any)?.recommendation
+                    : undefined
+              }
             />
           </PageCard>
-          {activeData?.diseaseBreakdown === undefined ? (
+
+          {[
+            'who',
+            'findrisc',
+            'copd',
+            'breastCancer',
+            'prostate',
+            'colorectal',
+          ].includes(activeTab) && (
+            <PageCard
+              title="Contributing Factors"
+              subtitle="These are some conditions and behaviors that increase the risk of cardiovascular diseases"
+            >
+              <FactorBreakdown
+                data={formatRiskFactors(
+                  activeTab === 'ckd'
+                    ? undefined
+                    : (activeData as any)?.breakdown,
+                  parseInt(activeData?.score || '0')
+                )}
+                isLoading={isLoading}
+                activeTab={activeTab}
+              />
+            </PageCard>
+          )}
+          {/* {activeData?.diseaseBreakdown === undefined ? (
             <div className="w-full bg-white p-6 rounded-lg border mb-4">
               <Skeleton className="h-8 w-48 mb-4" />
               <div className="space-y-4">
@@ -523,28 +605,42 @@ export const RiskAssessmentResult: React.FC<{
                 <DiseaseBreakdown data={activeData?.diseaseBreakdown} />
               </div>
             )
-          )}
+          )} */}
         </>
       </div>
     </motion.div>
   )
 }
 
-// Here's how the hooks and utility files might look:
+export const useActiveRiskData = (
+  activeTab: RiskType,
+  data?: RiskAssessmentModelResponseData
+) => {
+  let activeData = data?.[activeTab] || null
 
-// src/hooks/useActiveRiskData.ts
-export const useActiveRiskData = (activeTab: RiskType, data?: RiskData) => {
-  // Get the active tab data from real data or fallback to mock
+  if (activeTab === 'ckd' && data?.ckd && data?.ckdOutput) {
+    activeData = { ...data.ckd, ...data.ckdOutput }
+  }
 
-  const activeData = data?.[activeTab] || null
   return {
     activeData,
     criticalAlerts: data?.criticalAlerts || null,
-    predictions: activeData?.predictions || [],
+    predictions: data?.predictions || [],
   }
 }
 
-export const getRiskLevel = (score: number): RiskLevel => {
+export const getRiskLevel = (
+  score: number,
+  activeTab?: RiskType
+): RiskLevel => {
+  // Special handling for CKD stages
+  if (activeTab === 'ckd') {
+    if (score >= 4) return 'high' // Stage 4-5
+    if (score >= 2) return 'moderate' // Stage 2-3
+    return 'low' // Stage 1
+  }
+
+  // Default risk level calculation for other NCDs
   if (score >= 15) return 'high'
   if (score >= 5) return 'moderate'
   return 'low'
@@ -557,59 +653,6 @@ export const getRiskColor = (riskLevel: RiskLevel): string => {
     high: '#EB5757',
   }
   return colors[riskLevel] || colors.low
-}
-
-// Helper function to get risk type label
-const getRiskTypeLabel = (activeTab: RiskType): string => {
-  switch (activeTab) {
-    case 'who':
-      return 'CVD'
-    case 'findrisc':
-      return 'Diabetes'
-    case 'copd':
-      return 'COPD'
-    case 'breastCancer':
-      return 'Breast Cancer'
-    case 'prostateCancer':
-      return 'Prostate Cancer'
-    case 'colorectalCancer':
-      return 'Colorectal Cancer'
-    case 'ckd':
-      return 'CKD'
-    default:
-      return 'CVD'
-  }
-}
-
-// Helper function to get risk type for summary
-const getRiskTypeForSummary = (
-  activeTab: RiskType
-):
-  | 'cvd'
-  | 'diabetes'
-  | 'copd'
-  | 'breastCancer'
-  | 'prostateCancer'
-  | 'colorectalCancer'
-  | 'ckd' => {
-  switch (activeTab) {
-    case 'who':
-      return 'cvd'
-    case 'findrisc':
-      return 'diabetes'
-    case 'copd':
-      return 'copd'
-    case 'breastCancer':
-      return 'breastCancer'
-    case 'prostateCancer':
-      return 'prostateCancer'
-    case 'colorectalCancer':
-      return 'colorectalCancer'
-    case 'ckd':
-      return 'ckd'
-    default:
-      return 'cvd'
-  }
 }
 
 export default RiskAssessmentResult

@@ -59,6 +59,17 @@ const validateAndTransformData = (data?: Partial<RiskAssessmentModel>) => {
         high: pred.high || 0,
       }))
     }
+    if (!who.tenYearPredictions) {
+      who.tenYearPredictions = []
+    } else {
+      // Validate ten year predictions structure
+      who.tenYearPredictions = who.tenYearPredictions.map((pred: any) => ({
+        month: pred.month || 0,
+        low: pred.low || 0,
+        moderate: pred.moderate || 0,
+        high: pred.high || 0,
+      }))
+    }
   }
 
   // Validate and fix FINDRISC data
@@ -74,10 +85,13 @@ const validateAndTransformData = (data?: Partial<RiskAssessmentModel>) => {
       findrisc.breakdown = {
         age: 0,
         bmi: 0,
-        waist: 0,
+        waistCircumference: 0,
         physicalActivity: 0,
         familyHistory: 0,
         diet: 0,
+        fruitVegetableIntake: 0,
+        antihypertensiveMedication: 0,
+        highBloodGlucoseHistory: 0,
       }
     }
     if (!findrisc.predictions) {
@@ -93,31 +107,68 @@ const validateAndTransformData = (data?: Partial<RiskAssessmentModel>) => {
     }
   }
 
-  // Validate and fix COPD data
+  // Validate and fix COPD data - handle both old and new structure
   if (transformedResponseData.copd) {
-    const copd = transformedResponseData.copd as any // Type assertion for the raw data
-    // Transform COPD data to match expected interface
-    const transformedCopd = {
-      followUpAction:
-        copd.recommendations?.join('. ') ||
-        'Please consult with your healthcare provider.',
-      lifestyleModification:
-        'Consider smoking cessation and avoid dust exposure.',
-      personalizedAdvice: `Your COPD risk score is ${copd.riskScore || 0}. ${copd.copdRisk ? `COPD risk: ${copd.copdRisk}%` : ''} ${copd.lungCancerRisk ? `Lung cancer risk: ${copd.lungCancerRisk}%` : ''}`,
-      score: copd.riskScore?.toString() || '0',
-      riskLevel: copd.riskCategory?.toLowerCase() || 'low',
-      breakdown: {
-        coughDuration: 0,
-        shortnessOfBreath: 0,
-        activityLimitations: 0,
-        exposureToDust: 0,
-        smokingHistory: 0,
-      },
-      status: true,
-      diseaseBreakdown: {},
-      predictions: [],
+    const copd = transformedResponseData.copd as any
+    // Check if it's the new structure (with riskScore, riskCategory, etc.)
+    if (copd.riskScore !== undefined && copd.riskCategory !== undefined) {
+      // New COPD structure
+      const transformedCopd = {
+        followUpAction:
+          copd.recommendations?.join('. ') ||
+          'Please consult with your healthcare provider.',
+        lifestyleModification:
+          'Consider smoking cessation and avoid dust exposure.',
+        personalizedAdvice: `Your COPD risk score is ${copd.riskScore || 0}. ${copd.copdRisk ? `COPD risk: ${copd.copdRisk}%` : ''} ${copd.lungCancerRisk ? `Lung cancer risk: ${copd.lungCancerRisk}%` : ''}`,
+        score: copd.riskScore?.toString() || '0',
+        riskLevel: copd.riskCategory?.toLowerCase() || 'low',
+        breakdown: {
+          coughDuration: 0,
+          shortnessOfBreath: 0,
+          activityLimitations: 0,
+          exposureToDust: 0,
+          smokingHistory: 0,
+        },
+        status: true,
+        diseaseBreakdown: {},
+        predictions: [],
+        // Keep the new fields
+        riskScore: copd.riskScore,
+        riskCategory: copd.riskCategory,
+        copdRisk: copd.copdRisk,
+        lungCancerRisk: copd.lungCancerRisk,
+        recommendations: copd.recommendations,
+      }
+      transformedResponseData.copd = transformedCopd
+    } else {
+      // Old COPD structure - ensure all required fields exist
+      if (!copd.diseaseBreakdown) {
+        copd.diseaseBreakdown = {}
+      }
+      if (!copd.status) {
+        copd.status = true
+      }
+      if (!copd.breakdown) {
+        copd.breakdown = {
+          coughDuration: 0,
+          shortnessOfBreath: 0,
+          activityLimitations: 0,
+          exposureToDust: 0,
+          smokingHistory: 0,
+        }
+      }
+      if (!copd.predictions) {
+        copd.predictions = []
+      } else {
+        // Validate predictions structure
+        copd.predictions = copd.predictions.map((pred: any) => ({
+          month: pred.month || 0,
+          low: pred.low || 0,
+          moderate: pred.moderate || 0,
+          high: pred.high || 0,
+        }))
+      }
     }
-    transformedResponseData.copd = transformedCopd
   }
 
   // Validate and fix Breast Cancer data
@@ -144,24 +195,83 @@ const validateAndTransformData = (data?: Partial<RiskAssessmentModel>) => {
     }
   }
 
-  // Add missing models with default values if they don't exist
-  const requiredModels = ['prostateCancer', 'colorectalCancer', 'ckd'] as const
-  requiredModels.forEach((model) => {
-    if (!transformedResponseData[model]) {
-      ;(transformedResponseData as any)[model] = {
-        followUpAction: 'Please consult with your healthcare provider.',
+  // Validate and fix CKD data - handle both old and new structure
+  if (transformedResponseData.ckd) {
+    const ckd = transformedResponseData.ckd as any
+    // Check if it's the new structure (with eGFR, stage, etc.)
+    if (ckd.eGFR !== undefined && ckd.stage !== undefined) {
+      // New CKD structure
+      const transformedCkd = {
+        followUpAction:
+          ckd.recommendation || 'Please consult with your healthcare provider.',
         lifestyleModification:
           'Maintain a healthy lifestyle with regular exercise and balanced diet.',
-        personalizedAdvice: 'Regular health check-ups are recommended.',
-        score: '0',
+        personalizedAdvice: `Your eGFR is ${ckd.eGFR || 0} and you are at ${ckd.stage || 'unknown'} stage. ${ckd.interpretation || ''}`,
+        score: ckd.stage || '0',
         riskLevel: 'low',
-        breakdown: {},
+        breakdown: {
+          age: 0,
+          serumCreatinine: 0,
+          diabetes: 0,
+          hypertension: 0,
+          familyHistory: 0,
+          cardiovascularDisease: 0,
+          medications: 0,
+          symptoms: 0,
+          lifestyle: 0,
+        },
         status: true,
         diseaseBreakdown: {},
         predictions: [],
+        // Keep the new fields
+        eGFR: ckd.eGFR,
+        stage: ckd.stage,
+        interpretation: ckd.interpretation,
+        recommendation: ckd.recommendation,
+      }
+      transformedResponseData.ckd = transformedCkd
+    } else {
+      // Old CKD structure - ensure all required fields exist
+      if (!ckd.diseaseBreakdown) {
+        ckd.diseaseBreakdown = {}
+      }
+      if (!ckd.status) {
+        ckd.status = true
+      }
+      if (!ckd.breakdown) {
+        ckd.breakdown = {
+          age: 0,
+          serumCreatinine: 0,
+          diabetes: 0,
+          hypertension: 0,
+          familyHistory: 0,
+          cardiovascularDisease: 0,
+          medications: 0,
+          symptoms: 0,
+          lifestyle: 0,
+        }
+      }
+      if (!ckd.predictions) {
+        ckd.predictions = []
+      } else {
+        // Validate predictions structure
+        ckd.predictions = ckd.predictions.map((pred: any) => ({
+          month: pred.month || 0,
+          low: pred.low || 0,
+          moderate: pred.moderate || 0,
+          high: pred.high || 0,
+        }))
       }
     }
-  })
+  }
+
+  // Handle ckdOutput if it exists
+  if (transformedResponseData.ckdOutput) {
+    const ckdOutput = transformedResponseData.ckdOutput
+    if (!ckdOutput.status) {
+      ckdOutput.status = true
+    }
+  }
 
   return {
     ...data,
@@ -188,17 +298,26 @@ export const RiskAssessmentReport = ({
   // Validate and transform the data
   const validatedData = useMemo(() => validateAndTransformData(data), [data])
 
-  const riskData = useMemo(
-    () =>
-      validatedData?.responseData
-        ? Object.assign(
-            {},
-            validatedData?.responseData,
-            validatedData?.requestData
-          )
-        : {},
-    [validatedData]
-  ) as RiskData
+  const riskData = useMemo(() => {
+    if (!validatedData?.responseData) return {}
+
+    // Merge responseData and requestData
+    const mergedData = Object.assign(
+      {},
+      validatedData?.responseData,
+      validatedData?.requestData
+    )
+
+    // Handle ckdOutput if it exists - merge it with ckd data
+    if (mergedData.ckdOutput && mergedData.ckd) {
+      mergedData.ckd = {
+        ...mergedData.ckd,
+        ...mergedData.ckdOutput,
+      }
+    }
+
+    return mergedData
+  }, [validatedData]) as RiskData
 
   return (
     <div className={cn('w-full', className)}>

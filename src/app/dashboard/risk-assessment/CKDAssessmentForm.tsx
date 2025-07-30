@@ -4,17 +4,19 @@ import { Button } from '@/components/ui/button'
 import { Text } from '@/components/ui/text'
 import { useNcdFilter } from './NcdFilterContext'
 import calculateAge from '@/utils/calculateAge'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const CKDAssessmentForm = ({ onNext }: Props) => {
+export const CKDAssessmentForm = ({ onNext, disabled }: Props) => {
   const { watch } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
 
   // Only show this form for CKD
-  if (!hasNcdSelected('ckd')) {
+  if (!hasNcdSelected(NCD.CKD)) {
     return null
   }
 
@@ -78,9 +80,11 @@ export const CKDAssessmentForm = ({ onNext }: Props) => {
       </div>
 
       <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext} type="button">
-          Save & continue
-        </Button>
+        {!disabled && (
+          <Button className="px-8" onClick={onNext} type="button">
+            Save & continue
+          </Button>
+        )}
       </div>
     </div>
   )

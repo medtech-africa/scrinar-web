@@ -6,7 +6,11 @@ import { Checkbox } from '@/components/ui/checkbox'
 import { Text } from '@/components/ui/text'
 import { TooltipProvider } from '@/components/ui/tooltip'
 
-export const HistoricalDataCollectionForm = () => {
+export const HistoricalDataCollectionForm = ({
+  disabled,
+}: {
+  disabled?: boolean
+}) => {
   const { control, watch } = useFormContext()
 
   return (
@@ -40,6 +44,7 @@ export const HistoricalDataCollectionForm = () => {
                   label="Date of Last Screening"
                   labelStyle="lg:text-sm text-xs"
                   helperText="Optional - helps track screening intervals"
+                  disabled={disabled}
                 />
               )}
             />
@@ -50,6 +55,7 @@ export const HistoricalDataCollectionForm = () => {
                 label="Do you have previous blood pressure data?"
                 options={['Yes', 'No', "Don't Know"]}
                 form={{ id: 'previousHealthScreening.bloodPressureAvailable' }}
+                disabled={disabled}
               />
               {watch('previousHealthScreening.bloodPressureAvailable') ===
                 'Yes' && (
@@ -66,6 +72,7 @@ export const HistoricalDataCollectionForm = () => {
                         labelStyle="lg:text-sm text-xs"
                         min="70"
                         max="250"
+                        disabled={disabled}
                       />
                     )}
                   />
@@ -81,6 +88,7 @@ export const HistoricalDataCollectionForm = () => {
                         labelStyle="lg:text-sm text-xs"
                         min="40"
                         max="150"
+                        disabled={disabled}
                       />
                     )}
                   />
@@ -94,6 +102,7 @@ export const HistoricalDataCollectionForm = () => {
                 label="Do you have previous blood sugar level data?"
                 options={['Yes', 'No', "Don't Know"]}
                 form={{ id: 'previousHealthScreening.bloodSugarAvailable' }}
+                disabled={disabled}
               />
               {watch('previousHealthScreening.bloodSugarAvailable') ===
                 'Yes' && (
@@ -109,6 +118,7 @@ export const HistoricalDataCollectionForm = () => {
                       labelStyle="lg:text-sm text-xs"
                       min="50"
                       max="500"
+                      disabled={disabled}
                     />
                   )}
                 />
@@ -121,6 +131,7 @@ export const HistoricalDataCollectionForm = () => {
                 label="Do you have previous BMI data?"
                 options={['Yes', 'No', "Don't Know"]}
                 form={{ id: 'previousHealthScreening.bmiAvailable' }}
+                disabled={disabled}
               />
               {watch('previousHealthScreening.bmiAvailable') === 'Yes' && (
                 <Controller
@@ -136,6 +147,7 @@ export const HistoricalDataCollectionForm = () => {
                       min="10"
                       max="60"
                       step="0.1"
+                      disabled={disabled}
                     />
                   )}
                 />
@@ -150,6 +162,7 @@ export const HistoricalDataCollectionForm = () => {
                 label="Have you ever experienced complete memory loss while awake?"
                 options={['Yes', 'No', "Don't Know"]}
                 form={{ id: 'trapFieldMemoryLoss' }}
+                disabled={disabled}
               />
             </div>
             <Text variant="text/sm" className="text-yellow-700">
@@ -171,6 +184,7 @@ export const HistoricalDataCollectionForm = () => {
                 checked={field.value}
                 onCheckedChange={field.onChange}
                 className="mt-1"
+                disabled={disabled}
               />
             )}
           />

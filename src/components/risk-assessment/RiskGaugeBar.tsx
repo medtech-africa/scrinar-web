@@ -1,19 +1,46 @@
 import { cn } from '@/lib/utils'
+import { ResultRiskType } from '@/types/riskAssessment.types'
+
+// Helper function to get risk type label
+const getRiskTypeLabel = (activeTab: ResultRiskType): string => {
+  switch (activeTab) {
+    case 'who':
+      return 'CVD'
+    case 'findrisc':
+      return 'Diabetes'
+    case 'copd':
+      return 'COPD'
+    case 'breastCancer':
+      return 'Breast Cancer'
+    case 'prostate':
+      return 'Prostate Cancer'
+    case 'colorectal':
+      return 'Colorectal Cancer'
+    case 'ckd':
+      return 'CKD'
+    default:
+      return 'CVD'
+  }
+}
 
 const RiskGaugeBar = ({
   score,
-  riskLevel,
+  activeTab,
   maxScore = 15,
-  type = 'CVD',
+  riskLevel,
 }: {
   score: number
-  riskLevel: string
   maxScore?: number
-  type?: string
+  activeTab: ResultRiskType
+  riskLevel: string
 }) => {
-  console.log('🚀 ~ riskLevel:', riskLevel)
   // Calculate score percentage (capped at 100%)
-  const scorePercent = Math.min((score / maxScore) * 100, 100)
+
+  const newMaxScore = activeTab === 'ckd' ? 5 : maxScore
+
+  const scorePercent = Math.min((score / newMaxScore) * 100, 100)
+
+  const type = getRiskTypeLabel(activeTab)
 
   const risk = riskLevel.toLowerCase().includes('low')
     ? 'low'
@@ -28,10 +55,14 @@ const RiskGaugeBar = ({
     <div className="w-full" data-testid="risk-gauge">
       {/* Percentage indicators */}
       <div className="mb-1 flex justify-between">
-        <span className="text-sm">0%</span>
-        <span className="text-sm">5%</span>
-        <span className="text-sm">10%</span>
-        <span className="text-sm">15%+</span>
+        {(activeTab === 'ckd'
+          ? ['0', '1', '2', '3', '4', '5']
+          : ['0%', '5%', '10%', '15%+']
+        ).map((item) => (
+          <span key={item} className="text-sm">
+            {item}
+          </span>
+        ))}
       </div>
 
       {/* Gradient bar */}
@@ -82,10 +113,14 @@ const RiskGaugeBar = ({
             }
           )}
         >
-          <div className="font-bold">{riskLevel}!!!</div>
-          <div className="text-sm">
-            Your risk of {type} is {score}%
+          <div className="font-bold">
+            {activeTab === 'ckd' ? 'Stage ' + score : riskLevel}!!!
           </div>
+          {activeTab !== 'ckd' && (
+            <div className="text-sm">
+              Your risk of {type} is {score}%
+            </div>
+          )}
         </div>
       </div>
       {/* )} */}

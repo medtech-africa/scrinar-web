@@ -8,9 +8,10 @@ import { slugify } from '@/utils/slugify'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const FamilyHistoryForm = ({ onNext }: Props) => {
+export const FamilyHistoryForm = ({ onNext, disabled }: Props) => {
   const { register: customRegister, setValue, watch } = useFormContext()
   const formData = watch()
   const storeRiskAssessment = useRiskAssessmentStorage((store) => store.store)
@@ -29,7 +30,7 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
         setValue(`familyHistory.${key}`, value)
       }
     })
-  }, [others])
+  }, [others, setValue])
 
   const medicalConditions = [
     {
@@ -156,6 +157,7 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
                               }}
                               type="radio"
                               title={condition.key}
+                              disabled={disabled}
                             />
                           </span>
                         </label>
@@ -173,6 +175,7 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
                       }}
                       value={others[condition.key] ?? ''}
                       placeholder="Specify relative"
+                      disabled={disabled}
                     />
                   </td>
                 </tr>
@@ -269,11 +272,18 @@ export const FamilyHistoryForm = ({ onNext }: Props) => {
         </div>
       </div>
 
-      <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext} type="button">
-          Save & continue
-        </Button>
-      </div>
+      {!disabled && (
+        <div className="flex justify-end mt-6">
+          <Button
+            className="px-8"
+            onClick={onNext}
+            type="button"
+            disabled={disabled}
+          >
+            Save & continue
+          </Button>
+        </div>
+      )}
     </div>
   )
 }

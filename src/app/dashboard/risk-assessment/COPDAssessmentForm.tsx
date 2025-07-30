@@ -5,12 +5,14 @@ import { Text } from '@/components/ui/text'
 import { Input } from '@/components/ui/input'
 import { useNcdFilter } from './NcdFilterContext'
 import { useRequiredFieldLabel } from '@/hooks/useRequiredFieldLabel'
+import { NCD } from '@/types/riskAssessment.types'
 
 type Props = {
   onNext: () => void
+  disabled?: boolean
 }
 
-export const COPDAssessmentForm = ({ onNext }: Props) => {
+export const COPDAssessmentForm = ({ onNext, disabled }: Props) => {
   const { register: customRegister, watch } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
   const isRequiredField = useRequiredFieldLabel()
@@ -19,7 +21,7 @@ export const COPDAssessmentForm = ({ onNext }: Props) => {
   const formData = watch()
 
   // Only show this form for COPD
-  if (!hasNcdSelected('copd')) {
+  if (!hasNcdSelected(NCD.COPD)) {
     return null
   }
 
@@ -94,6 +96,7 @@ export const COPDAssessmentForm = ({ onNext }: Props) => {
                               value={value}
                               type="radio"
                               title={question.key}
+                              disabled={disabled}
                             />
                           </span>
                         </label>
@@ -120,6 +123,7 @@ export const COPDAssessmentForm = ({ onNext }: Props) => {
                             value={value}
                             type="radio"
                             title="lifestyle.currentSmokingStatus"
+                            disabled={disabled}
                           />
                         </span>
                       </label>
@@ -152,15 +156,23 @@ export const COPDAssessmentForm = ({ onNext }: Props) => {
             min="0"
             max="1000"
             step="1"
+            disabled={disabled}
           />
         </div>
       </div>
 
-      <div className="flex justify-end mt-6">
-        <Button className="px-8" onClick={onNext} type="button">
-          Save & continue
-        </Button>
-      </div>
+      {!disabled && (
+        <div className="flex justify-end mt-6">
+          <Button
+            className="px-8"
+            onClick={onNext}
+            type="button"
+            disabled={disabled}
+          >
+            Save & continue
+          </Button>
+        </div>
+      )}
     </div>
   )
 }
