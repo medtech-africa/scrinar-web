@@ -433,7 +433,7 @@ export const RiskAssessmentResult: React.FC<{
   )
 
   const riskLevel = getRiskLevel(
-    parseFloat(activeData?.score?.replace('Stage ', '') ?? '0'),
+    parseFloat(String(activeData?.score)?.replace('Stage ', '') ?? '0'),
     activeTab
   )
 
@@ -507,7 +507,9 @@ export const RiskAssessmentResult: React.FC<{
             <RiskGaugeBar
               score={
                 activeTab === 'ckd'
-                  ? parseFloat(activeData?.score?.replace('Stage ', '') ?? '0')
+                  ? parseFloat(
+                      String(activeData?.score)?.replace('Stage ', '') ?? '0'
+                    )
                   : parseFloat(activeData?.score ?? '0')
               }
               riskLevel={activeData?.riskLevel ?? ''}
@@ -517,7 +519,9 @@ export const RiskAssessmentResult: React.FC<{
             <RiskSummary
               score={
                 activeTab === 'ckd'
-                  ? parseFloat(activeData?.score?.replace('Stage ', '') ?? '0')
+                  ? parseFloat(
+                      String(activeData?.score)?.replace('Stage ', '') ?? '0'
+                    )
                   : parseFloat(activeData?.score ?? '0')
               }
               level={riskLevel}

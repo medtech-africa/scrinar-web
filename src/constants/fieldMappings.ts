@@ -6,6 +6,7 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   // Personal Info fields
   age: 'personalInfo.age',
   gender: 'personalInfo.gender',
+  dateOfBirth: 'personalInfo.dateOfBirth',
 
   // Vitals fields
   systolicBP: 'vitals.sys',
@@ -21,15 +22,14 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   // Blood Test fields
   cholesterol: 'bloodTest.cholesterolTotal',
   serumCreatinine: 'bloodTest.serumCreatinine',
+  psaLevel: 'bloodTest.psaLevel',
   pefLevel: 'copd.pefLevel',
 
   // Lifestyle fields
   smoking: 'lifestyle.everSmoked',
   hasQuitSmoking: 'lifestyle.currentSmokingStatus',
   physicalActivity: 'lifestyle.hasDailyPhysicalActivity',
-  eatsFruitVegetableDaily: 'lifestyle.vegetableServingsPerWeek',
-  diet: 'lifestyle.diet',
-  useHypensiveMedication: 'lifestyle.usesAntihypertensiveMedication',
+  usesAntihypertensiveMedication: 'lifestyle.usesAntihypertensiveMedication',
   hasHistoryHighBloodGlucose:
     'previousHealthScreening.hasHistoryHighBloodGlucose',
 
@@ -43,12 +43,18 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   ageAtMenarche: 'breastCancer.ageAtMenarche',
   ageAtFirstBirth: 'breastCancer.ageAtFirstBirth',
   menopauseStatus: 'breastCancer.menopauseStatus',
+  ageAtMenopause: 'breastCancer.ageAtMenopause',
   hormoneReplacementTherapy: 'breastCancer.hormoneReplacementTherapy',
   breastBiopsy: 'breastCancer.breastBiopsy',
   familyHistoryBreastCancer: 'familyHistory.breastCancer',
   familyHistoryOvarianCancer: 'familyHistory.ovarianCancer',
   brcaMutationStatus: 'breastCancer.brcaMutationStatus',
   breastDensity: 'breastCancer.breastDensity',
+  personalHistoryOvarianCancer: 'breastCancer.personalHistoryOvarianCancer',
+  personalHistoryColorectalPancreaticCancer:
+    'breastCancer.personalHistoryColorectalPancreaticCancer',
+  personalHistoryUterineCancer: 'breastCancer.personalHistoryUterineCancer',
+  ashkenaziInheritance: 'breastCancer.ashkenaziInheritance',
 
   // Prostate Cancer fields
   familyHistoryProstateCancer: 'familyHistory.prostateCancer',
@@ -61,20 +67,22 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   urinarySymptomsWeakStream: 'prostateCancer.urinarySymptomsWeakStream',
   urinarySymptomsStraining: 'prostateCancer.urinarySymptomsStraining',
   urinarySymptomsNocturia: 'prostateCancer.urinarySymptomsNocturia',
-  psaLevel: 'bloodTest.psaLevel',
 
   // Colorectal Cancer fields
-  personalHistoryColorectalCancer: 'colorectalCancer.personalHistory',
+  personalHistory: 'colorectalCancer.personalHistory',
   personalHistoryPolyps: 'colorectalCancer.personalHistoryPolyps',
   familyHistoryColorectalCancer:
     'colorectalCancer.familyHistoryColorectalCancer',
   familyHistoryPolyps: 'colorectalCancer.familyHistoryPolyps',
   inflammatoryBowelDisease: 'colorectalCancer.inflammatoryBowelDisease',
-  smokingStatus: 'lifestyle.currentSmokingStatus',
-  vegetableConsumption: 'lifestyle.vegetableServingsPerWeek',
+  numberOfRelatives: 'colorectalCancer.numberOfRelatives',
   colonoscopyHistory: 'colorectalCancer.colonoscopyHistory',
+  polypDiagnosis: 'colorectalCancer.polypDiagnosis',
   aspirinUse: 'colorectalCancer.aspirinUse',
   nsaidUse: 'colorectalCancer.nsaidUse',
+
+  // Diabetes fields
+  hasFamilyhistoryDiabetes: 'familyHistory.diabetes',
 }
 
 /**
@@ -105,9 +113,7 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   smoking: 'Smoking Status',
   hasQuitSmoking: 'Smoking Cessation',
   physicalActivity: 'Physical Activity',
-  eatsFruitVegetableDaily: 'Fruit/Vegetable Consumption',
-  diet: 'Diet',
-  useHypensiveMedication: 'Use of Hypensive Medication',
+  usesAntihypertensiveMedication: 'Use of Antihypertensive Medication',
   hasHistoryHighBloodGlucose: 'History of High Blood Glucose',
 
   // COPD fields
@@ -127,6 +133,11 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   familyHistoryOvarianCancer: 'Family History of Ovarian Cancer',
   brcaMutationStatus: 'BRCA Mutation Status',
   breastDensity: 'Breast Density',
+  personalHistoryOvarianCancer: 'Personal History of Ovarian Cancer',
+  personalHistoryColorectalPancreaticCancer:
+    'Personal History of Colorectal/Pancreatic Cancer',
+  personalHistoryUterineCancer: 'Personal History of Uterine Cancer',
+  ashkenaziInheritance: 'Ashkenazi Inheritance',
 
   // Prostate Cancer fields
   familyHistoryProstateCancer: 'Family History of Prostate Cancer',
@@ -141,19 +152,22 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   psaLevel: 'PSA Level',
 
   // Colorectal Cancer fields
-  personalHistoryColorectalCancer: 'Personal History of Colorectal Cancer',
+  personalHistory: 'Personal History of Colorectal Cancer',
   personalHistoryPolyps: 'Personal History of Polyps',
   familyHistoryColorectalCancer: 'Family History of Colorectal Cancer',
   familyHistoryPolyps: 'Family History of Polyps',
   inflammatoryBowelDisease: 'Inflammatory Bowel Disease',
-  smokingStatus: 'Smoking Status',
-  vegetableConsumption: 'Vegetable Consumption',
+  numberOfRelatives: 'Number of Relatives with Cancer',
   colonoscopyHistory: 'Colonoscopy History',
+  polypDiagnosis: 'Polyp Diagnosis',
   aspirinUse: 'Aspirin Use',
   nsaidUse: 'NSAID Use',
 
   // CKD fields
   hypertension: 'Hypertension',
+
+  // Diabetes fields
+  hasFamilyhistoryDiabetes: 'Family History of Diabetes',
 }
 
 /**

@@ -150,10 +150,18 @@ export interface BloodTest {
   cholesterolHdl?: string
   cholesterolTriglycerides?: string
   hba1cLevel?: string
+  serumCreatinine?: string
+  psaLevel?: string
 }
 
 export interface Cardiac {
   chestPain: string
+  chestPainLocation: string
+  painOnExertion: string
+  slowDownWithPain: string
+  painRelievedByRest: string
+  painDurationLessThan10Min: string
+  severePainOver30Min: string
   strokeSymptoms: string
 }
 
@@ -238,6 +246,8 @@ export interface DiabetesRequest {
   waist: string
   physicalActivity: string
   familyHistory: string
+  usesAntihypertensiveMedication: string
+  hasHistoryHighBloodGlucose: string
 }
 
 export interface RiskAssessmentModelResponseData {
@@ -343,9 +353,13 @@ export interface ColorectalCancerRequest {
   personalHistory?: string
   personalHistoryPolyps?: string
   inflammatoryBowelDisease?: string
-  familyHistory?: string
   familyHistoryColorectalCancer?: string
-  familyHistoryColorectalPolyps?: string
+  familyHistoryPolyps?: string
+  numberOfRelatives?: string
+  colonoscopyHistory?: string
+  polypDiagnosis?: string
+  aspirinUse?: string
+  nsaidUse?: string
 }
 
 export interface COPDBreakdown {

@@ -223,7 +223,7 @@ const RiskAssessmentFormContent = ({
         await baseAxios.post(API.generateRiskAssessment(assessmentId))
 
         // Small delay to allow server processing
-        await new Promise((resolve) => setTimeout(resolve, 2000))
+        await new Promise((resolve) => setTimeout(resolve, 5000))
 
         // Step 2: Fetch the generated assessment details
         const response = await baseAxios
@@ -298,6 +298,34 @@ const RiskAssessmentFormContent = ({
       const requiredFields = getRequiredFields(ncdType)
       if (!requiredFields) return true
 
+      // Special handling for colorectal cancer
+      if (ncdType === NCD.COLORECTAL_CANCER) {
+        const personalHistory = formData?.colorectalCancer?.personalHistory
+        if (personalHistory === 'Yes') {
+          // If patient has been diagnosed with colorectal cancer, skip validation
+          return true
+        }
+      }
+
+      // Special handling for breast cancer
+      if (ncdType === NCD.BREAST_CANCER) {
+        const hasBeenDiagnosed = formData?.breastCancer?.hasBeenDiagnosed
+        if (hasBeenDiagnosed === 'Yes') {
+          // If patient has been diagnosed with breast cancer, skip validation
+          return true
+        }
+      }
+
+      // Special handling for prostate cancer
+      if (ncdType === NCD.PROSTATE_CANCER) {
+        const psaLevel = formData?.bloodTest?.psaLevel
+        const hasPsaLevel = psaLevel && psaLevel.trim() !== ''
+        if (hasPsaLevel) {
+          // If PSA level is available, skip urinary symptoms validation
+          return true
+        }
+      }
+
       return Object.entries(requiredFields).every(([field, isRequired]) => {
         if (!isRequired) return true
 
@@ -325,10 +353,40 @@ const RiskAssessmentFormContent = ({
       return
     }
 
+    // Check for colorectal and breast cancer conditions and update ncdType accordingly
+    let finalNcdType = getNcdTypeString()
+    const formData = formMethods.watch()
+
+    // If colorectal cancer is selected but patient has been diagnosed, remove it from ncdType
+    if (selectedNcds.includes(NCD.COLORECTAL_CANCER)) {
+      const personalHistory = formData?.colorectalCancer?.personalHistory
+      if (personalHistory === 'Yes') {
+        // Remove colorectal cancer from ncdType
+        const ncdTypes = finalNcdType.split(',').map((type) => type.trim())
+        const filteredNcdTypes = ncdTypes.filter(
+          (type) => type !== NCD.COLORECTAL_CANCER
+        )
+        finalNcdType = filteredNcdTypes.join(', ')
+      }
+    }
+
+    // If breast cancer is selected but patient has been diagnosed, remove it from ncdType
+    if (selectedNcds.includes(NCD.BREAST_CANCER)) {
+      const hasBeenDiagnosed = formData?.breastCancer?.hasBeenDiagnosed
+      if (hasBeenDiagnosed === 'Yes') {
+        // Remove breast cancer from ncdType
+        const ncdTypes = finalNcdType.split(',').map((type) => type.trim())
+        const filteredNcdTypes = ncdTypes.filter(
+          (type) => type !== NCD.BREAST_CANCER
+        )
+        finalNcdType = filteredNcdTypes.join(', ')
+      }
+    }
+
     // Add ncdType to the data
     const formDataWithNcdType = {
       ...data,
-      ncdType: getNcdTypeString(),
+      ncdType: finalNcdType,
     }
 
     storeRiskAssessment(
@@ -356,6 +414,34 @@ const RiskAssessmentFormContent = ({
     selectedNcds.forEach((ncdType) => {
       const requiredFields = getRequiredFields(ncdType)
       if (!requiredFields) return
+
+      // Special handling for colorectal cancer
+      if (ncdType === NCD.COLORECTAL_CANCER) {
+        const personalHistory = formData?.colorectalCancer?.personalHistory
+        if (personalHistory === 'Yes') {
+          // If patient has been diagnosed with colorectal cancer, skip validation
+          return
+        }
+      }
+
+      // Special handling for breast cancer
+      if (ncdType === NCD.BREAST_CANCER) {
+        const hasBeenDiagnosed = formData?.breastCancer?.hasBeenDiagnosed
+        if (hasBeenDiagnosed === 'Yes') {
+          // If patient has been diagnosed with breast cancer, skip validation
+          return
+        }
+      }
+
+      // Special handling for prostate cancer
+      if (ncdType === NCD.PROSTATE_CANCER) {
+        const psaLevel = formData?.bloodTest?.psaLevel
+        const hasPsaLevel = psaLevel && psaLevel.trim() !== ''
+        if (hasPsaLevel) {
+          // If PSA level is available, skip urinary symptoms validation
+          return
+        }
+      }
 
       const missingFields = Object.entries(requiredFields)
         .filter(([field, isRequired]) => {

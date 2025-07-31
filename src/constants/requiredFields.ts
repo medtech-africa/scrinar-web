@@ -16,8 +16,6 @@ export interface NcdRequiredFields {
     waist: boolean
     bmi: boolean
     physicalActivity: boolean
-    eatsFruitVegetableDaily: boolean
-    diet: boolean
     hasFamilyhistoryDiabetes: boolean
     usesAntihypertensiveMedication: boolean
     hasHistoryHighBloodGlucose: boolean
@@ -36,41 +34,46 @@ export interface NcdRequiredFields {
   [NCD.BREAST_CANCER]: {
     dateOfBirth: boolean
     gender: boolean
-    height: boolean
-    weight: boolean
+    hasBeenDiagnosed: boolean
     ageAtMenarche: boolean
     ageAtFirstBirth: boolean
     menopauseStatus: boolean
+    ageAtMenopause: boolean
     hormoneReplacementTherapy: boolean
-    hrtDuration: boolean
     breastBiopsy: boolean
-    benignBreastDisease: boolean
     familyHistoryBreastCancer: boolean
     familyHistoryOvarianCancer: boolean
     brcaMutationStatus: boolean
     breastDensity: boolean
+    personalHistoryOvarianCancer: boolean
+    personalHistoryColorectalPancreaticCancer: boolean
+    personalHistoryUterineCancer: boolean
+    ashkenaziInheritance: boolean
   }
   [NCD.PROSTATE_CANCER]: {
     dateOfBirth: boolean
     gender: boolean
     psaLevel: boolean
     familyHistoryProstateCancer: boolean
-    urinarySymptoms: boolean
+    urinarySymptomsIncompleteEmptying: boolean
+    urinarySymptomsFrequency: boolean
+    urinarySymptomsIntermittency: boolean
+    urinarySymptomsUrgency: boolean
+    urinarySymptomsWeakStream: boolean
+    urinarySymptomsStraining: boolean
+    urinarySymptomsNocturia: boolean
   }
   [NCD.COLORECTAL_CANCER]: {
     dateOfBirth: boolean
     gender: boolean
-    height: boolean
-    weight: boolean
-    personalHistoryColorectalCancer: boolean
+    personalHistory: boolean
     personalHistoryPolyps: boolean
     familyHistoryColorectalCancer: boolean
     familyHistoryPolyps: boolean
     inflammatoryBowelDisease: boolean
-    smokingStatus: boolean
-    vegetableConsumption: boolean
-    diet: boolean
+    numberOfRelatives: boolean
     colonoscopyHistory: boolean
+    polypDiagnosis: boolean
     aspirinUse: boolean
     nsaidUse: boolean
   }
@@ -96,8 +99,6 @@ export const ncdRequiredFields: NcdRequiredFields = {
     waist: true,
     bmi: true,
     physicalActivity: true,
-    eatsFruitVegetableDaily: true,
-    diet: true,
     hasFamilyhistoryDiabetes: true,
     usesAntihypertensiveMedication: true,
     hasHistoryHighBloodGlucose: true,
@@ -116,41 +117,46 @@ export const ncdRequiredFields: NcdRequiredFields = {
   [NCD.BREAST_CANCER]: {
     dateOfBirth: true,
     gender: true,
-    height: true,
-    weight: true,
+    hasBeenDiagnosed: true,
     ageAtMenarche: true,
     ageAtFirstBirth: true,
     menopauseStatus: true,
+    ageAtMenopause: true,
     hormoneReplacementTherapy: true,
-    hrtDuration: true,
     breastBiopsy: true,
-    benignBreastDisease: true,
     familyHistoryBreastCancer: true,
     familyHistoryOvarianCancer: true,
     brcaMutationStatus: true,
     breastDensity: true,
+    personalHistoryOvarianCancer: true,
+    personalHistoryColorectalPancreaticCancer: true,
+    personalHistoryUterineCancer: true,
+    ashkenaziInheritance: true,
   },
   [NCD.PROSTATE_CANCER]: {
     dateOfBirth: true,
     gender: true,
     psaLevel: true,
     familyHistoryProstateCancer: true,
-    urinarySymptoms: true,
+    urinarySymptomsIncompleteEmptying: true,
+    urinarySymptomsFrequency: true,
+    urinarySymptomsIntermittency: true,
+    urinarySymptomsUrgency: true,
+    urinarySymptomsWeakStream: true,
+    urinarySymptomsStraining: true,
+    urinarySymptomsNocturia: true,
   },
   [NCD.COLORECTAL_CANCER]: {
     dateOfBirth: true,
     gender: true,
-    height: true,
-    weight: true,
-    personalHistoryColorectalCancer: true,
+    personalHistory: true,
     personalHistoryPolyps: true,
     familyHistoryColorectalCancer: true,
     familyHistoryPolyps: true,
     inflammatoryBowelDisease: true,
-    smokingStatus: true,
-    vegetableConsumption: true,
-    diet: true,
+    numberOfRelatives: true,
     colonoscopyHistory: true,
+    polypDiagnosis: true,
     aspirinUse: true,
     nsaidUse: true,
   },
@@ -220,7 +226,13 @@ export const getConditionalRequiredFields = (
       ...ncdRequiredFields[NCD.PROSTATE_CANCER],
       // If PSA level is available, urinary symptoms are not required
       // If PSA level is not available, urinary symptoms are required (at least one should be filled)
-      urinarySymptoms: !hasPsaLevel,
+      urinarySymptomsIncompleteEmptying: !hasPsaLevel,
+      urinarySymptomsFrequency: !hasPsaLevel,
+      urinarySymptomsIntermittency: !hasPsaLevel,
+      urinarySymptomsUrgency: !hasPsaLevel,
+      urinarySymptomsWeakStream: !hasPsaLevel,
+      urinarySymptomsStraining: !hasPsaLevel,
+      urinarySymptomsNocturia: !hasPsaLevel,
     }
   }
 
