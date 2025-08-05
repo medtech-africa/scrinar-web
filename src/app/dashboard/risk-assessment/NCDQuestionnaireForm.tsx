@@ -38,7 +38,7 @@ export const NCDQuestionnaireForm = ({ onNext, disabled }: Props) => {
   const showDiabetes = hasNcdSelected(NCD.DIABETES)
 
   // Create available tabs based on what's selected
-  const availableTabs = []
+  const availableTabs: { id: string; label: string }[] = []
   if (showCardiac) availableTabs.push({ id: NCD.CVD, label: 'CVD' })
   if (showCOPD) availableTabs.push({ id: NCD.COPD, label: 'COPD' })
   if (showBreastCancer)
@@ -218,8 +218,26 @@ export const NCDQuestionnaireForm = ({ onNext, disabled }: Props) => {
 
       <div className="flex justify-end mt-8">
         {!disabled && (
-          <Button className="px-8" onClick={onNext} type="button">
-            Next
+          <Button
+            className="px-8"
+            onClick={() => {
+              const currentIndex = availableTabs.findIndex(
+                (tab) => tab.id === activeNcdTab
+              )
+              const isLastTab = currentIndex === availableTabs.length - 1
+
+              if (isLastTab) {
+                onNext()
+              } else {
+                setActiveNcdTab(availableTabs[currentIndex + 1].id)
+              }
+            }}
+            type="button"
+          >
+            {availableTabs.findIndex((tab) => tab.id === activeNcdTab) ===
+            availableTabs.length - 1
+              ? 'Next'
+              : 'Next Tab'}
           </Button>
         )}
       </div>

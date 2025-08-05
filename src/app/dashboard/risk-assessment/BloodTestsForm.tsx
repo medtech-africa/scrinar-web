@@ -459,6 +459,8 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                   <Input
                     {...field}
                     type="number"
+                    min="0.4"
+                    max="50"
                     step="0.01"
                     placeholder="ng/mL"
                     label={isRequiredField(
