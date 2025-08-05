@@ -223,7 +223,7 @@ const RiskAssessmentFormContent = ({
         await baseAxios.post(API.generateRiskAssessment(assessmentId))
 
         // Small delay to allow server processing
-        await new Promise((resolve) => setTimeout(resolve, 5000))
+        await new Promise((resolve) => setTimeout(resolve, 15000))
 
         // Step 2: Fetch the generated assessment details
         const response = await baseAxios
@@ -249,22 +249,22 @@ const RiskAssessmentFormContent = ({
     },
     onMutate: () => {
       setProgress(0)
-      // Start progress animation with two phases
+      // Start progress animation with two phases for 15-second duration
       let phase = 1
       const interval = setInterval(() => {
         setProgress((prev) => {
-          // Phase 1: Generate assessment (0-45%)
+          // Phase 1: Generate assessment (0-45%) - ~6.75 seconds
           if (phase === 1 && prev < 45) {
-            return prev + 2
+            return prev + 1
           }
           // Transition to phase 2 (45-50%)
           if (phase === 1 && prev >= 45) {
             phase = 2
             return 50
           }
-          // Phase 2: Fetch results (50-90%)
+          // Phase 2: Fetch results (50-90%) - ~6 seconds
           if (phase === 2 && prev < 90) {
-            return prev + 1.5
+            return prev + 1
           }
           if (prev >= 90) {
             clearInterval(interval)
