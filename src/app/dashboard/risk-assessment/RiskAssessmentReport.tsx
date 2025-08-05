@@ -177,6 +177,9 @@ const validateAndTransformData = (data?: Partial<RiskAssessmentModel>) => {
     if (!breastCancer.diseaseBreakdown) {
       breastCancer.diseaseBreakdown = {}
     }
+    if (!breastCancer.status) {
+      breastCancer.status = true
+    }
     if (!breastCancer.breakdown) {
       breastCancer.breakdown = {
         age: 0,
@@ -192,6 +195,82 @@ const validateAndTransformData = (data?: Partial<RiskAssessmentModel>) => {
     }
     if (!breastCancer.predictions) {
       breastCancer.predictions = []
+    } else {
+      // Validate predictions structure
+      breastCancer.predictions = breastCancer.predictions.map((pred: any) => ({
+        month: pred.month || 0,
+        low: pred.low || 0,
+        moderate: pred.moderate || 0,
+        high: pred.high || 0,
+      }))
+    }
+  }
+
+  // Validate and fix Prostate Cancer data
+  if (transformedResponseData.prostate) {
+    const prostate = transformedResponseData.prostate
+    if (!prostate.diseaseBreakdown) {
+      prostate.diseaseBreakdown = {}
+    }
+    if (!prostate.status) {
+      prostate.status = true
+    }
+    if (!prostate.breakdown) {
+      prostate.breakdown = {
+        age: 0,
+        familyHistory: 0,
+        psaLevel: 0,
+        prostateVolume: 0,
+        previousBiopsy: 0,
+        freeToTotalPsaRatio: 0,
+        ethnicity: 0,
+        urinarySymptoms: 0,
+      }
+    }
+    if (!prostate.predictions) {
+      prostate.predictions = []
+    } else {
+      // Validate predictions structure
+      prostate.predictions = prostate.predictions.map((pred: any) => ({
+        month: pred.month || 0,
+        low: pred.low || 0,
+        moderate: pred.moderate || 0,
+        high: pred.high || 0,
+      }))
+    }
+  }
+
+  // Validate and fix Colorectal Cancer data
+  if (transformedResponseData.colorectal) {
+    const colorectal = transformedResponseData.colorectal
+    if (!colorectal.diseaseBreakdown) {
+      colorectal.diseaseBreakdown = {}
+    }
+    if (!colorectal.status) {
+      colorectal.status = true
+    }
+    if (!colorectal.breakdown) {
+      colorectal.breakdown = {
+        age: 0,
+        personalHistory: 0,
+        familyHistory: 0,
+        smokingStatus: 0,
+        diet: 0,
+        physicalActivity: 0,
+        medicalHistory: 0,
+        medicationUse: 0,
+      }
+    }
+    if (!colorectal.predictions) {
+      colorectal.predictions = []
+    } else {
+      // Validate predictions structure
+      colorectal.predictions = colorectal.predictions.map((pred: any) => ({
+        month: pred.month || 0,
+        low: pred.low || 0,
+        moderate: pred.moderate || 0,
+        high: pred.high || 0,
+      }))
     }
   }
 
@@ -270,6 +349,14 @@ const validateAndTransformData = (data?: Partial<RiskAssessmentModel>) => {
     const ckdOutput = transformedResponseData.ckdOutput
     if (!ckdOutput.status) {
       ckdOutput.status = true
+    }
+  }
+
+  // Handle prostateOutput if it exists
+  if (transformedResponseData.prostateOutput) {
+    const prostateOutput = transformedResponseData.prostateOutput
+    if (!prostateOutput.status) {
+      prostateOutput.status = true
     }
   }
 

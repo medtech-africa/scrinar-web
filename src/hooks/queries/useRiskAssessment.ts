@@ -255,11 +255,12 @@ export interface RiskAssessmentModelResponseData {
   findrisc?: Findrisc
   copd?: COPD
   breastCancer?: BreastCancer
-  prostate?: ProstateCancer
+  prostate?: ProstateCancer & NCDOutput
   colorectal?: ColorectalCancer
-  ckd?: CKD & CKDOutput
-  ckdOutput?: CKDOutput
+  ckd?: CKD & NCDOutput
+  ckdOutput?: NCDOutput
   healthdata?: any
+  prostateOutput?: NCDOutput
   criticalAlerts: CriticalAlert[]
   predictions?: Prediction[]
 }
@@ -474,7 +475,7 @@ export interface CKD {
   stage: string
 }
 
-export interface CKDOutput {
+export interface NCDOutput {
   followUpAction: string
   lifestyleModification: string
   personalizedAdvice: string

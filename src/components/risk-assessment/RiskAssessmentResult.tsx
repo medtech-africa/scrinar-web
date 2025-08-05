@@ -348,20 +348,11 @@ export const RiskAssessmentResult: React.FC<{
     // For CKD, check if it has either the old structure (followUpAction) or new structure (eGFR, stage)
     if (ncdType === 'ckd') {
       const ckdData = ncdData as any // Type assertion for CKD data
-      return !!(
-        ckdData.followUpAction ||
-        ckdData.eGFR ||
-        ckdData.stage ||
-        data?.ckdOutput
-      )
+      return !!(ckdData.stage || data?.ckdOutput)
     }
 
     // For other NCDs, check if they have followUpAction (indicating they have actual data)
-    return !!(
-      ncdData.followUpAction ||
-      ncdData.lifestyleModification ||
-      ncdData.personalizedAdvice
-    )
+    return !!(ncdData.score || ncdData.riskLevel)
   }
 
   const RISK_TABS: { id: RiskType; label: string; show: boolean }[] = [
@@ -624,6 +615,10 @@ export const useActiveRiskData = (
 
   if (activeTab === 'ckd' && data?.ckd && data?.ckdOutput) {
     activeData = { ...data.ckd, ...data.ckdOutput }
+  }
+
+  if (activeTab === 'prostate' && data?.prostate && data?.prostateOutput) {
+    activeData = { ...data.prostate, ...data.prostateOutput }
   }
 
   return {
