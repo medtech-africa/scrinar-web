@@ -42,7 +42,8 @@ export const ConsentForm = ({ assessmentId = '' }) => {
   return (
     <PageCard
       title="Consent & Data Use"
-      bodyStyle="px-4 pb-4 gap-4 flex flex-col"
+      textContainerClassName="!mb-4 !md:mb-6 mt-4"
+      bodyStyle="px-4 gap-4 flex flex-col"
     >
       <div className="bg-yellow-50 p-4 rounded-lg text-sm">
         <p className="font-semibold mb-2">Disclaimer:</p>

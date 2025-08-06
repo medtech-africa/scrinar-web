@@ -35,57 +35,116 @@ export const useGeneratedRiskAssessment = (id: string) => {
   })
 }
 
-export const useRiskAssessmentPolling = (id: string) => {
+export const useRiskAssessmentPolling = (
+  id: string,
+  selectedNcds?: string[]
+) => {
   const startTime = React.useRef(Date.now())
 
   return useQuery({
-    queryKey: ['risk-assessment-polling', id],
+    queryKey: ['risk-assessment-polling', id, selectedNcds],
     queryFn: () =>
       baseAxios
         .get(API.generateRiskAssessment(id))
         .then((res) => res.data.data),
     enabled: !!id,
+    // Disable caching to ensure fresh data on each poll
+    staleTime: 0,
+    gcTime: 0,
     refetchInterval: (query) => {
       const data = query.state.data as RiskAssessmentModel | undefined
       const elapsedTime = Date.now() - startTime.current
 
-      // Stop polling if we've exceeded 10 seconds
-      if (elapsedTime >= 10000) {
+      // Stop polling if we've exceeded 60 seconds
+      if (elapsedTime >= 60000) {
         return false
       }
 
-      // Check if we have the required fields for all models
-      const hasRequiredFields =
-        // CVD (WHO) model
-        data?.responseData?.who?.lifestyleModification !== undefined &&
-        data?.responseData?.who?.followUpAction !== undefined &&
-        data?.responseData?.who?.breakdown !== undefined &&
-        // Diabetes (FINDRISC) model
-        data?.responseData?.findrisc?.lifestyleModification !== undefined &&
-        data?.responseData?.findrisc?.followUpAction !== undefined &&
-        data?.responseData?.findrisc?.breakdown !== undefined &&
-        // COPD model - check for either old structure or new structure
-        ((data?.responseData?.copd?.lifestyleModification !== undefined &&
-          data?.responseData?.copd?.followUpAction !== undefined) ||
-          (data?.responseData?.copd?.riskScore !== undefined &&
-            data?.responseData?.copd?.riskCategory !== undefined)) &&
-        // Breast Cancer model
-        data?.responseData?.breastCancer?.lifestyleModification !== undefined &&
-        data?.responseData?.breastCancer?.followUpAction !== undefined &&
-        // Prostate Cancer model
-        data?.responseData?.prostate?.lifestyleModification !== undefined &&
-        data?.responseData?.prostate?.followUpAction !== undefined &&
-        // Colorectal Cancer model
-        data?.responseData?.colorectal?.lifestyleModification !== undefined &&
-        data?.responseData?.colorectal?.followUpAction !== undefined &&
-        // CKD model - check for either old structure or new structure
-        ((data?.responseData?.ckd?.lifestyleModification !== undefined &&
-          data?.responseData?.ckd?.followUpAction !== undefined) ||
-          (data?.responseData?.ckdOutput?.lifestyleModification !== undefined &&
-            data?.responseData?.ckdOutput?.followUpAction !== undefined))
+      // If no selected NCDs provided, use the old logic
+      if (!selectedNcds || selectedNcds.length === 0) {
+        const hasRequiredFields =
+          // CVD (WHO) model
+          data?.responseData?.who?.lifestyleModification !== undefined &&
+          data?.responseData?.who?.followUpAction !== undefined &&
+          data?.responseData?.who?.breakdown !== undefined &&
+          // Diabetes (FINDRISC) model
+          data?.responseData?.findrisc?.lifestyleModification !== undefined &&
+          data?.responseData?.findrisc?.followUpAction !== undefined &&
+          data?.responseData?.findrisc?.breakdown !== undefined &&
+          // COPD model - check for either old structure or new structure
+          ((data?.responseData?.copd?.lifestyleModification !== undefined &&
+            data?.responseData?.copd?.followUpAction !== undefined) ||
+            (data?.responseData?.copd?.riskScore !== undefined &&
+              data?.responseData?.copd?.riskCategory !== undefined)) &&
+          // Breast Cancer model
+          data?.responseData?.breastCancer?.lifestyleModification !==
+            undefined &&
+          data?.responseData?.breastCancer?.followUpAction !== undefined &&
+          // Prostate Cancer model
+          data?.responseData?.prostate?.lifestyleModification !== undefined &&
+          data?.responseData?.prostate?.followUpAction !== undefined &&
+          // Colorectal Cancer model
+          data?.responseData?.colorectal?.lifestyleModification !== undefined &&
+          data?.responseData?.colorectal?.followUpAction !== undefined &&
+          // CKD model - check for either old structure or new structure
+          ((data?.responseData?.ckd?.lifestyleModification !== undefined &&
+            data?.responseData?.ckd?.followUpAction !== undefined) ||
+            (data?.responseData?.ckdOutput?.lifestyleModification !==
+              undefined &&
+              data?.responseData?.ckdOutput?.followUpAction !== undefined))
 
-      // Stop polling if we have the fields, otherwise poll every 3 seconds
-      return hasRequiredFields ? false : 3000
+        return hasRequiredFields ? false : 3000
+      }
+
+      // Check for selected NCDs specifically
+      if (!data?.responseData) return 3000
+
+      const responseData = data.responseData
+
+      // Check each selected NCD type
+      for (const ncdType of selectedNcds) {
+        const ncdData = (responseData as any)[ncdType]
+
+        // Check if the NCD data exists and is not empty
+        if (!ncdData || Object.keys(ncdData).length === 0) {
+          return 3000
+        }
+
+        // Check for required fields based on NCD type
+        switch (ncdType) {
+          case 'CVD':
+            if (!ncdData.who?.score || !ncdData.who?.riskLevel) return 3000
+            break
+          case 'DIABETES':
+            if (!ncdData.findrisc?.score || !ncdData.findrisc?.riskLevel)
+              return 3000
+            break
+          case 'COPD':
+            if (!ncdData.copd?.score && !ncdData.copd?.riskScore) return 3000
+            break
+          case 'BREAST_CANCER':
+            if (
+              !ncdData.breastCancer?.score ||
+              !ncdData.breastCancer?.riskLevel
+            )
+              return 3000
+            break
+          case 'PROSTATE_CANCER':
+            if (!ncdData.prostate?.score || !ncdData.prostate?.riskLevel)
+              return 3000
+            break
+          case 'COLORECTAL_CANCER':
+            if (!ncdData.colorectal?.score || !ncdData.colorectal?.riskLevel)
+              return 3000
+            break
+          case 'CKD':
+            if (!ncdData.ckd?.stage && !ncdData.ckdOutput?.stage) return 3000
+            break
+        }
+      }
+
+      // If we reach here, all selected NCDs have complete data
+      return false
     },
   })
 }
@@ -261,6 +320,9 @@ export interface RiskAssessmentModelResponseData {
   ckdOutput?: NCDOutput
   healthdata?: any
   prostateOutput?: NCDOutput
+  colorectalOutput?: NCDOutput
+  copdOutput?: NCDOutput
+  breastCancerOutput?: NCDOutput
   criticalAlerts: CriticalAlert[]
   predictions?: Prediction[]
 }

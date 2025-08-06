@@ -1,5 +1,4 @@
 import { Input } from '@/components/ui/input'
-import { Select } from '@/components/ui/select'
 import React, { useEffect } from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
@@ -357,34 +356,21 @@ export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
                 )}
               />
 
-              <Controller
-                name="lifestyle.moderateActivityHoursPerWeek"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    placeholder="Select hours per week"
-                    label="During those months, on average, about how many hours per week did you do moderate physical activities?"
-                    labelStyle="lg:text-sm text-xs"
-                    options={[
-                      {
-                        value: 'Up to 1 hour/week',
-                        label: 'Up to 1 hour/week',
-                      },
-                      {
-                        value: 'Between 1 - 2 hours/week',
-                        label: 'Between 1 - 2 hours/week',
-                      },
-                      { value: '2 - 3 hours/week', label: '2 - 3 hours/week' },
-                      { value: '3 - 4 hours/week', label: '3 - 4 hours/week' },
-                      {
-                        value: 'More than 4 hours/week',
-                        label: 'More than 4 hours/week',
-                      },
-                    ]}
-                    disabled={disabled}
-                  />
+              <OptionWithRadioField
+                label={isRequiredField(
+                  'During those months, on average, about how many hours per week did you do moderate physical activities?',
+                  'lifestyle.moderateActivityHoursPerWeek',
+                  formData
                 )}
+                options={[
+                  'Up to 1 hour/week',
+                  'Between 1 - 2 hours/week',
+                  '2 - 3 hours/week',
+                  '3 - 4 hours/week',
+                  'More than 4 hours/week',
+                ]}
+                form={{ id: 'lifestyle.moderateActivityHoursPerWeek' }}
+                disabled={disabled}
               />
 
               <Controller
@@ -408,34 +394,21 @@ export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
                 )}
               />
 
-              <Controller
-                name="lifestyle.vigorousActivityHoursPerWeek"
-                control={control}
-                render={({ field }) => (
-                  <Select
-                    {...field}
-                    placeholder="Select hours per week"
-                    label="During those months, on average, about how many hours per week did you do vigorous physical activities?"
-                    labelStyle="lg:text-sm text-xs"
-                    options={[
-                      {
-                        value: 'Up to 1 hour/week',
-                        label: 'Up to 1 hour/week',
-                      },
-                      {
-                        value: 'Between 1 - 2 hours/week',
-                        label: 'Between 1 - 2 hours/week',
-                      },
-                      { value: '2 - 3 hours/week', label: '2 - 3 hours/week' },
-                      { value: '3 - 4 hours/week', label: '3 - 4 hours/week' },
-                      {
-                        value: 'More than 4 hours/week',
-                        label: 'More than 4 hours/week',
-                      },
-                    ]}
-                    disabled={disabled}
-                  />
+              <OptionWithRadioField
+                label={isRequiredField(
+                  'During those months, on average, about how many hours per week did you do vigorous physical activities?',
+                  'lifestyle.vigorousActivityHoursPerWeek',
+                  formData
                 )}
+                options={[
+                  'Up to 1 hour/week',
+                  'Between 1 - 2 hours/week',
+                  '2 - 3 hours/week',
+                  '3 - 4 hours/week',
+                  'More than 4 hours/week',
+                ]}
+                form={{ id: 'lifestyle.vigorousActivityHoursPerWeek' }}
+                disabled={disabled}
               />
             </div>
           )}

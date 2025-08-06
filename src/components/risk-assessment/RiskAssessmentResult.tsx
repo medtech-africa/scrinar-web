@@ -199,7 +199,7 @@ const FactorBreakdown = ({
         {data === undefined ? (
           <Skeleton className="w-full h-full" />
         ) : (
-          <ResponsiveContainer>
+          <ResponsiveContainer width="100%" height={256}>
             <BarChart data={data} layout="vertical">
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis type="number" />
@@ -561,23 +561,14 @@ export const RiskAssessmentResult: React.FC<{
             />
           </PageCard>
 
-          {[
-            'who',
-            'findrisc',
-            'copd',
-            'breastCancer',
-            'prostate',
-            'colorectal',
-          ].includes(activeTab) && (
+          {['who', 'findrisc'].includes(activeTab) && (
             <PageCard
               title="Contributing Factors"
               subtitle="These are some conditions and behaviors that increase the risk of cardiovascular diseases"
             >
               <FactorBreakdown
                 data={formatRiskFactors(
-                  activeTab === 'ckd'
-                    ? undefined
-                    : (activeData as any)?.breakdown,
+                  (activeData as any)?.breakdown,
                   parseInt(activeData?.score || '0')
                 )}
                 isLoading={isLoading}
@@ -619,6 +610,26 @@ export const useActiveRiskData = (
 
   if (activeTab === 'prostate' && data?.prostate && data?.prostateOutput) {
     activeData = { ...data.prostate, ...data.prostateOutput }
+  }
+
+  if (
+    activeTab === 'colorectal' &&
+    data?.colorectal &&
+    data?.colorectalOutput
+  ) {
+    activeData = { ...data.colorectal, ...data.colorectalOutput }
+  }
+
+  if (activeTab === 'copd' && data?.copd && data?.copdOutput) {
+    activeData = { ...data.copd, ...data.copdOutput }
+  }
+
+  if (
+    activeTab === 'breastCancer' &&
+    data?.breastCancer &&
+    data?.breastCancerOutput
+  ) {
+    activeData = { ...data.breastCancer, ...data.breastCancerOutput }
   }
 
   return {

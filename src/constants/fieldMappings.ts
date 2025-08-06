@@ -80,6 +80,8 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   polypDiagnosis: 'colorectalCancer.polypDiagnosis',
   aspirinUse: 'colorectalCancer.aspirinUse',
   nsaidUse: 'colorectalCancer.nsaidUse',
+  moderateActivityHoursPerWeek: 'lifestyle.moderateActivityHoursPerWeek',
+  alcoholFrequency: 'lifestyle.alcoholFrequency',
 
   // Diabetes fields
   hasFamilyhistoryDiabetes: 'familyHistory.diabetes',
@@ -115,6 +117,7 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   physicalActivity: 'Physical Activity',
   usesAntihypertensiveMedication: 'Use of Antihypertensive Medication',
   hasHistoryHighBloodGlucose: 'History of High Blood Glucose',
+  alcoholFrequency: 'Alcohol Frequency',
 
   // COPD fields
   coughDuration: 'Cough Duration',
@@ -162,6 +165,7 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   polypDiagnosis: 'Polyp Diagnosis',
   aspirinUse: 'Aspirin Use',
   nsaidUse: 'NSAID Use',
+  moderateActivityHoursPerWeek: 'Moderate Activity Hours Per Week',
 
   // CKD fields
   hypertension: 'Hypertension',

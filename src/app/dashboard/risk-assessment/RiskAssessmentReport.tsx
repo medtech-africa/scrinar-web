@@ -360,6 +360,30 @@ const validateAndTransformData = (data?: Partial<RiskAssessmentModel>) => {
     }
   }
 
+  // Handle colorectalOutput if it exists
+  if (transformedResponseData.colorectalOutput) {
+    const colorectalOutput = transformedResponseData.colorectalOutput
+    if (!colorectalOutput.status) {
+      colorectalOutput.status = true
+    }
+  }
+
+  // Handle copdOutput if it exists
+  if (transformedResponseData.copdOutput) {
+    const copdOutput = transformedResponseData.copdOutput
+    if (!copdOutput.status) {
+      copdOutput.status = true
+    }
+  }
+
+  // Handle breastCancerOutput if it exists
+  if (transformedResponseData.breastCancerOutput) {
+    const breastCancerOutput = transformedResponseData.breastCancerOutput
+    if (!breastCancerOutput.status) {
+      breastCancerOutput.status = true
+    }
+  }
+
   return {
     ...data,
     responseData: transformedResponseData,
@@ -400,6 +424,32 @@ export const RiskAssessmentReport = ({
       mergedData.ckd = {
         ...mergedData.ckd,
         ...mergedData.ckdOutput,
+      }
+    }
+
+    if (mergedData.prostateOutput && mergedData.prostate) {
+      mergedData.prostate = {
+        ...mergedData.prostate,
+        ...mergedData.prostateOutput,
+      }
+    }
+
+    if (mergedData.colorectalOutput && mergedData.colorectal) {
+      mergedData.colorectal = {
+        ...mergedData.colorectal,
+        ...mergedData.colorectalOutput,
+      }
+    }
+    if (mergedData.copdOutput && mergedData.copd) {
+      mergedData.copd = {
+        ...mergedData.copd,
+        ...mergedData.copdOutput,
+      }
+    }
+    if (mergedData.breastCancerOutput && mergedData.breastCancer) {
+      mergedData.breastCancer = {
+        ...mergedData.breastCancer,
+        ...mergedData.breastCancerOutput,
       }
     }
 

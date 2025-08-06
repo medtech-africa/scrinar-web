@@ -214,25 +214,48 @@ const RiskAssessmentFormContent = ({
   } = useMutation({
     mutationFn: async (assessmentId: string) => {
       try {
-        // Step 0:  store the assessment data
+        // Step 0: Store the assessment data
         const formData = formMethods.watch()
-
         await baseAxios.patch(API.updateRiskAssessment(assessmentId), formData)
 
         // Step 1: Generate risk assessment
         await baseAxios.post(API.generateRiskAssessment(assessmentId))
 
-        // Small delay to allow server processing
-        await new Promise((resolve) => setTimeout(resolve, 15000))
+        // Step 2: Poll for results with timeout
+        const maxPollingTime = 60000 // 60 seconds timeout
+        const pollInterval = 3000 // 3 seconds between polls
+        const startTime = Date.now()
 
-        // Step 2: Fetch the generated assessment details
-        const response = await baseAxios
-          .get<{
-            data: any
-          }>(API.generateRiskAssessment(assessmentId))
-          .then((res) => res.data.data)
+        while (Date.now() - startTime < maxPollingTime) {
+          try {
+            // Add cache-busting parameter to ensure fresh data
+            const response = await baseAxios
+              .get<{
+                data: any
+              }>(`${API.generateRiskAssessment(assessmentId)}?t=${Date.now()}`)
+              .then((res) => res.data.data)
 
-        return response
+            // Check if we have complete data for selected NCDs
+            const hasCompleteData = checkCompleteData(response, selectedNcds)
+
+            if (hasCompleteData) {
+              return response
+            }
+
+            // Wait before next poll
+            await new Promise((resolve) => setTimeout(resolve, pollInterval))
+          } catch (error: any) {
+            // If it's a 404, the assessment might not be ready yet
+            if (error?.response?.status === 404) {
+              await new Promise((resolve) => setTimeout(resolve, pollInterval))
+              continue
+            }
+            throw error
+          }
+        }
+
+        // If we reach here, timeout occurred
+        throw new Error('Assessment generation timed out. Please try again.')
       } catch (error: any) {
         // Provide more specific error messages based on the step that failed
         if (error?.response?.status === 404) {
@@ -241,7 +264,8 @@ const RiskAssessmentFormContent = ({
           throw new Error('Server error. Please try again later.')
         } else {
           throw new Error(
-            error?.response?.data?.message ||
+            error?.message ||
+              error?.response?.data?.message ||
               'Failed to analyze risk assessment data'
           )
         }
@@ -288,6 +312,54 @@ const RiskAssessmentFormContent = ({
       setProgress(0)
     },
   })
+
+  // Helper function to check if data is complete for selected NCDs
+  const checkCompleteData = (response: any, selectedNcds: string[]) => {
+    if (!response?.responseData) return false
+
+    const responseData = response.responseData
+
+    // Check each selected NCD type
+    for (const ncdType of selectedNcds) {
+      const ncdData = responseData[ncdType]
+
+      // Check if the NCD data exists and is not empty
+      if (!ncdData || Object.keys(ncdData).length === 0) {
+        return false
+      }
+
+      // Check for required fields based on NCD type
+      switch (ncdType) {
+        case 'CVD':
+          if (!ncdData.who?.score || !ncdData.who?.riskLevel) return false
+          break
+        case 'DIABETES':
+          if (!ncdData.findrisc?.score || !ncdData.findrisc?.riskLevel)
+            return false
+          break
+        case 'COPD':
+          if (!ncdData.copd?.score && !ncdData.copd?.riskScore) return false
+          break
+        case 'BREAST_CANCER':
+          if (!ncdData.breastCancer?.score || !ncdData.breastCancer?.riskLevel)
+            return false
+          break
+        case 'PROSTATE_CANCER':
+          if (!ncdData.prostate?.score || !ncdData.prostate?.riskLevel)
+            return false
+          break
+        case 'COLORECTAL_CANCER':
+          if (!ncdData.colorectal?.score || !ncdData.colorectal?.riskLevel)
+            return false
+          break
+        case 'CKD':
+          if (!ncdData.ckd?.stage && !ncdData.ckdOutput?.stage) return false
+          break
+      }
+    }
+
+    return true
+  }
 
   const isFormValid = (_data: any) => {
     // Check if all required fields for selected NCDs are filled
@@ -501,7 +573,6 @@ const RiskAssessmentFormContent = ({
     if (_assessmentId) {
       const currentFormData = formMethods.watch()
       let sectionData: any = {}
-      sectionData.ncdType = getNcdTypeString()
 
       switch (activeTab) {
         case 'bio':
@@ -541,6 +612,8 @@ const RiskAssessmentFormContent = ({
           break
       }
 
+      sectionData.ncdType = getNcdTypeString()
+
       if (Object.keys(sectionData).length > 0) {
         baseAxios
           .patch(API.updateRiskAssessment(_assessmentId), sectionData)
@@ -558,6 +631,10 @@ const RiskAssessmentFormContent = ({
     const currentIndex = filteredOrder.indexOf(activeTab)
     if (currentIndex < filteredOrder.length - 1) {
       setActiveTab(filteredOrder[currentIndex + 1])
+      // Auto-scroll to top when moving to next section
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }, 100)
     }
   }
 
@@ -566,6 +643,10 @@ const RiskAssessmentFormContent = ({
     const currentIndex = filteredOrder.indexOf(activeTab)
     if (currentIndex > 0) {
       setActiveTab(filteredOrder[currentIndex - 1])
+      // Auto-scroll to top when moving to previous section
+      setTimeout(() => {
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }, 100)
     }
   }
 
@@ -1046,6 +1127,7 @@ const RiskAssessmentFormContent = ({
               formData={{
                 personalInfo: formMethods.watch('personalInfo'),
                 vitals: formMethods.watch('vitals'),
+                ncdType: getNcdTypeString(),
               }}
               // data={data}
               setShowResults={setShowResults}
@@ -1073,7 +1155,10 @@ const RiskAssessmentGeneratedReport = ({
   const router = useRouter()
   const personalInfo = formData?.personalInfo
 
-  const { data: polledData } = useRiskAssessmentPolling(resultData?.id)
+  const { data: polledData } = useRiskAssessmentPolling(
+    resultData?.id,
+    formData?.ncdType?.split(',') || []
+  )
 
   const actionButton = (
     <div className="mt-8 flex justify-end">

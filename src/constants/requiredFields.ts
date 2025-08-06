@@ -76,6 +76,11 @@ export interface NcdRequiredFields {
     polypDiagnosis: boolean
     aspirinUse: boolean
     nsaidUse: boolean
+    moderateActivityHoursPerWeek: boolean
+    alcoholFrequency: boolean
+    height: boolean
+    weight: boolean
+    hasQuitSmoking: boolean
   }
   [NCD.CKD]: {
     dateOfBirth: boolean
@@ -159,6 +164,11 @@ export const ncdRequiredFields: NcdRequiredFields = {
     polypDiagnosis: true,
     aspirinUse: true,
     nsaidUse: true,
+    moderateActivityHoursPerWeek: true,
+    alcoholFrequency: true,
+    height: true,
+    weight: true,
+    hasQuitSmoking: true,
   },
   [NCD.CKD]: {
     dateOfBirth: true,

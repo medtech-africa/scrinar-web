@@ -293,41 +293,39 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                   )}
                 </div>
 
-                {(hasNcdSelected(NCD.CVD) || hasNcdSelected(NCD.DIABETES)) && (
-                  <div className="my-4">
-                    <div className="bg-grey-50 w-full p-4 flex justify-center">
-                      <Text>BMI Result</Text>
-                    </div>
-                    <div className="flex flex-col justify-center items-center gap-y-4 p-4">
-                      <Text
-                        variant="display/sm"
-                        weight="bold"
-                        className="text-grey-700"
-                      >
-                        {!!bmi ? bmi : '-'}
-                      </Text>
-                      {!!bmi && (
-                        <BadgeField
-                          variant={
-                            gender
-                              ? categorizeBMIWHO2007(Number(age), gender, bmi)
-                                  ?.variant
-                              : undefined
-                          }
-                          value={
-                            gender
-                              ? categorizeBMIWHO2007(Number(age), gender, bmi)
-                                  ?.message
-                              : undefined
-                          }
-                        />
-                      )}
-                    </div>
-                    <Label className="px-4 flex justify-center">
-                      * BMI automatically generated
-                    </Label>
+                <div className="my-4">
+                  <div className="bg-grey-50 w-full p-4 flex justify-center">
+                    <Text>BMI Result</Text>
                   </div>
-                )}
+                  <div className="flex flex-col justify-center items-center gap-y-4 p-4">
+                    <Text
+                      variant="display/sm"
+                      weight="bold"
+                      className="text-grey-700"
+                    >
+                      {!!bmi ? bmi : '-'}
+                    </Text>
+                    {!!bmi && (
+                      <BadgeField
+                        variant={
+                          gender
+                            ? categorizeBMIWHO2007(Number(age), gender, bmi)
+                                ?.variant
+                            : undefined
+                        }
+                        value={
+                          gender
+                            ? categorizeBMIWHO2007(Number(age), gender, bmi)
+                                ?.message
+                            : undefined
+                        }
+                      />
+                    )}
+                  </div>
+                  <Label className="px-4 flex justify-center">
+                    * BMI automatically generated
+                  </Label>
+                </div>
               </div>
 
               <div>
