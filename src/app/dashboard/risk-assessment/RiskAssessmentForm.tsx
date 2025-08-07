@@ -7,7 +7,7 @@ import { VitalsMeasurement } from './VitalsMeasurement'
 import { BloodTestsForm } from './BloodTestsForm'
 import { FamilyHistoryLifestyleForm } from './FamilyHistoryLifestyleForm'
 import { HistoricalDataCollectionForm } from './HistoricalDataCollectionForm'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import baseAxios from '@/utils/baseAxios'
 import { API } from '@/utils/api'
 import { useMutation } from '@tanstack/react-query'
@@ -187,6 +187,7 @@ const RiskAssessmentFormContent = ({
   const [showResults, setShowResults] = useState(false)
   const [assessmentDone, setAssessmentDone] = useState(false)
   const [activeTab, setActiveTab] = useState('bio')
+  const formContainerRef = useRef<HTMLDivElement>(null)
   const {
     selectedNcds,
     toggleNcd,
@@ -322,44 +323,55 @@ const RiskAssessmentFormContent = ({
 
     // Check each selected NCD type
     for (const ncdType of selectedNcds) {
-      const ncdData = responseData[ncdType]
-
-      // Check if the NCD data exists and is not empty
-      if (!ncdData || Object.keys(ncdData).length === 0) {
-        continue // Skip this NCD if no data, but continue checking others
-      }
-
-      // Check for required fields based on NCD type
       let isNcdComplete = false
+
       switch (ncdType) {
-        case 'CVD':
-          isNcdComplete = !!(ncdData.who?.score && ncdData.who?.riskLevel)
+        case 'cvd':
+          // Check if WHO data exists and has required fields
+          const whoData = responseData.who
+          isNcdComplete = !!(whoData?.score !== undefined && whoData?.riskLevel)
           break
-        case 'DIABETES':
+        case 'diabetes':
+          // Check if FINDRISC data exists and has required fields
+          const findriscData = responseData.findrisc
+          isNcdComplete = !!(findriscData?.score && findriscData?.riskLevel)
+          break
+        case 'copd':
+          // Check if COPD data exists and has required fields
+          const copdData = responseData.copd
+          const copdOutputData = responseData.copdOutput
           isNcdComplete = !!(
-            ncdData.findrisc?.score && ncdData.findrisc?.riskLevel
+            copdData?.score !== undefined || copdOutputData?.score
           )
           break
-        case 'COPD':
-          isNcdComplete = !!(ncdData.copd?.score || ncdData.copd?.riskScore)
-          break
-        case 'BREAST_CANCER':
+        case 'breastCancer':
+          // Check if Breast Cancer data exists and has required fields
+          const breastCancerData = responseData.breastCancer
           isNcdComplete = !!(
-            ncdData.breastCancer?.score && ncdData.breastCancer?.riskLevel
+            breastCancerData?.score !== undefined && breastCancerData?.riskLevel
           )
           break
-        case 'PROSTATE_CANCER':
+        case 'prostateCancer':
+          // Check if Prostate Cancer data exists and has required fields
+          const prostateData = responseData.prostate
+          const prostateOutputData = responseData.prostateOutput
           isNcdComplete = !!(
-            ncdData.prostate?.score && ncdData.prostate?.riskLevel
+            prostateData?.score !== undefined || prostateOutputData?.score
           )
           break
-        case 'COLORECTAL_CANCER':
+        case 'colorectalCancer':
+          // Check if Colorectal Cancer data exists and has required fields
+          const colorectalData = responseData.colorectal
+          const colorectalOutputData = responseData.colorectalOutput
           isNcdComplete = !!(
-            ncdData.colorectal?.score && ncdData.colorectal?.riskLevel
+            colorectalData?.score !== undefined || colorectalOutputData?.score
           )
           break
-        case 'CKD':
-          isNcdComplete = !!(ncdData.ckd?.stage || ncdData.ckdOutput?.stage)
+        case 'ckd':
+          // Check if CKD data exists and has required fields
+          const ckdData = responseData.ckd
+          const ckdOutputData = responseData.ckdOutput
+          isNcdComplete = !!(ckdData?.stage || ckdOutputData?.score)
           break
       }
 
@@ -643,7 +655,14 @@ const RiskAssessmentFormContent = ({
       setActiveTab(filteredOrder[currentIndex + 1])
       // Auto-scroll to top when moving to next section
       setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        if (formContainerRef.current) {
+          formContainerRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          })
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
       }, 100)
     }
   }
@@ -655,7 +674,14 @@ const RiskAssessmentFormContent = ({
       setActiveTab(filteredOrder[currentIndex - 1])
       // Auto-scroll to top when moving to previous section
       setTimeout(() => {
-        window.scrollTo({ top: 0, behavior: 'smooth' })
+        if (formContainerRef.current) {
+          formContainerRef.current.scrollIntoView({
+            behavior: 'smooth',
+            block: 'start',
+          })
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' })
+        }
       }, 100)
     }
   }
@@ -929,7 +955,10 @@ const RiskAssessmentFormContent = ({
                     </div>
                   </div>
 
-                  <div className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 min-h-0">
+                  <div
+                    ref={formContainerRef}
+                    className="bg-white rounded-2xl p-4 md:p-6 border border-gray-100 min-h-0"
+                  >
                     <Tabs.Content value="bio">
                       <PersonalInfoForm
                         onNext={handleNext}
@@ -1186,7 +1215,7 @@ const RiskAssessmentGeneratedReport = ({
   if (showResults) {
     const mergedData = Object.assign(
       {},
-      { responseData: polledData?.responseData || resultData },
+      { responseData: polledData?.responseData || resultData?.responseData },
       {
         requestData: formData,
       }

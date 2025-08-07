@@ -193,7 +193,8 @@ const RiskAssessment = () => {
     isLoading ||
     isPatientLoading ||
     isAssessmentLoading ||
-    (isCreatingAssessment && !urlAssessmentId && !assessmentId)
+    (isCreatingAssessment && !urlAssessmentId && !assessmentId) ||
+    (patientId && !assessmentId)
   ) {
     return <ContentLoader loading />
   }

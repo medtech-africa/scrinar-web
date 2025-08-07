@@ -34,11 +34,9 @@ export interface NcdRequiredFields {
   [NCD.BREAST_CANCER]: {
     dateOfBirth: boolean
     gender: boolean
-    hasBeenDiagnosed: boolean
     ageAtMenarche: boolean
     ageAtFirstBirth: boolean
     menopauseStatus: boolean
-    ageAtMenopause: boolean
     hormoneReplacementTherapy: boolean
     breastBiopsy: boolean
     familyHistoryBreastCancer: boolean
@@ -122,11 +120,9 @@ export const ncdRequiredFields: NcdRequiredFields = {
   [NCD.BREAST_CANCER]: {
     dateOfBirth: true,
     gender: true,
-    hasBeenDiagnosed: true,
     ageAtMenarche: true,
     ageAtFirstBirth: true,
     menopauseStatus: true,
-    ageAtMenopause: true,
     hormoneReplacementTherapy: true,
     breastBiopsy: true,
     familyHistoryBreastCancer: true,

@@ -22,6 +22,7 @@ export const useRiskAssessment = (id: string) => {
     queryKey: ['risk-assessment', id],
     queryFn: () =>
       baseAxios.get(API.riskAssessmentDetails(id)).then((res) => res.data.data),
+    refetchOnWindowFocus: false,
   })
 }
 
@@ -72,26 +73,26 @@ export const useRiskAssessmentPolling = (
           data?.responseData?.findrisc?.followUpAction !== undefined &&
           data?.responseData?.findrisc?.breakdown !== undefined &&
           // COPD model - check for either old structure or new structure
-          ((data?.responseData?.copd?.lifestyleModification !== undefined &&
-            data?.responseData?.copd?.followUpAction !== undefined) ||
-            (data?.responseData?.copd?.riskScore !== undefined &&
-              data?.responseData?.copd?.riskCategory !== undefined)) &&
-          // Breast Cancer model
-          data?.responseData?.breastCancer?.lifestyleModification !==
+          ((data?.responseData?.copdOutput?.lifestyleModification !==
             undefined &&
-          data?.responseData?.breastCancer?.followUpAction !== undefined &&
+            data?.responseData?.copdOutput?.followUpAction !== undefined) ||
+            data?.responseData?.copd?.score !== undefined) &&
+          // Breast Cancer model
+          data?.responseData?.breastCancerOutput?.lifestyleModification !==
+            undefined &&
+          data?.responseData?.breastCancerOutput?.followUpAction !==
+            undefined &&
           // Prostate Cancer model
-          data?.responseData?.prostate?.lifestyleModification !== undefined &&
-          data?.responseData?.prostate?.followUpAction !== undefined &&
+          data?.responseData?.prostateOutput?.lifestyleModification !==
+            undefined &&
+          data?.responseData?.prostateOutput?.followUpAction !== undefined &&
           // Colorectal Cancer model
-          data?.responseData?.colorectal?.lifestyleModification !== undefined &&
-          data?.responseData?.colorectal?.followUpAction !== undefined &&
+          data?.responseData?.colorectalOutput?.lifestyleModification !==
+            undefined &&
+          data?.responseData?.colorectalOutput?.followUpAction !== undefined &&
           // CKD model - check for either old structure or new structure
-          ((data?.responseData?.ckd?.lifestyleModification !== undefined &&
-            data?.responseData?.ckd?.followUpAction !== undefined) ||
-            (data?.responseData?.ckdOutput?.lifestyleModification !==
-              undefined &&
-              data?.responseData?.ckdOutput?.followUpAction !== undefined))
+          data?.responseData?.ckdOutput?.lifestyleModification !== undefined &&
+          data?.responseData?.ckdOutput?.followUpAction !== undefined
 
         return hasRequiredFields ? false : 3000
       }
@@ -105,44 +106,58 @@ export const useRiskAssessmentPolling = (
       let hasAtLeastOneComplete = false
 
       for (const ncdType of selectedNcds) {
-        const ncdData = (responseData as any)[ncdType]
-
-        // Check if the NCD data exists and is not empty
-        if (!ncdData || Object.keys(ncdData).length === 0) {
-          continue // Skip this NCD if no data, but continue checking others
-        }
-
-        // Check for required fields based on NCD type
         let isNcdComplete = false
+
         switch (ncdType) {
-          case 'CVD':
-            isNcdComplete = !!(ncdData.who?.score && ncdData.who?.riskLevel)
-            break
-          case 'DIABETES':
+          case 'cvd':
+            // Check if WHO data exists and has required fields
+            const whoData = responseData.who
             isNcdComplete = !!(
-              ncdData.findrisc?.score && ncdData.findrisc?.riskLevel
+              whoData?.score !== undefined && whoData?.riskLevel
             )
             break
-          case 'COPD':
-            isNcdComplete = !!(ncdData.copd?.score || ncdData.copd?.riskScore)
+          case 'diabetes':
+            // Check if FINDRISC data exists and has required fields
+            const findriscData = responseData.findrisc
+            isNcdComplete = !!(findriscData?.score && findriscData?.riskLevel)
             break
-          case 'BREAST_CANCER':
+          case 'copd':
+            // Check if COPD data exists and has required fields
+            const copdData = responseData.copd
+            const copdOutputData = responseData.copdOutput
             isNcdComplete = !!(
-              ncdData.breastCancer?.score && ncdData.breastCancer?.riskLevel
+              copdData?.score !== undefined || copdOutputData?.score
             )
             break
-          case 'PROSTATE_CANCER':
+          case 'breastCancer':
+            // Check if Breast Cancer data exists and has required fields
+            const breastCancerData = responseData.breastCancer
             isNcdComplete = !!(
-              ncdData.prostate?.score && ncdData.prostate?.riskLevel
+              breastCancerData?.score !== undefined &&
+              breastCancerData?.riskLevel
             )
             break
-          case 'COLORECTAL_CANCER':
+          case 'prostateCancer':
+            // Check if Prostate Cancer data exists and has required fields
+            const prostateData = responseData.prostate
+            const prostateOutputData = responseData.prostateOutput
             isNcdComplete = !!(
-              ncdData.colorectal?.score && ncdData.colorectal?.riskLevel
+              prostateData?.score !== undefined || prostateOutputData?.score
             )
             break
-          case 'CKD':
-            isNcdComplete = !!(ncdData.ckd?.stage || ncdData.ckdOutput?.stage)
+          case 'colorectalCancer':
+            // Check if Colorectal Cancer data exists and has required fields
+            const colorectalData = responseData.colorectal
+            const colorectalOutputData = responseData.colorectalOutput
+            isNcdComplete = !!(
+              colorectalData?.score !== undefined || colorectalOutputData?.score
+            )
+            break
+          case 'ckd':
+            // Check if CKD data exists and has required fields
+            const ckdData = responseData.ckd
+            const ckdOutputData = responseData.ckdOutput
+            isNcdComplete = !!(ckdData?.stage || ckdOutputData?.score)
             break
         }
 
