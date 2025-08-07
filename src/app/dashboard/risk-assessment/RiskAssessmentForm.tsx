@@ -318,6 +318,7 @@ const RiskAssessmentFormContent = ({
     if (!response?.responseData) return false
 
     const responseData = response.responseData
+    let hasAtLeastOneComplete = false
 
     // Check each selected NCD type
     for (const ncdType of selectedNcds) {
@@ -325,40 +326,49 @@ const RiskAssessmentFormContent = ({
 
       // Check if the NCD data exists and is not empty
       if (!ncdData || Object.keys(ncdData).length === 0) {
-        return false
+        continue // Skip this NCD if no data, but continue checking others
       }
 
       // Check for required fields based on NCD type
+      let isNcdComplete = false
       switch (ncdType) {
         case 'CVD':
-          if (!ncdData.who?.score || !ncdData.who?.riskLevel) return false
+          isNcdComplete = !!(ncdData.who?.score && ncdData.who?.riskLevel)
           break
         case 'DIABETES':
-          if (!ncdData.findrisc?.score || !ncdData.findrisc?.riskLevel)
-            return false
+          isNcdComplete = !!(
+            ncdData.findrisc?.score && ncdData.findrisc?.riskLevel
+          )
           break
         case 'COPD':
-          if (!ncdData.copd?.score && !ncdData.copd?.riskScore) return false
+          isNcdComplete = !!(ncdData.copd?.score || ncdData.copd?.riskScore)
           break
         case 'BREAST_CANCER':
-          if (!ncdData.breastCancer?.score || !ncdData.breastCancer?.riskLevel)
-            return false
+          isNcdComplete = !!(
+            ncdData.breastCancer?.score && ncdData.breastCancer?.riskLevel
+          )
           break
         case 'PROSTATE_CANCER':
-          if (!ncdData.prostate?.score || !ncdData.prostate?.riskLevel)
-            return false
+          isNcdComplete = !!(
+            ncdData.prostate?.score && ncdData.prostate?.riskLevel
+          )
           break
         case 'COLORECTAL_CANCER':
-          if (!ncdData.colorectal?.score || !ncdData.colorectal?.riskLevel)
-            return false
+          isNcdComplete = !!(
+            ncdData.colorectal?.score && ncdData.colorectal?.riskLevel
+          )
           break
         case 'CKD':
-          if (!ncdData.ckd?.stage && !ncdData.ckdOutput?.stage) return false
+          isNcdComplete = !!(ncdData.ckd?.stage || ncdData.ckdOutput?.stage)
           break
+      }
+
+      if (isNcdComplete) {
+        hasAtLeastOneComplete = true
       }
     }
 
-    return true
+    return hasAtLeastOneComplete
   }
 
   const isFormValid = (_data: any) => {

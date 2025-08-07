@@ -102,49 +102,63 @@ export const useRiskAssessmentPolling = (
       const responseData = data.responseData
 
       // Check each selected NCD type
+      let hasAtLeastOneComplete = false
+
       for (const ncdType of selectedNcds) {
         const ncdData = (responseData as any)[ncdType]
 
         // Check if the NCD data exists and is not empty
         if (!ncdData || Object.keys(ncdData).length === 0) {
-          return 3000
+          continue // Skip this NCD if no data, but continue checking others
         }
 
         // Check for required fields based on NCD type
+        let isNcdComplete = false
         switch (ncdType) {
           case 'CVD':
-            if (!ncdData.who?.score || !ncdData.who?.riskLevel) return 3000
+            isNcdComplete = !!(ncdData.who?.score && ncdData.who?.riskLevel)
             break
           case 'DIABETES':
-            if (!ncdData.findrisc?.score || !ncdData.findrisc?.riskLevel)
-              return 3000
+            isNcdComplete = !!(
+              ncdData.findrisc?.score && ncdData.findrisc?.riskLevel
+            )
             break
           case 'COPD':
-            if (!ncdData.copd?.score && !ncdData.copd?.riskScore) return 3000
+            isNcdComplete = !!(ncdData.copd?.score || ncdData.copd?.riskScore)
             break
           case 'BREAST_CANCER':
-            if (
-              !ncdData.breastCancer?.score ||
-              !ncdData.breastCancer?.riskLevel
+            isNcdComplete = !!(
+              ncdData.breastCancer?.score && ncdData.breastCancer?.riskLevel
             )
-              return 3000
             break
           case 'PROSTATE_CANCER':
-            if (!ncdData.prostate?.score || !ncdData.prostate?.riskLevel)
-              return 3000
+            isNcdComplete = !!(
+              ncdData.prostate?.score && ncdData.prostate?.riskLevel
+            )
             break
           case 'COLORECTAL_CANCER':
-            if (!ncdData.colorectal?.score || !ncdData.colorectal?.riskLevel)
-              return 3000
+            isNcdComplete = !!(
+              ncdData.colorectal?.score && ncdData.colorectal?.riskLevel
+            )
             break
           case 'CKD':
-            if (!ncdData.ckd?.stage && !ncdData.ckdOutput?.stage) return 3000
+            isNcdComplete = !!(ncdData.ckd?.stage || ncdData.ckdOutput?.stage)
             break
+        }
+
+        if (isNcdComplete) {
+          hasAtLeastOneComplete = true
         }
       }
 
-      // If we reach here, all selected NCDs have complete data
-      return false
+      // If at least one NCD is complete, we can stop polling
+      // The UI will show results for complete NCDs while others continue processing
+      if (hasAtLeastOneComplete) {
+        return false
+      }
+
+      // If none are complete yet, continue polling
+      return 3000
     },
   })
 }
