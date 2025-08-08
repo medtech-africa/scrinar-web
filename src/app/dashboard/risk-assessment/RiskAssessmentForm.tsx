@@ -571,7 +571,6 @@ const RiskAssessmentFormContent = ({
         const formData = formMethods.watch()
         formData.ncdType = getNcdTypeString()
 
-        console.log(formData.ncdType, 'formData.ncdType')
         await baseAxios.patch(API.updateRiskAssessment(assessmentId), formData)
 
         // Step 1: Generate risk assessment
