@@ -75,12 +75,10 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
     'colorectalCancer.familyHistoryColorectalCancer',
   familyHistoryPolyps: 'colorectalCancer.familyHistoryPolyps',
   inflammatoryBowelDisease: 'colorectalCancer.inflammatoryBowelDisease',
-  numberOfRelatives: 'colorectalCancer.numberOfRelatives',
   colonoscopyHistory: 'colorectalCancer.colonoscopyHistory',
   polypDiagnosis: 'colorectalCancer.polypDiagnosis',
   aspirinUse: 'colorectalCancer.aspirinUse',
   nsaidUse: 'colorectalCancer.nsaidUse',
-  moderateActivityHoursPerWeek: 'lifestyle.moderateActivityHoursPerWeek',
   alcoholFrequency: 'lifestyle.alcoholFrequency',
 
   // Diabetes fields
@@ -96,82 +94,99 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
   gender: 'Gender',
 
   // Vitals fields
-  systolicBP: 'Systolic Blood Pressure',
-  diastolicBP: 'Diastolic Blood Pressure',
-  bmi: 'BMI',
-  height: 'Height',
-  weight: 'Weight',
-  waist: 'Waist Circumference',
-  pulse: 'Pulse Rate',
-  oxygenSaturation: 'Oxygen Saturation',
-  temperature: 'Temperature',
+  systolicBP: 'Systolic Blood Pressure (Vitals)',
+  diastolicBP: 'Diastolic Blood Pressure (Vitals)',
+  bmi: 'BMI (Vitals)',
+  height: 'Height (Vitals)',
+  weight: 'Weight (Vitals)',
+  waist: 'Waist Circumference (Vitals)',
+  pulse: 'Pulse Rate (Vitals)',
+  oxygenSaturation: 'Oxygen Saturation (Vitals)',
+  temperature: 'Temperature (Vitals)',
 
   // Blood Test fields
-  cholesterol: 'Total Cholesterol',
-  serumCreatinine: 'Serum Creatinine',
-  pefLevel: 'PEF Level',
+  cholesterol: 'Total Cholesterol (Laboratory Tests)',
+  serumCreatinine: 'Serum Creatinine (Laboratory Tests)',
+  pefLevel: 'PEF Level (NCD Questionnaire/COPD)',
 
   // Lifestyle fields
-  smoking: 'Smoking Status',
-  hasQuitSmoking: 'Smoking Cessation',
-  physicalActivity: 'Physical Activity',
-  usesAntihypertensiveMedication: 'Use of Antihypertensive Medication',
-  hasHistoryHighBloodGlucose: 'History of High Blood Glucose',
-  alcoholFrequency: 'Alcohol Frequency',
+  smoking: 'Smoking Status (Lifestyle)',
+  hasQuitSmoking: 'Smoking Cessation (Lifestyle)',
+  physicalActivity: 'Physical Activity (Lifestyle)',
+  usesAntihypertensiveMedication:
+    'Use of Antihypertensive Medication (Lifestyle)',
+  hasHistoryHighBloodGlucose:
+    'History of High Blood Glucose (NCD Questionnaire/Diabetes)',
+  alcoholFrequency: 'Alcohol Frequency (Lifestyle)',
 
   // COPD fields
-  coughDuration: 'Cough Duration',
-  shortnessOfBreath: 'Shortness of Breath',
-  activityLimitations: 'Activity Limitations',
-  exposureToDust: 'Exposure to Dust',
+  coughDuration: 'Cough Duration (NCD Questionnaire/COPD)',
+  shortnessOfBreath: 'Shortness of Breath (NCD Questionnaire/COPD)',
+  activityLimitations: 'Activity Limitations (NCD Questionnaire/COPD)',
+  exposureToDust: 'Exposure to Dust (NCD Questionnaire/COPD)',
 
   // Breast Cancer fields
-  ageAtMenarche: 'Age at Menarche',
-  ageAtFirstBirth: 'Age at First Birth',
-  menopauseStatus: 'Menopause Status',
+  ageAtMenarche: 'Age at Menarche (NCD Questionnaire/Breast Cancer)',
+  ageAtFirstBirth: 'Age at First Birth (NCD Questionnaire/Breast Cancer)',
+  menopauseStatus: 'Menopause Status (NCD Questionnaire/Breast Cancer)',
   // ageAtMenopause: 'Age at Menopause',
-  hormoneReplacementTherapy: 'Hormone Replacement Therapy',
-  breastBiopsy: 'Breast Biopsy',
-  familyHistoryBreastCancer: 'Family History of Breast Cancer',
-  familyHistoryOvarianCancer: 'Family History of Ovarian Cancer',
-  brcaMutationStatus: 'BRCA Mutation Status',
-  breastDensity: 'Breast Density',
-  personalHistoryOvarianCancer: 'Personal History of Ovarian Cancer',
+  hormoneReplacementTherapy:
+    'Hormone Replacement Therapy (NCD Questionnaire/Breast Cancer)',
+  breastBiopsy: 'Breast Biopsy (NCD Questionnaire/Breast Cancer)',
+  familyHistoryBreastCancer: 'Family History of Breast Cancer (Family History)',
+  familyHistoryOvarianCancer:
+    'Family History of Ovarian Cancer (Family History)',
+  brcaMutationStatus: 'BRCA Mutation Status (NCD Questionnaire/Breast Cancer)',
+  breastDensity: 'Breast Density (NCD Questionnaire/Breast Cancer)',
+  personalHistoryOvarianCancer:
+    'Personal History of Ovarian Cancer (NCD Questionnaire/Breast Cancer)',
   personalHistoryColorectalPancreaticCancer:
-    'Personal History of Colorectal/Pancreatic Cancer',
-  personalHistoryUterineCancer: 'Personal History of Uterine Cancer',
-  ashkenaziInheritance: 'Ashkenazi Inheritance',
+    'Personal History of Colorectal/Pancreatic Cancer (NCD Questionnaire/Breast Cancer)',
+  personalHistoryUterineCancer:
+    'Personal History of Uterine Cancer (NCD Questionnaire/Breast Cancer)',
+  ashkenaziInheritance:
+    'Ashkenazi Inheritance (NCD Questionnaire/Breast Cancer)',
 
   // Prostate Cancer fields
-  familyHistoryProstateCancer: 'Family History of Prostate Cancer',
-  urinarySymptoms: 'Urinary Symptoms',
-  urinarySymptomsIncompleteEmptying: 'Incomplete Emptying',
-  urinarySymptomsFrequency: 'Urinary Frequency',
-  urinarySymptomsIntermittency: 'Urinary Intermittency',
-  urinarySymptomsUrgency: 'Urinary Urgency',
-  urinarySymptomsWeakStream: 'Weak Urinary Stream',
-  urinarySymptomsStraining: 'Urinary Straining',
-  urinarySymptomsNocturia: 'Nocturia',
-  psaLevel: 'PSA Level',
+  familyHistoryProstateCancer:
+    'Family History of Prostate Cancer (Family History)',
+  urinarySymptoms: 'Urinary Symptoms (NCD Questionnaire/Prostate Cancer)',
+  urinarySymptomsIncompleteEmptying:
+    'Incomplete Emptying (NCD Questionnaire/Prostate Cancer)',
+  urinarySymptomsFrequency:
+    'Urinary Frequency (NCD Questionnaire/Prostate Cancer)',
+  urinarySymptomsIntermittency:
+    'Urinary Intermittency (NCD Questionnaire/Prostate Cancer)',
+  urinarySymptomsUrgency: 'Urinary Urgency (NCD Questionnaire/Prostate Cancer)',
+  urinarySymptomsWeakStream:
+    'Weak Urinary Stream (NCD Questionnaire/Prostate Cancer)',
+  urinarySymptomsStraining:
+    'Urinary Straining (NCD Questionnaire/Prostate Cancer)',
+  urinarySymptomsNocturia: 'Nocturia (NCD Questionnaire/Prostate Cancer)',
+  psaLevel: 'PSA Level (Laboratory Tests)',
 
   // Colorectal Cancer fields
-  personalHistory: 'Personal History of Colorectal Cancer',
-  personalHistoryPolyps: 'Personal History of Polyps',
-  familyHistoryColorectalCancer: 'Family History of Colorectal Cancer',
-  familyHistoryPolyps: 'Family History of Polyps',
-  inflammatoryBowelDisease: 'Inflammatory Bowel Disease',
-  numberOfRelatives: 'Number of Relatives with Cancer',
-  colonoscopyHistory: 'Colonoscopy History',
-  polypDiagnosis: 'Polyp Diagnosis',
-  aspirinUse: 'Aspirin Use',
-  nsaidUse: 'NSAID Use',
-  moderateActivityHoursPerWeek: 'Moderate Activity Hours Per Week',
+  personalHistory:
+    'Personal History of Colorectal Cancer (NCD Questionnaire/Colorectal Cancer)',
+  personalHistoryPolyps:
+    'Personal History of Polyps (NCD Questionnaire/Colorectal Cancer)',
+  familyHistoryColorectalCancer:
+    'Family History of Colorectal Cancer (NCD Questionnaire/Colorectal Cancer)',
+  familyHistoryPolyps:
+    'Family History of Polyps (NCD Questionnaire/Colorectal Cancer)',
+  inflammatoryBowelDisease:
+    'Inflammatory Bowel Disease (NCD Questionnaire/Colorectal Cancer)',
+  colonoscopyHistory:
+    'Colonoscopy History (NCD Questionnaire/Colorectal Cancer)',
+  polypDiagnosis: 'Polyp Diagnosis (NCD Questionnaire/Colorectal Cancer)',
+  aspirinUse: 'Aspirin Use (NCD Questionnaire/Colorectal Cancer)',
+  nsaidUse: 'NSAID Use (NCD Questionnaire/Colorectal Cancer)',
 
   // CKD fields
   hypertension: 'Hypertension',
 
   // Diabetes fields
-  hasFamilyhistoryDiabetes: 'Family History of Diabetes',
+  hasFamilyhistoryDiabetes: 'Family History of Diabetes (Family History)',
 }
 
 /**

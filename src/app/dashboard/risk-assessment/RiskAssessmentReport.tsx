@@ -396,8 +396,7 @@ export const RiskAssessmentReport = ({
   assessmentId,
   personalInfo,
   className,
-  // TODO whether to hide the buttons
-  // showActionButton = true,
+  showActionButton = false,
 }: {
   data?: Partial<RiskAssessmentModel>
   action?: React.ReactElement
@@ -462,6 +461,8 @@ export const RiskAssessmentReport = ({
         <RiskAssessmentResult
           data={riskData}
           ncdType={validatedData?.requestData?.ncdType}
+          assessmentId={assessmentId}
+          showActionButton={showActionButton}
         />
       )}
       <ConsentForm assessmentId={assessmentId} />
@@ -473,7 +474,7 @@ export const RiskAssessmentReport = ({
           assessmentId={assessmentId}
         />
       )}
-      {action}
+      {showActionButton && action}
     </div>
   )
 }

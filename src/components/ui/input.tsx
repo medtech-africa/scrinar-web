@@ -25,7 +25,7 @@ export interface InputProps
     VariantProps<typeof inputVariants> {
   full?: boolean
   label?: string | React.ReactNode
-  option?: string
+  option?: string | React.ReactNode
   message?: string
   leadingIcon?: React.ReactNode
   endingIcon?: React.ReactNode

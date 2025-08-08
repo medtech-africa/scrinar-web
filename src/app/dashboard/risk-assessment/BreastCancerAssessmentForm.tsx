@@ -153,6 +153,7 @@ export const BreastCancerAssessmentForm = ({ onNext, disabled }: Props) => {
                     placeholder="Years"
                     label="Have you used hormone replacement therapy (HRT)? — HRT includes estrogen-only or combined estrogen and progesterone but does not include hormonal birth control."
                     labelStyle="lg:text-sm text-xs"
+                    min={0}
                     disabled={disabled}
                   />
                 )}

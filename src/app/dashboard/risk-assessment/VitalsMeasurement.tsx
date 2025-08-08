@@ -39,6 +39,9 @@ const validateHeight = (value: string) => {
     }
   }
   const num = Number(value)
+  if (num < 0) {
+    return { isValid: false, message: 'Height cannot be negative' }
+  }
   if (num < 50 || num > 250) {
     return { isValid: false, message: 'Height should be between 50-250 cm' }
   }
@@ -48,6 +51,9 @@ const validateHeight = (value: string) => {
 const validateWeight = (value: string) => {
   if (!value) return { isValid: true, message: '' }
   const num = Number(value)
+  if (num < 0) {
+    return { isValid: false, message: 'Weight cannot be negative' }
+  }
   if (num < 3 || num > 300) {
     return { isValid: false, message: 'Weight should be between 3-300 kg' }
   }
@@ -63,6 +69,9 @@ const validateWaist = (value: string) => {
     }
   }
   const num = Number(value)
+  if (num < 0) {
+    return { isValid: false, message: 'Waist cannot be negative' }
+  }
   if (num < 30 || num > 200) {
     return { isValid: false, message: 'Waist should be between 30-200 cm' }
   }
@@ -73,6 +82,13 @@ const validateBloodPressure = (sys: string, dys: string) => {
   if (!sys || !dys) return { isValid: true, message: '' }
   const sysNum = Number(sys)
   const dysNum = Number(dys)
+
+  if (sysNum < 0 || dysNum < 0) {
+    return {
+      isValid: false,
+      message: 'Blood pressure values cannot be negative',
+    }
+  }
 
   if (sysNum <= dysNum) {
     return {
@@ -95,6 +111,12 @@ const validateBloodPressure = (sys: string, dys: string) => {
 const validateOxygenSaturation = (value: string) => {
   if (!value) return { isValid: true, message: '' }
   const num = Number(value)
+  if (num < 0) {
+    return {
+      isValid: false,
+      message: 'Oxygen saturation cannot be negative',
+    }
+  }
   if (num < 60 || num > 100) {
     return {
       isValid: false,
@@ -107,16 +129,16 @@ const validateOxygenSaturation = (value: string) => {
 const validatePulse = (value: string) => {
   if (!value) return { isValid: true, message: '' }
   const num = Number(value)
+  if (num < 0) {
+    return {
+      isValid: false,
+      message: 'Pulse rate cannot be negative',
+    }
+  }
   if (num < 40 || num > 200) {
     return {
       isValid: false,
       message: 'Pulse rate should be between 40-200 bpm',
-    }
-  }
-  if (num < 60 || num > 100) {
-    return {
-      isValid: false,
-      message: 'Warning: Pulse rate outside normal range (60-100 bpm)',
     }
   }
   return { isValid: true, message: '' }
@@ -195,6 +217,55 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
           Vitals records
         </Text>
 
+        {/* Collapsible Measurement Guides - Moved higher */}
+        <div className="mt-6 mb-6 border border-gray-200 rounded-lg">
+          <button
+            type="button"
+            onClick={() => setIsGuidesOpen(!isGuidesOpen)}
+            className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
+          >
+            <div className="flex items-center gap-2">
+              <HelpCircleIcon size="1.2rem" className="text-blue-600" />
+              <Text variant="text/sm" className="font-medium text-gray-900">
+                Need help with measurements?
+              </Text>
+            </div>
+            <div
+              className={`transform transition-transform ${isGuidesOpen ? 'rotate-180' : ''}`}
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M6 9L12 15L18 9"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            </div>
+          </button>
+
+          {isGuidesOpen && (
+            <div className="px-4 pb-4 border-t border-gray-200">
+              <div className="pt-4">
+                <Text
+                  variant="text/sm"
+                  className="font-medium mb-3 text-gray-900"
+                >
+                  Measurement Guides
+                </Text>
+                <MeasurementGuides />
+              </div>
+            </div>
+          )}
+        </div>
+
         <div className="mt-6">
           {/* Main form content - full width */}
           <div>
@@ -225,7 +296,7 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                         message={
                           validationErrors.height || messageCheck(field.value)
                         }
-                        min="50"
+                        min="0"
                         max="250"
                         type="number"
                         disabled={disabled}
@@ -253,7 +324,7 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                         message={
                           validationErrors.weight || messageCheck(field.value)
                         }
-                        min="3"
+                        min="0"
                         max="300"
                         type="number"
                         disabled={disabled}
@@ -283,7 +354,7 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                           message={
                             validationErrors.waist || messageCheck(field.value)
                           }
-                          min="30"
+                          min="0"
                           max="200"
                           type="number"
                           disabled={disabled}
@@ -356,7 +427,7 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                             validationErrors.bloodPressure ||
                             messageCheck(field.value)
                           }
-                          min="70"
+                          min="0"
                           max="250"
                           type="number"
                           disabled={disabled}
@@ -388,7 +459,7 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                             validationErrors.bloodPressure ||
                             messageCheck(field.value)
                           }
-                          min="40"
+                          min="0"
                           max="150"
                           type="number"
                           disabled={disabled}
@@ -433,7 +504,7 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                           message={
                             validationErrors.pulse || messageCheck(field.value)
                           }
-                          min="40"
+                          min="0"
                           max="200"
                           type="number"
                           disabled={disabled}
@@ -488,7 +559,7 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                           validationErrors.oxygenSaturation ||
                           messageCheck(field.value)
                         }
-                        min="60"
+                        min="0"
                         max="100"
                         type="number"
                         disabled={disabled}
@@ -512,7 +583,7 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                           labelStyle="lg:text-sm text-xs"
                           variant={variantValidityCheck(field.value)}
                           message={messageCheck(field.value)}
-                          min="30"
+                          min="0"
                           max="45"
                           step="0.1"
                           type="number"
@@ -525,55 +596,6 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Collapsible Measurement Guides */}
-        <div className="mt-6 border border-gray-200 rounded-lg">
-          <button
-            type="button"
-            onClick={() => setIsGuidesOpen(!isGuidesOpen)}
-            className="w-full flex items-center justify-between p-4 text-left hover:bg-gray-50 transition-colors"
-          >
-            <div className="flex items-center gap-2">
-              <HelpCircleIcon size="1.2rem" className="text-blue-600" />
-              <Text variant="text/sm" className="font-medium text-gray-900">
-                Need help with measurements?
-              </Text>
-            </div>
-            <div
-              className={`transform transition-transform ${isGuidesOpen ? 'rotate-180' : ''}`}
-            >
-              <svg
-                width="16"
-                height="16"
-                viewBox="0 0 24 24"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  d="M6 9L12 15L18 9"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
-            </div>
-          </button>
-
-          {isGuidesOpen && (
-            <div className="px-4 pb-4 border-t border-gray-200">
-              <div className="pt-4">
-                <Text
-                  variant="text/sm"
-                  className="font-medium mb-3 text-gray-900"
-                >
-                  Measurement Guides
-                </Text>
-                <MeasurementGuides />
-              </div>
-            </div>
-          )}
         </div>
 
         {!disabled && (

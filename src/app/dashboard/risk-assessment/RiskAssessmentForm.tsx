@@ -206,6 +206,161 @@ const RiskAssessmentFormContent = ({
     }
   }, [data?.requestData, formMethods])
 
+  // Get gender for NCD filtering
+  const gender = formMethods.watch('personalInfo.gender')?.toLowerCase()
+
+  // Filter NCDs based on gender
+  const getFilteredNcds = () => {
+    const allNcds = ALL_NCD_TYPES
+    if (gender === 'male') {
+      // Hide breast cancer for males
+      return allNcds.filter((ncd) => ncd !== NCD.BREAST_CANCER)
+    } else if (gender === 'female') {
+      // Hide prostate cancer for females
+      return allNcds.filter((ncd) => ncd !== NCD.PROSTATE_CANCER)
+    }
+    return allNcds
+  }
+
+  // Auto-deselect gender-inappropriate NCDs when gender changes
+  useEffect(() => {
+    if (gender === 'male' && hasNcdSelected(NCD.BREAST_CANCER)) {
+      toggleNcd(NCD.BREAST_CANCER)
+    } else if (gender === 'female' && hasNcdSelected(NCD.PROSTATE_CANCER)) {
+      toggleNcd(NCD.PROSTATE_CANCER)
+    }
+  }, [gender, hasNcdSelected, toggleNcd])
+
+  // Get filtered NCDs based on gender
+  const filteredNcds = getFilteredNcds()
+
+  // Helper function to check if a specific tab is complete without changing state
+  const getTabValidation = (
+    tabValue: string
+  ): { isComplete: boolean; missingFields: string[] } => {
+    const formData = formMethods.watch()
+
+    switch (tabValue) {
+      case 'bio':
+        return {
+          isComplete: true,
+          missingFields: [],
+        }
+      case 'vitals':
+        const vitals = formData?.vitals
+        const missingVitals = []
+        if (!vitals?.height) missingVitals.push('Height')
+        if (!vitals?.weight) missingVitals.push('Weight')
+        if (!vitals?.sys) missingVitals.push('Systolic Blood Pressure')
+        if (!vitals?.dys) missingVitals.push('Diastolic Blood Pressure')
+        return {
+          isComplete: missingVitals.length === 0,
+          missingFields: missingVitals,
+        }
+      case 'labs':
+        // Labs are optional, so always allow progression
+        return {
+          isComplete: true,
+          missingFields: [],
+        }
+      case 'lifestyle':
+        const lifestyle = formData?.lifestyle
+        const missingLifestyle = []
+        if (!lifestyle?.everSmoked)
+          missingLifestyle.push('Have you ever smoked?')
+        if (!lifestyle?.currentSmokingStatus)
+          missingLifestyle.push('Current smoking status')
+        if (!lifestyle?.alcoholFrequency)
+          missingLifestyle.push('Alcohol consumption frequency')
+        if (!lifestyle?.hasDailyPhysicalActivity)
+          missingLifestyle.push('Daily physical activity')
+        return {
+          isComplete: missingLifestyle.length === 0,
+          missingFields: missingLifestyle,
+        }
+      case 'familyHistory':
+        const familyHistory = formData?.familyHistory
+        const missingFamilyHistory = []
+        if (!familyHistory?.cvd)
+          missingFamilyHistory.push('Family history of CVD')
+        if (!familyHistory?.diabetes)
+          missingFamilyHistory.push('Family history of Diabetes')
+        if (!familyHistory?.hypertension)
+          missingFamilyHistory.push('Family history of Hypertension')
+        return {
+          isComplete: missingFamilyHistory.length === 0,
+          missingFields: missingFamilyHistory,
+        }
+      case 'ncdQuestionnaire':
+        // Check if all selected NCDs have their required fields filled
+        const missingNcdFields: string[] = []
+
+        selectedNcds.forEach((ncdType) => {
+          const requiredFields = getRequiredFields(ncdType)
+          if (!requiredFields) return
+
+          // Special handling for colorectal cancer
+          if (ncdType === NCD.COLORECTAL_CANCER) {
+            const personalHistory = formData?.colorectalCancer?.personalHistory
+            if (personalHistory === 'Yes') {
+              return
+            }
+          }
+
+          // Special handling for breast cancer
+          if (ncdType === NCD.BREAST_CANCER) {
+            const hasBeenDiagnosed = formData?.breastCancer?.hasBeenDiagnosed
+            if (hasBeenDiagnosed === 'Yes') {
+              return
+            }
+          }
+
+          // Special handling for prostate cancer
+          if (ncdType === NCD.PROSTATE_CANCER) {
+            const psaLevel = formData?.bloodTest?.psaLevel
+            const hasPsaLevel = psaLevel && psaLevel.trim() !== ''
+            if (hasPsaLevel) {
+              return
+            }
+          }
+
+          Object.entries(requiredFields).forEach(([field, isRequired]) => {
+            if (!isRequired) return
+
+            const formField = getFieldPath(field)
+            const fieldValue = formField
+              .split('.')
+              .reduce((obj, key) => obj?.[key], formData as any)
+
+            if (!fieldValue) {
+              const displayName = getFieldDisplayName(field)
+              missingNcdFields.push(
+                `${NCD_DISPLAY_NAMES[ncdType as keyof typeof NCD_DISPLAY_NAMES]}: ${displayName}`
+              )
+            }
+          })
+        })
+
+        return {
+          isComplete: missingNcdFields.length === 0,
+          missingFields: missingNcdFields,
+        }
+      case 'historical':
+        const consentAgreement = formData?.consentAgreement
+        const missingHistorical = []
+        if (!consentAgreement) missingHistorical.push('Consent Agreement')
+        return {
+          isComplete: missingHistorical.length === 0,
+          missingFields: missingHistorical,
+        }
+      default:
+        return {
+          isComplete: true,
+          missingFields: [],
+        }
+    }
+  }
+
   const storeRiskAssessment = useRiskAssessmentStorage((store) => store.store)
 
   const {
@@ -580,6 +735,31 @@ const RiskAssessmentFormContent = ({
   }
 
   const handleNext = () => {
+    // Check if current section is complete
+    const { isComplete, missingFields } = getTabValidation(activeTab)
+    if (!isComplete) {
+      const sectionName =
+        activeTab === 'bio'
+          ? 'Patient Bio-data'
+          : activeTab === 'vitals'
+            ? 'Vitals & Measurements'
+            : activeTab === 'labs'
+              ? 'Laboratory Tests'
+              : activeTab === 'lifestyle'
+                ? 'Lifestyle & Habits'
+                : activeTab === 'familyHistory'
+                  ? 'Family History'
+                  : activeTab === 'ncdQuestionnaire'
+                    ? 'NCD Questionnaire'
+                    : activeTab === 'historical'
+                      ? 'Historical Data'
+                      : 'Current Section'
+
+      const errorMessage = `Please complete the following required fields in ${sectionName}:\n• ${missingFields.join('\n• ')}`
+      toast.error(errorMessage, { duration: 5000 })
+      return
+    }
+
     // Check if we need assessmentId for the next section
     const filteredOrder = getFilteredTabOrder()
     const nextTabIndex = filteredOrder.indexOf(activeTab) + 1
@@ -598,7 +778,7 @@ const RiskAssessmentFormContent = ({
 
       switch (activeTab) {
         case 'bio':
-          sectionData = { personalInfo: currentFormData.personalInfo }
+          // sectionData = { personalInfo: currentFormData.personalInfo }
           break
         case 'vitals':
           sectionData = { vitals: currentFormData.vitals }
@@ -797,12 +977,12 @@ const RiskAssessmentFormContent = ({
                                 <input
                                   type="checkbox"
                                   checked={
-                                    selectedNcds.length === ALL_NCD_TYPES.length
+                                    selectedNcds.length === filteredNcds.length
                                   }
                                   onChange={() => {
                                     if (
                                       selectedNcds.length ===
-                                      ALL_NCD_TYPES.length
+                                      filteredNcds.length
                                     ) {
                                       deselectAllNcds()
                                     } else {
@@ -878,42 +1058,50 @@ const RiskAssessmentFormContent = ({
                               </label>
                             </div>
                             <div className="space-y-3">
-                              <label className="flex items-center space-x-3 cursor-pointer">
-                                <input
-                                  type="checkbox"
-                                  checked={hasNcdSelected(NCD.BREAST_CANCER)}
-                                  onChange={() => toggleNcd(NCD.BREAST_CANCER)}
-                                  disabled={displayOnly}
-                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                                />
-                                <Text
-                                  variant="text/sm"
-                                  className="font-medium text-gray-700"
-                                >
-                                  {
-                                    NCD_DISPLAY_NAMES[
-                                      NCD.BREAST_CANCER as keyof typeof NCD_DISPLAY_NAMES
-                                    ]
-                                  }
-                                </Text>
-                              </label>
-                              <label className="flex items-center space-x-3 cursor-pointer">
-                                <input
-                                  type="checkbox"
-                                  checked={hasNcdSelected(NCD.PROSTATE_CANCER)}
-                                  onChange={() =>
-                                    toggleNcd(NCD.PROSTATE_CANCER)
-                                  }
-                                  disabled={displayOnly}
-                                  className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
-                                />
-                                <Text
-                                  variant="text/sm"
-                                  className="font-medium text-gray-700"
-                                >
-                                  {NCD_DISPLAY_NAMES[NCD.PROSTATE_CANCER]}
-                                </Text>
-                              </label>
+                              {gender !== 'male' && (
+                                <label className="flex items-center space-x-3 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    checked={hasNcdSelected(NCD.BREAST_CANCER)}
+                                    onChange={() =>
+                                      toggleNcd(NCD.BREAST_CANCER)
+                                    }
+                                    disabled={displayOnly}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                  />
+                                  <Text
+                                    variant="text/sm"
+                                    className="font-medium text-gray-700"
+                                  >
+                                    {
+                                      NCD_DISPLAY_NAMES[
+                                        NCD.BREAST_CANCER as keyof typeof NCD_DISPLAY_NAMES
+                                      ]
+                                    }
+                                  </Text>
+                                </label>
+                              )}
+                              {gender !== 'female' && (
+                                <label className="flex items-center space-x-3 cursor-pointer">
+                                  <input
+                                    type="checkbox"
+                                    checked={hasNcdSelected(
+                                      NCD.PROSTATE_CANCER
+                                    )}
+                                    onChange={() =>
+                                      toggleNcd(NCD.PROSTATE_CANCER)
+                                    }
+                                    disabled={displayOnly}
+                                    className="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 focus:ring-2"
+                                  />
+                                  <Text
+                                    variant="text/sm"
+                                    className="font-medium text-gray-700"
+                                  >
+                                    {NCD_DISPLAY_NAMES[NCD.PROSTATE_CANCER]}
+                                  </Text>
+                                </label>
+                              )}
                               <label className="flex items-center space-x-3 cursor-pointer">
                                 <input
                                   type="checkbox"
@@ -963,6 +1151,7 @@ const RiskAssessmentFormContent = ({
                       <PersonalInfoForm
                         onNext={handleNext}
                         disabled={isPatientDataPrefilled || displayOnly}
+                        displayOnly={displayOnly}
                         patientId={_patientId}
                         onPatientCreated={onPatientCreated}
                       />
@@ -1052,11 +1241,16 @@ const RiskAssessmentFormContent = ({
                             className={cn(
                               'text-sm text-gray-700 py-2 px-3 transition-all cursor-pointer block w-full text-left rounded-md',
                               'data-[state=active]:bg-primary data-[state=active]:text-white data-[state=active]:font-medium',
-                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary'
+                              'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
+                              getTabValidation('bio').isComplete &&
+                                'border-l-4 border-l-green-500'
                             )}
                             value="bio"
                           >
                             1. Patient Bio-data
+                            {getTabValidation('bio').isComplete && (
+                              <span className="ml-2 text-green-600">✓</span>
+                            )}
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(
@@ -1065,12 +1259,17 @@ const RiskAssessmentFormContent = ({
                               'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
                               _patientId &&
                                 !_assessmentId &&
-                                'opacity-50 cursor-not-allowed'
+                                'opacity-50 cursor-not-allowed',
+                              getTabValidation('vitals').isComplete &&
+                                'border-l-4 border-l-green-500'
                             )}
                             value="vitals"
                             disabled={!!(_patientId && !_assessmentId)}
                           >
                             2. Vitals & Measurements
+                            {getTabValidation('vitals').isComplete && (
+                              <span className="ml-2 text-green-600">✓</span>
+                            )}
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(
@@ -1079,12 +1278,17 @@ const RiskAssessmentFormContent = ({
                               'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
                               _patientId &&
                                 !_assessmentId &&
-                                'opacity-50 cursor-not-allowed'
+                                'opacity-50 cursor-not-allowed',
+                              getTabValidation('labs').isComplete &&
+                                'border-l-4 border-l-green-500'
                             )}
                             value="labs"
                             disabled={!!(_patientId && !_assessmentId)}
                           >
                             3. Laboratory Tests
+                            {getTabValidation('labs').isComplete && (
+                              <span className="ml-2 text-green-600">✓</span>
+                            )}
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(
@@ -1093,12 +1297,17 @@ const RiskAssessmentFormContent = ({
                               'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
                               _patientId &&
                                 !_assessmentId &&
-                                'opacity-50 cursor-not-allowed'
+                                'opacity-50 cursor-not-allowed',
+                              getTabValidation('lifestyle').isComplete &&
+                                'border-l-4 border-l-green-500'
                             )}
                             value="lifestyle"
                             disabled={!!(_patientId && !_assessmentId)}
                           >
                             4. Lifestyle & Habits
+                            {getTabValidation('lifestyle').isComplete && (
+                              <span className="ml-2 text-green-600">✓</span>
+                            )}
                           </Tabs.Trigger>
                           <Tabs.Trigger
                             className={cn(
@@ -1107,12 +1316,17 @@ const RiskAssessmentFormContent = ({
                               'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
                               _patientId &&
                                 !_assessmentId &&
-                                'opacity-50 cursor-not-allowed'
+                                'opacity-50 cursor-not-allowed',
+                              getTabValidation('familyHistory').isComplete &&
+                                'border-l-4 border-l-green-500'
                             )}
                             value="familyHistory"
                             disabled={!!(_patientId && !_assessmentId)}
                           >
                             5. Family History
+                            {getTabValidation('familyHistory').isComplete && (
+                              <span className="ml-2 text-green-600">✓</span>
+                            )}
                           </Tabs.Trigger>
                           {selectedNcds.length > 0 && (
                             <Tabs.Trigger
@@ -1122,13 +1336,19 @@ const RiskAssessmentFormContent = ({
                                 'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
                                 _patientId &&
                                   !_assessmentId &&
-                                  'opacity-50 cursor-not-allowed'
+                                  'opacity-50 cursor-not-allowed',
+                                getTabValidation('ncdQuestionnaire')
+                                  .isComplete && 'border-l-4 border-l-green-500'
                               )}
                               value="ncdQuestionnaire"
                               disabled={!!(_patientId && !_assessmentId)}
                             >
                               {getStepNumber('ncdQuestionnaire')}. NCD
                               Questionnaire
+                              {getTabValidation('ncdQuestionnaire')
+                                .isComplete && (
+                                <span className="ml-2 text-green-600">✓</span>
+                              )}
                             </Tabs.Trigger>
                           )}
 
@@ -1139,12 +1359,17 @@ const RiskAssessmentFormContent = ({
                               'hover:bg-gray-50 data-[state=active]:hover:bg-primary',
                               _patientId &&
                                 !_assessmentId &&
-                                'opacity-50 cursor-not-allowed'
+                                'opacity-50 cursor-not-allowed',
+                              getTabValidation('historical').isComplete &&
+                                'border-l-4 border-l-green-500'
                             )}
                             value="historical"
                             disabled={!!(_patientId && !_assessmentId)}
                           >
                             {getStepNumber('historical')}. Historical Data
+                            {getTabValidation('historical').isComplete && (
+                              <span className="ml-2 text-green-600">✓</span>
+                            )}
                           </Tabs.Trigger>
                         </Tabs.List>
                       </CollapsibleContent>
@@ -1170,6 +1395,7 @@ const RiskAssessmentFormContent = ({
               }}
               // data={data}
               setShowResults={setShowResults}
+              assessmentId={_assessmentId ?? ''}
             />
           )}
         </div>
@@ -1184,20 +1410,84 @@ const RiskAssessmentGeneratedReport = ({
   // data,
   setShowResults,
   formData,
+  assessmentId,
 }: {
   showResults: boolean
   resultData?: any
   // data?: RiskAssessmentModel
   formData?: Partial<RiskAssessmentModelRequestData>
   setShowResults: (showResults: boolean) => void
+  assessmentId?: string
 }) => {
   const router = useRouter()
   const personalInfo = formData?.personalInfo
 
   const { data: polledData } = useRiskAssessmentPolling(
     resultData?.id,
-    formData?.ncdType?.split(',') || []
+    formData?.ncdType?.split(',').map((ncd) => ncd.trim().toLowerCase()) || []
   )
+
+  // Check if we have at least one NCD result available
+  const hasAtLeastOneResult = () => {
+    if (!polledData?.responseData) return false
+
+    const responseData = polledData.responseData
+    const selectedNcds =
+      formData?.ncdType?.split(',').map((ncd) => ncd.trim().toLowerCase()) || []
+
+    for (const ncdType of selectedNcds) {
+      let hasResult = false
+
+      switch (ncdType) {
+        case 'cvd':
+          hasResult = !!(responseData.who?.score && responseData.who?.riskLevel)
+          break
+        case 'diabetes':
+          hasResult = !!(
+            responseData.findrisc?.score && responseData.findrisc?.riskLevel
+          )
+          break
+        case 'copd':
+          hasResult = !!(
+            responseData.copd?.score || responseData.copdOutput?.score
+          )
+          break
+        case 'breastcancer':
+          hasResult = !!(
+            (responseData.breastCancer?.score &&
+              responseData.breastCancer?.riskLevel) ||
+            (responseData.breastCancerOutput?.score &&
+              responseData.breastCancerOutput?.riskLevel)
+          )
+          break
+        case 'prostatecancer':
+          hasResult = !!(
+            (responseData.prostate?.score &&
+              responseData.prostate?.riskLevel) ||
+            (responseData.prostateOutput?.score &&
+              responseData.prostateOutput?.riskLevel)
+          )
+          break
+        case 'colorectalcancer':
+          hasResult = !!(
+            (responseData.colorectal?.score &&
+              responseData.colorectal?.riskLevel) ||
+            (responseData.colorectalOutput?.score &&
+              responseData.colorectalOutput?.riskLevel)
+          )
+          break
+        case 'ckd':
+          hasResult = !!(
+            responseData.ckd?.stage || responseData.ckdOutput?.score
+          )
+          break
+      }
+
+      if (hasResult) return true
+    }
+
+    return false
+  }
 
   const actionButton = (
     <div className="mt-8 flex justify-end">
@@ -1212,7 +1502,7 @@ const RiskAssessmentGeneratedReport = ({
     </div>
   )
 
-  if (showResults) {
+  if (showResults || hasAtLeastOneResult()) {
     const mergedData = Object.assign(
       {},
       { responseData: polledData?.responseData || resultData?.responseData },
@@ -1227,6 +1517,8 @@ const RiskAssessmentGeneratedReport = ({
           action={actionButton}
           data={mergedData}
           personalInfo={personalInfo}
+          showActionButton={true}
+          assessmentId={assessmentId}
         />
       </div>
     )

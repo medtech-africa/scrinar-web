@@ -69,12 +69,10 @@ export interface NcdRequiredFields {
     familyHistoryColorectalCancer: boolean
     familyHistoryPolyps: boolean
     inflammatoryBowelDisease: boolean
-    numberOfRelatives: boolean
     colonoscopyHistory: boolean
     polypDiagnosis: boolean
     aspirinUse: boolean
     nsaidUse: boolean
-    moderateActivityHoursPerWeek: boolean
     alcoholFrequency: boolean
     height: boolean
     weight: boolean
@@ -155,12 +153,10 @@ export const ncdRequiredFields: NcdRequiredFields = {
     familyHistoryColorectalCancer: true,
     familyHistoryPolyps: true,
     inflammatoryBowelDisease: true,
-    numberOfRelatives: true,
     colonoscopyHistory: true,
     polypDiagnosis: true,
     aspirinUse: true,
     nsaidUse: true,
-    moderateActivityHoursPerWeek: true,
     alcoholFrequency: true,
     height: true,
     weight: true,

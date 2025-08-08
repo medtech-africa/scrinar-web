@@ -12,12 +12,11 @@ import {
 } from '@/components/ui/sidebar-new'
 import { useUser } from '@/context/user'
 import Image from 'next/image'
-import { usePathname } from 'next/navigation'
 import { IconNames } from '../ui/icon-picker/icon-names'
 import { useMemo } from 'react'
 import { IconPicker } from '../ui/icon-picker'
 import { Text } from '../ui/text'
-import { NavMain } from './nav-main'
+// import { NavMain } from './nav-main'
 import { NavLink } from './nav-link'
 
 interface Datatype {
@@ -40,19 +39,19 @@ const generalData = [
       'jica_researchers',
     ],
   },
-  {
-    title: 'Interviews',
-    icon: 'outlineDocumentText',
-    url: 'interviews',
-    roles: [
-      'school',
-      'instructor',
-      'play4health_admin',
-      'super_admin',
-      'jica_enumerators',
-      'jica_researchers',
-    ],
-  },
+  // {
+  //   title: 'Interviews',
+  //   icon: 'outlineDocumentText',
+  //   url: 'interviews',
+  //   roles: [
+  //     'school',
+  //     'instructor',
+  //     'play4health_admin',
+  //     'super_admin',
+  //     'jica_enumerators',
+  //     'jica_researchers',
+  //   ],
+  // },
   {
     title: 'NCD Risk Assessment',
     icon: 'assessment',
@@ -73,20 +72,20 @@ const generalData = [
   //   url: 'health-data',
   //   roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   // },
-  {
-    title: 'Schedule',
-    icon: 'calendar',
-    url: 'screening',
-    roles: [
-      'school',
-      'instructor',
-      'organization',
-      'play4health_admin',
-      'super_admin',
-      'jica_enumerators',
-      'jica_researchers',
-    ],
-  },
+  // {
+  //   title: 'Schedule',
+  //   icon: 'calendar',
+  //   url: 'screening',
+  //   roles: [
+  //     'school',
+  //     'instructor',
+  //     'organization',
+  //     'play4health_admin',
+  //     'super_admin',
+  //     'jica_enumerators',
+  //     'jica_researchers',
+  //   ],
+  // },
   {
     title: 'Surveillance',
     icon: 'survey',
@@ -125,12 +124,12 @@ const generalData = [
   //     'super_admin',
   //   ],
   // },
-  {
-    title: 'Trainers Data',
-    icon: 'book',
-    url: 'training-module/admin',
-    roles: ['play4health_admin', 'admin', 'super_admin'],
-  },
+  // {
+  //   title: 'Trainers Data',
+  //   icon: 'book',
+  //   url: 'training-module/admin',
+  //   roles: ['play4health_admin', 'admin', 'super_admin'],
+  // },
 ] as Datatype[]
 
 const othersData = [
@@ -146,64 +145,64 @@ const othersData = [
   // },
 ] as Datatype[]
 
-const data = {
-  navMain: [
-    {
-      title: 'Health Data',
-      url: '#',
-      icon: <IconPicker icon="healthdata" />,
-      isActive: (pathname) =>
-        pathname.startsWith('/dashboard/family-health-data'),
-      items: [
-        {
-          title: 'All',
-          url: '/dashboard/family-health-data/all',
-          isActive: (pathname) => pathname.includes('/family-health-data/all'),
-        },
-        {
-          title: 'Households',
-          url: '/dashboard/family-health-data/household',
-          isActive: (pathname) =>
-            pathname.includes('/family-health-data/household'),
-        },
-        {
-          title: 'Children',
-          url: '/dashboard/family-health-data/students',
-          isActive: (pathname) =>
-            pathname.includes('/family-health-data/students'),
-        },
-        {
-          title: 'Fathers',
-          url: '/dashboard/family-health-data/fathers',
-          isActive: (pathname) =>
-            pathname.includes('/family-health-data/fathers'),
-        },
-        {
-          title: 'Mothers',
-          url: '/dashboard/family-health-data/mothers',
-          isActive: (pathname) =>
-            pathname.includes('/family-health-data/mothers'),
-        },
-      ],
-    },
-  ],
-} as Record<
-  string,
-  {
-    title: string
-    url: string
-    icon?: React.ReactElement
-    isActive?: (pathname: string) => boolean
-    items?: {
-      title: string
-      url: string
-      isActive?: (pathname: string) => boolean
-    }[]
-  }[]
->
+// const data = {
+//   navMain: [
+//     {
+//       title: 'Health Data',
+//       url: '#',
+//       icon: <IconPicker icon="healthdata" />,
+//       isActive: (pathname) =>
+//         pathname.startsWith('/dashboard/family-health-data'),
+//       items: [
+//         {
+//           title: 'All',
+//           url: '/dashboard/family-health-data/all',
+//           isActive: (pathname) => pathname.includes('/family-health-data/all'),
+//         },
+//         {
+//           title: 'Households',
+//           url: '/dashboard/family-health-data/household',
+//           isActive: (pathname) =>
+//             pathname.includes('/family-health-data/household'),
+//         },
+//         {
+//           title: 'Children',
+//           url: '/dashboard/family-health-data/students',
+//           isActive: (pathname) =>
+//             pathname.includes('/family-health-data/students'),
+//         },
+//         {
+//           title: 'Fathers',
+//           url: '/dashboard/family-health-data/fathers',
+//           isActive: (pathname) =>
+//             pathname.includes('/family-health-data/fathers'),
+//         },
+//         {
+//           title: 'Mothers',
+//           url: '/dashboard/family-health-data/mothers',
+//           isActive: (pathname) =>
+//             pathname.includes('/family-health-data/mothers'),
+//         },
+//       ],
+//     },
+//   ],
+// } as Record<
+//   string,
+//   {
+//     title: string
+//     url: string
+//     icon?: React.ReactElement
+//     isActive?: (pathname: string) => boolean
+//     items?: {
+//       title: string
+//       url: string
+//       isActive?: (pathname: string) => boolean
+//     }[]
+//   }[]
+// >
 
 export function AppSidebar() {
-  const pathname = usePathname()
+  // const pathname = usePathname()
 
   const user = useUser((state) => state.user)
   const generalSidebarMenu = useMemo(() => {
@@ -255,7 +254,7 @@ export function AppSidebar() {
                 </SidebarMenuItem>
               ))}
             </SidebarMenu>
-            <NavMain items={data.navMain} pathname={pathname} />
+            {/* <NavMain items={data.navMain} pathname={pathname} /> */}
           </SidebarGroupContent>
         </SidebarGroup>
       </SidebarContent>

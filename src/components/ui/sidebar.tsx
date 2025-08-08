@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/interactive-supports-focus */
 /* eslint-disable jsx-a11y/click-events-have-key-events */
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import useClickAway from '@/hooks/useClickAway'
@@ -48,9 +48,9 @@ const NavLink = ({ children, href, active, className }: NavLinkProps) => {
   )
 }
 
-const DotIcon = ({ className = '' }) => (
-  <div className={cn('h-2 w-2 rounded-full bg-grey-300', className)} />
-)
+// const DotIcon = ({ className = '' }) => (
+//   <div className={cn('h-2 w-2 rounded-full bg-grey-300', className)} />
+// )
 
 const generalData = [
   {
@@ -66,20 +66,20 @@ const generalData = [
       'jica_researchers',
     ],
   },
-  {
-    title: 'Interviews',
-    icon: 'outlineDocumentText',
-    href: 'interviews',
-    roles: [
-      'school',
-      'instructor',
-      'organization',
-      'play4health_admin',
-      'super_admin',
-      'jica_enumerators',
-      'jica_researchers',
-    ],
-  },
+  // {
+  //   title: 'Interviews',
+  //   icon: 'outlineDocumentText',
+  //   href: 'interviews',
+  //   roles: [
+  //     'school',
+  //     'instructor',
+  //     'organization',
+  //     'play4health_admin',
+  //     'super_admin',
+  //     'jica_enumerators',
+  //     'jica_researchers',
+  //   ],
+  // },
   {
     title: 'NCD Risk Assessment',
     icon: 'assessment',
@@ -100,20 +100,20 @@ const generalData = [
   //   href: 'health-data',
   //   roles: ['school', 'instructor', 'play4health_admin', 'super_admin'],
   // },
-  {
-    title: 'Schedule',
-    icon: 'calendar',
-    href: 'screening',
-    roles: [
-      'school',
-      'instructor',
-      'organization',
-      'play4health_admin',
-      'super_admin',
-      'jica_enumerators',
-      'jica_researchers',
-    ],
-  },
+  // {
+  //   title: 'Schedule',
+  //   icon: 'calendar',
+  //   href: 'screening',
+  //   roles: [
+  //     'school',
+  //     'instructor',
+  //     'organization',
+  //     'play4health_admin',
+  //     'super_admin',
+  //     'jica_enumerators',
+  //     'jica_researchers',
+  //   ],
+  // },
   {
     title: 'Surveillance',
     icon: 'survey',
@@ -140,12 +140,12 @@ const generalData = [
   //     'super_admin',
   //   ],
   // },
-  {
-    title: 'Trainers Data',
-    icon: 'book',
-    href: 'training-module/admin',
-    roles: ['play4health_admin', 'admin', 'super_admin'],
-  },
+  // {
+  //   title: 'Trainers Data',
+  //   icon: 'book',
+  //   href: 'training-module/admin',
+  //   roles: ['play4health_admin', 'admin', 'super_admin'],
+  // },
 ] as Datatype[]
 
 const othersData = [
@@ -170,7 +170,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
   const pathname = usePathname()
   const user = useUser((state) => state.user)
 
-  const [isHealthDataOpen, setHealthDataOpen] = useState(false)
+  // const [isHealthDataOpen, setHealthDataOpen] = useState(false)
 
   const sidebarRef = useRef(null)
   const windowSize = useWindowSize()
@@ -267,7 +267,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                     </NavLink>
                   </div>
                 ))}
-                <motion.div
+                {/* <motion.div
                   key="family-health-data"
                   // animate={{ height: open ? 'auto' : '40px' }}
                   layout
@@ -409,7 +409,7 @@ const SideBar = ({ sideOpen, sideToggleOpen }: ISideBar) => {
                       </motion.div>
                     )}
                   </AnimatePresence>
-                </motion.div>
+                </motion.div> */}
               </div>
 
               <div>

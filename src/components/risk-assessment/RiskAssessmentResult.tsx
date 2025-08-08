@@ -40,6 +40,7 @@ import { RiskGaugeBar } from './RiskGaugeBar'
 import PreventionTips from './PreventionTips'
 import RiskSummary from './RiskSummary'
 import { ResultRiskType as RiskType } from '@/types/riskAssessment.types'
+import Link from 'next/link'
 
 export type RiskLevel = 'low' | 'moderate' | 'high'
 
@@ -336,7 +337,15 @@ export const RiskAssessmentResult: React.FC<{
   data?: RiskData
   isLoading?: boolean
   ncdType?: string
-}> = ({ data, isLoading = false, ncdType: _ncdType }) => {
+  assessmentId?: string
+  showActionButton?: boolean
+}> = ({
+  data,
+  isLoading = false,
+  ncdType: _ncdType,
+  assessmentId,
+  showActionButton,
+}) => {
   // Helper function to check if NCD data is available (not empty object)
   const hasValidData = (ncdType: RiskType): boolean => {
     const ncdData = data?.[ncdType]
@@ -462,6 +471,14 @@ export const RiskAssessmentResult: React.FC<{
           professional advice or expert opinion.
         </p>
       </div>
+
+      {showActionButton && assessmentId && (
+        <div className="flex justify-end my-4">
+          <Link href={`/dashboard/risk-assessment/${assessmentId}`}>
+            <Button variant="outline">See Complete Assessment</Button>
+          </Link>
+        </div>
+      )}
 
       <div className="mb-6">
         <CriticalAlerts alerts={criticalAlerts as IClinicalAlert[]} />

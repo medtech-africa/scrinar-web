@@ -27,6 +27,36 @@ type Props = {
   disabled?: boolean
 }
 
+// Lab test standards and reference ranges
+const LAB_STANDARDS = {
+  cholesterol: {
+    total: { min: 0, max: 500, optimal: '≤ 200 mg/dL', high: '> 200 mg/dL' },
+    hdl: { min: 0, max: 200, optimal: '≥ 60 mg/dL', low: '< 60 mg/dL' },
+    ldl: { min: 0, max: 300, optimal: '< 100 mg/dL', high: '≥ 100 mg/dL' },
+    triglycerides: {
+      min: 0,
+      max: 1000,
+      optimal: '< 150 mg/dL',
+      high: '≥ 150 mg/dL',
+    },
+  },
+  bloodSugar: {
+    fasting: {
+      min: 50,
+      max: 500,
+      normal: '70-99 mg/dL',
+      prediabetes: '100-125 mg/dL',
+      diabetes: '≥ 126 mg/dL',
+    },
+    random: {
+      min: 50,
+      max: 500,
+      normal: '< 125 mg/dL',
+      diabetes: '≥ 200 mg/dL',
+    },
+  },
+}
+
 // Validation functions
 const validateCholesterol = (total: string, hdl: string, ldl: string) => {
   if (!total) return { isValid: true, message: '' }
@@ -52,6 +82,22 @@ const validateCholesterol = (total: string, hdl: string, ldl: string) => {
   return { isValid: true, message: '' }
 }
 
+const validateBloodSugar = (value: string, type: 'fasting' | 'random') => {
+  if (!value) return { isValid: true, message: '' }
+
+  const num = Number(value)
+  const range = LAB_STANDARDS.bloodSugar[type]
+
+  if (num < range.min || num > range.max) {
+    return {
+      isValid: false,
+      message: `${type === 'fasting' ? 'Fasting' : 'Random'} blood sugar should be between ${range.min}-${range.max} mg/dL`,
+    }
+  }
+
+  return { isValid: true, message: '' }
+}
+
 export const BloodTestsForm = ({ onNext, disabled }: Props) => {
   const { control, watch } = useFormContext()
   const [validationErrors, setValidationErrors] = useState<
@@ -70,7 +116,7 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
   // Get all form data for conditional required field logic
   const formData = watch()
 
-  // Validate cholesterol values
+  // Validate all fields
   useEffect(() => {
     const errors: Record<string, string> = {}
 
@@ -83,8 +129,23 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
       errors.cholesterol = cholesterolValidation.message
     }
 
+    // Validate blood sugar levels
+    if (bloodSugar2) {
+      const fastingValidation = validateBloodSugar(bloodSugar2, 'fasting')
+      if (!fastingValidation.isValid) {
+        errors.fastingBloodSugar = fastingValidation.message
+      }
+    }
+
+    if (bloodSugar1) {
+      const randomValidation = validateBloodSugar(bloodSugar1, 'random')
+      if (!randomValidation.isValid) {
+        errors.randomBloodSugar = randomValidation.message
+      }
+    }
+
     setValidationErrors(errors)
-  }, [totalCholesterol, hdlc, ldlc])
+  }, [totalCholesterol, hdlc, ldlc, bloodSugar1, bloodSugar2])
 
   const hasValidationErrors = Object.keys(validationErrors).length > 0
   const hasFastingBloodSugar = !!bloodSugar2
@@ -111,28 +172,57 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
 
             {/* Fasting Blood Sugar - Primary */}
             <div className="grid grid-cols-[2fr_1fr] items-center mb-4">
-              <Controller
-                name="bloodTest.bloodSugarFasting"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    placeholder="Enter Fasting Blood Sugar Level"
-                    label={isRequiredField(
-                      'Fasting Blood Sugar',
-                      'bloodTest.bloodSugarFasting',
-                      formData
-                    )}
-                    labelStyle="lg:text-sm text-xs"
-                    variant={variantValidityCheck(field.value)}
-                    message={messageCheck(field.value)}
-                    type="number"
-                    min="50"
-                    max="500"
-                    disabled={disabled}
-                  />
-                )}
-              />
+              <div className="relative">
+                <Controller
+                  name="bloodTest.bloodSugarFasting"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Enter Fasting Blood Sugar Level"
+                      label={isRequiredField(
+                        'Fasting Blood Sugar',
+                        'bloodTest.bloodSugarFasting',
+                        formData
+                      )}
+                      labelStyle="lg:text-sm text-xs"
+                      variant={
+                        validationErrors.fastingBloodSugar
+                          ? 'destructive'
+                          : variantValidityCheck(field.value)
+                      }
+                      message={
+                        validationErrors.fastingBloodSugar ||
+                        messageCheck(field.value)
+                      }
+                      type="number"
+                      min={LAB_STANDARDS.bloodSugar.fasting.min}
+                      max={LAB_STANDARDS.bloodSugar.fasting.max}
+                      disabled={disabled}
+                    />
+                  )}
+                />
+                <div className="absolute right-2 top-3 transform -translate-y-1/2">
+                  <Tooltip>
+                    <TooltipTrigger type="button">
+                      <HelpCircleIcon
+                        size="1rem"
+                        className="text-gray-400 hover:text-gray-600 cursor-help"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <div className="max-w-xs">
+                        <p className="font-medium mb-2">
+                          Fasting Blood Sugar Reference Ranges:
+                        </p>
+                        <p className="text-sm">Normal: 70-99 mg/dL</p>
+                        <p className="text-sm">Prediabetes: 100-125 mg/dL</p>
+                        <p className="text-sm">Diabetes: ≥ 126 mg/dL</p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
+              </div>
               {bloodSugar2 && (
                 <BadgeField
                   variant={
@@ -154,45 +244,53 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                     <Input
                       {...field}
                       placeholder="Enter Random Blood Sugar Level"
-                      label={
-                        <div className="flex items-center gap-2">
-                          <span>Random Blood Sugar</span>
-                          {hasFastingBloodSugar && (
-                            <span className="text-xs text-gray-500">
-                              (Optional)
-                            </span>
-                          )}
-                          {hasFastingBloodSugar && (
-                            <Tooltip>
-                              <TooltipTrigger type="button">
-                                <HelpCircleIcon
-                                  size="1rem"
-                                  className="text-gray-400 hover:text-gray-600 cursor-help"
-                                />
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                <p className="max-w-xs">
-                                  Random blood sugar is optional when fasting
-                                  blood sugar is provided, as fasting values are
-                                  more reliable for diabetes assessment.
-                                </p>
-                              </TooltipContent>
-                            </Tooltip>
-                          )}
-                        </div>
-                      }
+                      label={isRequiredField(
+                        'Random Blood Sugar',
+                        'bloodTest.bloodSugarRandom',
+                        formData
+                      )}
                       labelStyle="lg:text-sm text-xs"
-                      variant={variantValidityCheck(field.value)}
-                      message={messageCheck(field.value)}
-                      type="number"
-                      min="50"
-                      max="500"
-                      disabled={
-                        (hasFastingBloodSugar && !field.value) || disabled
+                      variant={
+                        validationErrors.randomBloodSugar
+                          ? 'destructive'
+                          : variantValidityCheck(field.value)
                       }
+                      message={
+                        validationErrors.randomBloodSugar ||
+                        messageCheck(field.value)
+                      }
+                      type="number"
+                      min={LAB_STANDARDS.bloodSugar.random.min}
+                      max={LAB_STANDARDS.bloodSugar.random.max}
+                      disabled={disabled || hasFastingBloodSugar}
                     />
                   )}
                 />
+                <div className="absolute right-2 top-3 transform -translate-y-1/2">
+                  <Tooltip>
+                    <TooltipTrigger type="button">
+                      <HelpCircleIcon
+                        size="1rem"
+                        className="text-gray-400 hover:text-gray-600 cursor-help"
+                      />
+                    </TooltipTrigger>
+                    <TooltipContent>
+                      <div className="max-w-xs">
+                        <p className="font-medium mb-2">
+                          Random Blood Sugar Reference Ranges:
+                        </p>
+                        <p className="text-sm">Normal: &lt; 125 mg/dL</p>
+                        <p className="text-sm">Diabetes: ≥ 200 mg/dL</p>
+
+                        <p className="max-w-xs">
+                          Random blood sugar is optional when fasting blood
+                          sugar is provided, as fasting values are more reliable
+                          for diabetes assessment.
+                        </p>
+                      </div>
+                    </TooltipContent>
+                  </Tooltip>
+                </div>
               </div>
               {bloodSugar1 && (
                 <BadgeField
@@ -208,44 +306,27 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
 
           <div>
             <Text as="h3" variant="text/sm" className="font-medium mb-2">
-              Blood Cholesterol Level{' '}
-              <span className="font-normal">(Most Recent Lipid Profile)</span>
+              Cholesterol Profile (mg/dL)
             </Text>
             <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
-              To measure blood cholesterol levels, a blood sample is taken using
-              a cholesterol test (lipid panel). This can be done with a
-              fingerstick test using a portable device or through a lab test
-              with a venous blood draw. The test measures total cholesterol, LDL
-              (bad cholesterol), HDL (good cholesterol), and triglycerides. For
-              accurate results, a fasting blood test (after 9–12 hours without
-              food) is recommended, as recent meals can temporarily raise
-              triglyceride levels. Monitoring cholesterol is crucial for
-              assessing heart disease risk and guiding lifestyle or medical
-              interventions.
+              Optional but recommended for cardiovascular risk assessment
             </Text>
 
-            {/* Cholesterol validation error */}
-            {validationErrors.cholesterol && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg">
-                <Text variant="text/sm" className="text-red-800">
-                  ⚠️ {validationErrors.cholesterol}
-                </Text>
-              </div>
-            )}
-
-            <div className="grid gap-4 grid-cols-1 lg:grid-cols-2">
+            <div className="space-y-4">
+              {/* Total Cholesterol */}
               <div className="grid grid-cols-[2fr_1fr] items-center">
-                <Controller
-                  name="bloodTest.cholesterolTotal"
-                  control={control}
-                  render={({ field }) => (
-                    <div>
+                <div className="relative">
+                  <Controller
+                    name="bloodTest.cholesterolTotal"
+                    control={control}
+                    render={({ field }) => (
                       <Input
                         {...field}
                         placeholder="Enter Total Cholesterol"
                         label={isRequiredField(
-                          'Total Cholesterol (mg/dL)',
-                          'bloodTest.cholesterolTotal'
+                          'Total Cholesterol',
+                          'bloodTest.cholesterolTotal',
+                          formData
                         )}
                         labelStyle="lg:text-sm text-xs"
                         variant={
@@ -258,13 +339,32 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                           messageCheck(field.value)
                         }
                         type="number"
-                        min="100"
-                        max="600"
+                        min={LAB_STANDARDS.cholesterol.total.min}
+                        max={LAB_STANDARDS.cholesterol.total.max}
                         disabled={disabled}
                       />
-                    </div>
-                  )}
-                />
+                    )}
+                  />
+                  <div className="absolute right-2 top-3 transform -translate-y-1/2">
+                    <Tooltip>
+                      <TooltipTrigger type="button">
+                        <HelpCircleIcon
+                          size="1rem"
+                          className="text-gray-400 hover:text-gray-600 cursor-help"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <div className="max-w-xs">
+                          <p className="font-medium mb-2">
+                            Total Cholesterol Reference Ranges:
+                          </p>
+                          <p className="text-sm">Optimal: ≤ 200 mg/dL</p>
+                          <p className="text-sm">High: &gt; 200 mg/dL</p>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
                 {totalCholesterol && (
                   <BadgeField
                     variant={
@@ -280,73 +380,51 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                 )}
               </div>
 
+              {/* HDL Cholesterol */}
               <div className="grid grid-cols-[2fr_1fr] items-center">
-                <Controller
-                  name="bloodTest.cholesterolLdl"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Enter LDL (Bad Cholesterol)"
-                      label={isRequiredField(
-                        'LDL (Bad Cholesterol) (mg/dL)',
-                        'bloodTest.cholesterolLdl'
-                      )}
-                      labelStyle="lg:text-sm text-xs"
-                      variant={
-                        validationErrors.cholesterol
-                          ? 'destructive'
-                          : variantValidityCheck(field.value)
-                      }
-                      message={
-                        validationErrors.cholesterol ||
-                        messageCheck(field.value)
-                      }
-                      type="number"
-                      min="30"
-                      max="400"
-                      disabled={disabled}
-                    />
-                  )}
-                />
-                {ldlc && (
-                  <BadgeField
-                    variant={categorizeLDLC(Number(ldlc)).variant}
-                    value={categorizeLDLC(Number(ldlc)).message}
-                    className="ml-2 mt-6"
+                <div className="relative">
+                  <Controller
+                    name="bloodTest.cholesterolHdl"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        placeholder="Enter HDL Cholesterol"
+                        label={isRequiredField(
+                          'HDL Cholesterol',
+                          'bloodTest.cholesterolHdl',
+                          formData
+                        )}
+                        labelStyle="lg:text-sm text-xs"
+                        variant={variantValidityCheck(field.value)}
+                        message={messageCheck(field.value)}
+                        type="number"
+                        min={LAB_STANDARDS.cholesterol.hdl.min}
+                        max={LAB_STANDARDS.cholesterol.hdl.max}
+                        disabled={disabled}
+                      />
+                    )}
                   />
-                )}
-              </div>
-
-              <div className="grid grid-cols-[2fr_1fr] items-center">
-                <Controller
-                  name="bloodTest.cholesterolHdl"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Enter HDL (Good Cholesterol)"
-                      label={isRequiredField(
-                        'HDL (Good Cholesterol) (mg/dL)',
-                        'bloodTest.cholesterolHdl'
-                      )}
-                      labelStyle="lg:text-sm text-xs"
-                      variant={
-                        validationErrors.cholesterol
-                          ? 'destructive'
-                          : variantValidityCheck(field.value)
-                      }
-                      message={
-                        validationErrors.cholesterol ||
-                        messageCheck(field.value)
-                      }
-                      type="number"
-                      min="20"
-                      max="150"
-                      disabled={disabled}
-                    />
-                  )}
-                />
+                  <div className="absolute right-2 top-3 transform -translate-y-1/2">
+                    <Tooltip>
+                      <TooltipTrigger type="button">
+                        <HelpCircleIcon
+                          size="1rem"
+                          className="text-gray-400 hover:text-gray-600 cursor-help"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <div className="max-w-xs">
+                          <p className="font-medium mb-2">
+                            HDL Cholesterol Reference Ranges:
+                          </p>
+                          <p className="text-sm">Optimal: ≥ 60 mg/dL</p>
+                          <p className="text-sm">Low: &lt; 60 mg/dL</p>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
                 {hdlc && (
                   <BadgeField
                     variant={categorizeHDLC(Number(hdlc)).variant}
@@ -356,28 +434,105 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                 )}
               </div>
 
+              {/* LDL Cholesterol */}
               <div className="grid grid-cols-[2fr_1fr] items-center">
-                <Controller
-                  name="bloodTest.cholesterolTriglycerides"
-                  control={control}
-                  render={({ field }) => (
-                    <Input
-                      {...field}
-                      placeholder="Enter Triglycerides"
-                      label={isRequiredField(
-                        'Triglycerides (mg/dL)',
-                        'bloodTest.cholesterolTriglycerides'
-                      )}
-                      labelStyle="lg:text-sm text-xs"
-                      variant={variantValidityCheck(field.value)}
-                      message={messageCheck(field.value)}
-                      type="number"
-                      min="30"
-                      max="1000"
-                      disabled={disabled}
-                    />
-                  )}
-                />
+                <div className="relative">
+                  <Controller
+                    name="bloodTest.cholesterolLdl"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        placeholder="Enter LDL Cholesterol"
+                        label={isRequiredField(
+                          'LDL Cholesterol',
+                          'bloodTest.cholesterolLdl',
+                          formData
+                        )}
+                        labelStyle="lg:text-sm text-xs"
+                        variant={variantValidityCheck(field.value)}
+                        message={messageCheck(field.value)}
+                        type="number"
+                        min={LAB_STANDARDS.cholesterol.ldl.min}
+                        max={LAB_STANDARDS.cholesterol.ldl.max}
+                        disabled={disabled}
+                      />
+                    )}
+                  />
+                  <div className="absolute right-2 top-3 transform -translate-y-1/2">
+                    <Tooltip>
+                      <TooltipTrigger type="button">
+                        <HelpCircleIcon
+                          size="1rem"
+                          className="text-gray-400 hover:text-gray-600 cursor-help"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <div className="max-w-xs">
+                          <p className="font-medium mb-2">
+                            LDL Cholesterol Reference Ranges:
+                          </p>
+                          <p className="text-sm">Optimal: &lt; 100 mg/dL</p>
+                          <p className="text-sm">High: ≥ 100 mg/dL</p>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
+                {ldlc && (
+                  <BadgeField
+                    variant={categorizeLDLC(Number(ldlc)).variant}
+                    value={categorizeLDLC(Number(ldlc)).message}
+                    className="ml-2 mt-6"
+                  />
+                )}
+              </div>
+
+              {/* Triglycerides */}
+              <div className="grid grid-cols-[2fr_1fr] items-center">
+                <div className="relative">
+                  <Controller
+                    name="bloodTest.cholesterolTriglycerides"
+                    control={control}
+                    render={({ field }) => (
+                      <Input
+                        {...field}
+                        placeholder="Enter Triglycerides"
+                        label={isRequiredField(
+                          'Triglycerides',
+                          'bloodTest.cholesterolTriglycerides',
+                          formData
+                        )}
+                        labelStyle="lg:text-sm text-xs"
+                        variant={variantValidityCheck(field.value)}
+                        message={messageCheck(field.value)}
+                        type="number"
+                        min={LAB_STANDARDS.cholesterol.triglycerides.min}
+                        max={LAB_STANDARDS.cholesterol.triglycerides.max}
+                        disabled={disabled}
+                      />
+                    )}
+                  />
+                  <div className="absolute right-2 top-3 transform -translate-y-1/2">
+                    <Tooltip>
+                      <TooltipTrigger type="button">
+                        <HelpCircleIcon
+                          size="1rem"
+                          className="text-gray-400 hover:text-gray-600 cursor-help"
+                        />
+                      </TooltipTrigger>
+                      <TooltipContent>
+                        <div className="max-w-xs">
+                          <p className="font-medium mb-2">
+                            Triglycerides Reference Ranges:
+                          </p>
+                          <p className="text-sm">Optimal: &lt; 150 mg/dL</p>
+                          <p className="text-sm">High: ≥ 150 mg/dL</p>
+                        </div>
+                      </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
                 {tg && (
                   <BadgeField
                     variant={categorizeTG(Number(tg)).variant}
@@ -391,88 +546,93 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
 
           <div>
             <Text as="h3" variant="text/sm" className="font-medium mb-2">
-              HbA1c (Glycated Hemoglobin)
+              Additional Tests
             </Text>
-            <Controller
-              name="bloodTest.hba1cLevel"
-              control={control}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  placeholder="Enter HbA1c Level"
-                  label={isRequiredField(
-                    'HbA1c Level (%)',
-                    'bloodTest.hba1cLevel',
-                    formData
-                  )}
-                  labelStyle="lg:text-sm text-xs"
-                  variant={variantValidityCheck(field.value)}
-                  message={messageCheck(field.value)}
-                  type="number"
-                  min="3"
-                  max="15"
-                  step="0.1"
-                  disabled={disabled}
-                />
-              )}
-            />
-          </div>
-
-          {/* Serum Creatinine */}
-          <div>
-            <Text as="h3" variant="text/sm" className="font-medium mb-4">
-              Laboratory Values
+            <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
+              Optional tests for comprehensive assessment
             </Text>
-            <Controller
-              name="bloodTest.serumCreatinine"
-              control={control}
-              rules={{
-                min: {
-                  value: 0.1,
-                  message: 'Creatinine must be greater than 0.1',
-                },
-                max: { value: 20, message: 'Creatinine must be less than 20' },
-              }}
-              render={({ field }) => (
-                <Input
-                  {...field}
-                  type="number"
-                  step="0.01"
-                  placeholder="mg/dL"
-                  label={isRequiredField(
-                    'Serum Creatinine (mg/dL)',
-                    'bloodTest.serumCreatinine',
-                    formData
-                  )}
-                  labelStyle="lg:text-sm text-xs"
-                  disabled={disabled}
-                />
-              )}
-            />
 
-            {/* PSA Level */}
-            <div className="mt-4">
-              <Controller
-                name="bloodTest.psaLevel"
-                control={control}
-                render={({ field }) => (
-                  <Input
-                    {...field}
-                    type="number"
-                    min="0.4"
-                    max="50"
-                    step="0.01"
-                    placeholder="ng/mL"
-                    label={isRequiredField(
-                      'PSA level (ng/mL)',
-                      'bloodTest.psaLevel',
-                      formData
-                    )}
-                    labelStyle="lg:text-sm text-xs"
-                    disabled={disabled}
-                  />
-                )}
-              />
+            <div className="space-y-4">
+              {/* HbA1c */}
+              <div className="grid grid-cols-[2fr_1fr] items-center">
+                <Controller
+                  name="bloodTest.hba1cLevel"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Enter HbA1c Level"
+                      label={isRequiredField(
+                        'HbA1c (%)',
+                        'bloodTest.hba1cLevel',
+                        formData
+                      )}
+                      labelStyle="lg:text-sm text-xs"
+                      variant={variantValidityCheck(field.value)}
+                      message={messageCheck(field.value)}
+                      type="number"
+                      min="3"
+                      max="15"
+                      step="0.1"
+                      disabled={disabled}
+                    />
+                  )}
+                />
+              </div>
+
+              {/* Serum Creatinine */}
+              <div className="grid grid-cols-[2fr_1fr] items-center">
+                <Controller
+                  name="bloodTest.serumCreatinine"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Enter Serum Creatinine"
+                      label={isRequiredField(
+                        'Serum Creatinine (mg/dL)',
+                        'bloodTest.serumCreatinine',
+                        formData
+                      )}
+                      labelStyle="lg:text-sm text-xs"
+                      variant={variantValidityCheck(field.value)}
+                      message={messageCheck(field.value)}
+                      type="number"
+                      min="0.1"
+                      max="20"
+                      step="0.01"
+                      disabled={disabled}
+                    />
+                  )}
+                />
+              </div>
+
+              {/* PSA Level */}
+              <div className="grid grid-cols-[2fr_1fr] items-center">
+                <Controller
+                  name="bloodTest.psaLevel"
+                  control={control}
+                  render={({ field }) => (
+                    <Input
+                      {...field}
+                      placeholder="Enter PSA Level"
+                      label={isRequiredField(
+                        'PSA Level (ng/mL)',
+                        'bloodTest.psaLevel',
+                        formData
+                      )}
+                      labelStyle="lg:text-sm text-xs"
+                      variant={variantValidityCheck(field.value)}
+                      message={messageCheck(field.value)}
+                      type="number"
+                      min="0"
+                      max="100"
+                      step="0.01"
+                      disabled={disabled}
+                    />
+                  )}
+                />
+              </div>
             </div>
           </div>
         </div>

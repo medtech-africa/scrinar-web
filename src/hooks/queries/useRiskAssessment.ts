@@ -61,49 +61,19 @@ export const useRiskAssessmentPolling = (
         return false
       }
 
-      // If no selected NCDs provided, use the old logic
-      if (!selectedNcds || selectedNcds.length === 0) {
-        const hasRequiredFields =
-          // CVD (WHO) model
-          data?.responseData?.who?.lifestyleModification !== undefined &&
-          data?.responseData?.who?.followUpAction !== undefined &&
-          data?.responseData?.who?.breakdown !== undefined &&
-          // Diabetes (FINDRISC) model
-          data?.responseData?.findrisc?.lifestyleModification !== undefined &&
-          data?.responseData?.findrisc?.followUpAction !== undefined &&
-          data?.responseData?.findrisc?.breakdown !== undefined &&
-          // COPD model - check for either old structure or new structure
-          ((data?.responseData?.copdOutput?.lifestyleModification !==
-            undefined &&
-            data?.responseData?.copdOutput?.followUpAction !== undefined) ||
-            data?.responseData?.copd?.score !== undefined) &&
-          // Breast Cancer model
-          data?.responseData?.breastCancerOutput?.lifestyleModification !==
-            undefined &&
-          data?.responseData?.breastCancerOutput?.followUpAction !==
-            undefined &&
-          // Prostate Cancer model
-          data?.responseData?.prostateOutput?.lifestyleModification !==
-            undefined &&
-          data?.responseData?.prostateOutput?.followUpAction !== undefined &&
-          // Colorectal Cancer model
-          data?.responseData?.colorectalOutput?.lifestyleModification !==
-            undefined &&
-          data?.responseData?.colorectalOutput?.followUpAction !== undefined &&
-          // CKD model - check for either old structure or new structure
-          data?.responseData?.ckdOutput?.lifestyleModification !== undefined &&
-          data?.responseData?.ckdOutput?.followUpAction !== undefined
-
-        return hasRequiredFields ? false : 3000
-      }
-
       // Check for selected NCDs specifically
       if (!data?.responseData) return 3000
 
       const responseData = data.responseData
 
+      // If no selected NCDs provided, continue polling
+      if (!selectedNcds || selectedNcds.length === 0) {
+        return 3000
+      }
+
       // Check each selected NCD type
-      let hasAtLeastOneComplete = false
+      let completedNcds = 0
+      const totalNcds = selectedNcds.length
 
       for (const ncdType of selectedNcds) {
         let isNcdComplete = false
@@ -132,9 +102,12 @@ export const useRiskAssessmentPolling = (
           case 'breastCancer':
             // Check if Breast Cancer data exists and has required fields
             const breastCancerData = responseData.breastCancer
+            const breastCancerOutputData = responseData.breastCancerOutput
             isNcdComplete = !!(
-              breastCancerData?.score !== undefined &&
-              breastCancerData?.riskLevel
+              (breastCancerData?.score !== undefined &&
+                breastCancerData?.riskLevel) ||
+              (breastCancerOutputData?.score !== undefined &&
+                breastCancerOutputData?.riskLevel)
             )
             break
           case 'prostateCancer':
@@ -142,7 +115,9 @@ export const useRiskAssessmentPolling = (
             const prostateData = responseData.prostate
             const prostateOutputData = responseData.prostateOutput
             isNcdComplete = !!(
-              prostateData?.score !== undefined || prostateOutputData?.score
+              (prostateData?.score !== undefined && prostateData?.riskLevel) ||
+              (prostateOutputData?.score !== undefined &&
+                prostateOutputData?.riskLevel)
             )
             break
           case 'colorectalCancer':
@@ -150,7 +125,10 @@ export const useRiskAssessmentPolling = (
             const colorectalData = responseData.colorectal
             const colorectalOutputData = responseData.colorectalOutput
             isNcdComplete = !!(
-              colorectalData?.score !== undefined || colorectalOutputData?.score
+              (colorectalData?.score !== undefined &&
+                colorectalData?.riskLevel) ||
+              (colorectalOutputData?.score !== undefined &&
+                colorectalOutputData?.riskLevel)
             )
             break
           case 'ckd':
@@ -162,18 +140,13 @@ export const useRiskAssessmentPolling = (
         }
 
         if (isNcdComplete) {
-          hasAtLeastOneComplete = true
+          completedNcds++
         }
       }
 
-      // If at least one NCD is complete, we can stop polling
-      // The UI will show results for complete NCDs while others continue processing
-      if (hasAtLeastOneComplete) {
-        return false
-      }
-
-      // If none are complete yet, continue polling
-      return 3000
+      // Continue polling until all NCDs are complete or timeout
+      // Results will be shown as soon as at least one NCD is complete
+      return completedNcds === totalNcds ? false : 3000
     },
   })
 }

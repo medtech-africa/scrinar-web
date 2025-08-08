@@ -25,6 +25,7 @@ type Props = {
   disabled?: boolean
   patientId?: string | null
   onPatientCreated?: (patientId: string) => void
+  displayOnly?: boolean
 }
 
 export const PersonalInfoForm = ({
@@ -32,6 +33,7 @@ export const PersonalInfoForm = ({
   disabled = false,
   patientId,
   onPatientCreated,
+  displayOnly = false,
 }: Props) => {
   const { control, register, watch, setValue, handleSubmit } = useFormContext()
   const { isFieldRequired } = useNcdFilter()
@@ -390,7 +392,7 @@ export const PersonalInfoForm = ({
                 : 'Create Patient & Continue'}
             </Button>
           ) : (
-            <Button className="px-8" onClick={onNext} disabled={isFormDisabled}>
+            <Button className="px-8" onClick={onNext} disabled={displayOnly}>
               Next
             </Button>
           )}

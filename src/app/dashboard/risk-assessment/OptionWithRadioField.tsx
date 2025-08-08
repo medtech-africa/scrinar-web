@@ -11,11 +11,13 @@ type OptionsWithOtherFieldProps = {
   otherValue?: string
   othersIndex?: number
   disabled?: boolean
+  defaultValue?: string
 }
 export const OptionWithRadioField = ({
   label = '',
   options = [],
   form,
+  defaultValue,
   disabled = false,
 }: OptionsWithOtherFieldProps) => {
   const { customRegister, watch } = useCustomRegister()
@@ -34,6 +36,7 @@ export const OptionWithRadioField = ({
                 type="radio"
                 id={id}
                 value={option}
+                defaultValue={defaultValue}
                 {...customRegister(form.id)}
                 defaultChecked={option === currentValue}
                 disabled={disabled}
