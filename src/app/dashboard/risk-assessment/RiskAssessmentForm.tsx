@@ -36,6 +36,7 @@ import { useRiskAssessmentPolling } from '@/hooks/queries/useRiskAssessment'
 import { getFieldPath, getFieldDisplayName } from '@/constants/fieldMappings'
 import { NCD } from '@/types/riskAssessment.types'
 import { NCD_DISPLAY_NAMES, ALL_NCD_TYPES } from '@/constants/riskAssessment'
+import { getConditionalRequiredFields } from '@/constants/requiredFields'
 
 import { useRouter } from 'next/navigation'
 
@@ -194,7 +195,6 @@ const RiskAssessmentFormContent = ({
     selectAllNcds,
     deselectAllNcds,
     hasNcdSelected,
-    getRequiredFields,
     getNcdTypeString,
   } = useNcdFilter()
   const formMethods = useForm({ defaultValues: data?.requestData })
@@ -249,31 +249,172 @@ const RiskAssessmentFormContent = ({
       case 'vitals':
         const vitals = formData?.vitals
         const missingVitals = []
-        if (!vitals?.height) missingVitals.push('Height')
-        if (!vitals?.weight) missingVitals.push('Weight')
-        if (!vitals?.sys) missingVitals.push('Systolic Blood Pressure')
-        if (!vitals?.dys) missingVitals.push('Diastolic Blood Pressure')
+
+        // Check which vitals are required based on selected NCDs
+        const requiredVitals = new Set<string>()
+
+        selectedNcds.forEach((ncdType) => {
+          const requiredFields = getConditionalRequiredFields(ncdType, formData)
+          if (!requiredFields) return
+
+          // Check for vitals-related fields
+          Object.entries(requiredFields).forEach(([field, isRequired]) => {
+            if (!isRequired) return
+
+            // Map field names to vitals fields
+            switch (field) {
+              case 'height':
+                requiredVitals.add('height')
+                break
+              case 'weight':
+                requiredVitals.add('weight')
+                break
+              case 'systolicBP':
+                requiredVitals.add('sys')
+                break
+              case 'diastolicBP':
+                requiredVitals.add('dys')
+                break
+              case 'waist':
+                requiredVitals.add('waist')
+                break
+              case 'bmi':
+                // BMI is calculated from height and weight, so require both
+                requiredVitals.add('height')
+                requiredVitals.add('weight')
+                break
+            }
+          })
+        })
+
+        // Check required vitals
+        if (requiredVitals.has('height') && !vitals?.height) {
+          missingVitals.push('Height')
+        }
+        if (requiredVitals.has('weight') && !vitals?.weight) {
+          missingVitals.push('Weight')
+        }
+        if (requiredVitals.has('sys') && !vitals?.sys) {
+          missingVitals.push('Systolic Blood Pressure')
+        }
+        if (requiredVitals.has('dys') && !vitals?.dys) {
+          missingVitals.push('Diastolic Blood Pressure')
+        }
+        if (requiredVitals.has('waist') && !vitals?.waist) {
+          missingVitals.push('Waist Circumference')
+        }
+
         return {
           isComplete: missingVitals.length === 0,
           missingFields: missingVitals,
         }
       case 'labs':
-        // Labs are optional, so always allow progression
+        const bloodTest = formData?.bloodTest
+        const missingLabs = []
+
+        // Check which lab tests are required based on selected NCDs
+        const requiredLabs = new Set<string>()
+
+        selectedNcds.forEach((ncdType) => {
+          const requiredFields = getConditionalRequiredFields(ncdType, formData)
+          if (!requiredFields) return
+
+          // Check for lab-related fields
+          Object.entries(requiredFields).forEach(([field, isRequired]) => {
+            if (!isRequired) return
+
+            // Map field names to lab fields
+            switch (field) {
+              case 'serumCreatinine':
+                requiredLabs.add('serumCreatinine')
+                break
+              case 'cholesterol':
+                requiredLabs.add('cholesterolTotal')
+                break
+              case 'psaLevel':
+                requiredLabs.add('psaLevel')
+                break
+            }
+          })
+        })
+
+        // Check required lab tests
+        if (
+          requiredLabs.has('serumCreatinine') &&
+          !bloodTest?.serumCreatinine
+        ) {
+          missingLabs.push('Serum Creatinine')
+        }
+        if (
+          requiredLabs.has('cholesterolTotal') &&
+          !bloodTest?.cholesterolTotal
+        ) {
+          missingLabs.push('Total Cholesterol')
+        }
+        if (requiredLabs.has('psaLevel') && !bloodTest?.psaLevel) {
+          missingLabs.push('PSA Level')
+        }
+
         return {
-          isComplete: true,
-          missingFields: [],
+          isComplete: missingLabs.length === 0,
+          missingFields: missingLabs,
         }
       case 'lifestyle':
         const lifestyle = formData?.lifestyle
         const missingLifestyle = []
-        if (!lifestyle?.everSmoked)
+
+        // Check which lifestyle fields are required based on selected NCDs
+        const requiredLifestyle = new Set<string>()
+
+        selectedNcds.forEach((ncdType) => {
+          const requiredFields = getConditionalRequiredFields(ncdType, formData)
+          if (!requiredFields) return
+
+          // Check for lifestyle-related fields
+          Object.entries(requiredFields).forEach(([field, isRequired]) => {
+            if (!isRequired) return
+
+            // Map field names to lifestyle fields
+            switch (field) {
+              case 'smoking':
+                requiredLifestyle.add('everSmoked')
+                break
+              case 'hasQuitSmoking':
+                requiredLifestyle.add('currentSmokingStatus')
+                break
+              case 'physicalActivity':
+                requiredLifestyle.add('hasDailyPhysicalActivity')
+                break
+              case 'alcoholFrequency':
+                requiredLifestyle.add('alcoholFrequency')
+                break
+            }
+          })
+        })
+
+        // Check required lifestyle fields
+        if (requiredLifestyle.has('everSmoked') && !lifestyle?.everSmoked) {
           missingLifestyle.push('Have you ever smoked?')
-        if (!lifestyle?.currentSmokingStatus)
+        }
+        if (
+          requiredLifestyle.has('currentSmokingStatus') &&
+          !lifestyle?.currentSmokingStatus
+        ) {
           missingLifestyle.push('Current smoking status')
-        if (!lifestyle?.alcoholFrequency)
-          missingLifestyle.push('Alcohol consumption frequency')
-        if (!lifestyle?.hasDailyPhysicalActivity)
+        }
+        if (
+          requiredLifestyle.has('hasDailyPhysicalActivity') &&
+          !lifestyle?.hasDailyPhysicalActivity
+        ) {
           missingLifestyle.push('Daily physical activity')
+        }
+        if (
+          requiredLifestyle.has('alcoholFrequency') &&
+          !lifestyle?.alcoholFrequency
+        ) {
+          missingLifestyle.push('Alcohol consumption frequency')
+        }
+
         return {
           isComplete: missingLifestyle.length === 0,
           missingFields: missingLifestyle,
@@ -281,12 +422,68 @@ const RiskAssessmentFormContent = ({
       case 'familyHistory':
         const familyHistory = formData?.familyHistory
         const missingFamilyHistory = []
-        if (!familyHistory?.cvd)
-          missingFamilyHistory.push('Family history of CVD')
-        if (!familyHistory?.diabetes)
+
+        // Check which family history fields are required based on selected NCDs
+        const requiredFamilyHistory = new Set<string>()
+
+        selectedNcds.forEach((ncdType) => {
+          const requiredFields = getConditionalRequiredFields(ncdType, formData)
+          if (!requiredFields) return
+
+          // Check for family history-related fields
+          Object.entries(requiredFields).forEach(([field, isRequired]) => {
+            if (!isRequired) return
+
+            // Map field names to family history fields
+            switch (field) {
+              case 'hasFamilyhistoryDiabetes':
+                requiredFamilyHistory.add('diabetes')
+                break
+              case 'familyHistoryBreastCancer':
+                requiredFamilyHistory.add('breastCancer')
+                break
+              case 'familyHistoryOvarianCancer':
+                requiredFamilyHistory.add('ovarianCancer')
+                break
+              case 'familyHistoryProstateCancer':
+                requiredFamilyHistory.add('prostateCancer')
+                break
+              case 'familyHistoryColorectalCancer':
+                requiredFamilyHistory.add('colorectalCancer')
+                break
+            }
+          })
+        })
+
+        // Check required family history fields
+        if (requiredFamilyHistory.has('diabetes') && !familyHistory?.diabetes) {
           missingFamilyHistory.push('Family history of Diabetes')
-        if (!familyHistory?.hypertension)
-          missingFamilyHistory.push('Family history of Hypertension')
+        }
+        if (
+          requiredFamilyHistory.has('breastCancer') &&
+          !familyHistory?.breastCancer
+        ) {
+          missingFamilyHistory.push('Family history of Breast Cancer')
+        }
+        if (
+          requiredFamilyHistory.has('ovarianCancer') &&
+          !familyHistory?.ovarianCancer
+        ) {
+          missingFamilyHistory.push('Family history of Ovarian Cancer')
+        }
+        if (
+          requiredFamilyHistory.has('prostateCancer') &&
+          !familyHistory?.prostateCancer
+        ) {
+          missingFamilyHistory.push('Family history of Prostate Cancer')
+        }
+        if (
+          requiredFamilyHistory.has('colorectalCancer') &&
+          !familyHistory?.colorectalCancer
+        ) {
+          missingFamilyHistory.push('Family history of Colorectal Cancer')
+        }
+
         return {
           isComplete: missingFamilyHistory.length === 0,
           missingFields: missingFamilyHistory,
@@ -296,7 +493,7 @@ const RiskAssessmentFormContent = ({
         const missingNcdFields: string[] = []
 
         selectedNcds.forEach((ncdType) => {
-          const requiredFields = getRequiredFields(ncdType)
+          const requiredFields = getConditionalRequiredFields(ncdType, formData)
           if (!requiredFields) return
 
           // Special handling for colorectal cancer
@@ -372,6 +569,9 @@ const RiskAssessmentFormContent = ({
       try {
         // Step 0: Store the assessment data
         const formData = formMethods.watch()
+        formData.ncdType = getNcdTypeString()
+
+        console.log(formData.ncdType, 'formData.ncdType')
         await baseAxios.patch(API.updateRiskAssessment(assessmentId), formData)
 
         // Step 1: Generate risk assessment
@@ -544,7 +744,7 @@ const RiskAssessmentFormContent = ({
 
     // Check if all selected NCDs have their required fields filled
     const allRequiredFieldsFilled = selectedNcds.every((ncdType) => {
-      const requiredFields = getRequiredFields(ncdType)
+      const requiredFields = getConditionalRequiredFields(ncdType, formData)
       if (!requiredFields) return true
 
       // Special handling for colorectal cancer
@@ -661,7 +861,7 @@ const RiskAssessmentFormContent = ({
     const missingFieldsByNcd: Record<string, string[]> = {}
 
     selectedNcds.forEach((ncdType) => {
-      const requiredFields = getRequiredFields(ncdType)
+      const requiredFields = getConditionalRequiredFields(ncdType, formData)
       if (!requiredFields) return
 
       // Special handling for colorectal cancer
@@ -814,6 +1014,7 @@ const RiskAssessmentFormContent = ({
           break
       }
 
+      formMethods.setValue('ncdType', getNcdTypeString())
       sectionData.ncdType = getNcdTypeString()
 
       if (Object.keys(sectionData).length > 0) {
