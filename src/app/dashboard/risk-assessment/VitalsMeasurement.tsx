@@ -144,6 +144,24 @@ const validatePulse = (value: string) => {
   return { isValid: true, message: '' }
 }
 
+const validateTemperature = (value: string) => {
+  if (!value) return { isValid: true, message: '' }
+  const num = Number(value)
+  if (num < 0) {
+    return {
+      isValid: false,
+      message: 'Temperature cannot be negative',
+    }
+  }
+  if (num < 30 || num > 45) {
+    return {
+      isValid: false,
+      message: 'Temperature should be between 30-45°C',
+    }
+  }
+  return { isValid: true, message: '' }
+}
+
 export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
   const { control, watch, setValue } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
@@ -153,8 +171,17 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
   const [isGuidesOpen, setIsGuidesOpen] = useState(false)
   const isRequiredField = useRequiredFieldLabel()
 
-  const { bmi, sys, dys, height, weight, waist, oxygenSaturation, pulse } =
-    watch('vitals', {})
+  const {
+    bmi,
+    sys,
+    dys,
+    height,
+    weight,
+    waist,
+    oxygenSaturation,
+    pulse,
+    temperature,
+  } = watch('vitals', {})
   const { gender: genderVal, age } = watch('personalInfo', {})
 
   // Get all form data for conditional required field logic
@@ -201,9 +228,13 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
       const pulseValidation = validatePulse(pulse)
       if (!pulseValidation.isValid) errors.pulse = pulseValidation.message
     }
+    if (temperature) {
+      const tempValidation = validateTemperature(temperature)
+      if (!tempValidation.isValid) errors.temperature = tempValidation.message
+    }
 
     setValidationErrors(errors)
-  }, [height, weight, waist, sys, dys, oxygenSaturation, pulse])
+  }, [height, weight, waist, sys, dys, oxygenSaturation, pulse, temperature])
 
   const hasValidationErrors = Object.keys(validationErrors).length > 0
 
@@ -397,6 +428,73 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                     * BMI automatically generated
                   </Label>
                 </div>
+
+                {/* Central Obesity Status Table */}
+                {waist && (
+                  <div className="my-4">
+                    <Text
+                      as="h4"
+                      variant="text/sm"
+                      className="font-medium mb-3"
+                    >
+                      Central Obesity Status
+                    </Text>
+                    <div className="overflow-x-auto">
+                      <table className="w-full border border-gray-200 rounded-lg">
+                        <thead>
+                          <tr className="bg-gray-50">
+                            <th className="px-4 py-2 text-left text-sm font-medium text-gray-900 border-b border-gray-200">
+                              Central obesity status
+                            </th>
+                            <th className="px-4 py-2 text-left text-sm font-medium text-gray-900 border-b border-gray-200">
+                              Men
+                            </th>
+                            <th className="px-4 py-2 text-left text-sm font-medium text-gray-900 border-b border-gray-200">
+                              Women
+                            </th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                              Normal
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                              Less than 94 cm
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                              Less than 80 cm
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                              Central Obesity-Increased Risk of metabolic
+                              complications like DM
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                              94 to 102 cm
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                              80 to 88 cm
+                            </td>
+                          </tr>
+                          <tr>
+                            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                              Central Obesity- Substantially Increased Risk of
+                              metabolic complications like DM
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                              More than 102 cm
+                            </td>
+                            <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                              More than 88 cm
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
               </div>
 
               <div>
@@ -480,6 +578,98 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                       className="ml-2 mt-6"
                     />
                   )}
+                </div>
+
+                {/* Blood Pressure Classification Table */}
+                <div className="mt-4">
+                  <Text as="h4" variant="text/sm" className="font-medium mb-3">
+                    Blood Pressure Classification
+                  </Text>
+                  <div className="overflow-x-auto">
+                    <table className="w-full border border-gray-200 rounded-lg">
+                      <thead>
+                        <tr className="bg-gray-50">
+                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-900 border-b border-gray-200">
+                            Classification
+                          </th>
+                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-900 border-b border-gray-200">
+                            Systolic Blood Pressure
+                          </th>
+                          <th className="px-4 py-2 text-left text-sm font-medium text-gray-900 border-b border-gray-200">
+                            Diastolic Blood Pressure
+                          </th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            Low
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            &lt; 90 mmHg
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            &lt; 60 mmHg
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            Optimal
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            90 - 120 mmHg
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            60 - 80 mmHg
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            Normal
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            121 - 129 mmHg
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            81 - 84 mmHg
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            High Normal (Prehypertension)
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            130 - 139 mmHg
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            85 - 89 mmHg
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            Hypertension
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            ≥ 140 mmHg
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            ≥ 90 mmHg
+                          </td>
+                        </tr>
+                        <tr>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            Hypertensive Crisis (Urgent care needed)
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            ≥ 180 mmHg
+                          </td>
+                          <td className="px-4 py-2 text-sm text-gray-700 border-b border-gray-200">
+                            ≥ 120 mmHg
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div>
                   <div className="flex mt-4">
@@ -568,29 +758,177 @@ export const VitalsMeasurement = ({ onNext, disabled }: Props) => {
                   />
 
                   <div className="mt-4">
-                    <Controller
-                      name="vitals.temperature"
-                      control={control}
-                      render={({ field }) => (
-                        <Input
-                          {...field}
-                          placeholder="36.5"
-                          label={isRequiredField(
-                            'Temperature (°C)',
-                            'vitals.temperature',
-                            formData
-                          )}
-                          labelStyle="lg:text-sm text-xs"
-                          variant={variantValidityCheck(field.value)}
-                          message={messageCheck(field.value)}
-                          min="0"
-                          max="45"
-                          step="0.1"
-                          type="number"
-                          disabled={disabled}
-                        />
-                      )}
-                    />
+                    <div className="relative">
+                      <Controller
+                        name="vitals.temperature"
+                        control={control}
+                        render={({ field }) => (
+                          <Input
+                            {...field}
+                            placeholder="36.5"
+                            label={
+                              <div className="flex items-center gap-2">
+                                {isRequiredField(
+                                  'Temperature (°C)',
+                                  'vitals.temperature',
+                                  formData
+                                )}
+                                <Tooltip>
+                                  <TooltipTrigger type="button">
+                                    <HelpCircleIcon
+                                      size="1rem"
+                                      className="text-gray-400 hover:text-gray-600 cursor-help"
+                                    />
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <div className="max-w-xs">
+                                      <p className="font-medium mb-2">
+                                        Temperature Reference Ranges:
+                                      </p>
+                                      <p className="text-sm">
+                                        Normal: 36.5 - 37.2°C
+                                      </p>
+                                      <p className="text-sm">
+                                        Fever: &gt; 37.2°C
+                                      </p>
+                                      <p className="text-sm">
+                                        Hypothermia: &lt; 36.5°C
+                                      </p>
+                                    </div>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </div>
+                            }
+                            labelStyle="lg:text-sm text-xs"
+                            variant={
+                              validationErrors.temperature
+                                ? 'destructive'
+                                : variantValidityCheck(field.value)
+                            }
+                            message={
+                              validationErrors.temperature ||
+                              messageCheck(field.value)
+                            }
+                            min="30"
+                            max="45"
+                            step="0.1"
+                            type="number"
+                            disabled={disabled}
+                          />
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Peak Expiratory Flow Meter */}
+                  <div className="mt-4">
+                    <Text
+                      as="h3"
+                      variant="text/sm"
+                      className="font-medium mb-2"
+                    >
+                      Peak Expiratory Flow (PEF) - Best of 3 Readings
+                    </Text>
+                    <Text variant="text/sm" className="text-gray-500 mb-3">
+                      The best out of 3 readings is recorded
+                    </Text>
+
+                    <div className="space-y-3">
+                      {[1, 2, 3].map((reading) => (
+                        <div key={reading} className="flex items-center gap-3">
+                          <Text variant="text/sm" className="w-8">
+                            {reading}.
+                          </Text>
+                          <Controller
+                            name={`vitals.pefReading${reading}`}
+                            control={control}
+                            render={({ field }) => (
+                              <Input
+                                {...field}
+                                placeholder="Enter PEF reading"
+                                label={`Reading ${reading} (L/min)`}
+                                labelStyle="lg:text-sm text-xs"
+                                variant={variantValidityCheck(field.value)}
+                                message={messageCheck(field.value)}
+                                type="number"
+                                min="0"
+                                max="1000"
+                                disabled={disabled}
+                                className="flex-1"
+                              />
+                            )}
+                          />
+                        </div>
+                      ))}
+
+                      {/* Best PEF Result */}
+                      <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                        <div className="flex items-center justify-between">
+                          <Text variant="text/sm" className="font-medium">
+                            Best PEF Result:
+                          </Text>
+                          <div className="flex items-center gap-2">
+                            <Text
+                              variant="display/sm"
+                              weight="bold"
+                              className="text-gray-700"
+                            >
+                              {(() => {
+                                const readings = [
+                                  watch('vitals.pefReading1'),
+                                  watch('vitals.pefReading2'),
+                                  watch('vitals.pefReading3'),
+                                ]
+                                  .filter(Boolean)
+                                  .map(Number)
+
+                                if (readings.length === 0) return '-'
+
+                                const bestReading = Math.max(...readings)
+                                const gender = watch(
+                                  'personalInfo.gender'
+                                )?.toLowerCase()
+
+                                return (
+                                  <div className="flex items-center gap-2">
+                                    <span>{bestReading} L/min</span>
+                                    {bestReading > 0 && (
+                                      <BadgeField
+                                        variant={
+                                          gender === 'female'
+                                            ? bestReading >= 250
+                                              ? 'success'
+                                              : 'error'
+                                            : gender === 'male'
+                                              ? bestReading >= 350
+                                                ? 'success'
+                                                : 'error'
+                                              : undefined
+                                        }
+                                        value={
+                                          gender === 'female'
+                                            ? bestReading >= 250
+                                              ? 'Normal'
+                                              : 'Below Normal'
+                                            : gender === 'male'
+                                              ? bestReading >= 350
+                                                ? 'Normal'
+                                                : 'Below Normal'
+                                              : undefined
+                                        }
+                                      />
+                                    )}
+                                  </div>
+                                )
+                              })()}
+                            </Text>
+                          </div>
+                        </div>
+                        <Text variant="text/xs" className="text-gray-600 mt-2">
+                          Normal levels: Females ≥ 250 L/min, Males ≥ 350 L/min
+                        </Text>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>

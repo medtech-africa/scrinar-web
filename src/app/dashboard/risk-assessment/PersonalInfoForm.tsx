@@ -30,7 +30,6 @@ type Props = {
 
 export const PersonalInfoForm = ({
   onNext,
-  disabled = false,
   patientId,
   onPatientCreated,
   displayOnly = false,
@@ -55,6 +54,25 @@ export const PersonalInfoForm = ({
         error?.response?.data?.message ||
           error?.message ||
           'Failed to create patient'
+      )
+    },
+  })
+
+  const { mutate: updatePatient, isPending: isUpdatingPatient } = useMutation({
+    mutationFn: async (data: any) => {
+      const response = await baseAxios.patch(API.patient(patientId ?? ''), data)
+      return response.data.data
+    },
+    onSuccess: () => {
+      toast.success('Patient updated successfully')
+
+      onNext()
+    },
+    onError: (error: any) => {
+      toast.error(
+        error?.response?.data?.message ||
+          error?.message ||
+          'Failed to update patient'
       )
     },
   })
@@ -113,10 +131,12 @@ export const PersonalInfoForm = ({
         emergencyContact: data.personalInfo.emergencyContact,
       }
       createPatient(patientData)
+    } else {
+      updatePatient(data.personalInfo)
     }
   }
 
-  const isFormDisabled = disabled || !!patientId
+  const isFormDisabled = displayOnly
   const showSubmitButton = !patientId // Show submit button for new patients and when no userId exists
 
   return (
@@ -392,8 +412,12 @@ export const PersonalInfoForm = ({
                 : 'Create Patient & Continue'}
             </Button>
           ) : (
-            <Button className="px-8" onClick={onNext} disabled={displayOnly}>
-              Next
+            <Button
+              className="px-8"
+              onClick={handleSubmit(handlePersonalInfoSubmit)}
+              disabled={displayOnly || isUpdatingPatient}
+            >
+              {isUpdatingPatient ? 'Updating Patient...' : 'Save & Continue'}
             </Button>
           )}
         </div>

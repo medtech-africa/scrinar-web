@@ -42,14 +42,17 @@ const RiskGaugeBar = ({
 
   const type = getRiskTypeLabel(activeTab)
 
-  const risk = riskLevel.toLowerCase().includes('low')
-    ? 'low'
-    : riskLevel.toLowerCase().includes('moderate') ||
-        riskLevel.toLowerCase().includes('medium')
-      ? 'moderate'
-      : riskLevel.toLowerCase().includes('high')
-        ? 'high'
-        : 'low'
+  const risk =
+    riskLevel.toLowerCase().includes('low') ||
+    (activeTab === 'ckd' && score <= 1)
+      ? 'low'
+      : riskLevel.toLowerCase().includes('moderate') ||
+          (activeTab === 'ckd' && score <= 3)
+        ? 'moderate'
+        : riskLevel.toLowerCase().includes('high') ||
+            (activeTab === 'ckd' && score >= 4)
+          ? 'high'
+          : 'low'
 
   return (
     <div className="w-full" data-testid="risk-gauge">
@@ -105,24 +108,35 @@ const RiskGaugeBar = ({
           )}
         ></div>
         <div
-          className={cn(
-            'bg-red-500 text-white px-4 py-2 rounded-md text-center w-fit mx-auto',
-            {
-              'bg-green-800': risk === 'low',
-              'bg-yellow-600': risk === 'moderate',
-            }
-          )}
+          className={cn({
+            'pl-[150px] md:pl-[100px] xl:pl-0': risk === 'low',
+            'pr-[150px] md:pr-[100px] xl:pr-0': risk === 'high',
+          })}
         >
-          <div className="font-bold">
-            {activeTab === 'ckd' ? 'Stage ' + score : riskLevel}!!!
-          </div>
-          {activeTab !== 'ckd' && (
-            <div className="text-sm">
-              Your risk of {type} is {score}%
+          <div
+            className={cn(
+              'bg-red-500 text-white px-4 py-2 rounded-md text-center w-fit mx-auto',
+              {
+                'bg-green-800': risk === 'low',
+                'bg-yellow-600': risk === 'moderate',
+              }
+            )}
+          >
+            <div className="font-bold">
+              {activeTab === 'ckd'
+                ? 'Your risk of CKD is in Stage ' + score
+                : riskLevel}
+              !!!
             </div>
-          )}
+            {activeTab !== 'ckd' && (
+              <div className="text-sm">
+                Your risk of {type} is {score}%
+              </div>
+            )}
+          </div>
         </div>
       </div>
+
       {/* )} */}
     </div>
   )
