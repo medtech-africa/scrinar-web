@@ -195,6 +195,8 @@ export const API = {
   updateRiskAssessment: (id: string) =>
     `${BASE_URL}/api/v1/scrinar-vitals/${id}`,
   sendRiskAssessment: `${BASE_URL}/api/v1/scrinar-vitals/send`,
+  userRiskAssessments: (userId: string) =>
+    `${BASE_URL}/api/v1/scrinar-vitals/${userId}/users`,
 
   //form
   createForm: `${BASE_URL}/api/v1/forms`,

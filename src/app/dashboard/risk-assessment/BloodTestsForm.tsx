@@ -111,6 +111,42 @@ const LAB_STANDARDS = {
   },
 }
 
+// Helper function to get min/max values based on unit
+const getMinMaxValues = (
+  type: 'glucose' | 'lipids',
+  field: string,
+  unit: string
+) => {
+  if (type === 'glucose') {
+    const range = LAB_STANDARDS.bloodSugar[field as 'fasting' | 'random']
+    if (unit === 'mmol/L') {
+      return {
+        min: Number(
+          (range.min / CONVERSION_FACTORS.glucose.mgdLToMmolL).toFixed(1)
+        ),
+        max: Number(
+          (range.max / CONVERSION_FACTORS.glucose.mgdLToMmolL).toFixed(1)
+        ),
+      }
+    }
+    return { min: range.min, max: range.max }
+  } else {
+    const range =
+      LAB_STANDARDS.cholesterol[field as keyof typeof LAB_STANDARDS.cholesterol]
+    if (unit === 'mmol/L') {
+      return {
+        min: Number(
+          (range.min / CONVERSION_FACTORS.lipids.mgdLToMmolL).toFixed(2)
+        ),
+        max: Number(
+          (range.max / CONVERSION_FACTORS.lipids.mgdLToMmolL).toFixed(2)
+        ),
+      }
+    }
+    return { min: range.min, max: range.max }
+  }
+}
+
 // Validation functions
 const validateCholesterol = (total: string, hdl: string, ldl: string) => {
   if (!total) return { isValid: true, message: '' }
@@ -148,15 +184,22 @@ const validateBloodSugar = (
 
   // Convert validation range based on unit
   if (unit === 'mmol/L') {
-    // Use mmol/L ranges for validation
     const mmolRanges = {
       fasting: {
-        min: 2.8, // 50 mg/dL / 18
-        max: 27.8, // 500 mg/dL / 18
+        min: Number(
+          (range.min / CONVERSION_FACTORS.glucose.mgdLToMmolL).toFixed(1)
+        ),
+        max: Number(
+          (range.max / CONVERSION_FACTORS.glucose.mgdLToMmolL).toFixed(1)
+        ),
       },
       random: {
-        min: 2.8, // 50 mg/dL / 18
-        max: 27.8, // 500 mg/dL / 18
+        min: Number(
+          (range.min / CONVERSION_FACTORS.glucose.mgdLToMmolL).toFixed(1)
+        ),
+        max: Number(
+          (range.max / CONVERSION_FACTORS.glucose.mgdLToMmolL).toFixed(1)
+        ),
       },
     }
 
@@ -238,17 +281,74 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
     glucose: 'mg/dL',
     lipids: 'mg/dL',
   })
+
+  // Separate state for display values (converted) vs storage values (mg/dL)
+  const [displayValues, setDisplayValues] = useState({
+    bloodSugarRandom: '',
+    bloodSugarFasting: '',
+    cholesterolTotal: '',
+    cholesterolHdl: '',
+    cholesterolLdl: '',
+    cholesterolTriglycerides: '',
+  })
+
   const isRequiredField = useRequiredFieldLabel()
 
+  // Watch the actual form values (always in mg/dL)
   const bloodSugar1 = watch('bloodTest.bloodSugarRandom')
   const bloodSugar2 = watch('bloodTest.bloodSugarFasting')
-
   const tg = watch('bloodTest.cholesterolTriglycerides')
   const hdlc = watch('bloodTest.cholesterolHdl')
   const ldlc = watch('bloodTest.cholesterolLdl')
   const totalCholesterol = watch('bloodTest.cholesterolTotal')
+  const psaLevel = watch('bloodTest.psaLevel')
+  const hba1c = watch('bloodTest.hba1cLevel')
 
-  // Convert input value back to mg/dL for storage
+  // Helper function to safely format display values
+  const formatDisplayValue = (
+    value: string,
+    conversionType: 'glucose' | 'lipids'
+  ) => {
+    if (!value || value.trim() === '') return ''
+
+    const numValue = Number(value)
+    if (isNaN(numValue) || numValue < 0) return ''
+
+    const currentUnit =
+      conversionType === 'glucose' ? units.glucose : units.lipids
+    if (currentUnit === 'mg/dL') return value
+
+    // Convert from stored mg/dL to display unit
+    if (conversionType === 'glucose') {
+      return convertGlucose(numValue, 'mg/dL', currentUnit).toString()
+    } else {
+      return convertLipids(numValue, 'mg/dL', currentUnit).toString()
+    }
+  }
+
+  // Update display values when form values change
+  useEffect(() => {
+    setDisplayValues({
+      bloodSugarRandom: formatDisplayValue(bloodSugar1, 'glucose'),
+      bloodSugarFasting: formatDisplayValue(bloodSugar2, 'glucose'),
+      cholesterolTotal: formatDisplayValue(totalCholesterol, 'lipids'),
+      cholesterolHdl: formatDisplayValue(hdlc, 'lipids'),
+      cholesterolLdl: formatDisplayValue(ldlc, 'lipids'),
+      cholesterolTriglycerides: formatDisplayValue(tg, 'lipids'),
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    bloodSugar1,
+    bloodSugar2,
+    totalCholesterol,
+    hdlc,
+    ldlc,
+    tg,
+    units.glucose,
+    units.lipids,
+  ])
+
+  // Handle unit change and update both display and storage values
   const handleUnitChange = (
     conversionType: 'glucose' | 'lipids',
     newUnit: string
@@ -257,61 +357,92 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
 
     if (oldUnit === newUnit) return
 
-    // Convert existing values when unit changes
+    // Update units state
+    setUnits((prev) => ({ ...prev, [conversionType]: newUnit }))
+
+    // Convert existing values and update display
     if (conversionType === 'glucose') {
       if (bloodSugar1) {
         const currentValue = Number(bloodSugar1)
-        const convertedValue =
-          newUnit === 'mmol/L'
-            ? convertGlucose(currentValue, 'mg/dL', 'mmol/L')
-            : convertGlucose(currentValue, 'mmol/L', 'mg/dL')
-        setValue('bloodTest.bloodSugarRandom', convertedValue.toString())
+        const convertedValue = convertGlucose(currentValue, 'mg/dL', newUnit)
+        setDisplayValues((prev) => ({
+          ...prev,
+          bloodSugarRandom: convertedValue.toString(),
+        }))
       }
       if (bloodSugar2) {
         const currentValue = Number(bloodSugar2)
-        const convertedValue =
-          newUnit === 'mmol/L'
-            ? convertGlucose(currentValue, 'mg/dL', 'mmol/L')
-            : convertGlucose(currentValue, 'mmol/L', 'mg/dL')
-        setValue('bloodTest.bloodSugarFasting', convertedValue.toString())
+        const convertedValue = convertGlucose(currentValue, 'mg/dL', newUnit)
+        setDisplayValues((prev) => ({
+          ...prev,
+          bloodSugarFasting: convertedValue.toString(),
+        }))
       }
     } else {
       if (totalCholesterol) {
         const currentValue = Number(totalCholesterol)
-        const convertedValue =
-          newUnit === 'mmol/L'
-            ? convertLipids(currentValue, 'mg/dL', 'mmol/L')
-            : convertLipids(currentValue, 'mmol/L', 'mg/dL')
-        setValue('bloodTest.cholesterolTotal', convertedValue.toString())
+        const convertedValue = convertLipids(currentValue, 'mg/dL', newUnit)
+        setDisplayValues((prev) => ({
+          ...prev,
+          cholesterolTotal: convertedValue.toString(),
+        }))
       }
       if (hdlc) {
         const currentValue = Number(hdlc)
-        const convertedValue =
-          newUnit === 'mmol/L'
-            ? convertLipids(currentValue, 'mg/dL', 'mmol/L')
-            : convertLipids(currentValue, 'mmol/L', 'mg/dL')
-        setValue('bloodTest.cholesterolHdl', convertedValue.toString())
+        const convertedValue = convertLipids(currentValue, 'mg/dL', newUnit)
+        setDisplayValues((prev) => ({
+          ...prev,
+          cholesterolHdl: convertedValue.toString(),
+        }))
       }
       if (ldlc) {
         const currentValue = Number(ldlc)
-        const convertedValue =
-          newUnit === 'mmol/L'
-            ? convertLipids(currentValue, 'mg/dL', 'mmol/L')
-            : convertLipids(currentValue, 'mmol/L', 'mg/dL')
-        setValue('bloodTest.cholesterolLdl', convertedValue.toString())
+        const convertedValue = convertLipids(currentValue, 'mg/dL', newUnit)
+        setDisplayValues((prev) => ({
+          ...prev,
+          cholesterolLdl: convertedValue.toString(),
+        }))
       }
       if (tg) {
         const currentValue = Number(tg)
-        const convertedValue =
-          newUnit === 'mmol/L'
-            ? convertLipids(currentValue, 'mg/dL', 'mmol/L')
-            : convertLipids(currentValue, 'mmol/L', 'mg/dL')
-        setValue(
-          'bloodTest.cholesterolTriglycerides',
-          convertedValue.toString()
-        )
+        const convertedValue = convertLipids(currentValue, 'mg/dL', newUnit)
+        setDisplayValues((prev) => ({
+          ...prev,
+          cholesterolTriglycerides: convertedValue.toString(),
+        }))
       }
     }
+  }
+
+  // Handle input change - convert display value to mg/dL for storage
+  const handleInputChange = (
+    fieldName: string,
+    displayValue: string,
+    conversionType: 'glucose' | 'lipids'
+  ) => {
+    if (!displayValue || displayValue.trim() === '') {
+      setValue(fieldName, '')
+      return
+    }
+
+    const numValue = Number(displayValue)
+    if (isNaN(numValue) || numValue < 0) return
+
+    // Convert to mg/dL for storage
+    const currentUnit =
+      conversionType === 'glucose' ? units.glucose : units.lipids
+    let storageValue: number
+
+    if (currentUnit === 'mg/dL') {
+      storageValue = numValue
+    } else if (conversionType === 'glucose') {
+      storageValue = convertGlucose(numValue, 'mmol/L', 'mg/dL')
+    } else {
+      storageValue = convertLipids(numValue, 'mmol/L', 'mg/dL')
+    }
+
+    // Update the form value (always in mg/dL)
+    setValue(fieldName, storageValue.toString())
   }
 
   // Get all form data for conditional required field logic
@@ -321,6 +452,7 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
   useEffect(() => {
     const errors: Record<string, string> = {}
 
+    // Validate cholesterol values using stored mg/dL values for comparison
     const cholesterolValidation = validateCholesterol(
       totalCholesterol,
       hdlc,
@@ -330,10 +462,10 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
       errors.cholesterol = cholesterolValidation.message
     }
 
-    // Validate blood sugar levels
+    // Validate blood sugar levels using display values for user-friendly error messages
     if (bloodSugar2) {
       const fastingValidation = validateBloodSugar(
-        bloodSugar2,
+        displayValues.bloodSugarFasting,
         'fasting',
         units.glucose
       )
@@ -344,7 +476,7 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
 
     if (bloodSugar1) {
       const randomValidation = validateBloodSugar(
-        bloodSugar1,
+        displayValues.bloodSugarRandom,
         'random',
         units.glucose
       )
@@ -354,7 +486,6 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
     }
 
     // Validate additional tests
-    const hba1c = watch('bloodTest.hba1cLevel')
     if (hba1c) {
       const hba1cValidation = validateHbA1c(hba1c)
       if (!hba1cValidation.isValid) {
@@ -362,7 +493,6 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
       }
     }
 
-    const psaLevel = watch('bloodTest.psaLevel')
     if (psaLevel) {
       const psaValidation = validatePSALevel(psaLevel)
       if (!psaValidation.isValid) {
@@ -371,7 +501,18 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
     }
 
     setValidationErrors(errors)
-  }, [totalCholesterol, hdlc, ldlc, bloodSugar1, bloodSugar2, watch])
+  }, [
+    hba1c,
+    psaLevel,
+    totalCholesterol,
+    hdlc,
+    ldlc,
+    bloodSugar1,
+    bloodSugar2,
+    displayValues.bloodSugarFasting,
+    displayValues.bloodSugarRandom,
+    units.glucose,
+  ])
 
   const hasValidationErrors = Object.keys(validationErrors).length > 0
   const hasFastingBloodSugar = !!bloodSugar2
@@ -405,7 +546,6 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                     value="mg/dL"
                     checked={units.glucose === 'mg/dL'}
                     onChange={(e) => {
-                      setUnits((prev) => ({ ...prev, glucose: e.target.value }))
                       handleUnitChange('glucose', e.target.value)
                     }}
                     disabled={disabled}
@@ -420,7 +560,6 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                     value="mmol/L"
                     checked={units.glucose === 'mmol/L'}
                     onChange={(e) => {
-                      setUnits((prev) => ({ ...prev, glucose: e.target.value }))
                       handleUnitChange('glucose', e.target.value)
                     }}
                     disabled={disabled}
@@ -442,7 +581,6 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                     value="mg/dL"
                     checked={units.lipids === 'mg/dL'}
                     onChange={(e) => {
-                      setUnits((prev) => ({ ...prev, lipids: e.target.value }))
                       handleUnitChange('lipids', e.target.value)
                     }}
                     disabled={disabled}
@@ -457,7 +595,6 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                     value="mmol/L"
                     checked={units.lipids === 'mmol/L'}
                     onChange={(e) => {
-                      setUnits((prev) => ({ ...prev, lipids: e.target.value }))
                       handleUnitChange('lipids', e.target.value)
                     }}
                     disabled={disabled}
@@ -469,8 +606,8 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
             </div>
           </div>
           <Text variant="text/xs" className="text-blue-600 mt-2">
-            * Values will be automatically converted between units. Reference
-            ranges are shown in both units.
+            * Values will be automatically converted between units. All values
+            are stored in mg/dL in the database.
           </Text>
         </div>
 
@@ -491,7 +628,19 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                   control={control}
                   render={({ field }) => (
                     <Input
-                      {...field}
+                      value={displayValues.bloodSugarFasting}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        setDisplayValues((prev) => ({
+                          ...prev,
+                          bloodSugarFasting: value,
+                        }))
+                        handleInputChange(
+                          'bloodTest.bloodSugarFasting',
+                          value,
+                          'glucose'
+                        )
+                      }}
                       placeholder={`Enter Fasting Blood Sugar Level (${units.glucose})`}
                       label={isRequiredField(
                         `Fasting Blood Sugar (${units.glucose})`,
@@ -509,8 +658,16 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                         messageCheck(field.value)
                       }
                       type="number"
-                      min={LAB_STANDARDS.bloodSugar.fasting.min}
-                      max={LAB_STANDARDS.bloodSugar.fasting.max}
+                      min={getMinMaxValues(
+                        'glucose',
+                        'fasting',
+                        units.glucose
+                      ).min.toString()}
+                      max={getMinMaxValues(
+                        'glucose',
+                        'fasting',
+                        units.glucose
+                      ).max.toString()}
                       disabled={disabled}
                     />
                   )}
@@ -561,7 +718,19 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                   control={control}
                   render={({ field }) => (
                     <Input
-                      {...field}
+                      value={displayValues.bloodSugarRandom}
+                      onChange={(e) => {
+                        const value = e.target.value
+                        setDisplayValues((prev) => ({
+                          ...prev,
+                          bloodSugarRandom: value,
+                        }))
+                        handleInputChange(
+                          'bloodTest.bloodSugarRandom',
+                          value,
+                          'glucose'
+                        )
+                      }}
                       placeholder={`Enter Random Blood Sugar Level (${units.glucose})`}
                       label={isRequiredField(
                         `Random Blood Sugar (${units.glucose})`,
@@ -579,8 +748,16 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                         messageCheck(field.value)
                       }
                       type="number"
-                      min={LAB_STANDARDS.bloodSugar.random.min}
-                      max={LAB_STANDARDS.bloodSugar.random.max}
+                      min={getMinMaxValues(
+                        'glucose',
+                        'random',
+                        units.glucose
+                      ).min.toString()}
+                      max={getMinMaxValues(
+                        'glucose',
+                        'random',
+                        units.glucose
+                      ).max.toString()}
                       disabled={disabled || hasFastingBloodSugar}
                     />
                   )}
@@ -647,7 +824,19 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                     control={control}
                     render={({ field }) => (
                       <Input
-                        {...field}
+                        value={displayValues.cholesterolTotal}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          setDisplayValues((prev) => ({
+                            ...prev,
+                            cholesterolTotal: value,
+                          }))
+                          handleInputChange(
+                            'bloodTest.cholesterolTotal',
+                            value,
+                            'lipids'
+                          )
+                        }}
                         placeholder={`Enter Total Cholesterol (${units.lipids})`}
                         label={isRequiredField(
                           `Total Cholesterol (${units.lipids})`,
@@ -665,8 +854,16 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                           messageCheck(field.value)
                         }
                         type="number"
-                        min={LAB_STANDARDS.cholesterol.total.min}
-                        max={LAB_STANDARDS.cholesterol.total.max}
+                        min={getMinMaxValues(
+                          'lipids',
+                          'total',
+                          units.lipids
+                        ).min.toString()}
+                        max={getMinMaxValues(
+                          'lipids',
+                          'total',
+                          units.lipids
+                        ).max.toString()}
                         disabled={disabled}
                       />
                     )}
@@ -718,7 +915,19 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                     control={control}
                     render={({ field }) => (
                       <Input
-                        {...field}
+                        value={displayValues.cholesterolHdl}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          setDisplayValues((prev) => ({
+                            ...prev,
+                            cholesterolHdl: value,
+                          }))
+                          handleInputChange(
+                            'bloodTest.cholesterolHdl',
+                            value,
+                            'lipids'
+                          )
+                        }}
                         placeholder="Enter HDL Cholesterol"
                         label={isRequiredField(
                           'HDL Cholesterol',
@@ -729,8 +938,16 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                         variant={variantValidityCheck(field.value)}
                         message={messageCheck(field.value)}
                         type="number"
-                        min={LAB_STANDARDS.cholesterol.hdl.min}
-                        max={LAB_STANDARDS.cholesterol.hdl.max}
+                        min={getMinMaxValues(
+                          'lipids',
+                          'hdl',
+                          units.lipids
+                        ).min.toString()}
+                        max={getMinMaxValues(
+                          'lipids',
+                          'hdl',
+                          units.lipids
+                        ).max.toString()}
                         disabled={disabled}
                       />
                     )}
@@ -772,7 +989,19 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                     control={control}
                     render={({ field }) => (
                       <Input
-                        {...field}
+                        value={displayValues.cholesterolLdl}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          setDisplayValues((prev) => ({
+                            ...prev,
+                            cholesterolLdl: value,
+                          }))
+                          handleInputChange(
+                            'bloodTest.cholesterolLdl',
+                            value,
+                            'lipids'
+                          )
+                        }}
                         placeholder="Enter LDL Cholesterol"
                         label={isRequiredField(
                           'LDL Cholesterol',
@@ -783,8 +1012,16 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                         variant={variantValidityCheck(field.value)}
                         message={messageCheck(field.value)}
                         type="number"
-                        min={LAB_STANDARDS.cholesterol.ldl.min}
-                        max={LAB_STANDARDS.cholesterol.ldl.max}
+                        min={getMinMaxValues(
+                          'lipids',
+                          'ldl',
+                          units.lipids
+                        ).min.toString()}
+                        max={getMinMaxValues(
+                          'lipids',
+                          'ldl',
+                          units.lipids
+                        ).max.toString()}
                         disabled={disabled}
                       />
                     )}
@@ -826,7 +1063,19 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                     control={control}
                     render={({ field }) => (
                       <Input
-                        {...field}
+                        value={displayValues.cholesterolTriglycerides}
+                        onChange={(e) => {
+                          const value = e.target.value
+                          setDisplayValues((prev) => ({
+                            ...prev,
+                            cholesterolTriglycerides: value,
+                          }))
+                          handleInputChange(
+                            'bloodTest.cholesterolTriglycerides',
+                            value,
+                            'lipids'
+                          )
+                        }}
                         placeholder="Enter Triglycerides"
                         label={isRequiredField(
                           'Triglycerides',
@@ -837,8 +1086,16 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
                         variant={variantValidityCheck(field.value)}
                         message={messageCheck(field.value)}
                         type="number"
-                        min={LAB_STANDARDS.cholesterol.triglycerides.min}
-                        max={LAB_STANDARDS.cholesterol.triglycerides.max}
+                        min={getMinMaxValues(
+                          'lipids',
+                          'triglycerides',
+                          units.lipids
+                        ).min.toString()}
+                        max={getMinMaxValues(
+                          'lipids',
+                          'triglycerides',
+                          units.lipids
+                        ).max.toString()}
                         disabled={disabled}
                       />
                     )}
@@ -877,9 +1134,6 @@ export const BloodTestsForm = ({ onNext, disabled }: Props) => {
           <div>
             <Text as="h3" variant="text/sm" className="font-medium mb-2">
               Additional Tests
-            </Text>
-            <Text variant="text/sm" className="text-gray-500 mb-6 md:mb-8">
-              Optional tests for comprehensive assessment
             </Text>
 
             <div className="space-y-4">

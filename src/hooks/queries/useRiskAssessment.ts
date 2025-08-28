@@ -151,6 +151,17 @@ export const useRiskAssessmentPolling = (
   })
 }
 
+export const useUserRiskAssessments = (userId: string) => {
+  return useQuery({
+    queryKey: ['user-risk-assessments', userId],
+    queryFn: () =>
+      baseAxios
+        .get(API.userRiskAssessments(userId))
+        .then((res) => res.data.data),
+    enabled: !!userId,
+  })
+}
+
 export interface RiskAssessmentModel {
   user: {
     firstName: string

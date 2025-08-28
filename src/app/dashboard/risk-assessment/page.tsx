@@ -419,7 +419,7 @@ const PatientsTable = () => {
       <div className="bg-white rounded-lg border border-grey-50">
         <>
           <Table>
-            <TableHeader>
+            <TableHeader className="bg-grey-100">
               <TableRow>
                 <TableHead>Patient</TableHead>
                 <TableHead>Gender</TableHead>

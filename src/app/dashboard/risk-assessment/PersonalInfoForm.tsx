@@ -239,8 +239,8 @@ export const PersonalInfoForm = ({
               const value = selectedOption.value
               setValue('personalInfo.gender', value)
             }}
-            disabled={isFormDisabled}
-            isDisabled={isFormDisabled}
+            disabled={isFormDisabled || !showSubmitButton}
+            isDisabled={isFormDisabled || !showSubmitButton}
           />
 
           <Select

@@ -1,3 +1,12 @@
+/**
+ * Vital calculations and categorization functions
+ *
+ * IMPORTANT: All blood test categorization functions (categorizeBloodSugarLevel,
+ * categorizeTotalCholesterol, categorizeLDLC, categorizeHDLC, categorizeTG)
+ * expect values in mg/dL units. The UI handles unit conversion, but these
+ * functions always receive mg/dL values from the backend.
+ */
+
 import { TVariant, TVariantEnum } from '@/types/variants.types'
 
 type IBP = (
@@ -77,6 +86,11 @@ export const calculateBloodPressureRisk: IBP = (
   // }
 }
 
+/**
+ * Categorizes blood sugar level based on mg/dL values
+ * @param glucoseLevel - Blood glucose level in mg/dL
+ * @returns Object with variant, message, and level
+ */
 export const categorizeBloodSugarLevel: IBS = (glucoseLevel: number) => {
   if (glucoseLevel < 70) {
     return {
@@ -84,7 +98,7 @@ export const categorizeBloodSugarLevel: IBS = (glucoseLevel: number) => {
       message: 'Hypoglycemia',
       variant: TVariantEnum.Pending,
     }
-  } else if (glucoseLevel >= 126 && glucoseLevel < 200) {
+  } else if (glucoseLevel >= 70 && glucoseLevel < 100) {
     return {
       level: 'Normal blood sugar',
       message: 'Normal',
@@ -94,18 +108,24 @@ export const categorizeBloodSugarLevel: IBS = (glucoseLevel: number) => {
     return {
       level: 'Prediabetes',
       message: 'Prediabetes',
-      variant: TVariantEnum.Danger,
+      variant: TVariantEnum.Warning,
     }
-  } else if (glucoseLevel >= 200) {
+  } else if (glucoseLevel >= 126) {
     return {
       level: 'Diabetes',
       message: 'Diabetes',
-      variant: TVariantEnum.Error,
+      variant: TVariantEnum.Danger,
     }
   } else {
     return { level: 'Unknown', message: 'Unknown', variant: 'pending2' }
   }
 }
+
+/**
+ * Categorizes total cholesterol based on mg/dL values
+ * @param totalCholesterol - Total cholesterol level in mg/dL
+ * @returns Object with variant, message, and level
+ */
 export const categorizeTotalCholesterol: IBS = (totalCholesterol: number) => {
   if (totalCholesterol < 170) {
     return {
@@ -127,14 +147,20 @@ export const categorizeTotalCholesterol: IBS = (totalCholesterol: number) => {
     }
   }
 }
-export const categorizeLDLC: IBS = (totalCholesterol: number) => {
-  if (totalCholesterol < 110) {
+
+/**
+ * Categorizes LDL cholesterol based on mg/dL values
+ * @param ldlCholesterol - LDL cholesterol level in mg/dL
+ * @returns Object with variant, message, and level
+ */
+export const categorizeLDLC: IBS = (ldlCholesterol: number) => {
+  if (ldlCholesterol < 100) {
     return {
       level: 'Desirable Level',
       message: 'Desirable Level',
       variant: TVariantEnum.Success,
     }
-  } else if (totalCholesterol >= 110 && totalCholesterol <= 129) {
+  } else if (ldlCholesterol >= 100 && ldlCholesterol <= 129) {
     return {
       level: 'Borderline Level',
       message: 'Borderline Level',
@@ -148,14 +174,20 @@ export const categorizeLDLC: IBS = (totalCholesterol: number) => {
     }
   }
 }
-export const categorizeHDLC: IBS = (totalCholesterol: number) => {
-  if (totalCholesterol < 35) {
+
+/**
+ * Categorizes HDL cholesterol based on mg/dL values
+ * @param hdlCholesterol - HDL cholesterol level in mg/dL
+ * @returns Object with variant, message, and level
+ */
+export const categorizeHDLC: IBS = (hdlCholesterol: number) => {
+  if (hdlCholesterol < 35) {
     return {
       level: 'Undesirable Level',
       message: 'Undesirable Level',
       variant: TVariantEnum.Error,
     }
-  } else if (totalCholesterol >= 35 && totalCholesterol <= 45) {
+  } else if (hdlCholesterol >= 35 && hdlCholesterol <= 45) {
     return {
       level: 'Borderline Level',
       message: 'Borderline Level',
@@ -169,8 +201,14 @@ export const categorizeHDLC: IBS = (totalCholesterol: number) => {
     }
   }
 }
-export const categorizeTG: IBS = (totalCholesterol: number) => {
-  if (totalCholesterol < 125) {
+
+/**
+ * Categorizes triglycerides based on mg/dL values
+ * @param triglycerides - Triglycerides level in mg/dL
+ * @returns Object with variant, message, and level
+ */
+export const categorizeTG: IBS = (triglycerides: number) => {
+  if (triglycerides < 150) {
     return {
       level: 'Desirable Level',
       message: 'Desirable Level',
@@ -184,6 +222,7 @@ export const categorizeTG: IBS = (totalCholesterol: number) => {
     }
   }
 }
+
 export const getVariantColor = (variant: TVariantEnum) => {
   switch (variant) {
     case TVariantEnum.Success:
