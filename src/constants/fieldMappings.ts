@@ -21,6 +21,8 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
 
   // Blood Test fields
   cholesterol: 'bloodTest.cholesterolTotal',
+  cholesterolHdl: 'bloodTest.cholesterolHdl',
+  cholesterolLdl: 'bloodTest.cholesterolLdl',
   serumCreatinine: 'bloodTest.serumCreatinine',
   psaLevel: 'bloodTest.psaLevel',
   pefLevel: 'copd.pefLevel',
@@ -106,6 +108,8 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
 
   // Blood Test fields
   cholesterol: 'Total Cholesterol (Laboratory Tests)',
+  cholesterolHdl: 'HDL Cholesterol (Laboratory Tests)',
+  cholesterolLdl: 'LDL Cholesterol (Laboratory Tests)',
   serumCreatinine: 'Serum Creatinine (Laboratory Tests)',
   pefLevel: 'PEF Level (NCD Questionnaire/COPD)',
 

@@ -37,6 +37,9 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { Text } from '../ui/text'
 import { RiskTrendGraph } from './RiskTrendGraph'
 import { RiskGaugeBar } from './RiskGaugeBar'
+import { RiskGaugeBarCOPD } from './RiskGaugeBarCOPD'
+import { RiskGaugeBarBreastCancer } from './RiskGaugeBarBreastCancer'
+import { RiskGaugeBarColorectal } from './RiskGaugeBarColorectal'
 import PreventionTips from './PreventionTips'
 import RiskSummary from './RiskSummary'
 import { ResultRiskType as RiskType } from '@/types/riskAssessment.types'
@@ -249,11 +252,11 @@ const ClinicalSummary = ({
   return (
     <div className="w-full bg-white p-6 rounded-lg border">
       <Text as="h3" className="text-base font-medium">
-        AI-Generated Clinical Summary
+        Scrinar Clinacal Summary
       </Text>
 
       <Text className="text-sm text-gray-600 mb-4">
-        AI-Generated Summary gives clinicians a concise patient overview,
+        Scrinar Summary gives clinicians a concise patient overview,
         highlighting key diagnoses, risk levels, and recommended actions.
       </Text>
 
@@ -512,17 +515,49 @@ export const RiskAssessmentResult: React.FC<{
                 : 'The risk score helps you make lifestyle changes or take medical advise to prevent heart disease.'}
             </p>
 
-            <RiskGaugeBar
-              score={
-                activeTab === 'ckd'
-                  ? parseFloat(
-                      String(activeData?.score)?.replace('Stage ', '') ?? '0'
-                    )
-                  : parseFloat(activeData?.score ?? '0')
-              }
-              riskLevel={activeData?.riskLevel ?? ''}
-              activeTab={activeTab}
-            />
+            {/* Render appropriate gauge component based on NCD type */}
+            {activeTab === 'copd' ? (
+              <RiskGaugeBarCOPD
+                score={parseFloat(activeData?.score ?? '0')}
+                riskLevel={activeData?.riskLevel ?? ''}
+              />
+            ) : activeTab === 'breastCancer' ? (
+              <RiskGaugeBarBreastCancer
+                data={{
+                  tenYearRisk:
+                    (activeData as any)?.tenYearRisk ||
+                    parseFloat(activeData?.score ?? '0'),
+                  lifetimeRisk:
+                    (activeData as any)?.lifetimeRisk ||
+                    parseFloat(activeData?.score ?? '0'),
+                  riskLevel: activeData?.riskLevel ?? '',
+                }}
+              />
+            ) : activeTab === 'colorectal' ? (
+              <RiskGaugeBarColorectal
+                data={{
+                  shortHorizonRisk:
+                    (activeData as any)?.shortHorizonRisk ||
+                    parseFloat(activeData?.score ?? '0'),
+                  longHorizonRisk:
+                    (activeData as any)?.longHorizonRisk ||
+                    parseFloat(activeData?.score ?? '0'),
+                  riskLevel: activeData?.riskLevel ?? '',
+                }}
+              />
+            ) : (
+              <RiskGaugeBar
+                score={
+                  activeTab === 'ckd'
+                    ? parseFloat(
+                        String(activeData?.score)?.replace('Stage ', '') ?? '0'
+                      )
+                    : parseFloat(activeData?.score ?? '0')
+                }
+                riskLevel={activeData?.riskLevel ?? ''}
+                activeTab={activeTab}
+              />
+            )}
 
             <RiskSummary
               score={

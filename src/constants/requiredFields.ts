@@ -8,6 +8,8 @@ export interface NcdRequiredFields {
     systolicBP: boolean
     bmi: boolean
     cholesterol: boolean
+    cholesterolHdl: boolean
+    cholesterolLdl: boolean
     smoking: boolean
     hasQuitSmoking: boolean
   }
@@ -91,6 +93,8 @@ export const ncdRequiredFields: NcdRequiredFields = {
     gender: true,
     bmi: true,
     cholesterol: true,
+    cholesterolHdl: true,
+    cholesterolLdl: true,
     smoking: true,
     hasQuitSmoking: true,
     systolicBP: true,
