@@ -41,7 +41,6 @@ import { RiskGaugeBarCOPD } from './RiskGaugeBarCOPD'
 import { RiskGaugeBarBreastCancer } from './RiskGaugeBarBreastCancer'
 import { RiskGaugeBarColorectal } from './RiskGaugeBarColorectal'
 import PreventionTips from './PreventionTips'
-import RiskSummary from './RiskSummary'
 import { ResultRiskType as RiskType } from '@/types/riskAssessment.types'
 import Link from 'next/link'
 
@@ -537,10 +536,10 @@ export const RiskAssessmentResult: React.FC<{
               <RiskGaugeBarColorectal
                 data={{
                   shortHorizonRisk:
-                    (activeData as any)?.shortHorizonRisk ||
+                    parseFloat((activeData as any)?.tenYearRisk) ||
                     parseFloat(activeData?.score ?? '0'),
                   longHorizonRisk:
-                    (activeData as any)?.longHorizonRisk ||
+                    parseFloat((activeData as any)?.lifetimeRisk) ||
                     parseFloat(activeData?.score ?? '0'),
                   riskLevel: activeData?.riskLevel ?? '',
                 }}
@@ -556,31 +555,11 @@ export const RiskAssessmentResult: React.FC<{
                 }
                 riskLevel={activeData?.riskLevel ?? ''}
                 activeTab={activeTab}
+                interpretation={
+                  activeTab === 'ckd' ? (activeData as any)?.interpretation : ''
+                }
               />
             )}
-
-            <RiskSummary
-              score={
-                activeTab === 'ckd'
-                  ? parseFloat(
-                      String(activeData?.score)?.replace('Stage ', '') ?? '0'
-                    )
-                  : parseFloat(activeData?.score ?? '0')
-              }
-              level={riskLevel}
-              activeTab={activeTab}
-              interpretation={
-                activeTab === 'ckd'
-                  ? (activeData as any)?.interpretation
-                  : activeTab === 'who' ||
-                      activeTab === 'findrisc' ||
-                      activeTab === 'breastCancer' ||
-                      activeTab === 'prostate' ||
-                      activeTab === 'colorectal'
-                    ? (activeData as any)?.interpretation
-                    : undefined
-              }
-            />
 
             {isWHO && (
               <div className="mt-6">

@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils'
 import { ResultRiskType } from '@/types/riskAssessment.types'
+import RiskSummary from './RiskSummary'
 
 // Helper function to get risk type label
 const getRiskTypeLabel = (activeTab: ResultRiskType): string => {
@@ -23,18 +24,42 @@ const getRiskTypeLabel = (activeTab: ResultRiskType): string => {
   }
 }
 
+const getRiskLevelLikelihood = (riskLevel: string) => {
+  if (riskLevel.toLowerCase().includes('low')) return 'weak'
+  if (riskLevel.toLowerCase().includes('moderate')) return 'moderate'
+  return 'strong'
+}
+
 const RiskGaugeBar = ({
   score,
   activeTab,
   maxScore = 15,
   riskLevel,
+  interpretation,
 }: {
   score: number
   maxScore?: number
   activeTab: ResultRiskType
   riskLevel: string
+  interpretation?: string
 }) => {
   // Calculate score percentage (capped at 100%)
+  const likelihood = getRiskLevelLikelihood(riskLevel)
+  const getMessage = () => {
+    switch (activeTab) {
+      case 'who':
+        return `A ${score}% risk means a ${riskLevel} chance of developing a stroke in 10 years and a ${likelihood} likelihood of heart disease.`
+      case 'findrisc':
+        return `A ${score}% risk means a ${riskLevel} chance of developing type II diabetes in 10 years and a ${likelihood} likelihood.`
+      case 'prostate':
+        return `A ${score}% risk means a ${riskLevel} chance of developing prostate cancer and a ${likelihood} likelihood of aggressive disease.`
+
+      case 'ckd':
+        return `A stage ${score} means ${interpretation}`
+      default:
+        return `A ${score}% risk means a ${riskLevel} chance of developing the condition and a ${likelihood} likelihood.`
+    }
+  }
 
   const newMaxScore = activeTab === 'ckd' ? 5 : maxScore
 
@@ -138,6 +163,7 @@ const RiskGaugeBar = ({
       </div>
 
       {/* )} */}
+      <RiskSummary message={getMessage()} />
     </div>
   )
 }

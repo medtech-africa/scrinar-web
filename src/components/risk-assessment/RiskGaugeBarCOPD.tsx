@@ -1,4 +1,5 @@
 import { cn } from '@/lib/utils'
+import RiskSummary from './RiskSummary'
 
 const RiskGaugeBarCOPD = ({
   score,
@@ -23,7 +24,14 @@ const RiskGaugeBarCOPD = ({
     return 'high'
   }
 
+  const getRiskLevelLikelihood = (score: number) => {
+    if (score <= 1) return 'weak'
+    if (score <= 4) return 'moderate'
+    return 'strong'
+  }
+
   const risk = getRiskLevel(score)
+  const likelihood = getRiskLevelLikelihood(score)
 
   return (
     <div className="w-full" data-testid="risk-gauge-copd">
@@ -94,6 +102,10 @@ const RiskGaugeBarCOPD = ({
           </div>
         </div>
       </div>
+
+      <RiskSummary
+        message={`A ${score}% risk means a ${risk} chance of developing COPD and a ${likelihood} likelihood of respiratory complications.`}
+      />
     </div>
   )
 }

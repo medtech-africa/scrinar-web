@@ -26,6 +26,18 @@ export const useRiskAssessment = (id: string) => {
   })
 }
 
+export const useAssessmentVitalData = (userId: string) => {
+  return useQuery({
+    queryKey: ['assessment-vital-data', userId],
+    queryFn: () =>
+      baseAxios
+        .get(API.assessmentVitalData(userId))
+        .then((res) => res.data.data),
+    refetchOnWindowFocus: false,
+    enabled: !!userId,
+  })
+}
+
 export const useGeneratedRiskAssessment = (id: string) => {
   return useQuery({
     queryKey: ['generated-risk-assessment', id],
@@ -457,6 +469,8 @@ export interface BreastCancer {
   diseaseBreakdown?: { [key: string]: number }
   predictions?: Prediction[]
   _id?: string
+  tenYearRisk?: string
+  lifetimeRisk?: string
 }
 
 export interface BreastCancerRequest {
@@ -530,6 +544,7 @@ export interface ColorectalCancer {
   status: boolean
   diseaseBreakdown: { [key: string]: number }
   predictions?: Prediction[]
+  tenYearRisk?: number
 }
 
 export interface ColorectalCancerBreakdown {

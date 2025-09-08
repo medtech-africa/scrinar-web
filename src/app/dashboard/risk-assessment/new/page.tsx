@@ -3,7 +3,10 @@ import React, { useEffect, useState, useRef } from 'react'
 import { RiskAssessmentForm } from '../RiskAssessmentForm'
 import { useSearchParams, useRouter } from 'next/navigation'
 import { useRiskAssessmentStorage } from '@/hooks/useRiskAssessmentStorage'
-import { RiskAssessmentModelRequestData } from '@/hooks/queries/useRiskAssessment'
+import {
+  RiskAssessmentModelRequestData,
+  useAssessmentVitalData,
+} from '@/hooks/queries/useRiskAssessment'
 import { usePatient } from '@/hooks/queries/usePatients'
 import { useRiskAssessment } from '@/hooks/queries/useRiskAssessment'
 import { useMutation } from '@tanstack/react-query'
@@ -50,6 +53,12 @@ const RiskAssessment = () => {
   // Fetch existing assessment data if urlAssessmentId is provided
   const { data: existingAssessment, isPending: isAssessmentLoading } =
     useRiskAssessment(urlAssessmentId || '')
+
+  const { data: assessmentVitalData, isPending: isAssessmentVitalDataLoading } =
+    useAssessmentVitalData(patientId || '')
+
+  //todo: complete this
+  console.log(assessmentVitalData, '>>')
 
   // Create assessment mutation
   const { mutate: createAssessment, isPending: isCreatingAssessment } =
@@ -193,6 +202,7 @@ const RiskAssessment = () => {
     isLoading ||
     isPatientLoading ||
     isAssessmentLoading ||
+    isAssessmentVitalDataLoading ||
     (isCreatingAssessment && !urlAssessmentId && !assessmentId) ||
     (patientId && !assessmentId)
   ) {
