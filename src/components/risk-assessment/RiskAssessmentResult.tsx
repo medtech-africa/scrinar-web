@@ -251,7 +251,7 @@ const ClinicalSummary = ({
   return (
     <div className="w-full bg-white p-6 rounded-lg border">
       <Text as="h3" className="text-base font-medium">
-        Scrinar Clinacal Summary
+        Scrinar Clinical Summary
       </Text>
 
       <Text className="text-sm text-gray-600 mb-4">
@@ -570,27 +570,36 @@ export const RiskAssessmentResult: React.FC<{
 
           <ClinicalSummary data={activeData} isLoading={isLoading} />
 
-          <PageCard
-            className="p-4 md:p-6 border-[0.2px] border-grey-300 rounded-lg"
-            title={
-              predictions.length > 0 ? 'Short-term & Mid-term Prediction' : ''
-            }
-          >
-            <RiskTrendGraph predictions={predictions ?? []} level={riskLevel} />
-            <RecommendationList
-              recommendation={
-                activeTab === 'ckd'
-                  ? (activeData as any)?.recommendation
-                  : activeTab === 'who' ||
-                      activeTab === 'findrisc' ||
-                      activeTab === 'breastCancer' ||
-                      activeTab === 'prostate' ||
-                      activeTab === 'colorectal'
-                    ? (activeData as any)?.recommendation
-                    : undefined
+          {(predictions.length > 0 ||
+            (activeData as any)?.recommendation ||
+            activeTab === 'who') && (
+            <PageCard
+              className="p-4 md:p-6 border-[0.2px] border-grey-300 rounded-lg"
+              title={
+                predictions.length > 0 ? 'Short-term & Mid-term Prediction' : ''
               }
-            />
-          </PageCard>
+            >
+              <RiskTrendGraph
+                predictions={predictions ?? []}
+                level={riskLevel}
+              />
+              {((activeData as any)?.recommendation || activeTab === 'who') && (
+                <RecommendationList
+                  recommendation={
+                    activeTab === 'ckd'
+                      ? (activeData as any)?.recommendation
+                      : activeTab === 'who' ||
+                          activeTab === 'findrisc' ||
+                          activeTab === 'breastCancer' ||
+                          activeTab === 'prostate' ||
+                          activeTab === 'colorectal'
+                        ? (activeData as any)?.recommendation
+                        : undefined
+                  }
+                />
+              )}
+            </PageCard>
+          )}
 
           {['who', 'findrisc'].includes(activeTab) && (
             <PageCard

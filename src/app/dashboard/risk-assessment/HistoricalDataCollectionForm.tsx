@@ -156,7 +156,7 @@ export const HistoricalDataCollectionForm = ({
           </div>
 
           {/* Trap Field for Data Quality */}
-          <div className="mt-6 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="mt-6">
             <div className="mb-3">
               <OptionWithRadioField
                 label="Have you ever experienced complete memory loss while awake?"

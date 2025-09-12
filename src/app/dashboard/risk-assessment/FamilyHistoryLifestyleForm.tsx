@@ -1,5 +1,5 @@
 import { Input } from '@/components/ui/input'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { Controller, useFormContext } from 'react-hook-form'
 import { OptionWithRadioField } from './OptionWithRadioField'
 import { Text } from '@/components/ui/text'
@@ -12,7 +12,7 @@ type Props = {
 }
 
 export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
-  const { control, watch, setValue } = useFormContext()
+  const { control, watch } = useFormContext()
   const isRequiredField = useRequiredFieldLabel()
 
   const hasDailyPhysicalActivity = watch('lifestyle.hasDailyPhysicalActivity')
@@ -25,8 +25,8 @@ export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
   const vegetableServingsPerWeek = watch('lifestyle.vegetableServingsPerWeek')
   const vegetableServingSize = watch('lifestyle.vegetableServingSize')
 
-  // Diet assessment system
-  useEffect(() => {
+  // Calculate diet quality based on current form values
+  const calculateDietQuality = () => {
     const dietQuestions = {
       processedFoodsFrequency,
       addSaltAtTable,
@@ -40,9 +40,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
     )
 
     if (!hasAnyDietData) {
-      // If no diet questions are filled, set diet to 'low'
-      setValue('lifestyle.diet', 'low')
-      return
+      return 'low'
     }
 
     // Calculate diet score based on available filled questions
@@ -137,25 +135,20 @@ export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
     // Calculate average score and determine diet quality
     if (totalQuestions > 0) {
       const averageScore = score / totalQuestions
-      let dietQuality: 'poor' | 'moderate' | 'good'
-
       if (averageScore >= 2.5) {
-        dietQuality = 'good'
+        return 'good'
       } else if (averageScore >= 1.5) {
-        dietQuality = 'moderate'
+        return 'moderate'
       } else {
-        dietQuality = 'poor'
+        return 'poor'
       }
-
-      setValue('lifestyle.diet', dietQuality)
     }
-  }, [
-    processedFoodsFrequency,
-    addSaltAtTable,
-    vegetableServingsPerWeek,
-    vegetableServingSize,
-    setValue,
-  ])
+
+    return 'low'
+  }
+
+  // Get current diet quality
+  const currentDietQuality = calculateDietQuality()
 
   //create a check for all diet questions and add a need field called lifestyle.diet: 'poor' | 'moderate' | 'good'. this will be gotten from available filled diet questions (if no diet questions are filled, then it should be 'low' and analyze available filled diet question without any required field). Run it here
 
@@ -224,7 +217,7 @@ export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
           </Text>
 
           {/* Diet Quality Indicator */}
-          {watch('lifestyle.diet') && watch('lifestyle.diet') !== 'low' && (
+          {currentDietQuality && currentDietQuality !== 'low' && (
             <div className="mb-4 p-3 rounded-lg border">
               <Text variant="text/sm" className="font-medium mb-1">
                 Calculated Diet Quality:
@@ -232,14 +225,14 @@ export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
               <div className="flex items-center space-x-2">
                 <span
                   className={`px-2 py-1 rounded text-xs font-medium ${
-                    watch('lifestyle.diet') === 'good'
+                    currentDietQuality === 'good'
                       ? 'bg-green-100 text-green-800'
-                      : watch('lifestyle.diet') === 'moderate'
+                      : currentDietQuality === 'moderate'
                         ? 'bg-yellow-100 text-yellow-800'
                         : 'bg-red-100 text-red-800'
                   }`}
                 >
-                  {watch('lifestyle.diet')?.toUpperCase()}
+                  {currentDietQuality?.toUpperCase()}
                 </span>
                 <Text variant="text/sm" className="text-gray-600">
                   Based on available diet information

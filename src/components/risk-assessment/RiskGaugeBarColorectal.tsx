@@ -31,7 +31,6 @@ const RiskGaugeBarColorectal = ({ data }: { data: ColorectalCancerData }) => {
     return 'high'
   }
 
-  const risk = getRiskLevel(shortHorizonRisk, longHorizonRisk)
   const shortRiskLevel = getRiskLevel(shortHorizonRisk, 0)
   const longRiskLevel = getRiskLevel(0, longHorizonRisk)
   const shortLikelihood = getLikelihood(shortRiskLevel)
@@ -85,6 +84,46 @@ const RiskGaugeBarColorectal = ({ data }: { data: ColorectalCancerData }) => {
             <div className="w-1/4 text-center">Mod (2.6-5%)</div>
             <div className="w-1/4 text-center">High (&gt;5%)</div>
           </div>
+
+          {/* Short Horizon Risk Level Display */}
+
+          <div
+            className="relative mt-4"
+            style={{
+              left: `${shortPercent}%`,
+              transform: 'translateX(-50%)',
+            }}
+          >
+            <div
+              className={cn(
+                'absolute w-4 h-4 bg-red-500 rotate-45 -mt-2 mx-auto left-0 right-0',
+                {
+                  'bg-green-800': shortRiskLevel === 'low',
+                  'bg-yellow-600': shortRiskLevel === 'moderate',
+                }
+              )}
+            ></div>
+            <div className="flex justify-center">
+              <div
+                className={cn(
+                  'bg-red-500 text-white px-4 py-2 rounded-md text-center w-fit',
+                  {
+                    'bg-green-800': shortRiskLevel === 'low',
+                    'bg-yellow-600': shortRiskLevel === 'moderate',
+                  }
+                )}
+              >
+                <div className="font-bold">
+                  {shortRiskLevel
+                    ? `${shortRiskLevel.charAt(0).toUpperCase() + shortRiskLevel.slice(1)} Risk`
+                    : riskLevel}
+                </div>
+                <div className="text-sm">
+                  Short: {shortHorizonRisk.toFixed(1)}%
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
 
         {/* Long Horizon Risk Gauge */}
@@ -126,45 +165,42 @@ const RiskGaugeBarColorectal = ({ data }: { data: ColorectalCancerData }) => {
             <div className="w-1/4 text-center">Mod (10-20%)</div>
             <div className="w-1/4 text-center">High (&gt;20%)</div>
           </div>
-        </div>
 
-        {/* Combined Risk Level Display */}
-        <div
-          className="relative mt-4"
-          style={{
-            left: '50%',
-            transform: 'translateX(-50%)',
-          }}
-        >
+          {/* Long Horizon Risk Level Display */}
           <div
-            className={cn(
-              'absolute w-4 h-4 bg-red-500 rotate-45 -mt-2 mx-auto left-0 right-0',
-              {
-                'bg-green-800': risk === 'low',
-                'bg-blue-600': risk === 'average',
-                'bg-yellow-600': risk === 'moderate',
-              }
-            )}
-          ></div>
-          <div className="flex justify-center">
+            className="relative mt-4"
+            style={{
+              left: `${longPercent}%`,
+              transform: 'translateX(-50%)',
+            }}
+          >
             <div
               className={cn(
-                'bg-red-500 text-white px-4 py-2 rounded-md text-center w-fit',
+                'absolute w-4 h-4 bg-red-500 rotate-45 -mt-2 mx-auto left-0 right-0',
                 {
-                  'bg-green-800': risk === 'low',
-                  'bg-blue-600': risk === 'average',
-                  'bg-yellow-600': risk === 'moderate',
+                  'bg-green-800': longRiskLevel === 'low',
+                  'bg-yellow-600': longRiskLevel === 'moderate',
                 }
               )}
-            >
-              <div className="font-bold">
-                {riskLevel ||
-                  `${risk.charAt(0).toUpperCase() + risk.slice(1)} Risk`}
-                !!!
-              </div>
-              <div className="text-sm">
-                Short: {shortHorizonRisk.toFixed(1)}% | Long:{' '}
-                {longHorizonRisk.toFixed(1)}%
+            ></div>
+            <div className="flex justify-center">
+              <div
+                className={cn(
+                  'bg-red-500 text-white px-4 py-2 rounded-md text-center w-fit',
+                  {
+                    'bg-green-800': longRiskLevel === 'low',
+                    'bg-yellow-600': longRiskLevel === 'moderate',
+                  }
+                )}
+              >
+                <div className="font-bold">
+                  {longRiskLevel
+                    ? `${longRiskLevel.charAt(0).toUpperCase() + longRiskLevel.slice(1)} Risk`
+                    : riskLevel}
+                </div>
+                <div className="text-sm">
+                  Long: {longHorizonRisk.toFixed(1)}%
+                </div>
               </div>
             </div>
           </div>

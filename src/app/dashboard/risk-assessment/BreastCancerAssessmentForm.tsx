@@ -181,7 +181,7 @@ export const BreastCancerAssessmentForm = ({ onNext, disabled }: Props) => {
             </div>
 
             {/* BRCA Mutation Status */}
-            <div>
+            <div className="mt-4">
               <Text as="h3" variant="text/sm" className="font-medium mb-4">
                 Genetic Testing
               </Text>
@@ -199,7 +199,7 @@ export const BreastCancerAssessmentForm = ({ onNext, disabled }: Props) => {
             </div>
 
             {/* Breast Density */}
-            <div>
+            <div className="mt-4">
               <Text as="h3" variant="text/sm" className="font-medium mb-4">
                 Breast Density
               </Text>
@@ -218,7 +218,7 @@ export const BreastCancerAssessmentForm = ({ onNext, disabled }: Props) => {
             </div>
 
             {/* Personal History */}
-            <div>
+            <div className="mt-4">
               <Text as="h3" variant="text/sm" className="font-medium mb-2 mt-4">
                 Personal History
               </Text>

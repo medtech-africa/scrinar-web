@@ -1,4 +1,4 @@
-import { useCustomRegister } from '@/hooks/useCustomRegister'
+import { useFormContext } from 'react-hook-form'
 
 type OptionsWithOtherFieldProps = {
   studentId?: string
@@ -17,12 +17,9 @@ export const OptionWithRadioField = ({
   label = '',
   options = [],
   form,
-  defaultValue,
   disabled = false,
 }: OptionsWithOtherFieldProps) => {
-  const { customRegister, watch } = useCustomRegister()
-
-  const currentValue = watch(form.id)
+  const { register } = useFormContext()
 
   return (
     <div className="form-group">
@@ -36,9 +33,7 @@ export const OptionWithRadioField = ({
                 type="radio"
                 id={id}
                 value={option}
-                defaultValue={defaultValue}
-                {...customRegister(form.id)}
-                defaultChecked={option === currentValue}
+                {...register(form.id)}
                 disabled={disabled}
                 className="mr-2"
               />
