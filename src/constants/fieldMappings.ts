@@ -76,12 +76,13 @@ export const RISK_ASSESSMENT_FIELD_MAP: Record<string, string> = {
   familyHistoryColorectalCancer:
     'colorectalCancer.familyHistoryColorectalCancer',
   familyHistoryPolyps: 'colorectalCancer.familyHistoryPolyps',
-  inflammatoryBowelDisease: 'colorectalCancer.inflammatoryBowelDisease',
   colonoscopyHistory: 'colorectalCancer.colonoscopyHistory',
   polypDiagnosis: 'colorectalCancer.polypDiagnosis',
   aspirinUse: 'colorectalCancer.aspirinUse',
   nsaidUse: 'colorectalCancer.nsaidUse',
   alcoholFrequency: 'lifestyle.alcoholFrequency',
+  vegetableServingsPerWeek: 'lifestyle.vegetableServingsPerWeek',
+  vegetableServingSize: 'lifestyle.vegetableServingSize',
 
   // Diabetes fields
   hasFamilyhistoryDiabetes: 'familyHistory.diabetes',
@@ -178,13 +179,13 @@ export const FIELD_DISPLAY_NAMES: Record<string, string> = {
     'Family History of Colorectal Cancer (NCD Questionnaire/Colorectal Cancer)',
   familyHistoryPolyps:
     'Family History of Polyps (NCD Questionnaire/Colorectal Cancer)',
-  inflammatoryBowelDisease:
-    'Inflammatory Bowel Disease (NCD Questionnaire/Colorectal Cancer)',
   colonoscopyHistory:
     'Colonoscopy History (NCD Questionnaire/Colorectal Cancer)',
   polypDiagnosis: 'Polyp Diagnosis (NCD Questionnaire/Colorectal Cancer)',
   aspirinUse: 'Aspirin Use (NCD Questionnaire/Colorectal Cancer)',
   nsaidUse: 'NSAID Use (NCD Questionnaire/Colorectal Cancer)',
+  vegetableServingsPerWeek: 'Vegetable Servings Per Week (Lifestyle)',
+  vegetableServingSize: 'Vegetable Serving Size (Lifestyle)',
 
   // CKD fields
   hypertension: 'Hypertension',

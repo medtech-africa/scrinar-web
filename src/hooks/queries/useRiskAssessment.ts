@@ -440,7 +440,6 @@ export interface COPDRequest {
 export interface ColorectalCancerRequest {
   personalHistory?: string
   personalHistoryPolyps?: string
-  inflammatoryBowelDisease?: string
   familyHistoryColorectalCancer?: string
   familyHistoryPolyps?: string
   numberOfRelatives?: string

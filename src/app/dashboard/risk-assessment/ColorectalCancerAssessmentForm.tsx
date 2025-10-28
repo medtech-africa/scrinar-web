@@ -5,6 +5,8 @@ import { Text } from '@/components/ui/text'
 import { useFormContext } from 'react-hook-form'
 import { useNcdFilter } from './NcdFilterContext'
 import { NCD } from '@/types/riskAssessment.types'
+import { Select } from '@/components/ui/select'
+import { convertStringsToOptionArray } from '@/lib/convertStringsToOptionArray'
 
 type Props = {
   onNext: () => void
@@ -12,8 +14,9 @@ type Props = {
 }
 
 export const ColorectalCancerAssessmentForm = ({ onNext, disabled }: Props) => {
-  const { watch } = useFormContext()
+  const { register: customRegister, watch, setValue } = useFormContext()
   const { hasNcdSelected } = useNcdFilter()
+  const gender = watch('personalInfo.gender')?.toLowerCase()
 
   // Only show this form for Colorectal Cancer
   if (!hasNcdSelected(NCD.COLORECTAL_CANCER)) {
@@ -54,24 +57,6 @@ export const ColorectalCancerAssessmentForm = ({ onNext, disabled }: Props) => {
                   cancer.
                 </Text>
               </div>
-            )}
-
-            {hasBeenDiagnosedWithColorectalCancer === 'No' && (
-              <>
-                <OptionWithRadioField
-                  label="Have you ever had colorectal polyps removed?"
-                  options={['Yes', 'No']}
-                  form={{ id: 'colorectalCancer.personalHistoryPolyps' }}
-                  disabled={disabled}
-                />
-
-                <OptionWithRadioField
-                  label="Have you been diagnosed with inflammatory bowel disease (Crohn's disease or ulcerative colitis)?"
-                  options={['Yes', 'No']}
-                  form={{ id: 'colorectalCancer.inflammatoryBowelDisease' }}
-                  disabled={disabled}
-                />
-              </>
             )}
           </div>
         </div>
@@ -124,6 +109,15 @@ export const ColorectalCancerAssessmentForm = ({ onNext, disabled }: Props) => {
                   disabled={disabled}
                 />
 
+                {watch('colorectalCancer.colonoscopyHistory') === 'Yes' && (
+                  <OptionWithRadioField
+                    label="In the past 10 years, did a healthcare provider tell the patient that he or she had a colon or rectal polyp?"
+                    options={['Yes', 'No']}
+                    form={{ id: 'colorectalCancer.personalHistoryPolyps' }}
+                    disabled={disabled}
+                  />
+                )}
+
                 <OptionWithRadioField
                   label="In the past 10 years, did a healthcare provider tell you that you have a colon or rectal polyp?"
                   options={['Yes', 'No', "I don't Know"]}
@@ -138,7 +132,7 @@ export const ColorectalCancerAssessmentForm = ({ onNext, disabled }: Props) => {
               <Text as="h3" variant="text/sm" className="font-medium mb-4">
                 Medication Use
               </Text>
-              <div className="space-y-4">
+              <div className="space-y-4 mt-4">
                 <OptionWithRadioField
                   label="During the past 30 days, did you take medications containing aspirin at least 3 times a week?  such as: Vasoprin, Bufferin, Bayer, Excedrin, Other generic forms?"
                   options={['Yes', 'No']}
@@ -153,6 +147,47 @@ export const ColorectalCancerAssessmentForm = ({ onNext, disabled }: Props) => {
                   disabled={disabled}
                 />
               </div>
+              {/* Female specific questions */}
+              {gender === 'female' && (
+                <>
+                  <OptionWithRadioField
+                    label="Does the patient still have periods?"
+                    options={['Yes', 'No']}
+                    form={{ id: 'colorectalCancer.hasPeriods' }}
+                    disabled={disabled}
+                  />
+
+                  {watch('colorectalCancer.hasPeriods') === 'No' && (
+                    <div className="mt-4">
+                      <Select
+                        {...customRegister('colorectalCancer.lastPeriod')}
+                        label="When did the patient have her last period"
+                        options={convertStringsToOptionArray([
+                          'Within the last year',
+                          'Between 1 and 2 years ago',
+                          '2 or more years ago',
+                        ])}
+                        value={{
+                          value: watch('colorectalCancer.lastPeriod'),
+                          label: watch('colorectalCancer.lastPeriod'),
+                        }}
+                        onChange={(selectedOption: any) => {
+                          const value = selectedOption.value
+                          setValue('colorectalCancer.lastPeriod', value)
+                        }}
+                      />
+                      <div className="mt-4">
+                        <OptionWithRadioField
+                          label="During the past two years, has the patient used estrogen, progestin, or other female hormones (These hormones may be given as hormone pills, oral contraceptives, shots, skin patches, vaginal creams, or as vaginal suppositories)"
+                          options={['Yes', 'No']}
+                          form={{ id: 'colorectalCancer.usedFemaleHormones' }}
+                          disabled={disabled}
+                        />
+                      </div>
+                    </div>
+                  )}
+                </>
+              )}
             </div>
           </>
         )}

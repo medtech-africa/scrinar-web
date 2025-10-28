@@ -67,10 +67,8 @@ export interface NcdRequiredFields {
     dateOfBirth: boolean
     gender: boolean
     personalHistory: boolean
-    personalHistoryPolyps: boolean
     familyHistoryColorectalCancer: boolean
     familyHistoryPolyps: boolean
-    inflammatoryBowelDisease: boolean
     colonoscopyHistory: boolean
     polypDiagnosis: boolean
     aspirinUse: boolean
@@ -78,7 +76,9 @@ export interface NcdRequiredFields {
     alcoholFrequency: boolean
     height: boolean
     weight: boolean
-    hasQuitSmoking: boolean
+    smoking: boolean
+    vegetableServingsPerWeek: boolean
+    vegetableServingSize: boolean
   }
   [NCD.CKD]: {
     dateOfBirth: boolean
@@ -153,10 +153,8 @@ export const ncdRequiredFields: NcdRequiredFields = {
     dateOfBirth: true,
     gender: true,
     personalHistory: true,
-    personalHistoryPolyps: true,
     familyHistoryColorectalCancer: true,
     familyHistoryPolyps: true,
-    inflammatoryBowelDisease: true,
     colonoscopyHistory: true,
     polypDiagnosis: true,
     aspirinUse: true,
@@ -164,7 +162,9 @@ export const ncdRequiredFields: NcdRequiredFields = {
     alcoholFrequency: true,
     height: true,
     weight: true,
-    hasQuitSmoking: true,
+    smoking: true,
+    vegetableServingsPerWeek: true,
+    vegetableServingSize: true,
   },
   [NCD.CKD]: {
     dateOfBirth: true,

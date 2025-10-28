@@ -270,23 +270,25 @@ export const FamilyHistoryLifestyleForm = ({ onNext, disabled }: Props) => {
               disabled={disabled}
             />
 
-            <OptionWithRadioField
-              label={isRequiredField(
-                'In the last month, about how many servings of vegetables or leafy green salads did you eat per week? (serving is each time you had vegetables or leafy greens, and includes leafy green salads and raw, cooked, canned, and frozen vegetables (including beans) Does not include fried vegetables like French fries or fried potatoes.)',
-                'lifestyle.vegetableServingsPerWeek',
-                formData
+            <Controller
+              name="lifestyle.vegetableServingsPerWeek"
+              control={control}
+              render={({ field }) => (
+                <Input
+                  {...field}
+                  type="number"
+                  min="0"
+                  max="10"
+                  placeholder="How many servings"
+                  label={isRequiredField(
+                    'In the last month, about how many servings of vegetables or leafy green salads did you eat per week? (serving is each time you had vegetables or leafy greens, and includes leafy green salads and raw, cooked, canned, and frozen vegetables (including beans) Does not include fried vegetables like French fries or fried potatoes.)',
+                    'lifestyle.vegetableServingsPerWeek',
+                    formData
+                  )}
+                  labelStyle="lg:text-sm text-xs"
+                  disabled={disabled}
+                />
               )}
-              options={[
-                'None',
-                'Less than 1 serving/week',
-                '1-2 servings/week',
-                '3-4 servings/week',
-                '5-6 servings/week',
-                '7-10 servings/week',
-                'More than 10 servings/week',
-              ]}
-              form={{ id: 'lifestyle.vegetableServingsPerWeek' }}
-              disabled={disabled}
             />
 
             <OptionWithRadioField

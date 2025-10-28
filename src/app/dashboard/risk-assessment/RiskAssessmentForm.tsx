@@ -198,9 +198,16 @@ const RiskAssessmentFormContent = ({
     getNcdTypeString,
   } = useNcdFilter()
   const formMethods = useForm({
-    defaultValues: data?.requestData || {},
+    defaultValues: data?.requestData,
     mode: 'onChange',
   })
+
+  // Reset form when data becomes available
+  useEffect(() => {
+    if (data?.requestData) {
+      formMethods.reset(data.requestData)
+    }
+  }, [data?.requestData, formMethods])
 
   // Get gender for NCD filtering
   const gender = formMethods.watch('personalInfo.gender')?.toLowerCase()
