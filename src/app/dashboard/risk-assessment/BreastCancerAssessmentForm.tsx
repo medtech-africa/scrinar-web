@@ -87,6 +87,7 @@ export const BreastCancerAssessmentForm = ({ onNext, disabled }: Props) => {
                       label="Age at first menstruation"
                       helperText="if no history of menstrual period, enter 0"
                       labelStyle="lg:text-sm text-xs"
+                      disabled={disabled}
                     />
                   )}
                 />
@@ -143,6 +144,17 @@ export const BreastCancerAssessmentForm = ({ onNext, disabled }: Props) => {
               <Text as="h3" variant="text/sm" className="font-medium my-4">
                 Hormone Replacement Therapy
               </Text>
+              {/* <OptionWithRadioField
+                label="Have you ever used Hormone Replacement Therapy (HRT)?"
+                options={[
+                  'Never',
+                  'Previous user (more than 5 year ago)',
+                  'Previous user (less than 5 year ago)',
+                  'Current user',
+                ]}
+                form={{ id: 'breastCancer.hm' }}
+                disabled={disabled}
+              /> */}
               <Controller
                 name="breastCancer.hormoneReplacementTherapy"
                 control={control}
@@ -280,6 +292,7 @@ export const BreastCancerAssessmentForm = ({ onNext, disabled }: Props) => {
                                       value={value}
                                       type="radio"
                                       title={condition.key}
+                                      disabled={disabled}
                                     />
                                   </span>
                                 </label>

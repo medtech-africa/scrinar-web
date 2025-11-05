@@ -175,6 +175,7 @@ export const ColorectalCancerAssessmentForm = ({ onNext, disabled }: Props) => {
                           const value = selectedOption.value
                           setValue('colorectalCancer.lastPeriod', value)
                         }}
+                        disabled={disabled}
                       />
                       <div className="mt-4">
                         <OptionWithRadioField
