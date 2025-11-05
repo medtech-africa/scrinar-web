@@ -58,7 +58,7 @@ const RiskAssessment = () => {
     useAssessmentVitalData(patientId || '')
 
   //todo: complete this
-  console.log(assessmentVitalData, '>>')
+  console.log(assessmentVitalData, isAssessmentVitalDataLoading, '>>')
 
   // Create assessment mutation
   const { mutate: createAssessment, isPending: isCreatingAssessment } =
@@ -202,7 +202,6 @@ const RiskAssessment = () => {
     isLoading ||
     isPatientLoading ||
     isAssessmentLoading ||
-    isAssessmentVitalDataLoading ||
     (isCreatingAssessment && !urlAssessmentId && !assessmentId) ||
     (patientId && !assessmentId)
   ) {
